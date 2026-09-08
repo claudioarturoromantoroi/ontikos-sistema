@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estado medido · Ontikos</title>
+<style>
+:root{ --bg:#F5F6F8; --surf:#fff; --ink:#12141a; --ink2:#4a4f5c; --ink3:#868c9b;
+       --brd:#dfe2e8; --acc:#D0021B; --ok:#1f7a3f; --mal:#c01c1c; }
+@media(prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#0e0f13; --surf:#171920; --ink:#f2f2f7; --ink2:#c2c6d0; --ink3:#868c9b;
+  --brd:#272a33; --ok:#4ec27d; --mal:#ff6b6b; } }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.6 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.w{max-width:820px;margin:0 auto;padding:72px 24px 96px}
+.eyebrow{font-size:.64rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--acc)}
+h1{margin:10px 0 12px;font-size:2.1rem;font-weight:200;letter-spacing:-.035em;line-height:1.1;text-wrap:balance}
+h1 b{font-weight:600}
+.lead{margin:0 0 40px;color:var(--ink2);max-width:60ch}
+h2{margin:44px 0 4px;font-size:1.02rem;font-weight:700;letter-spacing:-.01em}
+h2 + p{margin:0 0 16px;color:var(--ink3);font-size:.86rem}
+.cifras{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:26px 0 8px}
+.c{background:var(--surf);border:1px solid var(--brd);padding:16px 18px}
+.c s{display:block;font-size:1.9rem;font-weight:800;letter-spacing:-.04em;text-decoration:none;
+  font-variant-numeric:tabular-nums;line-height:1.1}
+.c u{display:block;text-decoration:none;font-size:.72rem;color:var(--ink3);margin-top:4px;line-height:1.35}
+.c.mal s{color:var(--mal)} .c.ok s{color:var(--ok)}
+table{width:100%;border-collapse:collapse;font-size:.86rem;margin:4px 0 8px}
+th{text-align:left;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink3);padding:8px 10px;border-bottom:1px solid var(--brd)}
+td{padding:9px 10px;border-bottom:1px solid var(--brd);font-variant-numeric:tabular-nums}
+td.n{text-align:right;width:5.5em}
+.b{color:var(--mal);font-weight:700} .g{color:var(--ok);font-weight:700}
+.nota{background:var(--surf);border:1px solid var(--brd);border-left:3px solid var(--acc);
+  padding:14px 18px;margin:18px 0;font-size:.88rem;color:var(--ink2)}
+code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em;color:var(--ink)}
+footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--brd);font-size:.76rem;color:var(--ink3)}
+a{color:var(--acc)}
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="eyebrow">Ontikos · estado medido</div>
+  <h1>Lo que <b>mide</b> el sistema, no lo que opina.</h1>
+  <p class="lead">Tres verificadores recorren el producto y fallan en rojo cuando algo se sale
+  del contrato. Esta página es su salida, no un resumen escrito a mano.</p>
+
+  <div class="cifras">
+    <div class="c mal"><s>33</s><u>defectos de pantalla<br>en 55 medidas</u></div>
+    <div class="c mal"><s>21</s><u>anchos fuera del<br>contrato de rejilla</u></div>
+    <div class="c mal"><s>19</s><u>correcciones a Carbon<br>sin declarar</u></div>
+    <div class="c"><s>1</s><u>pantalla que no se<br>puede medir aún</u></div>
+  </div>
+
+  <h2>Pantallas</h2>
+  <p>Diez anchos, de 320 a 1584. Desborde según WCAG 1.4.10, orientación según 1.3.4,
+  objetivo táctil contra los 44 px que declara la casa — medido con dedo, no con ratón.</p>
+  <table>
+    <thead><tr><th>Pantalla</th><th class="n">Desborde</th><th class="n">Táctil</th><th>Apaisado</th></tr></thead>
+    <tbody>
+      <tr><td>Vendedor</td><td class="n b">1</td><td class="n b">2</td><td class="b">bloquea</td></tr>
+      <tr><td>Administrador</td><td class="n b">1</td><td class="n b">2</td><td class="b">bloquea</td></tr>
+      <tr><td>Caja</td><td class="n b">1</td><td class="n b">5</td><td class="b">bloquea</td></tr>
+      <tr><td>Documento · Ontikos</td><td class="n b">6</td><td class="n g">0</td><td class="g">—</td></tr>
+      <tr><td>Documento · RetiCash</td><td class="n b">6</td><td class="n b">5</td><td class="b">bloquea</td></tr>
+      <tr><td>Cliente</td><td class="n">—</td><td class="n">—</td><td>sin construir</td></tr>
+    </tbody>
+  </table>
+
+  <div class="nota"><b>El apaisado bloqueado es una regla del sistema, no un descuido.</b>
+  La regla 26 de Ontikos dice «se declara y se bloquea» y lleva la marca de <i>ganada</i>.
+  Contradice WCAG 2.1 · 1.3.4, que sólo admite restringir la orientación cuando es esencial;
+  una terminal de operación no lo es. Hay tabletas montadas en soporte fijo que no giran.
+  La regla está propuesta para reescribirse — «declara una orientación preferida y se adapta» —
+  y bajar a <i>en deriva</i> hasta que el producto la cumpla.</div>
+
+  <h2>Rejilla</h2>
+  <p>Cinco quiebres de Carbon: 320 · 672 · 1056 · 1312 · 1584. Ninguna hoja debería inventar otro.</p>
+  <table>
+    <thead><tr><th>Hoja</th><th class="n">Fuera de contrato</th></tr></thead>
+    <tbody>
+      <tr><td><code>app.css</code></td><td class="n b">15</td></tr>
+      <tr><td><code>carbon/carbon.css</code></td><td class="n b">2</td></tr>
+      <tr><td><code>carbon/puente.css</code></td><td class="n b">2</td></tr>
+      <tr><td><code>carbon/caja.css</code></td><td class="n b">1</td></tr>
+      <tr><td><code>carbon/cliente.css</code></td><td class="n b">1</td></tr>
+      <tr><td>Las otras nueve</td><td class="n g">0</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:.84rem;color:var(--ink3)">Los inventados: 400 · 430 · 520 · 544 · 560 · 561 · 600 · 860 · 900.</p>
+
+  <h2>Qué le corregimos a Carbon</h2>
+  <p>La hoja de la casa se empaqueta después de Carbon para poder corregirlo. Eso hace falta
+  para la marca; no para la geometría, que es aquello por lo que se adoptó.</p>
+  <table>
+    <thead><tr><th>&nbsp;</th><th class="n">Reglas</th></tr></thead>
+    <tbody>
+      <tr><td>Caen sobre clases de Carbon</td><td class="n">35</td></tr>
+      <tr><td>Pisan geometría, tipografía o espaciado</td><td class="n b">19</td></tr>
+      <tr><td>Declaran su porqué</td><td class="n b">0</td></tr>
+    </tbody>
+  </table>
+
+  <div class="nota"><b>Ya se corrigió una.</b> La barra global bajaba las cajas de Carbon de 48 a 40
+  y el disco de iniciales a 30, con un comentario que afirmaba que el objetivo de toque seguía
+  siendo de 40. Medido con dedo: era 30×30. Se quitó, Carbon recuperó sus 48, y la barra ahora
+  se pliega en el orden que manda la regla 08 en vez de encogerse.</div>
+
+  <footer>
+    Generado por <code>verificar-pantallas.mjs</code>, <code>verificar-rejilla.py</code> y
+    <code>verificar-carbon.py</code> · 8 de septiembre de 2026 ·
+    <a href="../">volver a los documentos</a>
+  </footer>
+</div>
+</body>
+</html>
