@@ -1,0 +1,1103 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ontikos · Sistema de funcionamiento</title>
+<style>
+:root{
+  --bg:#F5F6F8; --surf:#fff; --ink:#12141a; --ink2:#4a4f5c; --ink3:#868c9b;
+  --brd:#dfe2e8; --brd2:#eceef2; --acc:#c8102e; --blue:#0f62fe; --grn:#1f7a3f; --amb:#b06a00;
+  --sh:#20242c; --rg:#f2f4f7; --rgb:#cfd5df;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font:14px/1.55 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.w{max-width:1080px;margin:0 auto;padding:0 32px 120px}
+
+/* portada */
+.cover{padding:78px 0 44px;border-block-end:1px solid var(--brd);margin-block-end:8px}
+.eyebrow{font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);margin-block-end:14px}
+h1{font-size:2.9rem;font-weight:200;letter-spacing:-.035em;line-height:1.05;margin:0 0 14px}
+h1 b{font-weight:600}
+.cover .lead{font-size:1.08rem;color:var(--ink2);max-width:64ch;margin:0 0 26px;line-height:1.6}
+.cover .lead b{color:var(--ink);font-weight:600}
+.stats{display:flex;gap:36px;flex-wrap:wrap;padding-block-start:8px}
+.stats div s{display:block;text-decoration:none;font-size:2rem;font-weight:200;letter-spacing:-.03em;
+             color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+.stats div s.g{color:var(--grn)} .stats div s.d{color:var(--ink3)} .stats div s.x{color:var(--acc)}
+.stats div u{display:block;text-decoration:none;font-size:.68rem;color:var(--ink3);margin-block-start:6px;max-width:140px;line-height:1.4}
+
+/* índice */
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--brd);
+     border:1px solid var(--brd);margin:36px 0 0}
+.toc a{background:var(--surf);padding:16px 18px 18px;text-decoration:none;display:block;transition:background .12s}
+.toc a:hover{background:#fafbfc}
+.toc a .n{display:block;font-size:.6rem;font-weight:700;letter-spacing:.14em;color:var(--acc);text-transform:uppercase}
+.toc a .t{display:block;font-size:.95rem;font-weight:600;color:var(--ink);margin-block-start:5px;letter-spacing:-.01em}
+.toc a .s{display:block;font-size:.74rem;color:var(--ink3);margin-block-start:3px;line-height:1.4}
+
+h2{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+   color:var(--ink3);margin:76px 0 6px;padding-block-end:8px;border-block-end:1px solid var(--brd);scroll-margin-top:20px}
+h3{font-size:1.5rem;font-weight:300;letter-spacing:-.02em;margin:24px 0 10px;color:var(--ink)}
+h3 b{font-weight:600}
+p{max-width:70ch;color:var(--ink2);margin:0 0 14px}
+p.lead{color:var(--ink);font-size:.98rem}
+b.k{color:var(--ink);font-weight:600}
+code{font:.72rem/1.4 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+     background:#eceef2;padding:1px 5px;border-radius:2px;color:#333}
+.cq{border:1px solid var(--rgb);background:#fbfcfd;padding:10px 12px;
+    font:.68rem/1.65 "IBM Plex Mono",ui-monospace,monospace;color:#4a4f5c;white-space:pre;overflow-x:auto;margin:14px 0}
+.cq b{color:var(--grn);font-weight:600} .cq u{text-decoration:none;color:var(--acc)}
+
+.ax{background:var(--sh);color:#f2f4f7;padding:28px 32px;margin:22px 0 8px}
+.ax h4{margin:0 0 10px;font-size:1.4rem;font-weight:300;letter-spacing:-.02em;color:#fff}
+.ax h4 b{font-weight:600}
+.ax p{color:#a9b1bf;max-width:68ch;margin:0 0 12px}
+.ax p:last-child{margin:0}
+.ax b.w{color:#f2f4f7;font-weight:600}
+.ax ul{margin:0;padding-inline-start:18px;color:#a9b1bf;font-size:.88rem}
+.ax li{margin-block-end:5px} .ax li b{color:#f2f4f7;font-weight:600}
+
+/* vocabulario */
+.voc{display:flex;gap:16px;flex-wrap:wrap;margin:20px 0 0}
+.voc > div{flex:1 1 208px;background:var(--surf);border:1px solid var(--brd);padding:15px 17px}
+.voc h5{margin:0 0 4px;font-size:.94rem;font-weight:600}
+.voc p{font-size:.8rem;margin:0}
+
+/* reglas */
+.rule{background:var(--surf);border:1px solid var(--brd);margin:20px 0;overflow:hidden;scroll-margin-top:20px}
+.rule > .hd{display:flex;align-items:flex-start;gap:12px;padding:16px 20px 14px;border-block-end:1px solid var(--brd)}
+.rule .no{font-size:.72rem;font-weight:700;letter-spacing:.1em;color:var(--acc);flex:0 0 auto;padding-top:4px;
+          font-variant-numeric:tabular-nums}
+.rule .tx{flex:1;min-width:0}
+.rule .tx b{display:block;font-size:1.02rem;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+.rule .tx span{display:block;font-size:.84rem;color:var(--ink2);margin-block-start:3px;max-width:66ch}
+.st{flex:0 0 auto;font-size:.55rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+    padding:4px 8px;white-space:nowrap;margin-block-start:2px}
+.st.ganada{background:#e6f4ea;color:var(--grn)}
+.st.declarada{background:#eef1f6;color:var(--ink3)}
+.st.deriva{background:#fbe9ec;color:var(--acc)}
+.pair{display:grid;grid-template-columns:1fr 1fr}
+.pair > div{padding:16px 20px 18px}
+.pair > div:first-child{border-inline-end:1px solid var(--brd)}
+.bd{padding:16px 20px 18px}
+.mk{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-block-end:10px}
+.mk.ok{color:var(--grn)} .mk.no{color:var(--acc)}
+.cm{font-size:.76rem;color:var(--ink3);margin:9px 0 0;max-width:48ch}
+.ver{padding:11px 20px;background:#f7f8fa;border-block-start:1px solid var(--brd);font-size:.74rem;color:var(--ink2)}
+.ver b{color:var(--ink);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.6rem;margin-inline-end:8px}
+
+/* ── piezas de dibujo (compartidas por todos los pliegos) ── */
+.dg{border:1px solid var(--rgb);background:var(--surf);height:112px;display:flex;flex-direction:column;
+    overflow:hidden;position:relative}
+.d-bar{height:15px;background:var(--sh);flex:0 0 auto}
+.d-bar.cut{margin-block-start:-8px}
+.d-st{height:9px;background:#e3e6ec;border-block-start:1px solid var(--rgb);flex:0 0 auto}
+.d-bd{flex:1;display:flex;min-height:0}
+.d-rail{width:26px;background:#dfe3ea;flex:0 0 auto;border-inline-end:1px solid var(--rgb)}
+.rg{background:var(--rg);border-inline-end:1px solid var(--rgb);position:relative;min-width:0;
+    display:flex;flex-direction:column}
+.rg:last-child{border-inline-end:none}
+.rg.act{background:#fff;box-shadow:inset 0 0 0 2px rgba(200,16,46,.45)}
+.rg.hl{background:#eef3ff;box-shadow:inset 0 0 0 1px rgba(15,98,254,.35)}
+.rg .tt{height:12px;background:#e6e9ef;border-block-end:1px solid var(--rgb);flex:0 0 auto;
+        font-size:.5rem;color:#7b8394;padding-inline:5px;display:flex;align-items:center;letter-spacing:.06em}
+.rg .b2{flex:1;padding:5px;min-height:0;overflow:hidden}
+.ln{height:5px;background:#dbe0e8;border-radius:1px;margin-block-end:4px}
+.ln.s{width:58%} .ln.m{width:82%} .ln.b{background:#c3cad5} .ln.sel{background:#b6c6e8}
+.sb{position:absolute;right:1px;top:16px;bottom:4px;width:3px;background:#b9c1cd;border-radius:2px}
+.sb.page{right:-1px;top:0;bottom:0;background:var(--acc);opacity:.55}
+.vsplit{display:flex;flex-direction:column;flex:1;min-height:0}
+.vsplit > .rg{border-inline-end:none;border-block-end:1px solid var(--rgb)}
+.vsplit > .rg:last-child{border-block-end:none}
+.ruler{display:flex;height:9px;border-inline:1px solid var(--rgb)}
+.ruler i{flex:1;border-inline-end:1px dashed #c9d0da} .ruler i:last-child{border-inline-end:none}
+.bad-gap{position:absolute;top:0;bottom:0;background:rgba(200,16,46,.13);border-inline:1px solid rgba(200,16,46,.5)}
+.lbl-float{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:#8d94a1;padding:4px 5px 2px}
+.mini{display:flex;gap:7px;align-items:center}
+.mini > .dg,.mini > .sc{flex:1}
+.arrw{color:var(--ink3);font-size:.8rem;flex:0 0 auto}
+.tabs{display:flex;height:12px;flex:0 0 auto}
+.tabs i{flex:0 0 auto;width:26px;background:#e6e9ef;border-inline-end:1px solid var(--rgb);border-block-end:1px solid var(--rgb)}
+.tabs i.on{background:var(--surf);border-block-end-color:transparent;box-shadow:inset 0 2px 0 var(--blue)}
+.tabs .fill{flex:1;background:#e6e9ef;border-block-end:1px solid var(--rgb)}
+.depth{border:1px solid var(--rgb);background:var(--rg);padding:5px;flex:1;display:flex;gap:5px;min-width:0}
+.depth.v{flex-direction:column}
+.cap{font-size:.6rem;color:var(--ink3);text-align:center;margin-block-start:6px;letter-spacing:.04em}
+.xed{position:relative}
+.xed::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(to top right,transparent 47.5%,rgba(200,16,46,.65) 48.5%,rgba(200,16,46,.65) 51.5%,transparent 52.5%)}
+/* superficies */
+.sc{border:1px solid var(--rgb);background:var(--surf);height:74px;display:flex;flex-direction:column;
+    overflow:hidden;position:relative}
+.sc .bar{height:9px;background:var(--sh);flex:0 0 auto}
+.sc .bd2{flex:1;display:flex;min-height:0}
+.sc .rail{width:13px;background:#dfe3ea;border-inline-end:1px solid var(--rgb);flex:0 0 auto}
+.ov{position:absolute;background:var(--surf);border:1px solid #9aa4b4;box-shadow:0 2px 6px rgba(20,24,32,.22)}
+.ov.anchor{width:34%;height:44%;right:8%;top:26%}
+.ov.drawer{top:0;bottom:0;right:0;width:46%;border-inline-start:1px solid #9aa4b4}
+.ov.modal{left:14%;right:14%;top:16%;bottom:16%}
+.scrim{position:absolute;inset:9px 0 0 0;background:rgba(20,24,32,.42)}
+.lost{position:absolute;background:repeating-linear-gradient(45deg,rgba(200,16,46,.13) 0 4px,rgba(200,16,46,.04) 4px 8px);
+      outline:1px solid rgba(200,16,46,.35);outline-offset:-1px;pointer-events:none}
+/* teléfono */
+.ph{width:112px;border:1px solid var(--rgb);background:var(--surf);height:186px;
+    display:flex;flex-direction:column;overflow:hidden;position:relative;flex:0 0 auto;border-radius:9px}
+.ph .top{height:19px;background:var(--sh);flex:0 0 auto}
+.ph .mid{flex:1;overflow:hidden;padding:7px;min-height:0;position:relative;background:var(--surf)}
+.ph .bot{height:25px;background:var(--surf);border-block-start:1px solid var(--rgb);flex:0 0 auto;
+         display:flex;justify-content:space-around;align-items:center;padding-block-end:4px}
+.ph .bot i{width:10px;height:10px;border-radius:2px;background:#c9d0da}
+.ph .bot i.on{background:var(--acc)}
+.sheet{position:absolute;left:0;right:0;bottom:0;height:66%;background:var(--surf);
+       border:1px solid #9aa4b4;border-radius:12px 12px 0 0;box-shadow:0 -3px 10px rgba(20,24,32,.16);padding:8px}
+.pushed{position:absolute;inset:0;background:var(--surf);padding:7px}
+.phrow{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin:20px 0 4px}
+.phcell{text-align:center}
+.phcell .nm{font-size:.8rem;font-weight:600;color:var(--ink);margin-block-start:10px}
+.phcell .g{font-size:1.45rem;font-weight:300;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.1;margin-block-start:4px}
+.phcell .g.z{color:var(--grn)} .phcell .g.w{color:var(--amb)} .phcell .g.f{color:var(--acc)}
+.phcell .gl{font-size:.58rem;color:var(--ink3);letter-spacing:.04em}
+/* cinta */
+.tape{margin:22px 0 6px;border:1px solid var(--rgb);background:var(--surf);position:relative;height:78px;display:flex}
+.tape .z{border-inline-end:1px solid var(--rgb);flex:1;position:relative}
+.tape .z:last-child{border-inline-end:none}
+.tape .z.doc{background:#f7f8fa} .tape .z.nadie{background:#fdf3f5} .tape .z.ter{background:#eef1f6}
+.tape .lb{position:absolute;top:6px;left:0;right:0;text-align:center;font-size:.56rem;color:var(--ink3);
+          font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.tape .nm{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:.64rem;font-weight:600;color:var(--ink2)}
+.tape .nm.bad{color:var(--acc)}
+.leg{display:flex;gap:18px;flex-wrap:wrap;font-size:.74rem;color:var(--ink3);margin-block-start:14px}
+.leg i{display:inline-block;width:20px;height:9px;vertical-align:-1px;margin-inline-end:6px;border:1px solid var(--rgb)}
+.leg i.d{background:#f7f8fa} .leg i.n{background:#fdf3f5} .leg i.t{background:#eef1f6}
+/* tablas */
+table{border-collapse:collapse;width:100%;margin:16px 0 6px;font-size:.85rem;background:var(--surf)}
+th,td{text-align:left;padding:10px 14px;border-block-end:1px solid var(--brd);vertical-align:top}
+th{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:700;background:#f4f5f7}
+td b{color:var(--ink);font-weight:600}
+td.cross,td.tronco{background:#f4faf6}
+td.why{color:var(--ink3);font-size:.8rem}
+tr:last-child td{border-block-end:none}
+.find{background:var(--surf);border:1px solid var(--brd);border-inline-start:3px solid var(--acc);padding:18px 22px;margin:16px 0}
+.find.ok{border-inline-start-color:var(--grn)}
+.find h4{margin:0 0 5px;font-size:1.02rem;font-weight:600}
+.find p{margin:0 0 8px} .find p:last-child{margin:0}
+.bars{display:flex;align-items:flex-end;gap:5px;height:62px;margin:12px 0 24px}
+.bars div{flex:1;background:#c9d0da;position:relative}
+.bars div.hi{background:var(--acc);opacity:.7}
+.bars span{position:absolute;bottom:-15px;left:0;right:0;text-align:center;font-size:.54rem;color:var(--ink3)}
+@media(max-width:900px){.surf5{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:780px){.w{padding:0 18px 72px}h1{font-size:2.1rem}
+  .pair{grid-template-columns:1fr}
+  .pair > div:first-child{border-inline-end:none;border-block-end:1px solid var(--brd)}}
+</style>
+<link rel="stylesheet" href="proceso.css">
+<style>
+  /* la muestra hereda los fichas de la casa, que ahora son los de Ontikos */
+  .muestra-proc{ --surf:#fff; --surf2:#f4f4f8; --surf3:#eeeef3; --brd2:rgba(0,0,0,.12);
+                 --ink:#09090f; --ink2:#2e2e42; --ink3:#6b6b82;
+                 --green:#16a34a; --blue:#2563eb; --amber:#d97706; --danger:#c01c1c;
+                 background:var(--surf); border:1px solid var(--brd); padding:24px 26px 22px; margin:16px 0 6px }
+  .muestra-proc + .cap-m{ font-size:.72rem;color:var(--ink3);margin:0 0 26px }
+  .muestra-proc .titulo{ font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+                         color:#868c9b;margin-block-end:18px }
+</style></head><body>
+<div class="w">
+
+<div class="cover">
+  <div class="eyebrow">Ontikos · Sistema de funcionamiento · v1</div>
+  <h1>Cómo se divide el espacio,<br>cómo se <b>despliega</b> lo que pasa en él.</h1>
+  <p class="lead">Veintiocho reglas de estructura y comportamiento, cada una con su verificación. <b>Ninguna nombra un negocio.</b> Este documento no describe un producto: describe el sistema sobre el que se montan los productos. RetiCash es el primero, y es el que las puso a prueba.</p>
+  <div class="stats">
+    <div><s>28</s><u>reglas, en cuatro pliegos</u></div>
+    <div><s class="g">7</s><u>ganadas · pasaron la operación real</u></div>
+    <div><s class="d">8</s><u>declaradas · leídas de la referencia, aún sin probar</u></div>
+    <div><s class="x">13</s><u>en deriva · el producto hoy no las cumple</u></div>
+  </div>
+  <div class="toc">
+    <a href="#p1"><span class="n">Pliego I</span><span class="t">El espacio</span><span class="s">Cómo se divide un viewport en regiones · 01–08</span></a>
+    <a href="#p2"><span class="n">Pliego II</span><span class="t">El despliegue</span><span class="s">Qué pasa cuando algo se abre · 09–16</span></a>
+    <a href="#p3"><span class="n">Pliego III</span><span class="t">La frontera</span><span class="s">Dónde cambia la gramática · 17–21</span></a>
+    <a href="#piezas"><span class="n">Piezas</span><span class="t">El proceso</span><span class="s">La primera pieza del sistema · una para tres negocios</span></a>
+    <a href="#p4"><span class="n">Pliego IV</span><span class="t">La región única</span><span class="s">El sistema de una sola región · 22–28</span></a>
+  </div>
+</div>
+
+<h2 id="origen">De dónde sale esto</h2>
+<p class="lead">De dos fuentes y una asimetría.</p>
+<p><b class="k">Interactive Brokers</b> puso el marco: cinco franjas, tres columnas, un panel de contexto permanente que no cambia al cambiar de pestaña, cifras en dos niveles, barra de estado, vistas con nombre. <b class="k">Carbon</b> puso las superficies y el aire: la rejilla de 16 columnas, la escala tipográfica, las piezas, la densidad. Las dos son sistemas de container-row-column con cortes de mínimo; la lógica es la misma máquina.</p>
+<p>La asimetría es ésta: <b class="k">ninguna de las dos documenta el armazón de terminal.</b> El «Ratio» de IB —que es Bootstrap— cubre sus sitios de marketing, su registro y sus portales; su sección de componentes de portal tiene tres piezas. TWS, que es lo que uno admira, no está en el sistema. Carbon cubre la barra y el riel, no la división del espacio de trabajo.</p>
+<div class="find ok"><h4>Por eso este documento existe</h4>
+<p style="margin:0">Lo que faltaba no era elegir entre dos sistemas: era escribir el que ninguno de los dos escribió. Y escribirlo con la disciplina que impide que se desvanezca — cada regla con su verificación, y cada verificación diciendo si hoy pasa o falla.</p></div>
+
+<h2 id="axioma">El axioma</h2>
+<div class="ax">
+  <h4>La disposición es <b>dato</b>, no estado de usuario.</h4>
+  <p>IB deja que el operador arme su escritorio: divisores arrastrables, pestañas que se abren y cierran, disposiciones guardadas. Aquí no. El que usa esto tiene a alguien enfrente, no una estación de trabajo que configurar.</p>
+  <ul>
+    <li><b>No hay</b> divisores arrastrables, ni pestañas que el usuario agregue o cierre, ni disposiciones guardadas.</li>
+    <li><b>Sí hay</b> una disposición declarada por rol y por vista, que vive en un archivo y se lee.</li>
+    <li>Consecuencia dura: si la disposición es dato, <b>se puede verificar</b> — y se puede montar otro producto encima leyendo el archivo, no el código.</li>
+  </ul>
+</div>
+
+<h2 id="marca">La marca de estado</h2>
+<p>Ontikos fracasó cuatro veces como sistema de diseño, y siempre por la misma razón: se escribió como ideal antes de que nada hubiera operado. Éste se escribe al revés — <b class="k">sale de algo que operó</b>. Para que no vuelva a pasar, cada regla lleva su marca, y la marca es dura:</p>
+<div class="voc">
+  <div><h5><span class="st ganada" style="margin:0 0 6px;display:inline-block">Ganada</span></h5><p>Pasó la operación real en un producto, y su verificación corre y da verde. Es la única marca que autoriza a copiar la regla a otro producto sin volver a pensarla.</p></div>
+  <div><h5><span class="st declarada" style="margin:0 0 6px;display:inline-block">Declarada</span></h5><p>Se leyó de la referencia o se dedujo del sistema, pero todavía no la probó nadie operando. Vale como plano; no vale como evidencia.</p></div>
+  <div><h5><span class="st deriva" style="margin:0 0 6px;display:inline-block">En deriva</span></h5><p>La regla es correcta y el producto hoy no la cumple. No se borra la regla: se deja en rojo hasta que el producto la alcance.</p></div>
+</div>
+<p style="margin-block-start:16px"><b class="k">Nada entra a Ontikos sin verificación que corra.</b> Una regla sin comprobación es una opinión con número, y de eso ya hubo cuatro versiones.</p>
+
+<h2 id="p1">Pliego I · El espacio</h2>
+<h3>Cómo se divide un viewport en <b>regiones</b></h3>
+<p>Cuatro piezas de vocabulario. Todo lo demás del sistema se dice con estas cuatro palabras.</p>
+<div class="voc">
+  <div><h5>Armazón</h5><p>El marco fijo: barra, riel, estado. Vive fuera de la rejilla y nunca se mueve.</p></div>
+  <div><h5>Región</h5><p>Una división del viewport restante. Declara su ancho en columnas y es dueña de su scroll.</p></div>
+  <div><h5>Panel</h5><p>Lo visible de una región: barra de título más cuerpo. Es la unidad que puede llevar pestañas.</p></div>
+  <div><h5>Contenido</h5><p>Lo que va dentro del cuerpo. Ahí manda la rejilla de documento, con su aire.</p></div>
+</div>
+
+<div class="rule" id="r01"><div class="hd"><span class="no">01</span><span class="tx">
+  <b>El armazón nunca baja</b>
+  <span>Sólo las regiones tienen scroll. La página, como página, no se mueve nunca. Es la única regla del tronco común: rige los dos sistemas, el de varias regiones y el de una sola.</span></span><span class="st ganada">Ganada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="dg"><div class="d-bar"></div><div class="d-bd">
+      <div class="d-rail"></div>
+      <div class="rg" style="flex:1"><div class="tt">Trabajo</div><div class="b2" style="position:relative">
+        <div class="ln m"></div><div class="ln s"></div><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div>
+        <div class="sb"></div></div></div>
+    </div><div class="d-st"></div></div>
+    <p class="cm">Barra, riel y estado quedan. El scroll ocurre dentro de la región, y se ve dónde.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="dg"><div class="d-bar cut"></div><div class="d-bd">
+      <div class="d-rail"></div>
+      <div class="rg" style="flex:1"><div class="b2">
+        <div class="ln m"></div><div class="ln s"></div><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div><div class="ln s"></div></div></div>
+      <div class="sb page"></div>
+    </div></div>
+    <p class="cm">La barra se fue hacia arriba y el estado desapareció: un documento estirado.</p></div>
+</div>
+<div class="ver"><b>Verificación</b><code>scrollingElement.scrollTop === 0</code> en todo momento, y la barra de estado visible a cualquier alto de contenido.</div></div>
+
+<div class="rule" id="r02"><div class="hd"><span class="no">02</span><span class="tx">
+  <b>Una región declara su ancho en columnas, no en píxeles</b>
+  <span>El borde de toda región cae sobre un borde de columna de la rejilla. Un ancho en píxeles es una grilla inventada con otro nombre.</span></span><span class="st deriva">En deriva</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="ruler"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="dg" style="height:88px"><div class="d-bd">
+      <div class="rg" style="width:18.75%"><div class="tt">Lista</div><div class="b2"><div class="ln s"></div><div class="ln m"></div></div></div>
+      <div class="rg" style="width:50%"><div class="tt">Trabajo</div><div class="b2"><div class="ln m"></div><div class="ln s"></div></div></div>
+      <div class="rg act" style="width:31.25%"><div class="tt">Contexto</div><div class="b2"><div class="ln m"></div><div class="ln b s"></div></div></div>
+    </div></div>
+    <p class="cm">3 · 8 · 5 de las 16. Cada borde coincide con una línea de la rejilla.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="ruler"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="dg" style="height:88px"><div class="d-bd">
+      <div class="rg" style="width:23%"><div class="tt">Lista · 296 px</div><div class="b2"><div class="ln s"></div><div class="ln m"></div></div></div>
+      <div class="rg" style="flex:1"><div class="tt">Trabajo</div><div class="b2"><div class="ln m"></div><div class="ln s"></div></div></div>
+    </div>
+    <div class="bad-gap" style="left:18.75%;width:4.25%"></div></div>
+    <p class="cm">296 px cae entre dos columnas. Ese resto es el que después obliga a inventar márgenes para taparlo.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> cero anchos en <code>px</code> en la declaración de regiones; y medido, cada borde de región coincide con un borde de columna con tolerancia <b>0</b>.</div></div>
+
+<div class="rule" id="r03"><div class="hd"><span class="no">03</span><span class="tx">
+  <b>Una región se divide sólo en el eje contrario al de su padre</b>
+  <span>Si el padre partió en columnas, el hijo parte en filas. Es lo que mantiene la rejilla legible al mirarla.</span></span><span class="st declarada">Declarada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="dg"><div class="d-bd">
+      <div class="rg" style="width:22%"><div class="tt">Lista</div><div class="b2"><div class="ln s"></div><div class="ln m"></div></div></div>
+      <div class="vsplit" style="flex:1;border-inline-end:1px solid var(--rgb)">
+        <div class="rg hl" style="flex:1.4"><div class="tt">Trabajo</div><div class="b2"><div class="ln m"></div><div class="ln s"></div></div></div>
+        <div class="rg hl" style="flex:1"><div class="tt">Detalle</div><div class="b2"><div class="ln s"></div></div></div>
+      </div>
+      <div class="rg act" style="width:28%"><div class="tt">Contexto</div><div class="b2"><div class="ln m"></div></div></div>
+    </div></div>
+    <p class="cm">Corte vertical arriba, horizontal adentro. Los bordes siguen alineados de arriba abajo.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="dg"><div class="d-bd">
+      <div class="rg" style="width:22%"><div class="tt">Lista</div><div class="b2"><div class="ln s"></div></div></div>
+      <div class="d-bd" style="flex:1;border-inline-end:1px solid var(--rgb)">
+        <div class="rg hl" style="flex:1"><div class="tt">Trabajo</div><div class="b2"><div class="ln m"></div></div></div>
+        <div class="rg hl" style="flex:1"><div class="tt">Extra</div><div class="b2"><div class="ln s"></div></div></div>
+      </div>
+      <div class="rg act" style="width:22%"><div class="tt">Contexto</div><div class="b2"><div class="ln m"></div></div></div>
+    </div></div>
+    <p class="cm">Vertical dentro de vertical: cuatro bandas y ninguna jerarquía.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> estática sobre el archivo de disposición: ninguna región comparte eje con su padre.</div></div>
+
+<div class="rule" id="r04"><div class="hd"><span class="no">04</span><span class="tx">
+  <b>Profundidad máxima de división: dos</b>
+  <span>Es la diferencia entre una terminal legible y una confusa, y no es de color ni de tipografía. La vista de cotización de IB es profundidad 1. Su espacio de mosaico es 2 y ya cuesta más. Más abajo, se pierde.</span></span><span class="st declarada">Declarada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="mini">
+      <div class="dg"><div class="d-bd" style="padding:5px;gap:5px">
+        <div class="depth" style="flex:1"></div><div class="depth" style="flex:2"></div><div class="depth" style="flex:1"></div></div></div>
+      <div class="dg"><div class="d-bd" style="padding:5px;gap:5px">
+        <div class="depth" style="flex:1"></div>
+        <div class="depth v" style="flex:2"><div class="depth"></div><div class="depth"></div></div>
+        <div class="depth" style="flex:1"></div></div></div>
+    </div>
+    <p class="cap">profundidad 1 &nbsp;·&nbsp; profundidad 2</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="mini">
+      <div class="dg"><div class="d-bd" style="padding:5px;gap:5px">
+        <div class="depth v" style="flex:1"><div class="depth"><div class="depth v"><div class="depth"></div><div class="depth"></div></div></div><div class="depth"></div></div>
+        <div class="depth v" style="flex:1.4"><div class="depth"><div class="depth"></div><div class="depth"></div></div><div class="depth"></div></div></div></div>
+    </div>
+    <p class="cap">profundidad 3</p>
+    <p class="cm">Nadie puede decir de un vistazo dónde termina una cosa y empieza la otra.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> profundidad máxima del árbol declarado <code>≤ 2</code>, contada sobre el archivo.</div></div>
+
+<div class="rule" id="r05"><div class="hd"><span class="no">05</span><span class="tx">
+  <b>Toda región lleva un panel, y todo panel lleva barra de título</b>
+  <span>Nada flota. Un rótulo suelto sobre un bloque no dice dónde empieza ni dónde termina lo que nombra.</span></span><span class="st deriva">En deriva</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="dg" style="height:96px"><div class="d-bd" style="padding:9px;gap:9px">
+      <div class="rg" style="flex:1;border:1px solid var(--rgb)"><div class="tt">Pendientes</div>
+        <div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div>
+      <div class="rg" style="flex:1;border:1px solid var(--rgb)"><div class="tt">Últimos movimientos</div>
+        <div class="b2"><div class="ln s"></div><div class="ln m"></div></div></div>
+    </div></div>
+    <p class="cm">El título está dentro del borde: nombra un recinto, no una zona vaga.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="dg" style="height:96px"><div class="d-bd" style="padding:9px;gap:9px;flex-direction:column">
+      <div><div class="lbl-float">Pendientes</div>
+        <div style="padding:0 5px"><div class="ln m"></div><div class="ln s"></div></div></div>
+      <div><div class="lbl-float">Últimos movimientos</div>
+        <div style="padding:0 5px"><div class="ln s"></div><div class="ln m"></div></div></div>
+    </div></div>
+    <p class="cm">Rótulos flotando sobre bloques sin recinto. Al segundo ya no se sabe si el rótulo abre o cierra.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> cero regiones sin panel; cero rótulos de bloque fuera de una barra de título.</div></div>
+
+<div class="rule" id="r06"><div class="hd"><span class="no">06</span><span class="tx">
+  <b>Las pestañas cambian el cuerpo, nunca la región</b>
+  <span>En la vista de cotización de IB, cinco pestañas mueven la columna del centro y dejan el panel de contexto intacto. Lo que cambia es el material para decidir, no la acción.</span></span><span class="st declarada">Declarada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="mini">
+      <div class="dg"><div class="d-bd">
+        <div class="rg" style="flex:1"><div class="tabs"><i class="on"></i><i></i><i></i><div class="fill"></div></div><div class="b2"><div class="ln m"></div><div class="ln s"></div></div></div>
+        <div class="rg act" style="width:34%"><div class="b2"><div class="ln m"></div><div class="ln b s"></div></div></div></div></div>
+      <div class="dg"><div class="d-bd">
+        <div class="rg" style="flex:1"><div class="tabs"><i></i><i class="on"></i><i></i><div class="fill"></div></div><div class="b2"><div class="ln s"></div><div class="ln m"></div><div class="ln s"></div></div></div>
+        <div class="rg act" style="width:34%"><div class="b2"><div class="ln m"></div><div class="ln b s"></div></div></div></div></div>
+      <div class="dg"><div class="d-bd">
+        <div class="rg" style="flex:1"><div class="tabs"><i></i><i></i><i class="on"></i><div class="fill"></div></div><div class="b2"><div class="ln m"></div></div></div>
+        <div class="rg act" style="width:34%"><div class="b2"><div class="ln m"></div><div class="ln b s"></div></div></div></div></div>
+    </div>
+    <p class="cm">Tres pestañas, un mismo rectángulo de contexto. La acción está siempre en el mismo lugar.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="mini">
+      <div class="dg"><div class="d-bd">
+        <div class="rg" style="flex:1"><div class="tabs"><i class="on"></i><i></i><i></i><div class="fill"></div></div><div class="b2"><div class="ln m"></div></div></div>
+        <div class="rg act" style="width:34%"><div class="b2"><div class="ln m"></div></div></div></div></div>
+      <div class="dg"><div class="d-bd">
+        <div class="rg" style="flex:1"><div class="tabs"><i></i><i class="on"></i><i></i><div class="fill"></div></div><div class="b2"><div class="ln m"></div><div class="ln s"></div></div></div>
+        <div class="rg act" style="width:18%"><div class="b2"><div class="ln s"></div></div></div></div></div>
+      <div class="dg xed"><div class="d-bd">
+        <div class="rg" style="flex:1"><div class="tabs"><i></i><i></i><i class="on"></i><div class="fill"></div></div><div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div></div></div>
+    </div>
+    <p class="cm">El contexto se encoge y en la tercera desaparece. Hay que volver atrás para poder actuar.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> al recorrer todas las pestañas de una vista, el <code>getBoundingClientRect()</code> de la región de contexto no cambia en ningún valor.</div></div>
+
+<div class="rule" id="r07"><div class="hd"><span class="no">07</span><span class="tx">
+  <b>Dentro del cuerpo manda la rejilla de documento</b>
+  <span>La región no es una excusa para colocar a mano. Adentro se reestablece la rejilla —subrejilla— y el contenido se alinea a ella.</span></span><span class="st declarada">Declarada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="dg" style="height:96px"><div class="d-bd"><div class="rg" style="flex:1">
+      <div class="tt">Trabajo · subrejilla de 8</div>
+      <div class="b2" style="padding:8px 6px">
+        <div style="display:flex;gap:4px;margin-block-end:6px">
+          <div class="ln" style="flex:1;margin:0"></div><div class="ln" style="flex:1;margin:0"></div>
+          <div class="ln" style="flex:1;margin:0"></div><div class="ln" style="flex:1;margin:0"></div></div>
+        <div style="display:flex;gap:4px"><div class="ln b" style="flex:2;margin:0"></div><div class="ln b" style="flex:2;margin:0"></div></div>
+        <div style="display:flex;gap:4px;margin-block-start:6px"><div class="ln" style="flex:4;margin:0"></div></div>
+      </div></div></div></div>
+    <p class="cm">Cuatro tarjetas, dos bloques, una tabla. Todo cae en las mismas líneas.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="dg" style="height:96px"><div class="d-bd"><div class="rg" style="flex:1">
+      <div class="tt">Trabajo</div>
+      <div class="b2" style="padding:8px 6px">
+        <div style="display:flex;gap:7px;margin-block-end:7px">
+          <div class="ln" style="width:31%;margin:0"></div><div class="ln" style="width:24%;margin:0"></div>
+          <div class="ln" style="width:37%;margin:0"></div></div>
+        <div style="display:flex;gap:5px"><div class="ln b" style="width:44%;margin:0"></div><div class="ln b" style="width:41%;margin:0"></div></div>
+        <div style="display:flex;margin-block-start:7px"><div class="ln" style="width:88%;margin-inline-start:6%"></div></div>
+      </div></div></div></div>
+    <p class="cm">Cada fila arranca en un sitio distinto. Prolijo por bloque, desordenado por columna.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> todo cuerpo declara subrejilla; cero anchos absolutos dentro de un cuerpo.</div></div>
+
+<div class="rule" id="r08"><div class="hd"><span class="no">08</span><span class="tx">
+  <b>Al angostar, las regiones se pliegan en un orden declarado, y la que lleva la acción se pliega última</b>
+  <span>La columna de contexto no es un lujo del ancho máximo: es la que permite actuar.</span></span><span class="st deriva">En deriva</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="mini">
+      <div class="dg"><div class="d-bd"><div class="d-rail" style="width:16px"></div>
+        <div class="rg" style="width:19%"></div><div class="rg" style="flex:1"></div><div class="rg act" style="width:31%"></div></div></div>
+      <div class="dg"><div class="d-bd"><div class="d-rail" style="width:16px"></div>
+        <div class="rg" style="width:19%"></div><div class="rg" style="flex:1"></div><div class="rg act" style="width:31%"></div></div></div>
+      <div class="dg"><div class="d-bd"><div class="d-rail" style="width:16px"></div>
+        <div class="rg" style="flex:1"><div class="tabs"><i class="on"></i><i></i><div class="fill"></div></div></div><div class="rg act" style="width:37%"></div></div></div>
+    </div>
+    <p class="cap">ancho máximo &nbsp;·&nbsp; medio &nbsp;·&nbsp; mínimo de terminal</p>
+    <p class="cm">La lista se pliega primero y pasa a pestaña. El contexto —y por lo tanto la acción— se queda.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="mini">
+      <div class="dg"><div class="d-bd"><div class="d-rail" style="width:16px"></div>
+        <div class="rg" style="width:19%"></div><div class="rg" style="flex:1"></div><div class="rg act" style="width:31%"></div></div></div>
+      <div class="dg xed"><div class="d-bd"><div class="d-rail" style="width:16px"></div>
+        <div class="rg" style="width:26%"></div><div class="rg" style="flex:1"></div></div></div>
+    </div>
+    <p class="cm">Se salvó la lista y se perdió la acción. Ya no se puede cerrar una operación sin abrir otra cosa.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> el orden de plegado está declarado, y la región que contiene la acción primaria es la última de esa lista. Comprobado a los cuatro anchos.</div></div>
+
+<h2 id="p2">Pliego II · El despliegue</h2>
+<h3>Qué pasa cuando algo <b>se abre</b></h3>
+<div class="ax">
+  <h4>Una apertura <b>cobra</b>. Lo que cobra tiene que valer lo que impide.</h4>
+  <p>Todo lo que se abre le quita al usuario una parte de lo que estaba viendo. Elegir la superficie es elegir cuánto se le quita. La pregunta no es «¿qué se ve mejor?», sino <b class="w">¿qué pierde de vista mientras esto está abierto, y lo necesitaba?</b></p>
+</div>
+
+<h3 style="font-size:1.1rem;font-weight:600;margin-block-start:34px">Las cinco superficies</h3>
+<div class="voc surf5" style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px">
+  <div><h5>Región de contexto</h5><p style="font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--grn);margin-block-end:8px">no cobra nada</p>
+    <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln sel s"></div><div class="ln m"></div></div></div>
+      <div class="rg act" style="width:36%"><div class="b2"><div class="ln m"></div><div class="ln b s"></div></div></div></div></div>
+    <p>Ya está en pantalla. Seleccionar la llena. No aparece nada nuevo.</p></div>
+  <div><h5>En sitio</h5><p style="font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--grn);margin-block-end:8px">no cobra nada</p>
+    <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div>
+        <div style="background:#fff;border:1px solid #b9c1cd;padding:3px;margin-block-end:3px">
+          <div class="ln s" style="margin:0 0 3px"></div><div class="ln" style="width:70%;margin:0"></div></div>
+        <div class="ln m"></div></div></div></div></div>
+    <p>La fila crece donde está. Nada se corre salvo lo que viene debajo.</p></div>
+  <div><h5>Anclada</h5><p style="font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-block-end:8px">cobra poco</p>
+    <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div><div class="ln s"></div></div></div></div>
+      <div class="ov anchor"><div style="padding:4px"><div class="ln s" style="margin-block-end:3px"></div><div class="ln" style="width:70%;margin:0"></div></div></div>
+      <div class="lost" style="right:8%;top:26%;width:34%;height:44%"></div></div>
+    <p>Pegada a lo que la abrió. Efímera: se va al elegir o al tocar afuera.</p></div>
+  <div><h5>Cajón</h5><p style="font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amb);margin-block-end:8px">cobra su región</p>
+    <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div></div></div></div>
+      <div class="ov drawer"><div style="padding:5px"><div class="ln m" style="margin-block-end:4px"></div><div class="ln s"></div><div class="ln m"></div></div></div>
+      <div class="lost" style="right:0;top:9px;bottom:0;width:46%"></div></div>
+    <p>Entra por el borde de <b class="k">su región</b>, no de la pantalla.</p></div>
+  <div><h5>Modal</h5><p style="font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-block-end:8px">cobra todo</p>
+    <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div></div></div></div>
+      <div class="scrim"></div>
+      <div class="ov modal"><div style="padding:5px"><div class="ln s" style="margin-block-end:4px"></div><div class="ln m"></div></div></div>
+      <div class="lost" style="inset:9px 0 0 0"></div></div>
+    <p>Impide todo lo demás. Vale sólo cuando seguir sin decidir sería un error.</p></div>
+</div>
+
+<h3 style="font-size:1.1rem;font-weight:600;margin-block-start:36px">La tabla que decide</h3>
+<p>No hay que discutirlo cada vez. Lo que se abre determina la superficie.</p>
+<table>
+<tr><th>Lo que se abre</th><th>Superficie</th><th>Por qué</th></tr>
+<tr><td>El detalle de algo seleccionado</td><td><b>Región de contexto</b></td><td class="why">ya está en pantalla y no cuesta nada</td></tr>
+<tr><td>Un menú de opciones de un elemento</td><td><b>Anclada</b></td><td class="why">efímera, y hay que ver de qué elemento es</td></tr>
+<tr><td>Filtros de una lista</td><td><b>En sitio, sobre la lista</b></td><td class="why">pertenecen a la región y hay que ver el efecto</td></tr>
+<tr><td>Un formulario de varios campos</td><td><b>Cajón en su región</b></td><td class="why">necesita espacio, no necesita bloquear</td></tr>
+<tr><td>Confirmar algo irreversible</td><td><b>Modal</b></td><td class="why">seguir sin decidir sería el error</td></tr>
+<tr><td>Un aviso que no exige acción</td><td><b>En línea, en la región</b></td><td class="why">informa sin interrumpir</td></tr>
+<tr><td>Una condición que impide operar</td><td><b>Compuerta sobre la región</b></td><td class="why">cubre y ofrece el acto que desbloquea · <b>no</b> un banner con los controles vivos debajo</td></tr>
+<tr><td>El resultado de una acción ya hecha</td><td><b>Aviso pasajero sobre el armazón</b></td><td class="why">no hay nada que decidir; se va solo</td></tr>
+</table>
+
+<div class="find" style="border-inline-start-color:var(--grn)">
+  <h4>La compuerta: una corrección que vino del producto</h4>
+  <p style="margin:0">Esta fila decía «banner de la región». El documento del primer producto ya tenía la regla mejor resuelta y
+  <b class="k">ganada</b>: <i>el bloqueo no es un aviso, es una compuerta</i>. Un banner deja los controles vivos debajo, y un
+  control que no va a funcionar no debe poder tocarse. La compuerta cubre su región y ofrece el acto que desbloquea. Se corrigió
+  aquí, no allá — es la disciplina funcionando en la dirección que importa: lo que operó gana sobre lo que se dedujo.</p>
+</div>
+
+<div class="rule" id="r09"><div class="hd"><span class="no">09</span><span class="tx">
+  <b>Seleccionar no abre nada</b>
+  <span>Elegir una fila llena la región de contexto. Es el movimiento por omisión y debería cubrir la mayor parte de lo que el usuario hace en un día.</span></span><span class="st deriva">En deriva</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="mini">
+      <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+        <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div>
+        <div class="rg act" style="width:36%"><div class="b2"><div class="ln" style="width:40%;background:#e6e9ef"></div></div></div></div></div>
+      <div class="arrw">→</div>
+      <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+        <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln sel s"></div><div class="ln m"></div></div></div>
+        <div class="rg act" style="width:36%"><div class="b2"><div class="ln m"></div><div class="ln b s"></div><div class="ln" style="width:64%"></div></div></div></div></div>
+    </div>
+    <p class="cm">La lista no se movió, el rectángulo de contexto tampoco. Sólo cambió lo que hay dentro.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="mini">
+      <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+        <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div></div></div>
+      <div class="arrw">→</div>
+      <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div>
+        <div class="scrim"></div><div class="ov modal"><div style="padding:5px"><div class="ln s"></div><div class="ln m"></div></div></div></div>
+    </div>
+    <p class="cm"><i>Mirar</i> un registro cobra la pantalla entera. Es lo que hace hoy el producto.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> seleccionar no crea ninguna superficie nueva, y el <code>getBoundingClientRect()</code> de la región de contexto no cambia.</div></div>
+
+<div class="rule" id="r10"><div class="hd"><span class="no">10</span><span class="tx">
+  <b>Toda apertura ocurre dentro de la región que la disparó</b>
+  <span>Una superficie no puede exceder su región. La única excepción es el modal, y es excepción declarada, no descuido.</span></span><span class="st declarada">Declarada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="sc" style="height:88px"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="width:26%"><div class="b2"><div class="ln s"></div><div class="ln m"></div></div></div>
+      <div class="rg" style="flex:1;position:relative"><div class="b2"><div class="ln m"></div></div>
+        <div class="ov drawer" style="width:58%"><div style="padding:5px"><div class="ln m"></div><div class="ln s"></div></div></div></div>
+      <div class="rg act" style="width:26%"><div class="b2"><div class="ln b s"></div></div></div>
+    </div></div>
+    <p class="cm">El cajón entra por el borde de su región. La lista y el contexto siguen a la vista.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="sc" style="height:88px"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="width:26%"></div><div class="rg" style="flex:1"></div><div class="rg act" style="width:26%"></div></div>
+      <div class="ov drawer" style="width:52%;top:0"></div>
+      <div class="lost" style="right:0;top:0;bottom:0;width:52%"></div>
+    </div>
+    <p class="cm">Salió de su región, tapó el contexto y hasta la barra. Ya no se sabe para quién se está llenando el formulario.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> el rectángulo de toda superficie abierta está contenido en el de su región. Excepción única: las marcadas <code>modal</code> en la disposición.</div></div>
+
+<div class="rule" id="r11"><div class="hd"><span class="no">11</span><span class="tx">
+  <b>El modal es uno solo, y confirma lo irreversible</b>
+  <span>Si bloquear no está justificado por una consecuencia que no se puede deshacer, no es un modal. Es la superficie más cara del sistema y hay que gastarla bien.</span></span><span class="st deriva">En deriva</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="sc" style="height:80px"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div>
+      <div class="scrim"></div>
+      <div class="ov modal" style="top:22%;bottom:22%"><div style="padding:6px">
+        <div class="ln s" style="margin-block-end:5px"></div>
+        <div style="display:flex;gap:4px;margin-block-start:6px">
+          <div style="flex:1;height:8px;background:#e6e9ef"></div>
+          <div style="flex:1;height:8px;background:var(--acc);opacity:.75"></div></div></div></div></div>
+    <p class="cm">Una pregunta y dos salidas. Detrás no hay nada que el usuario pueda seguir haciendo, y así debe ser.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="mini">
+      <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div><div class="scrim"></div><div class="ov modal"></div></div>
+      <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div><div class="scrim"></div><div class="ov modal"></div></div>
+      <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div><div class="scrim"></div><div class="ov modal"></div></div>
+    </div>
+    <p class="cm">Ver, filtrar y editar también bloquean. Cuando todo bloquea, bloquear no significa nada y se confirma sin leer.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> se cuentan los modales por vista; cada uno debe terminar en una acción declarada como irreversible. Un modal que sólo muestra, no pasa.</div></div>
+
+<div class="rule" id="r12"><div class="hd"><span class="no">12</span><span class="tx">
+  <b>Nada tapa el dato que la decisión necesita</b>
+  <span>En IB la boleta de orden va <i>al lado</i> del gráfico, nunca encima. Un formulario que tapa aquello sobre lo que uno decide obliga a recordar en vez de mirar.</span></span><span class="st declarada">Declarada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="sc" style="height:88px"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln b s"></div><div class="ln m"></div><div class="ln s"></div></div></div>
+      <div class="rg act" style="width:40%"><div class="b2"><div class="ln m"></div><div class="ln s"></div>
+        <div style="display:flex;gap:3px;margin-block-start:4px"><div style="flex:1;height:7px;background:#3f6fd8"></div><div style="flex:1;height:7px;background:#c8102e;opacity:.8"></div></div></div></div>
+    </div></div>
+    <p class="cm">El formulario y el dato que lo justifica están en pantalla al mismo tiempo.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="sc" style="height:88px"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln b s"></div><div class="ln m"></div></div></div></div>
+      <div class="ov" style="left:12%;right:12%;top:24%;bottom:14%"><div style="padding:5px"><div class="ln s"></div><div class="ln m"></div></div></div>
+      <div class="lost" style="left:12%;right:12%;top:24%;bottom:14%"></div>
+    </div>
+    <p class="cm">Cayó justo sobre la cifra que hay que copiar. El usuario cierra, mira, vuelve a abrir.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> con la superficie abierta, todo dato citado por sus campos sigue visible. Se comprueba caso por caso, no por clase.</div></div>
+
+<div class="rule" id="r13"><div class="hd"><span class="no">13</span><span class="tx">
+  <b>Profundidad de apertura: uno</b>
+  <span>Nada se abre sobre algo abierto. Es la regla 04 en el otro eje: si hace falta un segundo nivel, la primera superficie estaba mal elegida.</span></span><span class="st declarada">Declarada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="sc" style="height:80px"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div>
+      <div class="scrim"></div><div class="ov modal"><div style="padding:5px"><div class="ln s"></div><div class="ln m"></div></div></div></div>
+    <p class="cm">Un nivel. Para llegar a otra decisión, primero se resuelve ésta.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="sc" style="height:80px"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div>
+      <div class="scrim"></div>
+      <div class="ov modal" style="left:8%;right:20%;top:12%;bottom:20%"></div>
+      <div class="scrim" style="inset:12% 20% 20% 8%;background:rgba(20,24,32,.35)"></div>
+      <div class="ov modal" style="left:22%;right:8%;top:30%;bottom:8%"><div style="padding:5px"><div class="ln s"></div></div></div>
+      <div class="lost" style="inset:9px 0 0 0"></div>
+    </div>
+    <p class="cm">Modal sobre modal. Ya no se sabe qué cierra qué, ni qué queda a medio hacer si se cancela.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> cero superficies abiertas mientras otra lo está. Un contador basta: nunca pasa de 1.</div></div>
+
+<div class="rule" id="r14"><div class="hd"><span class="no">14</span><span class="tx">
+  <b>El disparador queda visible, y se cierra por donde se abrió</b>
+  <span>Lo que abrió una superficie tiene que seguir en pantalla mientras está abierta. Es el hilo de vuelta.</span></span><span class="st declarada">Declarada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="sc" style="height:80px"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div>
+        <div class="ln sel s" style="height:6px;box-shadow:0 0 0 1px #3f6fd8"></div><div class="ln m"></div></div></div></div>
+      <div class="ov drawer" style="width:44%"><div style="padding:5px"><div class="ln m"></div><div class="ln s"></div></div></div>
+    </div>
+    <p class="cm">La fila que abrió el cajón queda marcada y a la vista. <code>Esc</code> o volver a ella lo cierran.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="sc" style="height:80px"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div></div></div></div>
+      <div class="ov drawer" style="width:74%"><div style="padding:5px"><div class="ln m"></div><div class="ln s"></div></div></div>
+      <div class="lost" style="right:0;top:9px;bottom:0;width:74%"></div>
+    </div>
+    <p class="cm">El disparador quedó tapado. Sin marca ni hilo de vuelta, cerrar es adivinar.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> el disparador conserva rectángulo visible y marca de estado mientras la superficie está abierta; <code>Esc</code> y el propio disparador la cierran.</div></div>
+
+<div class="rule" id="r15"><div class="hd"><span class="no">15</span><span class="tx">
+  <b>Entra por su propio borde, en un movimiento</b>
+  <span>Nada aparece de la nada y nada viaja por la pantalla. Un solo eje, y por debajo del umbral en que el ojo tiene que seguir la cosa: <code>240 ms</code>.</span></span><span class="st ganada">Ganada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="mini">
+      <div class="sc" style="height:58px"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div><div class="ov drawer" style="width:12%;opacity:.45"></div></div>
+      <div class="arrw">→</div>
+      <div class="sc" style="height:58px"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div><div class="ov drawer" style="width:30%;opacity:.75"></div></div>
+      <div class="arrw">→</div>
+      <div class="sc" style="height:58px"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div><div class="ov drawer" style="width:46%"></div></div>
+    </div>
+    <p class="cm">Sale del borde donde va a quedarse. El ojo ya sabe dónde mirar antes de que termine.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="mini">
+      <div class="sc" style="height:58px"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div><div class="ov" style="left:6%;top:50%;width:22%;height:26%;opacity:.5"></div></div>
+      <div class="arrw">→</div>
+      <div class="sc" style="height:58px"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div><div class="ov" style="left:34%;top:32%;width:34%;height:40%;opacity:.75"></div></div>
+      <div class="arrw">→</div>
+      <div class="sc" style="height:58px"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div><div class="ov drawer" style="width:46%"></div></div>
+    </div>
+    <p class="cm">Nace en un lugar y termina en otro. El usuario persigue la superficie en vez de leerla.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> duración <code>≤ 240 ms</code>, desplazamiento en un solo eje, y el origen del movimiento sobre el borde donde la superficie queda. Cero apariciones instantáneas y cero traslados.</div></div>
+
+<div class="rule" id="r16"><div class="hd"><span class="no">16</span><span class="tx">
+  <b>La acción primaria no se abre: está</b>
+  <span>Lo que uno vino a hacer no se invoca. Si la acción principal de una vista vive detrás de una apertura, la vista está mal armada.</span></span><span class="st deriva">En deriva</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="sc" style="height:88px"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+      <div class="rg" style="width:24%"><div class="b2"><div class="ln s"></div><div class="ln m"></div></div></div>
+      <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div>
+      <div class="rg act" style="width:32%"><div class="b2"><div class="ln m"></div><div class="ln b s"></div>
+        <div style="display:flex;gap:3px;margin-block-start:5px"><div style="flex:1;height:8px;background:#3f6fd8"></div><div style="flex:1;height:8px;background:#c8102e;opacity:.8"></div></div></div></div>
+    </div></div>
+    <p class="cm">Las dos acciones están en pantalla desde que la vista abre. Cero clics para poder actuar.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="mini">
+      <div class="sc" style="height:58px"><div class="bar"></div><div class="bd2"><div class="rail"></div>
+        <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div></div></div></div>
+        <div class="ov anchor" style="right:4%;top:14%;width:22%;height:24%"></div></div>
+      <div class="arrw">→</div>
+      <div class="sc" style="height:58px"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div>
+        <div class="ov drawer" style="width:46%"><div style="padding:4px"><div style="height:7px;background:#3f6fd8;width:60%"></div></div></div></div>
+    </div>
+    <p class="cm">Menú, después cajón, y recién ahí el botón. Dos aperturas para hacer lo único que la pantalla existe para hacer.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> en toda vista de trabajo, la acción primaria es alcanzable sin abrir ninguna superficie. Se mide en clics: <code>0</code> para llegar a ella.</div></div>
+
+<h2 id="p3">Pliego III · La frontera</h2>
+<h3>Dónde <b>cambia la gramática</b></h3>
+<div class="ax">
+  <h4>La frontera no es un corte más de la rejilla: es donde <b>cambian las reglas que gobiernan</b>.</h4>
+  <p>Los otros cortes refluyen contenido dentro de un mismo sistema —tres columnas pasan a dos, una tarjeta se angosta—. Éste no reordena nada. Antes de él manda el sistema de una región; después, el de varias. Por eso es <b class="w">uno solo</b> y por eso hay que declararlo.</p>
+</div>
+<div class="tape">
+  <div class="z doc" style="flex:1.7"><div class="lb">mínimo</div><div class="nm">Una región</div></div>
+  <div class="z doc" style="flex:1.3"><div class="lb">refluye</div><div class="nm">Una región</div></div>
+  <div class="z ter" style="flex:1"><div class="lb">FRONTERA</div><div class="nm">Varias regiones</div></div>
+  <div class="z ter" style="flex:.9"><div class="lb">refluye</div><div class="nm">Varias regiones</div></div>
+  <div class="z ter" style="flex:.8"><div class="lb">máximo</div><div class="nm">Varias regiones</div></div>
+</div>
+<div class="leg"><span><i class="d"></i>sistema de una región</span><span><i class="t"></i>sistema de varias regiones</span></div>
+<p style="margin-block-start:16px">Cuatro cortes, una sola frontera. Los demás refluyen dentro de su sistema; sólo uno cambia de sistema.</p>
+
+<div class="rule" id="r17"><div class="hd"><span class="no">17</span><span class="tx">
+  <b>Hay una frontera, y una sola</b>
+  <span>Un único ancho en que cambia el sistema, declarado en un solo lugar y leído desde ahí por el CSS y por el JS. Dos fronteras no son un matiz: son una tercera gramática que nadie diseñó y por lo tanto nadie probó.</span></span><span class="st deriva">En deriva</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="mini">
+      <div class="dg"><div class="d-bar"></div><div class="d-bd"><div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div></div></div>
+      <div class="arrw">│</div>
+      <div class="dg"><div class="d-bar"></div><div class="d-bd"><div class="d-rail" style="width:16px"></div>
+        <div class="rg" style="width:26%"></div><div class="rg" style="flex:1"></div><div class="rg act" style="width:28%"></div></div></div>
+    </div>
+    <p class="cm">Un solo umbral. De un lado un sistema entero; del otro, el otro entero. No hay estado intermedio que probar.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="mini">
+      <div class="dg"><div class="d-bar"></div><div class="d-bd"><div class="rg" style="flex:1"></div></div></div>
+      <div class="arrw">│</div>
+      <div class="dg"><div class="d-bar"></div><div class="d-bd"><div class="d-rail" style="width:16px"></div>
+        <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div></div></div></div>
+        <div class="d-st"></div>
+        <div class="lost" style="inset:0"></div></div>
+      <div class="arrw">│</div>
+      <div class="dg"><div class="d-bar"></div><div class="d-bd"><div class="d-rail" style="width:16px"></div>
+        <div class="rg" style="width:26%"></div><div class="rg" style="flex:1"></div><div class="rg act" style="width:28%"></div></div></div>
+    </div>
+    <p class="cm">La del medio no es ninguna de las dos: riel y barra de estado del sistema de varias regiones, encima de un contenido que baja.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> un único valor de frontera en el código; cero reglas del sistema de varias regiones fuera de él.</div></div>
+
+<div class="rule" id="r18"><div class="hd"><span class="no">18</span><span class="tx">
+  <b>El cruce es reversible y no deja estado</b>
+  <span>Ir y volver devuelve exactamente lo mismo. Si el regreso difiere, algo del otro sistema se quedó pegado y va a aparecer después, sin que nada lo explique.</span></span><span class="st deriva">En deriva</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="mini">
+      <div class="dg" style="height:56px"><div class="d-bar"></div><div class="d-bd"><div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div></div></div>
+      <div class="arrw">→</div>
+      <div class="dg" style="height:56px"><div class="d-bar"></div><div class="d-bd"><div class="d-rail" style="width:14px"></div><div class="rg" style="width:28%"></div><div class="rg" style="flex:1"></div><div class="rg act" style="width:28%"></div></div></div>
+      <div class="arrw">→</div>
+      <div class="dg" style="height:56px"><div class="d-bar"></div><div class="d-bd"><div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div></div></div>
+    </div>
+    <p class="cm" style="text-align:center;font-family:'IBM Plex Mono',monospace;color:var(--grn)">a3f1 → … → a3f1</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="mini">
+      <div class="dg" style="height:56px"><div class="d-bar"></div><div class="d-bd"><div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div></div></div>
+      <div class="arrw">→</div>
+      <div class="dg" style="height:56px"><div class="d-bar"></div><div class="d-bd"><div class="d-rail" style="width:14px"></div><div class="rg" style="width:28%"></div><div class="rg" style="flex:1"></div><div class="rg act" style="width:28%"></div></div></div>
+      <div class="arrw">→</div>
+      <div class="dg" style="height:56px"><div class="d-bar"></div><div class="d-bd"><div class="rg" style="flex:1"><div class="b2"><div class="ln s"></div><div class="ln m"></div></div></div></div><div class="lost" style="inset:0"></div></div>
+    </div>
+    <p class="cm" style="text-align:center;font-family:'IBM Plex Mono',monospace;color:var(--acc)">a3f1 → … → c0b9</p>
+    <p class="cm">Volvió con un bloque menos. Un plegado automático se comió un aviso al cruzar.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> se toma la huella del DOM en el ancho mínimo, se cruza al máximo y se vuelve. Las dos huellas deben ser idénticas, en ambos sentidos.</div></div>
+
+<div class="rule" id="r19"><div class="hd"><span class="no">19</span><span class="tx">
+  <b>Ninguna regla cruza</b>
+  <span>Cada regla declara a qué sistema pertenece, y su implementación vive dentro del media query de ese sistema. Una regla que aplica a los dos lados es una regla que nadie verificó en uno de ellos.</span></span><span class="st deriva">En deriva</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="cq">@media (max-width: FRONTERA - .02){
+  <b>/* una región */</b>
+  .fila { … }
+}
+@media (min-width: FRONTERA){
+  <b>/* varias regiones */</b>
+  .region { … }
+}</div>
+    <p class="cm">Cada regla se puede probar en un solo lado. Tocar un sistema no puede mover el otro, y se sabe sin leer el código.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="cq">.panel { gap: 16px }        <u>← los dos lados</u>
+
+@media (min-width: FRONTERA){
+  <u>.region .pieza { display:none }</u>
+        ↑ apunta a algo que no
+          existe hasta más ancho
+}</div>
+    <p class="cm">Arriba, una regla sin sistema: al tocarla se movió el ritmo del otro lado. Abajo, una regla declarada que no aplica a nada.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> estática: cero selectores de un sistema fuera de su media query, en ambas direcciones. Tiene que dar <code>0</code>.</div></div>
+
+<div class="rule" id="r20"><div class="hd"><span class="no">20</span><span class="tx">
+  <b>Lo que cruza es el contenido, nunca la disposición</b>
+  <span>Los dos sistemas comparten todo lo que dice <i>qué</i> es la cosa, y no comparten nada de lo que dice <i>dónde</i> va.</span></span><span class="st ganada">Ganada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Cruza</div>
+    <p class="cm" style="max-width:none">Los fichas de color · la escala tipográfica · el vocabulario de estados · las palabras de la interfaz · los datos y la capa de servicio · la ontología: qué entidad, qué acción, qué pregunta responde la pantalla.</p></div>
+  <div><div class="mk no">✗ No cruza</div>
+    <p class="cm" style="max-width:none">Las regiones · las superficies y su costo · el orden de plegado · el riel · la barra de estado · el cajón · la profundidad de división. Nada de esto significa lo mismo del otro lado, y varias cosas ni siquiera existen ahí.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> el conjunto de fichas y el vocabulario de estados es idéntico a ambos lados; y ningún nombre de región aparece en el sistema de una región.</div></div>
+
+<div class="rule" id="r21"><div class="hd"><span class="no">21</span><span class="tx">
+  <b>Un ancho de cero no decide nada</b>
+  <span>La frontera se cruza midiendo el ancho real, nunca el dispositivo ni el agente. Y una medición que da cero no es «el chico»: es que no se pudo medir. Ante eso, no se decide.</span></span><span class="st ganada">Ganada</span></div>
+<div class="pair">
+  <div><div class="mk ok">✓ Bien</div>
+    <div class="cq">ancho = medir()
+si ancho === 0:
+  <b>no decidir nada</b>
+  volver a medir
+si ancho ≥ frontera: varias regiones
+si no:               una región</div>
+    <p class="cm">La medición sin resultado se distingue de la medición chica. Son cosas distintas y se tratan distinto.</p></div>
+  <div><div class="mk no">✗ Mal</div>
+    <div class="cq">si ancho ≥ frontera: varias regiones
+si no:               <u>una región</u>
+       ↑ un panel oculto informa 0
+         y la disposición se desarma sola</div>
+    <p class="cm">Costó un desbordamiento inexistente y unos gráficos dibujados en blanco: el panel oculto informaba ancho 0 y cero cuadros de animación.</p></div>
+</div>
+<div class="ver"><b>Verificación</b> ninguna decisión de gramática se toma con ancho <code>0</code>; y la decisión no consulta el agente de usuario en ningún punto — se busca la cadena y tiene que dar cero apariciones.</div></div>
+
+<h2 id="p4">Pliego IV · La región única</h2>
+<h3>El sistema del <b>lado angosto</b></h3>
+<p class="lead">No es el otro sistema con menos columnas. Es otro sistema, y tratarlo como una degradación es el error que produce interfaces estiradas.</p>
+<div class="ax">
+  <h4>Aquí el armazón <b>también es fijo</b>. Lo que cambia es que cuelga una sola región.</h4>
+  <p>Es el hallazgo que reordenó este documento: la regla 01 no pertenece al sistema de varias regiones. Un armazón fijo con una región que baja ya la cumplía, y la cumplía antes de que existieran estos pliegos. <b class="w">La regla 01 es del tronco común.</b></p>
+  <p>Y el costo se mide distinto. En varias regiones lo caro es <b class="w">tapar el dato</b>. Aquí tapar es normal y barato: lo caro es <b class="w">perder el lugar</b>. Se mide en gestos para volver, no en superficie cubierta.</p>
+</div>
+
+<div class="phrow">
+  <div class="phcell">
+    <div class="ph"><div class="top"></div><div class="mid">
+      <div class="ln m"></div>
+      <div style="border:1px solid #b9c1cd;border-radius:6px;padding:4px;margin-block-end:5px">
+        <div class="ln s" style="margin:0 0 4px"></div><div class="ln" style="width:70%;margin:0"></div></div>
+      <div class="ln m"></div><div class="ln s"></div></div>
+      <div class="bot"><i class="on"></i><i></i><i></i><i></i></div></div>
+    <div class="nm">En sitio</div><div class="g z">0</div><div class="gl">gestos para volver</div></div>
+  <div class="phcell">
+    <div class="ph"><div class="top"></div><div class="mid">
+      <div class="ln m"></div><div class="ln s"></div>
+      <div class="sheet"><div class="ln m"></div><div class="ln s"></div>
+        <div style="position:absolute;left:8px;right:8px;bottom:8px;display:flex;gap:4px">
+          <div style="flex:1;height:10px;background:#e6e9ef"></div><div style="flex:1;height:10px;background:var(--acc);opacity:.75"></div></div></div>
+      <div class="lost" style="left:0;right:0;bottom:0;height:66%"></div></div>
+      <div class="bot"><i class="on"></i><i></i><i></i><i></i></div></div>
+    <div class="nm">Hoja inferior</div><div class="g z">1</div><div class="gl">toca fuera y vuelve</div></div>
+  <div class="phcell">
+    <div class="ph"><div class="top"></div><div class="mid">
+      <div class="pushed"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div>
+      <div class="lost" style="inset:0"></div></div>
+      <div class="bot"><i class="on"></i><i></i><i></i><i></i></div></div>
+    <div class="nm">Pantalla empujada</div><div class="g w">1</div><div class="gl">si el «atrás» funciona</div></div>
+  <div class="phcell">
+    <div class="ph"><div class="top"></div><div class="mid">
+      <div class="ln m"></div><div class="ln s"></div>
+      <div class="scrim" style="inset:0"></div>
+      <div class="sheet" style="height:52%"><div class="ln s"></div>
+        <div style="position:absolute;left:8px;right:8px;bottom:8px;display:flex;gap:4px">
+          <div style="flex:1;height:10px;background:#e6e9ef"></div><div style="flex:1;height:10px;background:var(--acc);opacity:.75"></div></div></div>
+      <div class="lost" style="inset:0"></div></div>
+      <div class="bot"><i class="on"></i><i></i><i></i><i></i></div></div>
+    <div class="nm">Modal</div><div class="g f">1 + decidir</div><div class="gl">no se sale sin resolver</div></div>
+</div>
+
+<div class="rule" id="r22"><div class="hd"><span class="no">22</span><span class="tx">
+  <b>Una sola región, enmarcada por el armazón fijo</b>
+  <span>Barra arriba, región al medio, barra de alcance abajo; las dos barras no bajan y respetan el área segura del aparato.</span></span><span class="st ganada">Ganada</span></div>
+<div class="bd"><div class="cq">.armazon { flex-shrink:0; padding: calc(<b>env(safe-area-inset-top)</b> + n) … }
+.region  { flex:1; <b>overflow-y:auto</b>; min-height:0 }
+.alcance { flex-shrink:0; padding-block-end: calc(<b>env(safe-area-inset-bottom)</b> + n) }</div>
+  <p class="cm">El área segura contemplada arriba y abajo es lo que evita que la barra de alcance quede debajo del indicador del aparato.</p></div>
+<div class="ver"><b>Verificación</b><code>scrollingElement.scrollTop === 0</code> a cualquier alto de contenido; las dos barras visibles siempre.</div></div>
+
+<div class="rule" id="r23"><div class="hd"><span class="no">23</span><span class="tx">
+  <b>Lo caro es perder el lugar, no tapar</b>
+  <span>Toda superficie tiene una salida visible y devuelve al mismo punto de scroll. Tapar entero es aceptable; no saber cómo volver, no.</span></span><span class="st deriva">En deriva</span></div>
+<div class="bd"><p class="cm" style="max-width:64ch">La salida suele estar —una cruz arriba a la derecha, y el velo que se toca—. Lo que casi nunca está garantizado es la vuelta al mismo punto: la región se repinta y el usuario aterriza arriba, en una lista por la que ya había bajado.</p></div>
+<div class="ver"><b>Verificación</b> abrir y cerrar cada superficie devuelve el mismo <code>scrollTop</code> de la región, con tolerancia 0 px.</div></div>
+
+<div class="rule" id="r24"><div class="hd"><span class="no">24</span><span class="tx">
+  <b>El alcance manda: navegación, acción y aviso viven abajo</b>
+  <span>Lo que se toca está en el tercio inferior. Lo que sólo se lee puede estar arriba.</span></span><span class="st ganada">Ganada</span></div>
+<div class="bd"><div class="cq">.nav          { order: último }        <b>← navegación abajo</b>
+.pie .boton   { flex: 1 }              <b>← botones al pie, ancho completo</b>
+.aviso        { bottom: … }            <b>← el aviso también abajo</b>
+.nav .destino { flex: 1 1 0 }          <b>← los destinos, ancho parejo</b></div>
+  <p class="cm">Los destinos se reparten el ancho en partes iguales: ninguno queda más difícil de acertar que otro.</p></div>
+<div class="ver"><b>Verificación</b> el rectángulo de la acción primaria cae dentro del tercio inferior en todas las vistas de trabajo.</div></div>
+
+<div class="rule" id="r25"><div class="hd"><span class="no">25</span><span class="tx">
+  <b>La hoja sube desde abajo</b>
+  <span>La misma superficie es hoja inferior de un lado y ventana centrada del otro. Cambia de forma al cruzar la frontera, y eso está bien: es la regla 20 funcionando. Lo que no puede es cambiar en otro ancho.</span></span><span class="st deriva">En deriva</span></div>
+<div class="bd"><div class="cq">.velo{ align-items: <b>flex-end</b> }                    ← hoja, sube desde abajo
+@media(min-width: <u>otro umbral</u>){ align-items:center }   ← ventana centrada
+@media(min-width: <u>otro más</u>){   align-items:center }   ← otra vez, 39 px después</div>
+  <p class="cm">La regla estaba bien pensada desde el principio. Lo que se fue de norma es <b class="k">dónde</b> cambia: en dos umbrales, y ninguno es la frontera.</p></div>
+<div class="ver"><b>Verificación</b> la hoja cambia de forma en la frontera declarada y en ningún otro ancho.</div></div>
+
+<div class="rule" id="r26"><div class="hd"><span class="no">26</span><span class="tx">
+  <b>Una sola orientación, y está defendida</b>
+  <span>Si el producto se diseñó vertical, el horizontal no se tolera a medias: se declara y se bloquea con una pantalla que lo dice.</span></span><span class="st ganada">Ganada</span></div>
+<div class="bd"><div class="cq">@media (orientation: landscape) and (max-width: …){
+  body::before{ content: <b>"Gira tu dispositivo"</b>; position:fixed; inset:0; … }
+}</div>
+  <p class="cm">Es la regla más inusual del sistema y la más firme. Al lado ancho no le aplica: allá el ancho es el material de trabajo.</p></div>
+<div class="ver"><b>Verificación</b> en la orientación no soportada, la pantalla de bloqueo cubre todo y ninguna vista queda operable por debajo.</div></div>
+
+<div class="rule" id="r27"><div class="hd"><span class="no">27</span><span class="tx">
+  <b>Cada sistema tiene su escala de esquina, y son distintas</b>
+  <span>Un lado puede ser redondo y el otro recto. Las dos están bien; lo que no está bien es que una de las dos no sea una escala.</span></span><span class="st deriva">En deriva</span></div>
+<div class="bd">
+  <div class="bars">
+    <div class="hi" style="height:100%"><span>14</span></div><div class="hi" style="height:100%"><span>12</span></div>
+    <div style="height:64%"><span>16</span></div><div style="height:55%"><span>99</span></div>
+    <div style="height:55%"><span>8</span></div><div style="height:55%"><span>10</span></div>
+    <div style="height:36%"><span>6</span></div><div style="height:18%"><span>5</span></div>
+    <div style="height:18%"><span>18</span></div><div style="height:18%"><span>11</span></div>
+    <div style="height:9%"><span>9</span></div><div style="height:9%"><span>7</span></div>
+    <div style="height:9%"><span>4</span></div><div style="height:9%"><span>3</span></div>
+    <div style="height:9%"><span>2</span></div><div style="height:9%"><span>13</span></div>
+  </div>
+  <p class="cm" style="max-width:64ch"><b class="k">Diecisiete radios distintos</b> medidos en el producto de referencia, contra <b class="k">dos</b> del otro lado. Eso no es una escala redonda: es una acumulación de decisiones sueltas tomadas en momentos distintos.</p>
+  <p class="cm" style="max-width:64ch"><b class="k">Y corrige a quien verifica.</b> Medir un lado contra la norma del otro produce falsos rojos. Cada sistema declara la suya, y sólo dentro de ella se juzga.</p></div>
+<div class="ver"><b>Verificación</b> cada sistema declara su escala de esquina y ningún radio queda fuera de ella. Meta para el lado redondo: de 17 valores a <code>4</code>.</div></div>
+
+<div class="rule" id="r28"><div class="hd"><span class="no">28</span><span class="tx">
+  <b>Cambiar de vista es navegar</b>
+  <span>Cada vista es una entrada de historia, y el gesto de «atrás» del aparato vuelve a la anterior. Es el gesto más usado del lado angosto.</span></span><span class="st deriva">En deriva</span></div>
+<div class="bd"><div class="cq">.vista        { display:none }
+.vista.activa { display:flex }        <b>← se conmuta, no se navega</b>
+
+history.pushState({guard1})           <u>← dos marcadores, no dos vistas</u>
+history.pushState({guard2})
+onpopstate → confirm(<u>"¿Salir?"</u>)     ← el gesto se intercepta</div>
+  <p class="cm" style="max-width:64ch">Las vistas se encienden y se apagan; no entran en la historia. Y lo que sí entra son <b class="k">dos marcadores de guarda</b>, puestos para que el gesto de atrás pregunte si uno quiere salir. O sea: el gesto no está sin implementar — está implementado <i>al revés</i> de esta regla, y cuesta un diálogo cada vez.</p>
+  <p class="cm" style="max-width:64ch">La guarda resuelve un problema real —salirse sin querer— pero lo resuelve interceptando en vez de navegando. Con vistas apiladas, el mismo gesto haría lo que el usuario espera y la guarda sólo haría falta en la primera.</p></div>
+<div class="ver"><b>Verificación</b> desde la tercera vista, el gesto de atrás devuelve a la segunda y después a la primera, sin salir.</div></div>
+
+
+<h2 id="piezas">Piezas · la primera</h2>
+<h3>El <b>proceso</b>: un compromiso que atraviesa hitos</h3>
+<p class="lead">Es la única pieza que entra a Ontikos por ahora, y entra porque los dos sistemas de referencia le guardan sitio por separado: Carbon la tiene como <i>Progress Indicator</i>; «Ratio» de IB tiene <i>Progress Steps</i> entre los <b class="k">tres únicos</b> componentes de su sección de portal.</p>
+<p>Cuando dos sistemas que no se hablan reservan lugar para la misma pieza, la pieza no es de un negocio. Lo que sigue son <b class="k">tres negocios distintos con la misma pieza</b>, sin una línea de CSS de diferencia entre ellos.</p>
+
+<div class="muestra-proc">
+  <div class="titulo">Seguros · colocar una póliza</div>
+  <div class="proc">
+    <div class="proc-paso cumplido"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Cotizada</span><span class="proc-sub">12 mar · 09:41</span></div></div>
+    <div class="proc-paso actual"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Emitida</span><span class="proc-sub">falta la firma del tomador</span><span class="proc-plazo">vence en 3 d</span></div></div>
+    <div class="proc-paso"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Pagada</span></div></div>
+    <div class="proc-paso"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Vigente</span></div></div>
+  </div>
+  <div class="proc-msg actual">
+    <div class="proc-msg-t">La póliza está emitida y sin firmar.</div>
+    <div class="proc-msg-s">Quedan tres días de vigencia de la cotización. Envíe el enlace de firma al tomador.</div>
+  </div>
+</div>
+<p class="cap-m">Hitos y palabras del producto. Forma, estados y plazo del sistema.</p>
+
+<div class="muestra-proc">
+  <div class="titulo">ERP genérico · entregar un producto</div>
+  <div class="proc">
+    <div class="proc-paso cumplido"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Pedido</span><span class="proc-sub">02 sep · 16:20</span></div></div>
+    <div class="proc-paso cumplido"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Preparado</span><span class="proc-sub">03 sep · 08:05</span></div></div>
+    <div class="proc-paso actual"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Despachado</span><span class="proc-sub">en ruta · guía 44-8812</span></div></div>
+    <div class="proc-paso"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Entregado</span></div></div>
+  </div>
+  <div class="proc-msg actual">
+    <div class="proc-msg-t">El pedido va en ruta.</div>
+    <div class="proc-msg-s">Confirme la recepción cuando el transportista reporte la entrega.</div>
+  </div>
+</div>
+<p class="cap-m">Cuatro hitos, sin plazo: no todo compromiso lo tiene, y el que no lo tiene no lo muestra.</p>
+
+<div class="muestra-proc">
+  <div class="titulo">RetiCash · registrar una orden</div>
+  <div class="proc">
+    <div class="proc-paso cumplido"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Solicitada</span><span class="proc-sub">14:02</span></div></div>
+    <div class="proc-paso actual"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Precio congelado</span><span class="proc-sub">1.042 · USD 4.200</span><span class="proc-plazo">11 min</span></div></div>
+    <div class="proc-paso"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Cobrada en caja</span></div></div>
+  </div>
+  <div class="proc-msg plazo">
+    <div class="proc-msg-t">El precio está congelado y corre el plazo.</div>
+    <div class="proc-msg-s">Quedan once minutos. Envíe al cliente a caja o libere el precio.</div>
+  </div>
+</div>
+<p class="cap-m">Tres hitos. Los mismos estados, la misma marca, el mismo plazo — y el negocio no aparece en ninguna clase.</p>
+
+<div class="muestra-proc">
+  <div class="titulo">El cuarto estado · el compromiso que no se cumplió</div>
+  <div class="proc">
+    <div class="proc-paso cumplido"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Solicitada</span><span class="proc-sub">11:30</span></div></div>
+    <div class="proc-paso fallido"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Precio congelado</span><span class="proc-sub">venció sin cobro</span><span class="proc-plazo vencido">vencido</span></div></div>
+    <div class="proc-paso"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Cobrada en caja</span></div></div>
+  </div>
+  <div class="proc-msg fallido">
+    <div class="proc-msg-t">El plazo venció y la orden no se cobró.</div>
+    <div class="proc-msg-s">Vuelva a cotizar al precio vigente si el cliente sigue interesado.</div>
+  </div>
+</div>
+<p class="cap-m">Fallido no es un color más: es un estado del compromiso, y el mensaje sigue terminando en verbo.</p>
+
+<h3 style="font-size:1.05rem;font-weight:600;margin-block-start:34px">Lo que se dejó afuera al generalizarla</h3>
+<p>La versión que operó en RetiCash hace tres cosas que <b class="k">no viajan</b>, y conviene tenerlas escritas para que no vuelvan a entrar:</p>
+<table>
+<tr><th>Lo que hacía</th><th>Por qué se queda en el producto</th></tr>
+<tr><td>El hito actual <b>pulsa</b></td><td class="why">El pulso pide una atención que el hito no necesita. Ninguno de los dos sistemas de referencia anima su indicador de proceso.</td></tr>
+<tr><td>Conector de <b>3 px redondeado</b></td><td class="why">Carbon usa 1 px recto. El grosor era peso visual sin información.</td></tr>
+<tr><td>El hito activo se tiñe según <b>compra o venta</b></td><td class="why">Es vocabulario del cambio de divisa. Una póliza no tiene lado.</td></tr>
+</table>
+<div class="find">
+  <h4>Cómo se evita la contradicción que tuvimos hoy</h4>
+  <p style="margin:0">La pieza vive en <code>proceso.css</code>, <b class="k">un solo archivo</b>. Este documento la importa y la muestra; el documento del producto la importa y sólo declara sus hitos y sus palabras. Ninguno de los dos la redacta dos veces — que es exactamente lo que permitió que la compuerta fuera falsa en un documento y verdadera en el otro durante media tarde.</p>
+</div>
+<div class="ver" style="border:1px solid var(--brd);border-block-start:1px solid var(--brd);margin-block-start:16px">
+  <b>Verificación</b> <b>medido:</b> las cuatro muestras las dibuja el mismo <code>proceso.css</code> · cero clases de negocio · cero colores literales fuera del bloque de fichas · un solo umbral, en la frontera · cero animaciones. <b>Sin medir:</b> la geometría y el cambio de orientación en navegador — el panel no ejecuta scripts sobre archivos locales, así que queda declarado, no comprobado.
+</div>
+
+<h2 id="reparto">El reparto</h2>
+<table>
+<tr><th>&nbsp;</th><th>Una región</th><th>Varias regiones</th></tr>
+<tr><td><b>Armazón</b></td><td colspan="2" class="tronco">fijo, no baja nunca &nbsp;·&nbsp; <b>tronco común · regla 01</b></td></tr>
+<tr><td><b>Regiones</b></td><td>una</td><td>declaradas, de 2 a 4</td></tr>
+<tr><td><b>Quién manda el alto</b></td><td colspan="2" class="tronco">el viewport, de los dos lados</td></tr>
+<tr><td><b>Navegación</b></td><td>barra de alcance, abajo</td><td>riel con rótulo, al costado</td></tr>
+<tr><td><b>Superficies</b></td><td>en sitio · hoja · pantalla empujada · modal</td><td>contexto · en sitio · anclada · cajón · modal</td></tr>
+<tr><td><b>Lo caro</b></td><td>perder el lugar · se mide en gestos</td><td>tapar el dato · se mide en superficie</td></tr>
+<tr><td><b>Esquina</b></td><td>su propia escala</td><td>su propia escala</td></tr>
+<tr><td><b>Reglas</b></td><td>01 · 22 – 28</td><td>01 – 16</td></tr>
+<tr><td><b>La frontera</b></td><td colspan="2">17 – 21</td></tr>
+</table>
+
+
+<h2 id="estado">Estado de las verificaciones</h2>
+<p>Corrido contra el código que sirve producción del primer producto. Esta tabla la reescribe <code>verificar.py</code>; si envejece, es porque nadie la corrió — y eso también se ve.</p>
+<table>
+<tr><th>Regla</th><th>Comprobación</th><th>Fecha</th><th>Resultado</th></tr>
+<!-- VERIFICACION-SISTEMA:INICIO -->
+<tr><td><b>17</b></td><td>Hay una frontera, y una sola</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 2 umbrales de terminal · 1056 · 1312</td></tr>
+<tr><td><b>17</b></td><td>Ancho de la tierra de nadie</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 256 px en total · 1056–1311 px (256)</td></tr>
+<tr><td><b>19</b></td><td>Ninguna regla cruza · reglas inertes</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 5 regla(s) declaradas antes de que exista la región · nace en 1312 px</td></tr>
+<tr><td><b>—</b></td><td>Umbrales que deciden algo en la plataforma</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 12 umbrales distintos · 400 · 430 · 520 · 560 · 561 · 600 · 671 · 860 · 900 · 1055 · 1056 · 1312</td></tr>
+<tr><td><b>02</b></td><td>Regiones declaradas en columnas, no en píxeles</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 4 en píxeles · #rc-menu → 78px · .bnav.cds--side-nav--rail: → 74px · .bnav.cds--side-nav.cds--s → 78px</td></tr>
+<tr><td><b>21</b></td><td>La gramática no consulta el agente de usuario</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> cero en el compositor · 2 en core.js, ajenos a la disposición</td></tr>
+<tr><td><b>21</b></td><td>Un ancho de cero no decide nada</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> guarda presente en el compositor</td></tr>
+<tr><td><b>27</b></td><td>Escala de esquina por sistema</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> una región: 17 valores (meta 4) · varias regiones: 0</td></tr>
+<tr><td><b>28</b></td><td>Cambiar de vista es navegar</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> el gesto atrás está interceptado para preguntar si salir, no para volver a la vista anterior</td></tr>
+<tr><td><b>—</b></td><td>Pieza · proceso: de sistema, no de negocio</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> sin literales · sin negocio · 1 umbral (1055 px) · sin animación</td></tr>
+<tr><td><b>—</b></td><td>Pieza · proceso: una sola implementación</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> dos implementaciones · carbon/linea.css aún dibuja: marca · conector · estados · animación</td></tr>
+<tr><td><b>01</b></td><td>El armazón nunca baja <i style="color:var(--ink3)">· navegador</i></td><td class="mono">4 sep 2026</td><td>Cumple en una región; en varias, sin medir</td></tr>
+<tr><td><b>06</b></td><td>Las pestañas no mueven la región <i style="color:var(--ink3)">· navegador</i></td><td class="mono">—</td><td>No aplica todavía: no hay pestañas de región</td></tr>
+<tr><td><b>16</b></td><td>La acción primaria no se abre <i style="color:var(--ink3)">· navegador</i></td><td class="mono">4 sep 2026</td><td>No cumple: registrar orden exige abrir un panel</td></tr>
+<tr><td><b>18</b></td><td>El cruce es reversible <i style="color:var(--ink3)">· navegador</i></td><td class="mono">4 sep 2026</td><td>Huella de ida y vuelta sin comparar</td></tr>
+<tr><td><b>23</b></td><td>Vuelta al mismo punto de scroll <i style="color:var(--ink3)">· navegador</i></td><td class="mono">—</td><td>Sin medir</td></tr>
+<tr><td><b>—</b></td><td>Pieza · proceso: geometría y orientación <i style="color:var(--ink3)">· navegador</i></td><td class="mono">—</td><td>Sin medir · el panel no ejecuta scripts sobre archivos locales</td></tr>
+<!-- VERIFICACION-SISTEMA:FIN -->
+</table>
+
+<h2 id="cierre">Cómo se monta un producto sobre esto</h2>
+<p class="lead">Ontikos no trae colores, ni tipografía, ni componentes. Trae la casa; cada producto pone los muebles.</p>
+<table>
+<tr><th>Lo pone Ontikos</th><th>Lo pone el producto</th></tr>
+<tr><td>El armazón y las regiones</td><td>Qué va en cada región</td></tr>
+<tr><td>Las cinco superficies y su costo</td><td>Qué se abre en cada una</td></tr>
+<tr><td>La frontera y su reversibilidad</td><td>En qué ancho cae, y por qué</td></tr>
+<tr><td>Que haya escala de esquina, de color y de tipografía</td><td>Los valores de cada escala</td></tr>
+<tr><td>Que cada pantalla responda una pregunta y habilite una acción</td><td>Cuál es la pregunta y cuál la acción</td></tr>
+<tr><td>Que toda regla traiga verificación</td><td>Que la verificación corra en su tubería</td></tr>
+</table>
+
+<div class="find ok" style="margin-block-start:26px">
+  <h4>La disciplina que impide la quinta versión</h4>
+  <p>Este sistema existe porque los cuatro intentos anteriores se escribieron como ideal antes de que nada operara. Éste sale al revés: de un producto que operó. Para que no se repita, la regla de entrada es dura y no admite excepción —</p>
+  <p style="margin:0"><b class="k">Nada entra a Ontikos sin una verificación que corra y un producto donde haya pasado.</b> Una regla sin comprobación es una opinión con número. De las veintiocho, hoy sólo siete están ganadas; las otras veintiuna llevan su marca a la vista, y no se pueden citar como evidencia hasta que la pierdan.</p>
+</div>
+
+</div></body></html>

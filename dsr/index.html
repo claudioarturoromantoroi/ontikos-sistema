@@ -1,0 +1,2735 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RetiCash · Sistema · v5</title>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     LAS HOJAS REALES DE PRODUCCIÓN, NO COPIAS.
+     Todo lo que este documento muestra dentro de un bloque «muestra viva» está
+     pintado con el mismo app.css y la misma linea.css que sirven
+     mm.reticash.com. Si alguien cambia un ficha, un radio o un peso, este
+     documento lo muestra cambiado al recargar.
+     El cromo del documento —fondo, tipografía de la prosa, filetes— es SUYO y
+     vive en fichas --d-*, para no disfrazarse del producto que documenta.
+     ══════════════════════════════════════════════════════════════════════════ -->
+<style>
+/* ==== app.css · incrustada: este host no sirve la aplicación ==== */
+/* ============================================================
+   RETICASH · app.css · DESIGN SYSTEM (estándar sobrio)
+   Mobile-first / iOS · barra inferior con área segura · escritorio: nav superior
+   Modo claro y oscuro por tokens (body.dk) · movimiento de entrada breve, sin rebote
+   eyebrow · panel-h/b · KPIs hairline · segmentado negro · alertas con barra lateral
+   cuadrito de rol · tendencias · DM Sans
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap');
+
+:root{
+  --bg:#ebebf0; --surf:#fff; --surf2:#f4f4f8; --surf3:#eeeef3;
+  --brd:rgba(0,0,0,.07); --brd2:rgba(0,0,0,.12); --brd3:rgba(0,0,0,.22);
+  --ink:#09090f; --ink2:#2e2e42; --ink3:#6b6b82; --ink4:#a8a8c0;
+  --red:#D0021B; --red-bg:rgba(208,2,27,.06); --red-brd:rgba(208,2,27,.18); --red-h:#b8011a;
+  --green:#16a34a; --green-bg:rgba(22,163,74,.07); --green-brd:rgba(22,163,74,.2);
+  --amber:#d97706; --amber-bg:rgba(217,119,6,.07); --amber-brd:rgba(217,119,6,.22);
+  --blue:#2563eb; --blue-bg:rgba(37,99,235,.07); --blue-brd:rgba(37,99,235,.18);
+  --danger:#c01c1c; --danger-bg:rgba(192,28,28,.06); --danger-brd:rgba(192,28,28,.18);
+  --f:'DM Sans',system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(.4,0,.2,1); --t-fast:.14s; --t:.2s; --t-slow:.22s;
+}
+/* ---- modo oscuro: solo redefine superficies, tintas y bordes; la marca es invariante ---- */
+body.dk{
+  --bg:#08080f; --surf:#111118; --surf2:#16161f; --surf3:#1c1c27;
+  --brd:rgba(255,255,255,.06); --brd2:rgba(255,255,255,.10); --brd3:rgba(255,255,255,.18);
+  --ink:#ededf5; --ink2:#a0a0b8; --ink3:#8a8aa2; --ink4:#66667e;
+  --red-bg:rgba(208,2,27,.13); --green-bg:rgba(22,163,74,.12);
+  --amber-bg:rgba(217,119,6,.12); --blue-bg:rgba(37,99,235,.12); --danger-bg:rgba(192,28,28,.13);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:var(--f);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;
+  transition:background var(--t) var(--ease),color var(--t) var(--ease)}
+a{color:var(--blue);text-decoration:none}
+
+/* transición suave de superficies al alternar modo */
+.app,.appbar,.bnav,.panel,.kpis,.kpi,.seg,.seg button,.tcbig,.fld-in,.alert,.bdg,.modal,.tbl th,.tbl td,.lrow,.kv,.stp,.ubtn{
+  transition:background var(--t) var(--ease),border-color var(--t) var(--ease),color var(--t) var(--ease)}
+
+/* ---- movimiento de entrada (sobrio: breve, 4px, sin rebote) ---- */
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(4px)}
+.reveal.in{opacity:1;transform:none;transition:opacity var(--t-slow) var(--ease),transform var(--t-slow) var(--ease)}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}.reveal{opacity:1;transform:none}}
+
+/* ---------- shell de app ---------- */
+.app{max-width:480px;margin:0 auto;min-height:100dvh;height:100dvh;display:flex;flex-direction:column;background:var(--surf);overflow:hidden}
+.appbar{flex-shrink:0;display:flex;align-items:center;gap:11px;padding:calc(env(safe-area-inset-top,0px) + 13px) max(20px,env(safe-area-inset-right)) 13px max(20px,env(safe-area-inset-left));border-bottom:1px solid var(--brd);background:var(--surf)}
+.appbar .back{font-size:1.1rem;color:var(--ink2);cursor:pointer;margin:-4px 2px -4px -4px;padding:4px;display:none}
+.appbar .brand{flex-shrink:0;font-size:1.32rem;font-weight:900;letter-spacing:-.05em;text-transform:uppercase;line-height:1;user-select:none}
+.appbar .brand em{color:var(--red);font-style:normal}
+.appbar .role{flex-shrink:0;font-size:.5rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--red);border:1px solid var(--red-brd);padding:3px 7px;background:var(--red-bg);white-space:nowrap}
+.appbar .title{font-size:.92rem;font-weight:800;letter-spacing:-.01em}
+.appbar .sp{flex:1}
+.appbar .clock{flex-shrink:0;font-variant-numeric:tabular-nums;font-size:.68rem;font-weight:700;color:var(--ink3);display:flex;align-items:center;gap:5px;text-transform:uppercase;letter-spacing:.04em}
+.appbar .clock.warn{color:var(--amber)}
+.appbar .clock .cdot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.appbar .clock.warn .cdot{background:var(--amber)}
+.appbar .who{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;min-width:0}
+.appbar .who b{font-size:.74rem;font-weight:700;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appbar .ubtn{flex-shrink:0}
+.appbar .who span{font-size:.54rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.appbar .lvl-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:.56rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);background:var(--surf3);border:1px solid var(--brd2);border-radius:9999px;padding:3px 9px;white-space:nowrap;line-height:1}
+
+/* área de scroll + pantallas */
+.sa{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;min-height:0;order:1}
+.wrap{padding:18px max(20px,env(safe-area-inset-right)) 28px max(20px,env(safe-area-inset-left))}
+.sc{display:none;flex:1;flex-direction:column;min-height:0}
+.sc.on{display:flex}
+
+/* ---------- barra de navegación (inferior en móvil) ---------- */
+.bnav{flex-shrink:0;order:2;display:flex;justify-content:space-around;align-items:center;padding:9px 0 calc(env(safe-area-inset-bottom,8px) + 9px);border-top:1px solid var(--brd);background:var(--surf)}
+.ni{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex:1 1 0;min-width:0;padding:2px 4px;background:none;border:none;font-family:inherit}
+.ni svg{width:23px;height:23px;stroke:var(--ink4);stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:stroke var(--t-fast)}
+.ni-lbl{font-size:.56rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink4);line-height:1;transition:color var(--t-fast)}
+.ni.on svg{stroke:var(--red)} .ni.on .ni-lbl{color:var(--red)}
+
+/* escritorio: nav arriba, horizontal */
+@media(min-width:860px){
+  .app{max-width:1040px;border-left:1px solid var(--brd);border-right:1px solid var(--brd)}
+  .appbar{order:0} .bnav{order:1} .sa{order:2}
+  .wrap{padding:24px 28px 48px;max-width:980px;margin:0 auto;width:100%}
+  .bnav{justify-content:flex-start;gap:4px;padding:7px 22px;border-top:none;border-bottom:1px solid var(--brd)}
+  .ni{flex-direction:row;gap:8px;flex:0 0 auto;padding:8px 14px;border-radius:8px}
+  .ni svg{width:18px;height:18px}
+  .ni-lbl{font-size:.66rem;letter-spacing:.04em}
+  .ni.on{background:var(--surf2)}
+}
+
+/* ---------- tipografía de sección ---------- */
+.eyebrow{font-size:.52rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.h1{font-size:1.28rem;font-weight:900;letter-spacing:-.03em;line-height:1.1}
+.lead{font-size:.84rem;color:var(--ink3);max-width:640px;margin-top:5px}
+.sec-gap{margin-bottom:22px}
+
+/* ---------- panel (filo, encabezado en versalita) ---------- */
+.panel{background:var(--surf);border:1.5px solid var(--brd2);margin-bottom:14px}
+.panel-h{font-size:.52rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);padding:11px 15px;border-bottom:1px solid var(--brd);background:var(--surf2);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.panel-b{padding:15px}
+.pcard{background:var(--surf);border:1.5px solid var(--brd2);border-radius:14px;padding:15px 17px;margin-bottom:11px}
+
+/* ---------- KPIs (rejilla de líneas finas) ---------- */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1.5px;background:var(--brd2);border:1.5px solid var(--brd2);margin-bottom:16px}
+.kpi{background:var(--surf);padding:15px 16px}
+.kpi-l{font-size:.5rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.kpi-v{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.kpi-v.green{color:var(--green)} .kpi-v.red{color:var(--red)} .kpi-v.amber{color:var(--amber)} .kpi-v.ink{color:var(--ink2)}
+.kpi-sub{font-size:.6rem;font-weight:600;color:var(--ink3);margin-top:6px}
+
+/* ---------- segmentado (cuadrado, activo negro) ---------- */
+.seg{display:flex;border:1.5px solid var(--brd2);margin-bottom:16px}
+.seg button{flex:1;font-family:var(--f);font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:11px 8px;background:var(--surf);color:var(--ink3);border:none;border-right:1px solid var(--brd2);cursor:pointer}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--ink);color:var(--surf)}
+
+/* ---------- alertas ---------- */
+.alert{display:flex;gap:11px;padding:12px 15px;border:1px solid var(--brd2);border-left-width:3px;margin-bottom:10px;align-items:flex-start;background:var(--surf)}
+.alert .ic{font-size:.95rem;flex:none;line-height:1.3}
+.alert-t{font-size:.78rem;font-weight:800;margin-bottom:2px}
+.alert-b{font-size:.74rem;color:var(--ink2);line-height:1.5}
+.alert.danger{background:var(--danger-bg);border-color:var(--danger-brd);border-left-color:var(--danger)} .alert.danger .alert-t,.alert.danger .ic{color:var(--danger)}
+.alert.amber{background:var(--amber-bg);border-color:var(--amber-brd);border-left-color:var(--amber)} .alert.amber .alert-t,.alert.amber .ic{color:var(--amber)}
+.alert.green{background:var(--green-bg);border-color:var(--green-brd);border-left-color:var(--green)} .alert.green .alert-t,.alert.green .ic{color:var(--green)}
+.alert.blue{background:var(--blue-bg);border-color:var(--blue-brd);border-left-color:var(--blue)} .alert.blue .alert-t,.alert.blue .ic{color:var(--blue)}
+
+/* ---------- TC en grande ---------- */
+.tcbig{border:1.5px solid var(--brd2);background:var(--surf);margin-bottom:14px}
+.tcbig-h{font-size:.52rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);padding:10px 14px;border-bottom:1px solid var(--brd);background:var(--surf2)}
+.tcbig-row{display:flex}
+.tcbig .c{flex:1;padding:13px 14px;border-right:1px solid var(--brd)} .tcbig .c:last-child{border-right:none}
+.tcbig .l{font-size:.5rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink4);margin-top:5px}
+.tcbig .v{font-size:1.3rem;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.tcbig .v.min{color:var(--green)}
+.tcbig-foot{padding:9px 14px;border-top:1px solid var(--brd);font-size:.62rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums;line-height:1.5}
+.tcbig-foot b{font-weight:900;color:var(--ink2)}
+.log-eq{margin-top:9px;font-size:.66rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums;line-height:1.5}
+.log-eq b{font-weight:900;color:var(--ink2)}
+.log-row{border:1px solid var(--brd);padding:12px;margin-bottom:10px}
+.log-row-h{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.log-row-h .fld-in{margin:0;flex:1 1 auto;min-width:0;font-weight:800}
+.log-del{flex:0 0 auto;width:36px;height:36px;border:1px solid var(--brd2);background:var(--surf);color:var(--ink3);font-size:1.15rem;line-height:1;cursor:pointer;font-family:var(--f)}
+.log-del:active{background:var(--surf2);color:var(--red)}
+.log-row-eq{margin-top:9px;font-size:.62rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums;line-height:1.5}
+.log-seg{margin-bottom:11px}
+.log-seg button{font-size:.58rem;letter-spacing:.04em;padding:9px 4px}
+.log-row .row-2{grid-template-columns:1fr 1fr;gap:10px}
+.log-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--brd);cursor:pointer}
+.log-item:last-child{border-bottom:none}
+.log-item:active{background:var(--surf2)}
+.log-item-b{flex:1 1 auto;min-width:0}
+.log-item-n{font-size:.82rem;font-weight:900;letter-spacing:-.01em}
+.log-item-d{font-size:.66rem;font-weight:700;color:var(--ink3);margin-top:3px;font-variant-numeric:tabular-nums}
+.log-item-p{flex:0 0 auto;font-size:.78rem;font-weight:900;font-variant-numeric:tabular-nums}
+.log-item.cross .log-item-p,.log-item.cross .log-item-d{color:var(--red)}
+.log-item-w{font-size:.58rem;font-weight:700;color:var(--ink4);margin-top:4px}
+.log-hist-i{padding:11px 14px;border-bottom:1px solid var(--brd)}
+.log-hist-i:last-child{border-bottom:none}
+.log-hist-t{font-size:.68rem;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
+.log-hist-t b{font-weight:900;color:var(--ink)}
+.log-hist-w{font-size:.58rem;font-weight:700;color:var(--ink4);margin-top:3px;font-variant-numeric:tabular-nums}
+.cxp-i{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--brd)}
+.cxp-i:last-child{border-bottom:none}
+.cxp-b{flex:1 1 auto;min-width:0}
+.cxp-n{font-size:.8rem;font-weight:900;letter-spacing:-.01em}
+.cxp-ag{font-size:.58rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink4);margin-left:5px}
+.cxp-d{font-size:.62rem;font-weight:700;color:var(--ink3);margin-top:3px;font-variant-numeric:tabular-nums}
+.cxp-m{flex:0 0 auto;font-size:.8rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--red)}
+.log-eq{padding:11px 14px;margin:0;border-top:1px solid var(--brd)}
+.log-row .row-2 .field{margin-bottom:0}
+.log-row .fld-lbl{font-size:.55rem;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log-row .row-2 .fld-in{font-size:.85rem;padding:10px;font-variant-numeric:tabular-nums}
+.log-row.cross{border-color:var(--red)}
+.log-row-eq.bad{color:var(--red)}
+.log-row-eq.bad b{color:var(--red)}
+.tc-logline{margin-top:9px;font-size:.62rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums;line-height:1.5}
+.tc-logline b{font-weight:900;color:var(--ink2)}
+.tc-sum{border:1px solid var(--brd);margin:12px 0}
+.tc-sum-r{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:9px 12px;border-bottom:1px solid var(--brd);font-size:.66rem}
+.tc-sum-r:last-child{border-bottom:none}
+.tc-sum-r span{font-weight:700;color:var(--ink3);flex:0 0 auto}
+.tc-sum-r b{font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.tc-sum-r.tot{border-top:1px solid var(--brd2)}
+.tc-sum-r.tot span{color:var(--ink2);font-weight:800}
+.tc-sum-r.util{background:var(--surf2)}
+.tc-sum-r.util b{color:var(--green)}
+
+/* ---------- campos / formularios ---------- */
+.field{margin-bottom:13px}
+.fld-lbl{display:block;font-size:.62rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2);margin-bottom:6px}
+.fld-lbl .req{color:var(--red)}
+.fld-in,select.fld-in,textarea.fld-in{width:100%;font-family:var(--f);font-size:.92rem;font-weight:600;color:var(--ink);background:var(--surf);border:1.5px solid var(--brd2);padding:11px 12px;-webkit-appearance:none;appearance:none;transition:border-color var(--t-fast),background var(--t),color var(--t)}
+.fld-in:focus{outline:none;border-color:var(--red)}
+.fld-in::placeholder{color:var(--ink4);font-weight:500}
+.fld-hint{font-size:.66rem;color:var(--ink3);margin-top:5px}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:430px){.row-2{grid-template-columns:1fr}}
+
+/* ---------- ojo de contraseña (dentro del cajón de la clave) ---------- */
+.fld-pass{position:relative;display:block}
+.fld-pass .fld-in{padding-right:44px}
+.fld-eye{position:absolute;right:3px;top:50%;transform:translateY(-50%);background:none;border:none;padding:8px;cursor:pointer;color:var(--ink4);display:flex;align-items:center}
+.fld-eye:active{color:var(--ink2)}
+.fld-eye.on{color:var(--red)}
+.fld-eye svg{width:19px;height:19px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- stepper +/− (precio con clamp a frontera · montos enteros) ---------- */
+.stp{display:flex;align-items:stretch;border:1.5px solid var(--brd2);background:var(--surf)}
+.stp:focus-within{border-color:var(--red)}
+.stp .fld-in{border:none;text-align:center;flex:1;min-width:0;font-variant-numeric:tabular-nums;font-weight:800}
+.stp button{width:46px;flex:none;background:var(--surf2);border:none;font-size:1.25rem;font-weight:800;color:var(--ink2);cursor:pointer;font-family:var(--f);line-height:1;transition:background .1s}
+.stp button:first-child{border-right:1.5px solid var(--brd2)}
+.stp button:last-child{border-left:1.5px solid var(--brd2)}
+.stp button:active{background:var(--surf3)}
+.stp button:disabled{opacity:.32;cursor:not-allowed}
+
+/* ---------- botones ---------- */
+.btn{font-family:var(--f);font-size:.78rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:12px 16px;border:1.5px solid transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:background .12s,border-color .12s,opacity .12s}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:active{background:var(--red-h)}
+.btn-sec{background:var(--surf);color:var(--ink);border-color:var(--brd2)}
+.btn-sec:active{background:var(--surf2)}
+.btn-dark{background:var(--ink);color:var(--surf)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-ghost{background:none;color:var(--ink3);border-color:transparent}
+.btn-ghost:active{color:var(--ink)}
+.btn-block{width:100%}
+.btn-sm{padding:7px 11px;font-size:.66rem}
+.ubtn{font-family:var(--f);font-size:.66rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:6px 10px;background:var(--surf);border:1.5px solid var(--brd2);color:var(--ink);cursor:pointer;border-radius:7px}
+.ubtn:active{background:var(--surf2)}
+.ubtn.ok{color:var(--green);border-color:var(--green-brd);background:var(--green-bg)}
+.ubtn.no{color:var(--red);border-color:var(--red-brd);background:var(--red-bg)}
+
+/* ---------- badges ---------- */
+.bdg{display:inline-flex;align-items:center;gap:5px;font-size:.56rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--brd2);background:var(--surf2);color:var(--ink2);white-space:nowrap}
+.bdg.green{color:var(--green);background:var(--green-bg);border-color:var(--green-brd)}
+.bdg.amber{color:var(--amber);background:var(--amber-bg);border-color:var(--amber-brd)}
+.bdg.gray{color:var(--ink3);background:var(--surf3);border-color:var(--brd2)}
+.bdg.blue{color:var(--blue);background:var(--blue-bg);border-color:var(--blue-brd)}
+.bdg.red{color:var(--red);background:var(--red-bg);border-color:var(--red-brd)}
+
+/* ---------- tablas ---------- */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;cursor:grab}
+.tbl-wrap.grabbing{cursor:grabbing;user-select:none}
+.tbl-wrap::-webkit-scrollbar{height:9px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--brd2);border-radius:5px}
+.tbl{width:100%;border-collapse:collapse;font-size:.86rem}
+.tbl th{text-align:left;font-size:.58rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);padding:11px 13px;border-bottom:1.5px solid var(--brd2);background:var(--surf2);white-space:nowrap}
+.tbl td{padding:13px;border-bottom:1px solid var(--brd);color:var(--ink2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbl tbody tr:nth-child(even){background:var(--surf2)}
+.tbl tbody tr:hover{background:var(--surf3)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td:first-child{font-weight:700;color:var(--ink)}
+.tbl .num{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tbl .strong{font-weight:800;color:var(--ink)}
+
+/* ---------- filas clave-valor / lista ---------- */
+.kv{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--brd);font-size:.8rem}
+.kv:last-child{border-bottom:none}
+.kv-k{color:var(--ink3)} .kv-v{font-weight:800;font-variant-numeric:tabular-nums}
+.lrow{display:flex;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid var(--brd)}
+.lrow:last-child{border-bottom:none}
+.lrow-main{flex:1;min-width:0}
+.lrow-t{font-weight:800;font-size:.82rem;display:flex;align-items:center;gap:7px}
+.lrow-s{font-size:.7rem;color:var(--ink3);margin-top:3px}
+.lrow-act{display:flex;gap:6px;flex-shrink:0}
+.lrow.tap{cursor:pointer} .lrow.tap:active{background:var(--surf2)}
+.lrow-tap{cursor:pointer} .lrow-tap:active{opacity:.55}
+.lrow .chev{color:var(--ink4);font-size:1rem;flex-shrink:0}
+
+/* ---------- misceláneo ---------- */
+.empty{text-align:center;padding:34px 18px;color:var(--ink3);font-size:.8rem}
+.divider{height:1px;background:var(--brd);margin:14px 0}
+.hidden{display:none!important}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:520px){.grid-2{grid-template-columns:1fr}}
+
+/* ---------- tendencias (barras diarias que crecen, sobrio) ---------- */
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:560px){.charts{grid-template-columns:1fr}}
+.chart{position:relative;display:flex;align-items:flex-end;gap:5px;height:118px;border-bottom:1px solid var(--brd3)}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0;gap:3px}
+.bar-val{font-size:.5rem;font-weight:800;color:var(--ink2);white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1}
+.bar{width:100%;background:var(--ink3);min-height:3px;height:0;transition:height .42s var(--ease)}
+.bar.g{background:var(--green)} .bar.lo{background:var(--surf3)} .bar.a{background:var(--amber)}
+.chart-x{display:flex;gap:5px;margin-top:6px}
+.chart-x span{flex:1;text-align:center;font-size:.54rem;font-weight:700;color:var(--ink4)}
+.objline{position:absolute;left:0;right:0;border-top:1px dashed var(--amber)}
+.objlbl{position:absolute;right:0;font-size:.52rem;font-weight:800;color:var(--amber);transform:translateY(-50%);background:var(--surf);padding:0 3px}
+/* barra de progreso / ritmo */
+.bar-track{height:7px;background:var(--surf3);overflow:hidden;margin:11px 0 0}
+.bar-fill{height:100%;background:var(--danger);width:0;transition:width .6s var(--ease)}
+.bar-fill.g{background:var(--green)} .bar-fill.a{background:var(--amber)}
+.pace-lbl{font-size:.72rem;font-weight:800;margin-top:9px}
+.pace-lbl.green{color:var(--green)} .pace-lbl.amber{color:var(--amber)} .pace-lbl.red{color:var(--red)}
+.pace-verdict{font-size:.76rem;color:var(--ink2);line-height:1.5;margin-top:6px}
+.pace-verdict strong{font-weight:900;color:var(--ink)}
+/* TABLERO de control "Cómo vamos" — instrumentos (números), no alertas */
+.dash-hero{margin-bottom:14px}
+.dash-core{margin-bottom:16px}
+.dash-var{display:inline-block;font-size:.58rem;font-weight:800;letter-spacing:0;padding:0 5px;border-radius:9999px;white-space:nowrap;text-transform:none;vertical-align:middle}
+.dash-var.up{color:var(--green);background:var(--green-bg)}
+.dash-var.down{color:var(--red);background:var(--red-bg)}
+.dash-more{font-size:.7rem;font-weight:800;color:var(--ink3);padding:9px 4px;text-align:center}
+.cli-fuga{display:inline-block;font-size:.54rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--red);background:var(--red-bg);border:1px solid var(--red-brd);border-radius:9999px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+.cli-row.fuga{box-shadow:inset 3px 0 0 var(--red)}
+/* Operación: 3 accesos grandes (Órdenes · Caja · Campañas) */
+.op-access{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;margin-bottom:14px}
+.op-card{text-align:left;background:var(--surf);border:1.5px solid var(--brd2);border-radius:12px;padding:9px 14px;cursor:pointer;transition:background .12s,border-color .12s;font-family:var(--f)}
+.op-card:active{background:var(--surf2)} .op-card:hover{border-color:var(--brd3)}
+.op-card-t{font-size:.92rem;font-weight:900;color:var(--ink);letter-spacing:-.01em}
+.op-card-s{font-size:.66rem;color:var(--ink3);margin-top:2px;line-height:1.3}
+@media(max-width:560px){.op-access{gap:7px}.op-card{text-align:center;padding:12px 6px}.op-card-s{display:none}}
+/* ARREGLO 1 — filtros de Órdenes: chips en wrap (móvil únicamente) */
+@media(max-width:560px){
+  #ord-filtro{flex-wrap:wrap;border:none;gap:6px;background:transparent;margin-bottom:12px}
+  #ord-filtro button{flex:0 0 auto;border:1.5px solid var(--brd2);border-radius:99px;padding:7px 13px;border-right:1.5px solid var(--brd2)}
+  #ord-filtro button.on{background:var(--ink);border-color:var(--ink);color:var(--surf)}
+}
+/* Publicar TC: cajas con signo (= costo, + venta, − compra) */
+.tc-cbox{display:flex;gap:12px;align-items:stretch;border:1.5px solid var(--brd3);border-radius:12px;padding:13px;background:var(--surf2);margin-bottom:12px}
+.tc-cbox-b{flex:1;min-width:0}
+.tc-margins{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px}
+.tc-mbox{display:flex;gap:11px;align-items:stretch;border:1.5px solid var(--brd2);border-radius:12px;padding:13px;background:var(--surf);transition:border-color .15s,background .15s}
+.tc-mbox.sell{border-color:var(--green-brd);background:var(--green-bg)}
+.tc-mbox.cross{border-color:var(--red);background:var(--red-bg)}
+.tc-mbox-b{flex:1;min-width:0}
+.tc-sign{font-size:1.7rem;font-weight:900;line-height:1;align-self:center;width:24px;text-align:center;flex:none}
+.tc-sign.base{color:var(--ink3)} .tc-mbox.sell .tc-sign{color:var(--green)} .tc-mbox.buy .tc-sign{color:var(--ink2)} .tc-mbox.cross .tc-sign{color:var(--red)}
+.tc-cbox .fld-in,.tc-mbox .fld-in{margin:6px 0 0}
+.tc-result{font-size:.82rem;font-weight:900;margin-top:9px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tc-result.green{color:var(--green)} .tc-mbox.cross .tc-result{color:var(--red)}
+@media(max-width:560px){.tc-margins{grid-template-columns:1fr}}
+
+/* ---------- toast ---------- */
+.toast-wrap{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,12px) + 78px);transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center;width:max-content;max-width:90vw}
+@media(min-width:860px){.toast-wrap{bottom:28px}}
+.toast{background:var(--ink);color:var(--surf);font-size:.76rem;font-weight:700;padding:11px 18px;box-shadow:0 10px 40px rgba(0,0,0,.18);animation:fadeIn var(--t) var(--ease)}
+.toast.ok{background:var(--green);color:#fff} .toast.err{background:var(--danger);color:#fff}
+
+/* ---------- modal (hoja inferior en móvil) ---------- */
+.ovl{position:fixed;inset:0;background:rgba(9,9,15,.5);z-index:150;display:flex;align-items:flex-end;justify-content:center;animation:fin .15s ease}
+@media(min-width:561px){.ovl{align-items:center}.modal{border-radius:16px}}   /* escritorio (admin): modal centrado; móvil/cliente sigue como hoja inferior */
+@media(min-width:600px){.ovl{align-items:center}}
+@keyframes fin{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surf);width:100%;max-width:460px;padding:22px 20px calc(env(safe-area-inset-bottom,0px) + 22px);max-height:90vh;overflow:auto;animation:sup .2s var(--ease)}
+@media(min-width:600px){.modal{border-radius:4px;padding-bottom:22px}}
+@keyframes sup{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+.modal-h{font-size:1.02rem;font-weight:900;letter-spacing:-.02em;margin-bottom:3px}
+.modal-x{position:absolute;top:14px;right:14px;font-size:1.5rem;line-height:1;color:var(--ink3);background:none;border:none;cursor:pointer;padding:2px 8px;font-family:var(--f)}
+.modal-x:active{color:var(--ink)}
+.modal{position:relative}
+.modal-sub{font-size:.74rem;color:var(--ink3);margin-bottom:16px}
+.modal-foot{display:flex;gap:9px;margin-top:18px}
+.modal-foot .btn{flex:1}
+
+/* ---------- login ---------- */
+.login-wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(180deg,var(--bg),var(--surf3))}
+.login-card{background:var(--surf);border:1.5px solid var(--brd2);width:100%;max-width:370px;padding:30px 26px}
+.login-brand{font-size:1.7rem;font-weight:900;letter-spacing:-.055em;text-transform:uppercase;line-height:1;margin-bottom:6px}
+.login-brand em{color:var(--red);font-style:normal}
+.login-tag{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:24px}
+.login-err{background:var(--red-bg);border:1px solid var(--red-brd);border-left:3px solid var(--red);color:var(--red);font-size:.74rem;font-weight:700;padding:10px 12px;margin-bottom:14px}
+.login-foot{font-size:.56rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink4);text-align:center;margin-top:18px}
+.login-ok{text-align:center}
+.login-ok .ico{font-size:2rem;color:var(--green);margin-bottom:8px}
+
+.appfoot{text-align:center;padding:20px 16px 28px;margin-top:20px;border-top:1.5px solid var(--brd2);color:var(--ink4);font-size:.72rem;letter-spacing:.02em;line-height:1.5}
+
+/* móvil: header compacto (sin desbordes ni rol duplicado) · KPIs en una columna */
+@media(max-width:560px){
+  .appbar{gap:7px;padding-left:12px;padding-right:12px}
+  .appbar .role{font-size:.46rem;letter-spacing:.1em;padding:3px 5px}
+  .appbar .clock{font-size:.6rem}
+  .appbar .lvl-chip{font-size:.5rem;letter-spacing:.04em;padding:2px 7px}
+  .appbar .who span{display:none}        /* el rol ya está en el cuadrito; se quita el duplicado */
+  .appbar .who b{font-size:.7rem}
+  #rc-theme{padding:6px 9px;font-size:1rem;letter-spacing:0}
+  .kpis{grid-template-columns:1fr}       /* tres KPIs apilados: sin celda gris vacía */
+}
+/* Botón "Perfil" del header: mismo estilo plano que la campanita (sin fondo/border), color --ink2. */
+.appbar .who-btn{flex-shrink:0;position:relative;background:none;border:none;color:var(--ink2);padding:6px 8px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .1s,color .1s}
+.appbar .who-btn:hover,.appbar .who-btn:active{background:var(--surf2);color:var(--ink)}
+.appbar .who-btn svg{display:block;width:22px;height:22px}
+/* Avatar con iniciales estilo Gmail: siempre cabe en móvil, identifica al empleado sin ambigüedad.
+   Al tocar abre mini popup con nombre completo + rol + Salir (o navega a pestaña Perfil si se indicó). */
+.appbar .who-avatar{flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--surf3);border:1.5px solid var(--brd2);color:var(--ink2);font-family:inherit;font-size:.72rem;font-weight:800;letter-spacing:.02em;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;transition:background .1s,color .1s,border-color .1s}
+.appbar .who-avatar:hover,.appbar .who-avatar:active{background:var(--surf2);color:var(--ink);border-color:var(--brd)}
+.cpane{display:none}
+.cpane.on{display:block}
+.login-inst{position:fixed;left:0;right:0;bottom:0;border:0;margin:0;padding:16px 16px calc(env(safe-area-inset-bottom,0px) + 16px)}
+
+/* Tu semana: celdas por día (verde operó · rojo no operó) */
+.week{display:flex;gap:6px}
+.wk-d{flex:1;text-align:center}
+.wk-box{height:36px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--brd2);font-weight:800;font-size:.85rem;color:var(--ink4);background:var(--surf3)}
+.wk-box.on{background:var(--green);border-color:var(--green);color:#fff}
+.wk-box.off{background:var(--red);border-color:var(--red);color:#fff}
+.wk-box.cur{outline:2px dashed var(--amber);outline-offset:2px}
+.wk-lbl{margin-top:4px;font-size:.62rem;letter-spacing:.06em;color:var(--ink4);text-transform:uppercase}
+/* Tendencia de ganancias del vendedor: barras diarias vs línea de meta */
+.trend{position:relative;display:flex;align-items:flex-end;gap:3px;height:90px;border-bottom:1.5px solid var(--brd2)}
+.trend-bar{flex:1;min-height:2px;background:var(--ink4)}
+.trend-bar.hit{background:var(--green)}
+.trend-meta{position:absolute;left:0;right:0;height:0;border-top:1.5px dashed var(--ink3)}
+
+/* ============================================================
+   CARA DEL CLIENTE · sección Mercado · lenguaje visual rico (customer_v35)
+   El cliente es consumidor, no operador interno: tarjetas redondeadas,
+   hero grande, jerarquía cálida. Hereda los tokens del sistema.
+   ============================================================ */
+
+/* el wrap del cliente respira más */
+#s-mercado .wrap{padding:20px 18px 28px}
+
+/* saludo */
+.cli-greet{font-size:1.05rem;font-weight:400;color:var(--ink2);margin-bottom:4px}
+.cli-greet strong{font-weight:700;color:var(--ink)}
+.cli-ey{font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:18px}
+
+/* ── bloque conductual · widget con peso ── */
+.beh{background:var(--surf2);border-radius:16px;padding:18px;margin-bottom:16px}
+.beh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.beh-tier{display:flex;align-items:center;gap:11px}
+.beh-medal{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25)}
+.beh-tier-lbl{font-size:.56rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:3px}
+.beh-tier-name{font-size:1.15rem;font-weight:900;letter-spacing:-.02em;color:var(--ink);line-height:1}
+.beh-score-block{text-align:right}
+.beh-score{font-size:2.2rem;font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.beh-score-lbl{font-size:.56rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-top:2px}
+.beh-bar{height:6px;background:var(--brd2);border-radius:9999px;overflow:hidden;margin-bottom:8px}
+.beh-bar-fill{height:100%;border-radius:9999px;background:linear-gradient(90deg,var(--amber),var(--red));transition:width .5s var(--ease)}
+.beh-next{font-size:.72rem;color:var(--ink3);margin-bottom:15px;line-height:1.4}
+.beh-next strong{color:var(--ink2);font-weight:800}
+.beh-grid{display:flex;gap:10px;margin-bottom:13px}
+.beh-cell{flex:1;background:var(--surf);border-radius:12px;padding:13px;text-align:center}
+.beh-cell-v{font-size:1.4rem;font-weight:900;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+.beh-cell-l{font-size:.56rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-top:7px}
+.beh-nudge{display:flex;align-items:center;gap:11px;background:var(--green-bg);border:1.5px solid var(--green-brd);border-radius:12px;padding:13px 14px}
+.beh-nudge-ic{width:26px;height:26px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;flex-shrink:0}
+.beh-nudge-txt{font-size:.74rem;color:var(--ink2);line-height:1.45}
+.beh-nudge-txt strong{color:var(--green);font-weight:800}
+
+/* ── encabezado de campaña (4 estados, tarjeta redondeada) ── */
+.camp{display:flex;align-items:flex-start;gap:12px;padding:14px 15px;border-radius:14px;margin-bottom:16px;border:1.5px solid var(--brd2);background:var(--surf)}
+.camp-ic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;color:#fff}
+.camp-t{font-size:.84rem;font-weight:800;margin-bottom:3px;letter-spacing:-.01em}
+.camp-s{font-size:.74rem;color:var(--ink2);line-height:1.5}
+.camp.blue{background:var(--blue-bg);border-color:var(--blue-brd)} .camp.blue .camp-t{color:var(--blue)} .camp.blue .camp-ic{background:var(--blue)}
+.camp.green{background:var(--green-bg);border-color:var(--green-brd)} .camp.green .camp-t{color:var(--green)} .camp.green .camp-ic{background:var(--green)}
+.camp.amber{background:var(--amber-bg);border-color:var(--amber-brd)} .camp.amber .camp-t{color:var(--amber)} .camp.amber .camp-ic{background:var(--amber)}
+
+/* ── cotización · hero del cliente ── */
+/* Componente teléfono con selector de país (RC.phoneInput) */
+.rc-phone{display:flex;gap:8px;align-items:stretch}
+.rc-phone-cc{flex:0 0 auto;min-width:120px;background:var(--surf2);border:1px solid var(--brd2);border-radius:8px;padding:8px 10px;font-family:var(--f);font-size:.86rem;color:var(--ink);cursor:pointer}
+.rc-phone-cc:focus{outline:none;border-color:var(--red)}
+.rc-phone-num{flex:1;min-width:0}
+@media(max-width:400px){ .rc-phone-cc{min-width:96px;font-size:.78rem} }
+.quote{background:var(--surf);border:1.5px solid var(--brd2);border-radius:16px;padding:20px 18px;margin-bottom:16px}
+/* modo campaña vendedor · oferta cerrada: borde verde + input verde. Sentido y stepper quedan sin pointer-events desde JS. */
+.quote.mercado-locked{border:2px solid var(--green);box-shadow:0 0 0 4px var(--green-bg)}
+.quote.mercado-locked #q-seg{opacity:.6;pointer-events:none}
+.quote.mercado-locked .q-amt-inp{color:var(--green)}
+.quote-ey{font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin-bottom:14px}
+.quote-inp-row{display:flex;align-items:baseline;gap:8px;border-bottom:2px solid var(--brd2);padding-bottom:10px;transition:border-color .15s}
+.quote-inp-row:focus-within{border-bottom-color:var(--red)}
+.quote-sym{font-size:1.3rem;font-weight:500;color:var(--ink3)}
+.quote-inp{font-size:3.2rem;font-weight:900;letter-spacing:-.04em;color:var(--ink);background:transparent;border:none;outline:none;flex:1;width:0;text-align:right;font-family:var(--f);font-variant-numeric:tabular-nums}
+.quote-usd{font-size:.9rem;font-weight:500;color:var(--ink3)}
+
+/* dos resultados: sugerido + utilidad (utilidad como tarjeta verde, protagonista) */
+.quote-sug-row{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;padding-bottom:14px;border-bottom:1px solid var(--brd)}
+.quote-sug-l{font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3)}
+.quote-sug-v{font-size:1.15rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.quote-util-card{background:var(--green-bg);border:1.5px solid var(--green-brd);border-radius:14px;padding:15px 16px;margin-top:14px}
+.quote-util-l{font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);opacity:.9;margin-bottom:5px}
+.quote-util-v{font-size:1.9rem;font-weight:900;color:var(--green);letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.quote-util-sub{font-size:.74rem;font-weight:600;color:var(--green);opacity:.85;margin-top:3px}
+
+/* ── tabla de 3 columnas · más aire, redondeada ── */
+.t3-lbl{font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin:6px 2px 10px}
+.t3-wrap{border:1.5px solid var(--brd2);border-radius:14px;overflow:hidden;background:var(--surf)}
+.t3-head{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--surf2)}
+.t3-h{font-size:.54rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);padding:11px 14px}
+.t3-h.num{text-align:right}
+.t3-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--brd);cursor:pointer;transition:background .12s}
+.t3-row:active{background:var(--surf2)}
+.t3-row.on{background:var(--red-bg)}
+.t3-c{padding:15px 14px;font-size:.88rem;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
+.t3-c.num{text-align:right;color:var(--ink)}
+.t3-c.green{color:var(--green);font-weight:800}
+
+/* ── botón ejecutar con peso ── */
+.cli-exec{width:100%;background:var(--red);color:#fff;border:none;border-radius:14px;padding:18px;font-family:var(--f);font-size:1rem;font-weight:800;letter-spacing:-.01em;cursor:pointer;margin-top:18px;box-shadow:0 4px 16px rgba(208,2,27,.22);transition:transform .12s,box-shadow .12s,background .12s}
+.cli-exec:active{transform:translateY(1px);box-shadow:0 2px 6px rgba(208,2,27,.18);background:var(--red-h)}
+.cli-disc{font-size:.7rem;color:var(--ink3);text-align:center;margin-top:14px;line-height:1.5;padding:0 10px}
+
+/* ── título de la sección conductual ── */
+.beh-title{font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin:26px 2px 12px}
+
+/* ── widgets conductuales (racha, ganancia) estilo v35 ── */
+.beh-w{background:var(--surf2);border-radius:16px;padding:18px;margin-bottom:12px}
+.beh-w.green{background:var(--green-bg);border:1.5px solid var(--green-brd)}
+.beh-w-ey{font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin-bottom:12px}
+.beh-w-ey.green{color:var(--green);opacity:.9}
+.beh-w-main{display:flex;align-items:baseline;gap:9px;margin-bottom:12px}
+.beh-w-n{font-size:2.1rem;font-weight:900;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.beh-w-l{font-size:.85rem;font-weight:500;color:var(--ink2)}
+.beh-w-grid{display:flex;gap:5px;margin-bottom:12px;padding:6px 0}
+.beh-sq{height:28px;border-radius:5px;flex:1;background:var(--green);position:relative;box-shadow:inset 0 -2px 0 rgba(0,0,0,.08)}
+.beh-sq.e{background:var(--brd2);box-shadow:none}
+.beh-sq.cur{background:transparent;border:2px dashed var(--amber)}
+.beh-w-m{font-size:.74rem;font-weight:500;color:var(--ink2)}
+.beh-w-m strong{color:var(--amber);font-weight:800}
+
+/* ══ Cuadrícula de semanas del cliente (mismo lenguaje visual que la semana del vendedor) ══ */
+.cli-week{display:flex;gap:6px;margin-bottom:12px}
+.cw-d{flex:1;text-align:center;min-width:0}
+.cw-box{height:40px;display:flex;align-items:center;justify-content:center;border-radius:9px;font-weight:800;font-size:.9rem;color:var(--surf);background:var(--surf3)}
+.cw-box.on{background:var(--green)}
+.cw-box.off{background:var(--red)}
+.cw-box.cur{outline:2px dashed var(--amber);outline-offset:2px;background:var(--amber);color:#fff}
+.cw-lbl{margin-top:6px;font-size:.6rem;font-weight:700;letter-spacing:.06em;color:var(--ink4);text-transform:uppercase}
+.cw-num{font-size:.5rem;font-weight:700;color:var(--ink4);margin-top:2px;font-variant-numeric:tabular-nums;letter-spacing:0;text-transform:none}
+
+/* ══ Perfil · sección "Cómo ganas puntos" · reglas del motor SCI ══ */
+.pf-rules{display:flex;flex-direction:column;gap:10px}
+/* Badge ⓘ visible pero contenido: abre modal "Cómo ganas puntos" desde la barra de progreso (Mercado y Perfil). */
+.rule-info{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;margin-left:10px;border:1.5px solid #3b82f6;background:rgba(59,130,246,.14);color:#3b82f6;font-size:.85rem;font-weight:800;line-height:1;cursor:pointer;border-radius:6px;vertical-align:middle;transition:background .15s,color .15s,box-shadow .15s}
+.rule-info:hover,.rule-info:focus{background:#3b82f6;color:#fff;outline:none;box-shadow:0 2px 8px rgba(59,130,246,.35)}
+.pf-rule{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--surf3)}
+.pf-rule.pos{background:color-mix(in srgb,var(--green) 8%,var(--surf3))}
+.pf-rule.neg{background:color-mix(in srgb,var(--red) 8%,var(--surf3))}
+.pf-rule-pts{flex:0 0 auto;min-width:72px;text-align:center;font-weight:900;font-size:.85rem;padding:8px 10px;border-radius:8px;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.pf-rule.pos .pf-rule-pts{background:var(--green)}
+.pf-rule.neg .pf-rule-pts{background:var(--red)}
+.pf-rule-body{flex:1;min-width:0}
+.pf-rule-t{font-size:.88rem;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:3px}
+.pf-rule-d{font-size:.72rem;font-weight:500;color:var(--ink3);line-height:1.35}
+.pf-rules-empty{color:var(--ink3);font-size:.85rem;padding:8px 0}
+
+/* ══ Chart mensual (Órdenes) · SVG doble serie: barras USD + línea MXN ══ */
+.chart-month{background:var(--surf2);border-radius:16px;padding:18px;margin-bottom:16px}
+.chart-month-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.chart-month-t{font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.chart-month-sub{font-size:.7rem;font-weight:600;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase}
+.chart-month-svg{width:100%;height:auto;display:block}
+.cm-bar{fill:#3b82f6;opacity:.85}
+.cm-bar.zero{fill:var(--brd2);opacity:.5}
+.cm-line{fill:none;stroke:var(--amber);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.cm-dot{fill:var(--amber);stroke:var(--surf2);stroke-width:1.5}
+.cm-lbl{font-size:9px;fill:var(--ink3);font-weight:700}
+.chart-month-lgd{display:flex;gap:16px;margin-top:10px;font-size:.7rem;font-weight:600;color:var(--ink3);letter-spacing:.03em}
+.lgd-item{display:inline-flex;align-items:center;gap:6px}
+.lgd-swatch{display:inline-block;width:12px;height:12px;border-radius:3px}
+.lgd-swatch.bar{background:#3b82f6}
+.lgd-swatch.line{background:var(--amber);height:3px;border-radius:2px}
+
+/* empujón de ganancia (tarjeta verde) */
+.beh-nudge2{}
+.beh-nudge2-v{font-size:2.3rem;font-weight:900;color:var(--green);letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums;margin-bottom:6px}
+.beh-nudge2-l{font-size:.82rem;font-weight:500;color:var(--green);opacity:.92;line-height:1.45}
+.beh-nudge2-l strong{font-weight:800}
+
+/* la barra de progreso conductual usa la animación de growBars (data-w) */
+.beh-bar-fill{width:0}
+
+/* ── sentido venta/compra ── */
+.q-seg{display:flex;border:1.5px solid var(--brd2);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.q-seg button{flex:1;font-family:var(--f);font-size:.78rem;font-weight:800;letter-spacing:.01em;padding:11px 8px;background:var(--surf);color:var(--ink3);border:none;cursor:pointer;transition:background .12s,color .12s}
+.q-seg button.on{background:var(--ink);color:var(--surf)}
+
+/* ── TC del día (animado) ── */
+.q-tc-row{margin-bottom:16px}
+.q-tc-ey{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px}
+.q-tc{font-size:2.6rem;font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--green);font-variant-numeric:tabular-nums}
+.q-tc-cur{font-size:.82rem;font-weight:500;color:var(--ink3);letter-spacing:0}
+
+/* ── monto con stepper +/− ── */
+.q-amt{display:flex;align-items:stretch;border:1.5px solid var(--brd2);border-radius:12px;overflow:hidden;margin-bottom:12px}
+.q-amt:focus-within{border-color:var(--red)}
+.q-amt-btn{width:54px;flex:none;background:var(--surf2);border:none;font-size:1.5rem;font-weight:800;color:var(--ink2);cursor:pointer;font-family:var(--f);line-height:1;transition:background .1s}
+.q-amt-btn:active{background:var(--surf3)}
+.q-amt-mid{flex:1;display:flex;align-items:baseline;justify-content:center;gap:6px;padding:14px 8px;min-width:0}
+.q-amt-sym{font-size:1.1rem;font-weight:500;color:var(--ink3)}
+.q-amt-inp{font-size:2.1rem;font-weight:900;letter-spacing:-.03em;color:var(--ink);background:transparent;border:none;outline:none;width:0;flex:1;text-align:center;font-family:var(--f);font-variant-numeric:tabular-nums;min-width:0}
+.q-amt-usd{font-size:.8rem;font-weight:500;color:var(--ink3)}
+
+/* ── botones rápidos ── */
+.q-fast{display:flex;gap:8px;margin-bottom:4px}
+.q-fast-btn{flex:1;font-family:var(--f);font-size:.82rem;font-weight:800;padding:10px;border-radius:10px;border:1.5px solid var(--brd2);background:transparent;color:var(--ink2);cursor:pointer;transition:all .12s}
+.q-fast-btn:active{background:var(--surf2)}
+.q-fast-btn.on{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* etiqueta de nivel del cliente en el header */
+.cli-tag{font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#d97706;padding:5px 11px;border-radius:9999px;white-space:nowrap}
+
+/* MDO · monto restante como aviso importante: rojo, peso, y palpitando */
+.mdo-rest{color:var(--red);font-weight:900;animation:mdo-pulse 1.1s ease-in-out infinite;display:inline-block}
+@keyframes mdo-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(1.06)}}
+@media(prefers-reduced-motion:reduce){.mdo-rest{animation:none}}
+
+/* ── tarjeta de tiempo sin operar (empujón por ausencia · ámbar, invita) ── */
+.clk{display:flex;gap:13px;align-items:flex-start;background:var(--amber-bg);border:1.5px solid var(--amber-brd);border-radius:16px;padding:16px 17px;margin:26px 0 12px}
+.clk-ic{width:36px;height:36px;border-radius:50%;background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0}
+.clk-body{flex:1;min-width:0}
+.clk-ey{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.clk-time{font-size:1.8rem;font-weight:900;letter-spacing:-.03em;color:var(--amber);line-height:1;font-variant-numeric:tabular-nums;margin-bottom:6px}
+.clk-time.warn{color:var(--red)}   /* últimos 10 min del regresivo: escala a rojo */
+.clk-msg{font-size:.76rem;color:var(--ink2);line-height:1.45}
+.clk-msg strong{color:var(--amber);font-weight:800}
+
+/* ── flecha de subir (círculo flotante, aparece al bajar) ── */
+.to-top{position:absolute;right:16px;bottom:calc(env(safe-area-inset-bottom,12px) + 78px);width:46px;height:46px;border-radius:50%;background:var(--surf);border:1.5px solid var(--brd2);box-shadow:0 4px 18px rgba(0,0,0,.14);cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(8px) scale(.9);pointer-events:none;transition:opacity .2s var(--ease),transform .2s var(--ease)}
+.to-top.on{opacity:1;transform:none;pointer-events:auto}
+.to-top svg{width:22px;height:22px;stroke:var(--ink2);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.to-top:active{background:var(--surf2)}
+@media(min-width:860px){.to-top{bottom:28px}}
+
+/* ════════ ÓRDENES ════════ */
+
+/* ── tarjeta del QR (la herramienta de ejecución, protagonista) ── */
+.qr-card{background:var(--surf);border:1.5px solid var(--brd2);border-radius:18px;padding:22px 20px;text-align:center;margin-bottom:4px;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+.qr-tag{display:inline-flex;align-items:center;gap:7px;font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:16px}
+.qr-pulse{width:8px;height:8px;border-radius:50%;background:var(--green);animation:mdo-pulse 1.3s ease-in-out infinite}
+.qr-img{display:inline-block;padding:14px;background:#fff;border:1.5px solid var(--brd2);border-radius:14px;line-height:0;margin-bottom:14px}
+.qr-img svg{display:block}
+.qr-code{font-size:1.5rem;font-weight:900;letter-spacing:.04em;color:var(--ink);font-variant-numeric:tabular-nums;margin-bottom:4px}
+.qr-sub{font-size:.74rem;color:var(--ink3);margin-bottom:16px}
+.qr-data{display:flex;gap:1.5px;background:var(--brd2);border:1.5px solid var(--brd2);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.qr-d{flex:1;background:var(--surf2);padding:12px}
+.qr-d-l{font-size:.54rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.qr-d-v{font-size:1.05rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.qr-timer{font-size:.74rem;color:var(--ink2);background:var(--green-bg);border:1.5px solid var(--green-brd);border-radius:10px;padding:10px 12px;line-height:1.4}
+.qr-timer strong{color:var(--green);font-weight:800}
+
+/* ── estado SIN orden pendiente (invitación a operar) ── */
+.ord-empty{background:var(--surf2);border-radius:18px;padding:32px 24px;text-align:center}
+.ord-empty-ic{width:54px;height:54px;border-radius:50%;background:var(--surf);border:1.5px solid var(--brd2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.ord-empty-ic svg{width:26px;height:26px;stroke:var(--ink3);stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ord-empty-t{font-size:1.05rem;font-weight:900;letter-spacing:-.02em;color:var(--ink);margin-bottom:6px}
+.ord-empty-s{font-size:.8rem;color:var(--ink3);line-height:1.5;max-width:300px;margin:0 auto}
+
+/* ── aviso de ganancias perdidas (J-01) ── */
+.ord-perdido{display:flex;gap:11px;align-items:flex-start;background:var(--red-bg);border:1.5px solid var(--red-brd);border-radius:14px;padding:13px 15px;margin-top:20px}
+.ord-perdido-ic{color:var(--red);font-weight:900;font-size:.9rem;flex-shrink:0;line-height:1.4}
+.ord-perdido-txt{font-size:.76rem;color:var(--ink2);line-height:1.5}
+.ord-perdido-txt strong{color:var(--red);font-weight:900}
+
+/* ── filas del historial (estado de cuenta) ── */
+.ord-list-card{border:1.5px solid var(--brd2);border-radius:14px;overflow:hidden;background:var(--surf)}
+.ord-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px;border-top:1px solid var(--brd);cursor:pointer;transition:background .12s}
+.ord-row:first-child{border-top:none}
+.ord-row:active{background:var(--surf2)}
+.ord-row-main{flex:1;min-width:0}          /* el monto (protagonista izq.) crece y trunca en móvil; empuja la utilidad a la derecha */
+.ord-row-t{font-size:.92rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.ord-dir{font-size:.66rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;margin-left:4px}
+.ord-row-s{font-size:.72rem;color:var(--ink3);margin-top:3px}
+.ord-est{font-weight:800}
+.ord-est.green{color:var(--green)} .ord-est.amber{color:var(--amber)} .ord-est.red{color:var(--red)} .ord-est.gray{color:var(--ink4)}
+.ord-row-r{text-align:right;flex-shrink:0}
+.ord-util{font-size:.92rem;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums}
+.ord-util.red{color:var(--red)} .ord-util.amber{color:var(--amber)}
+.ord-util-sub{font-size:.6rem;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.04em;margin-top:1px}
+.ord-perd{font-size:.68rem;font-weight:700;color:var(--red);margin-top:2px}
+
+/* reloj regresivo de la orden vigente (cuenta hacia cero) */
+.qr-clock{font-size:.74rem;color:var(--ink2);background:var(--green-bg);border:1.5px solid var(--green-brd);border-radius:10px;padding:10px 12px;line-height:1.4}
+.qr-clock-v{color:var(--green);font-weight:900;font-variant-numeric:tabular-nums}
+.qr-clock-v.warn{color:var(--amber)}
+.qr-clock-v.exp{color:var(--red)}
+
+/* empuje por inventario (dibujo demo): la moneda con MENOS inventario va apagada (gris).
+   Es señal visual, NO deshabilita — si el cliente la toca, se activa normal (.on manda). */
+.q-seg button.q-seg-dim:not(.on){color:var(--ink4);background:var(--surf2);opacity:.72}
+
+/* "USD" pequeño junto a los montos en dólares de la tabla */
+.t3-usd{font-size:.62rem;font-weight:600;color:var(--ink3);letter-spacing:.02em}
+
+/* ════════ PERFIL ════════ */
+.pf-head{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.pf-avatar{width:56px;height:56px;border-radius:50%;background:var(--ink);color:var(--surf);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;flex-shrink:0}
+.pf-name{font-size:1.2rem;font-weight:900;letter-spacing:-.02em;color:var(--ink)}
+.pf-sub{font-size:.78rem;color:var(--ink3);margin-top:2px}
+.pf-card{background:var(--surf2);border-radius:16px;padding:18px;margin-bottom:14px}
+.pf-card-t{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:14px}
+.pf-card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.pf-tier{display:flex;align-items:center;gap:8px;font-size:1.05rem;font-weight:900;color:var(--ink)}
+.pf-tier-medal{font-size:1.3rem}
+.pf-score{display:flex;align-items:baseline;gap:5px}
+.pf-score span:first-child{font-size:1.6rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums}
+.pf-score-l{font-size:.58rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.pf-bar{height:8px;background:var(--surf3);border-radius:99px;overflow:hidden;margin-bottom:8px}
+.pf-bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--amber),var(--red));border-radius:99px;transition:width 1s var(--ease)}
+.pf-bar-lbl{font-size:.76rem;color:var(--ink2);margin-bottom:16px}
+.pf-bar-lbl strong{color:var(--ink);font-weight:800}
+.pf-stats{display:flex;gap:10px}
+.pf-stat{flex:1;background:var(--surf);border-radius:12px;padding:12px;text-align:center}
+.pf-stat-v{font-size:1.25rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums}
+.pf-stat-l{font-size:.58rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);margin-top:3px}
+.pf-ref-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.pf-ref-big{font-size:1.3rem;font-weight:900;color:var(--ink)}
+.pf-ref-big span{color:var(--green)}
+.pf-ref-btn{font-family:var(--f);font-size:.82rem;font-weight:800;padding:9px 18px;border-radius:10px;border:none;background:var(--red);color:#fff;cursor:pointer}
+.pf-ref-sub{font-size:.74rem;color:var(--ink3)}
+.pf-data{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--brd);font-size:.84rem}
+.pf-data:last-child{border-bottom:none}
+.pf-data-l{color:var(--ink3)}
+.pf-data-v{color:var(--ink);font-weight:700}
+.pf-set{display:flex;align-items:center;justify-content:space-between;padding:4px 0 16px}
+.pf-set-l{font-size:.88rem;font-weight:700;color:var(--ink)}
+.pf-toggle{width:46px;height:27px;border-radius:99px;background:var(--surf3);border:1.5px solid var(--brd2);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.pf-toggle.on{background:var(--green)}
+.pf-toggle-dot{position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.pf-toggle.on .pf-toggle-dot{transform:translateX(19px)}
+.pf-logout{width:100%;font-family:var(--f);font-size:.86rem;font-weight:800;padding:13px;border-radius:11px;border:1.5px solid var(--brd2);background:transparent;color:var(--red);cursor:pointer}
+
+/* resumen del estado de cuenta en Órdenes */
+.ord-sum{display:flex;gap:10px;margin:18px 0 4px}
+.ord-sum-c{flex:1;background:var(--surf2);border-radius:13px;padding:14px 8px;text-align:center}
+.ord-sum-v{font-size:1.2rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.ord-sum-v.green{color:var(--green)} .ord-sum-v.red{color:var(--red)} .ord-sum-v.amber{color:var(--amber)}
+.ord-sum-l{font-size:.56rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);margin-top:4px}
+.ord-sum-sub{font-size:.58rem;font-weight:700;color:var(--ink4);margin-top:5px;font-variant-numeric:tabular-nums}
+.ord-sum-sub .m{font-weight:900}
+.ord-sum-sub.green .m{color:var(--green)} .ord-sum-sub.red .m{color:var(--red)}
+
+/* filtros del historial de Órdenes */
+.ord-filtros{display:flex;gap:7px;margin:10px 0 4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.ord-filtros::-webkit-scrollbar{display:none}
+.ord-filtro{flex-shrink:0;font-family:var(--f);font-size:.74rem;font-weight:700;padding:7px 14px;border-radius:99px;border:1.5px solid var(--brd2);background:transparent;color:var(--ink3);cursor:pointer;white-space:nowrap;transition:background .12s,color .12s,border-color .12s}
+.ord-filtro.on{background:var(--ink);color:var(--surf);border-color:var(--ink)}
+.ord-vacio{padding:28px 16px;text-align:center;font-size:.84rem;color:var(--ink3)}
+
+/* fila tocable: chevron y feedback */
+.ord-row.tap{cursor:pointer;position:relative;transition:background .12s}
+.ord-row.tap:active{background:var(--surf2)}
+.ord-row-chev{position:absolute;right:2px;top:50%;transform:translateY(-50%);font-size:1.3rem;color:var(--ink4);font-weight:400;line-height:1}
+.ord-row.tap .ord-row-r{margin-right:16px}
+
+/* detalle de la orden (modal) */
+.od-body{display:block}
+.od-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--brd);font-size:.86rem}
+.od-row:last-child{border-bottom:none}
+.od-l{color:var(--ink3)}
+.od-v{color:var(--ink);font-weight:700}
+.od-v.green{color:var(--green)}
+.od-v.red{color:var(--red)}
+.od-sep{height:1px;background:var(--brd);margin:8px 0}
+.od-note{font-size:.78rem;color:var(--ink3);line-height:1.5;padding-top:4px}
+/* pop-up de detalle: número-héroe (utilidad de la orden) + mensaje conductual */
+.od-hero{text-align:center;padding:6px 0 16px;border-bottom:1px solid var(--brd);margin-bottom:6px}
+.od-hero-l{font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.od-hero-v{font-size:2.1rem;font-weight:900;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.od-hero-v.green{color:var(--green)} .od-hero-v.red{color:var(--red)} .od-hero-v.amber{color:var(--amber)}
+.od-msg{font-size:.82rem;line-height:1.5;padding:12px 13px;border-radius:11px;margin-top:12px}
+.od-msg.green{background:var(--green-bg);color:var(--ink2);border:1px solid var(--green-brd)}
+.od-msg.red{background:var(--red-bg);color:var(--ink2);border:1px solid var(--red-brd)}
+.od-msg.amber{background:var(--amber-bg);color:var(--ink2);border:1px solid var(--amber-brd)}
+.od-msg.gray{background:var(--surf2);color:var(--ink3)}
+.od-msg strong{font-weight:900}
+.od-msg.green strong{color:var(--green)} .od-msg.red strong{color:var(--red)} .od-msg.amber strong{color:var(--amber)}
+
+/* ---------- ayuda contextual "?" (Bloque 6) ---------- */
+.hlp{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1.2px solid var(--brd3);background:var(--surf2);color:var(--ink3);font-size:.6rem;font-weight:800;cursor:pointer;vertical-align:middle;line-height:1;padding:0;flex:none}
+.hlp:hover{border-color:var(--ink3);color:var(--ink);background:var(--surf3)}
+
+/* pop-up de ayuda "?" — fondo gris claro; móvil cerca del tap, desktop centrado */
+.hlp-ovl{position:fixed;inset:0;z-index:130;background:rgba(20,20,25,.20)}
+.hlp-pop{position:fixed;background:var(--surf2);border:1px solid var(--brd2);border-radius:14px;box-shadow:0 14px 44px rgba(0,0,0,.24);padding:16px 18px 17px;max-width:420px;width:min(90vw,420px)}
+.hlp-pop-t{font-weight:900;font-size:.98rem;color:var(--ink);margin:0 22px 7px 0;letter-spacing:-.01em}
+.hlp-pop-b{font-size:.83rem;line-height:1.52;color:var(--ink2)}
+.hlp-x{position:absolute;top:9px;right:11px;border:none;background:none;font-size:1.3rem;line-height:1;color:var(--ink3);cursor:pointer;padding:2px}
+.hlp-x:hover{color:var(--ink)}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CAJA — fila de operación del turno y frame de recibo (usadas en caja.html)
+   ═══════════════════════════════════════════════════════════════════ */
+.turno-op{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:12px 15px;border-bottom:1px solid var(--brd);cursor:pointer;transition:background .1s}
+.turno-op:hover{background:var(--surf2)}
+.turno-op:last-child{border-bottom:none}
+.turno-op-main{min-width:0}
+.turno-op-t{font-size:.82rem;font-weight:800;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.turno-op-s{font-size:.66rem;color:var(--ink3);margin-top:2px;font-variant-numeric:tabular-nums}
+.turno-op-n{font-size:.9rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right;letter-spacing:-.01em;line-height:1.1}
+.turno-op-n-l{font-size:.58rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-top:2px;text-align:right}
+.turno-op-chev{color:var(--ink3);font-size:1rem}
+
+.rcp-frame{background:var(--surf);border:1.5px solid var(--brd);border-radius:14px;padding:18px 16px;margin:6px 0 12px}
+.rcp-logo{font-family:-apple-system,system-ui,sans-serif;font-size:1.35rem;font-weight:900;letter-spacing:-.055em;text-transform:uppercase;line-height:1;text-align:center;margin-bottom:2px}
+.rcp-logo em{color:var(--red);font-style:normal}
+.rcp-sub{text-align:center;font-size:.62rem;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px}
+.rcp-folio{text-align:center;font-size:.66rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
+.rcp-folio strong{color:var(--ink);font-weight:900;letter-spacing:.01em;font-size:.94rem;display:block;margin-top:2px}
+.rcp-done{background:var(--green-bg);color:var(--green);border:1px solid var(--green-brd);border-radius:10px;padding:8px 12px;text-align:center;font-size:.78rem;font-weight:800;margin-top:12px}
+.rcp-part{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-brd);border-radius:10px;padding:8px 12px;text-align:center;font-size:.78rem;font-weight:800;margin-top:12px}
+.rcp-btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.rcp-btn{padding:12px 8px;border-radius:12px;border:1.5px solid var(--brd2);background:var(--surf);color:var(--ink);font-family:-apple-system,system-ui,sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.02em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;line-height:1}
+.rcp-btn:hover{background:var(--surf2);border-color:var(--ink3)}
+.rcp-btn.pri{background:var(--red);color:#fff;border-color:transparent}
+.rcp-btn.pri:hover{background:#a90116}
+.rcp-btn.disabled{opacity:.5;cursor:not-allowed}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CAMPANITA de notificaciones — botón en header + panel dropdown
+   ═══════════════════════════════════════════════════════════════════ */
+.rc-bell-slot{position:relative;display:flex;align-items:center;margin-right:6px}
+.rc-bell{position:relative;background:none;border:none;color:var(--ink2);padding:6px 8px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .1s,color .1s}
+.rc-bell:hover{background:var(--surf2);color:var(--ink)}
+.rc-bell svg{display:block}
+.rc-bell-badge{position:absolute;top:2px;right:2px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--red);color:#fff;font-size:.62rem;font-weight:800;line-height:16px;text-align:center;letter-spacing:.02em;box-shadow:0 0 0 2px var(--surf)}
+.rc-notif-panel{position:fixed;z-index:1200;background:var(--surf);border:1.5px solid var(--brd2);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.18);max-height:70vh;display:flex;flex-direction:column;overflow:hidden}
+.rc-notif-h{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--brd);background:var(--surf2)}
+.rc-notif-h b{font-size:.85rem;color:var(--ink);font-weight:800}
+.rc-notif-all{background:none;border:none;color:var(--blue);font-size:.72rem;font-weight:700;cursor:pointer;padding:2px 4px;border-radius:6px}
+.rc-notif-all:hover{background:var(--blue-bg)}
+.rc-notif-body{overflow-y:auto;flex:1}
+.rc-notif-empty{padding:22px 14px;text-align:center;color:var(--ink3);font-size:.78rem}
+.rc-notif-item{padding:10px 14px 10px 18px;border-bottom:1px solid var(--brd);cursor:pointer;position:relative;transition:background .1s}
+.rc-notif-item:hover{background:var(--surf2)}
+.rc-notif-item:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ink4)}
+.rc-notif-item.p-info:before{background:var(--blue)}
+.rc-notif-item.p-action:before{background:var(--amber)}
+.rc-notif-item.p-critical:before{background:var(--red)}
+.rc-notif-item.p-passive:before{background:var(--ink4)}
+.rc-notif-item.read{opacity:.72}
+.rc-notif-item.read .rc-notif-title{font-weight:600}
+.rc-notif-item.unread .rc-notif-title{font-weight:800}
+.rc-notif-item:last-child{border-bottom:none}
+.rc-notif-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-size:.82rem;color:var(--ink);line-height:1.25;margin-bottom:3px}
+.rc-notif-ago{font-size:.66rem;color:var(--ink3);font-weight:500;flex-shrink:0;font-variant-numeric:tabular-nums}
+.rc-notif-body-txt{font-size:.74rem;color:var(--ink2);line-height:1.35}
+.rc-notif-foot{display:flex;align-items:center;justify-content:space-between;margin-top:5px;gap:8px}
+.rc-notif-act{font-size:.7rem;font-weight:700;color:var(--blue);cursor:pointer;padding:2px 8px;border-radius:6px;background:var(--blue-bg);text-decoration:none}
+.rc-notif-act:hover{background:var(--blue-bg);filter:brightness(.95)}
+.rc-notif-dis{background:none;border:none;color:var(--ink3);font-size:1rem;line-height:1;cursor:pointer;padding:2px 6px;border-radius:6px;margin-left:auto}
+.rc-notif-dis:hover{background:var(--brd);color:var(--ink)}
+
+/* ═══ Footer legal (deslinde bilingüe RetiCash LLC). Discreto, siempre al pie. ═══
+   Va en index.html (público), customer.html (Perfil), acceso-interno.html (solo ES). NO en admin/vendedor/caja. */
+.rc-legal-footer{max-width:640px;margin:32px auto 0;padding:20px 22px 28px;border-top:1px solid var(--brd);color:var(--ink4);font-size:.7rem;line-height:1.5;text-align:left}
+.rc-legal-footer p{margin:0 0 10px}
+.rc-legal-footer p:last-child{margin-bottom:0}
+.rc-legal-footer .rc-legal-en{color:var(--ink4);opacity:.85}
+.rc-legal-footer .rc-legal-links{margin-top:12px;padding-top:10px;border-top:1px dashed var(--brd2);font-size:.72rem;font-weight:700;letter-spacing:.02em;text-align:center}
+.rc-legal-footer .rc-legal-links a{color:var(--red);text-decoration:underline;text-underline-offset:2px}
+.rc-legal-footer .rc-legal-links a:hover{color:var(--red);filter:brightness(.85)}
+.rc-legal-footer .rc-legal-credits{margin-top:16px;padding-top:12px;border-top:1px solid var(--brd);font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;font-weight:800;color:var(--ink4);text-align:center}
+/* Compatibilidad: .login-inst dejó de usarse en index/acceso-interno (se solapaba con el legal footer);
+   se mantiene el estilo por si otros archivos aún lo referencian. */
+
+/* ═══ Landscape en móvil/tablet: overlay pidiendo rotar. La app está diseñada 100% vertical. ═══
+   Complementa el manifest orientation:portrait (que solo funciona en PWA instalada). */
+@media (orientation: landscape) and (max-width: 900px){
+  body::before{
+    content: "Gira tu dispositivo";
+    position: fixed; inset: 0; z-index: 2147483646;
+    background: var(--surf,#fff); color: var(--ink,#09090f);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 40px 30px;
+    font-family: -apple-system,system-ui,sans-serif;
+    font-size: 1.3rem; font-weight: 900; letter-spacing: -.02em; line-height: 1.4;
+    white-space: pre-line;
+  }
+  body::after{
+    content: "Esta app funciona en vertical";
+    position: fixed; inset: 55% 0 0 0; z-index: 2147483647;
+    color: var(--ink3,#6b6b82);
+    display: flex; align-items: flex-start; justify-content: center;
+    text-align: center; padding: 20px 40px 0;
+    font-family: -apple-system,system-ui,sans-serif;
+    font-size: .95rem; font-weight: 600; line-height: 1.4;
+    pointer-events: none;
+  }
+}
+/* Altura del app: el CSS usa dvh, pero Chrome Android tiene bugs de recálculo tras cerrar el teclado.
+   core.js sobreescribe app.style.height con innerHeight real y lo re-actualiza en resize/focusout/visibilitychange. */
+
+</style>
+<style>
+/* ==== carbon/linea.css · incrustada: este host no sirve la aplicación ==== */
+/* ═══════════════════════════════════════════════════════════════════════════
+   LÍNEA · la línea de tiempo de una orden.
+
+   PROCEDENCIA: esta pieza no es de Carbon ni la inventé. Está copiada tal cual
+   de Cash Market —`public/assets/css/mercado.css`, clases .orden-hitos* y
+   .orden-step*—, que es la misma casa y los mismos fichas: --surf, --brd2,
+   --green, --red, --ink3. Por eso entra en Middle Market sin traducir un solo
+   color.
+
+   Son DOS piezas que trabajan juntas:
+     · .orden-hitos   — tres puntos y dos líneas, horizontal, con un mensaje
+                        debajo. Dice DÓNDE va la orden y QUÉ falta.
+     · .orden-stepper — la versión vertical y detallada, con sello de hora en
+                        cada paso. Dice CUÁNDO pasó cada cosa.
+
+   La palomita del punto cumplido está dibujada en CSS (dos bordes girados),
+   no es un icono: así no depende de ninguna librería.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Los fichas de esta pieza ────────────────────────────────────────────────
+   El sistema prohíbe escribir un color directamente en una regla. Los valores
+   que la pieza necesita y que la casa no declara —los halos de pulso, el blanco
+   sobre color, el ámbar de aviso— se declaran UNA vez aquí y se usan por
+   nombre. Derivan de --red, --green y --amber; si la marca cambia, cambian
+   estos con ella.
+   ────────────────────────────────────────────────────────────────────────── */
+:root{
+  --hito-sobre-color:#fff;                    /* la palomita, sobre disco lleno */
+  --hito-halo-rojo:rgba(208,2,27,.12);        /* --red al 12 %  · halo del punto activo */
+  --hito-halo-rojo-tenue:rgba(208,2,27,.04);
+  --hito-borde-rojo:rgba(208,2,27,.35);
+  --hito-fondo-rojo:rgba(208,2,27,.05);
+  --hito-halo-verde:rgba(22,163,74,.12);      /* --green al 12 % · lado vendedor */
+  --hito-halo-verde-tenue:rgba(22,163,74,.04);
+  --hito-borde-verde:rgba(22,163,74,.35);
+  --hito-fondo-verde:rgba(22,163,74,.06);
+  --hito-halo-ambar:rgba(217,119,6,.14);      /* --amber · aviso dentro del hito */
+  --hito-borde-ambar:rgba(217,119,6,.35);
+  --hito-fondo-ambar:rgba(217,119,6,.06);
+  --hito-tinta-ambar:#8a5a06;
+}
+
+
+/* ══ Los 3 hitos (v7 · registro formal) ══
+   Barra discreta de 3 puntos que dan ubicación + tarjeta de mensaje
+   contextual que da acción. Reemplaza el stepper vertical de 7 estados
+   internos. El cliente no piensa en "estados" — piensa en "¿qué pasa
+   y qué hago?". Móvil primero. */
+.orden-hitos{margin-bottom:18px}
+
+.orden-hitos-track{
+  display:grid;grid-template-columns:auto 1fr auto 1fr auto;
+  align-items:center;gap:0;padding:4px 6px 10px;
+}
+
+.orden-hitos-dot{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  min-width:70px;
+}
+
+.orden-hitos-dot-i{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--surf3);border:2px solid var(--brd2);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .25s var(--ease), border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+
+.orden-hitos-dot-l{
+  font-size:.62rem;font-weight:800;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--ink3);
+  text-align:center;line-height:1.2;max-width:96px;
+}
+
+.orden-hitos-line{
+  height:3px;background:var(--brd2);border-radius:9999px;
+  align-self:center;margin-top:-14px; /* alinear con el centro del dot */
+  transition:background .4s var(--ease);
+}
+
+/* Hito completado — dot lleno con palomita */
+.orden-hitos-dot.done .orden-hitos-dot-i{
+  background:var(--green);border-color:var(--green);
+}
+
+.orden-hitos-dot.done .orden-hitos-dot-i::after{
+  content:"";width:7px;height:4px;
+  border-left:2px solid var(--hito-sobre-color);border-bottom:2px solid var(--hito-sobre-color);
+  transform:rotate(-45deg);margin-top:-2px;
+}
+
+.orden-hitos-dot.done .orden-hitos-dot-l{color:var(--ink)}
+
+.orden-hitos-line.done{background:var(--green)}
+
+/* Hito activo — dot pulsante con el color del rol */
+.orden-hitos-dot.active .orden-hitos-dot-i{
+  background:var(--surf);border-color:var(--red);
+  box-shadow:0 0 0 4px var(--hito-halo-rojo);
+  animation:ordenHitoPulse 1.4s ease-in-out infinite;
+}
+
+.orden-hitos-dot.active .orden-hitos-dot-l{
+  color:var(--red);font-weight:800;
+}
+
+.orden-hitos.venta .orden-hitos-dot.active .orden-hitos-dot-i{
+  border-color:var(--green);box-shadow:0 0 0 4px var(--hito-halo-verde);
+  animation:ordenHitoPulseVerde 1.4s ease-in-out infinite;
+}
+
+.orden-hitos.venta .orden-hitos-dot.active .orden-hitos-dot-l{color:var(--green)}
+
+/* Tonos alternos del hito activo · avisos de excepción */
+.orden-hitos-dot.active.tone-warn .orden-hitos-dot-i{
+  border-color:var(--amber);box-shadow:0 0 0 4px var(--hito-halo-ambar);animation:none;
+}
+
+.orden-hitos-dot.active.tone-warn .orden-hitos-dot-l{color:var(--amber)}
+
+.orden-hitos-dot.active.tone-danger .orden-hitos-dot-i{
+  border-color:var(--red);background:var(--red);animation:none;
+}
+
+.orden-hitos-dot.active.tone-danger .orden-hitos-dot-l{color:var(--red)}
+
+@keyframes ordenHitoPulse{
+  0%,100%{box-shadow:0 0 0 4px var(--hito-halo-rojo)}
+  50%    {box-shadow:0 0 0 8px var(--hito-halo-rojo-tenue)}
+}
+
+@keyframes ordenHitoPulseVerde{
+  0%,100%{box-shadow:0 0 0 4px var(--hito-halo-verde)}
+  50%    {box-shadow:0 0 0 8px var(--hito-halo-verde-tenue)}
+}
+
+/* Tarjeta de mensaje debajo de los 3 puntos */
+.orden-hitos-msg{
+  background:var(--surf);border:1.5px solid var(--brd2);
+  border-radius:12px;padding:14px 16px;
+}
+
+.orden-hitos-msg-t{
+  font-size:.92rem;font-weight:800;color:var(--ink);
+  letter-spacing:-.005em;line-height:1.3;
+}
+
+.orden-hitos-msg-s{
+  font-size:.8rem;color:var(--ink2);line-height:1.5;margin-top:6px;
+}
+
+.orden-hitos-msg.tone-warn{
+  border-color:var(--hito-borde-ambar);background:var(--hito-fondo-ambar);
+}
+
+.orden-hitos-msg.tone-warn .orden-hitos-msg-t{color:var(--hito-tinta-ambar)}
+
+.orden-hitos-msg.tone-danger{
+  border-color:var(--hito-borde-rojo);background:var(--hito-fondo-rojo);
+}
+
+.orden-hitos-msg.tone-danger .orden-hitos-msg-t{color:var(--red)}
+
+.orden-hitos-msg.tone-ok{
+  border-color:var(--hito-borde-verde);background:var(--hito-fondo-verde);
+}
+
+.orden-hitos-msg.tone-ok .orden-hitos-msg-t{color:var(--green)}
+
+/* Stepper vertical · 7 estados */
+.orden-stepper{
+  background:var(--surf);border:1.5px solid var(--brd2);border-radius:12px;
+  padding:6px 14px;margin-bottom:14px;
+}
+
+.orden-step{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:11px 0;position:relative;
+}
+
+.orden-step:not(:last-child)::before{
+  content:"";position:absolute;left:9px;top:28px;bottom:-3px;
+  width:2px;background:var(--brd2);
+}
+
+.orden-step.done:not(:last-child)::before{background:var(--green)}
+
+.orden-step-dot{
+  flex-shrink:0;width:20px;height:20px;border-radius:50%;
+  background:var(--surf3);border:2px solid var(--brd2);
+  display:flex;align-items:center;justify-content:center;
+  margin-top:2px;z-index:1;
+  transition:background .2s, border-color .2s;
+}
+
+.orden-step.done .orden-step-dot{background:var(--green);border-color:var(--green)}
+
+.orden-step.done .orden-step-dot::after{
+  content:"";width:8px;height:4px;border-left:2px solid var(--hito-sobre-color);border-bottom:2px solid var(--hito-sobre-color);
+  transform:rotate(-45deg);margin-top:-3px;
+}
+
+.orden-step.active .orden-step-dot{
+  background:var(--surf);border-color:var(--red);
+  box-shadow:0 0 0 4px var(--hito-halo-rojo);
+  animation:ordenPulse 1.4s ease-in-out infinite;
+}
+
+.orden-step.venta.active .orden-step-dot{
+  border-color:var(--green);box-shadow:0 0 0 4px var(--hito-halo-verde);
+  animation:ordenPulseVerde 1.4s ease-in-out infinite;
+}
+
+@keyframes ordenPulse{
+  0%,100%{box-shadow:0 0 0 4px var(--hito-halo-rojo)}
+  50%{box-shadow:0 0 0 7px var(--hito-halo-rojo-tenue)}
+}
+
+@keyframes ordenPulseVerde{
+  0%,100%{box-shadow:0 0 0 4px var(--hito-halo-verde)}
+  50%{box-shadow:0 0 0 7px var(--hito-halo-verde-tenue)}
+}
+
+.orden-step-b{flex:1;line-height:1.3;min-width:0}
+
+.orden-step-t{
+  font-size:.78rem;font-weight:800;color:var(--ink2);letter-spacing:-.01em;
+}
+
+.orden-step.done .orden-step-t{color:var(--ink)}
+
+.orden-step.active .orden-step-t{color:var(--ink)}
+
+.orden-step-s{
+  font-size:.64rem;color:var(--ink3);margin-top:2px;line-height:1.4;
+}
+
+.orden-step-ts{
+  font-size:.56rem;font-weight:700;color:var(--ink3);
+  font-variant-numeric:tabular-nums;margin-top:2px;letter-spacing:.02em;
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800;9..40,900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   FICHAS DEL DOCUMENTO · deliberadamente distintos de los del producto.
+   El papel es más frío y más claro que el --bg del producto (#ebebf0), para
+   que se note de un vistazo qué es documento y qué es muestra.
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root{
+  --d-bg:#F5F6F8; --d-surf:#FFFFFF; --d-surf2:#EDEFF3;
+  --d-line:#DCE0E6; --d-line2:#E8EBEF;
+  --d-ink:#14171C; --d-ink2:#414855; --d-ink3:#697280; --d-ink4:#98A1AE;
+  --d-acc:#D0021B; --d-ok:#0F7A3D; --d-warn:#B45309; --d-debt:#B01B1B;
+  --d-ok-bg:rgba(15,122,61,.06); --d-warn-bg:rgba(180,83,9,.06); --d-debt-bg:rgba(176,27,27,.05);
+  --m:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --s:'DM Sans',system-ui,-apple-system,sans-serif;
+}
+body.dk{
+  --d-bg:#0B0D11; --d-surf:#14171D; --d-surf2:#1A1E26;
+  --d-line:#272C35; --d-line2:#1F242C;
+  --d-ink:#E9ECF2; --d-ink2:#AEB6C2; --d-ink3:#8892A0; --d-ink4:#5F6875;
+  --d-ok:#3FB574; --d-warn:#E0A340; --d-debt:#F2626B;
+  --d-ok-bg:rgba(63,181,116,.10); --d-warn-bg:rgba(224,163,64,.10); --d-debt-bg:rgba(242,98,107,.09);
+}
+
+body{ background:var(--d-bg); color:var(--d-ink); font-family:var(--s);
+      font-size:15px; line-height:1.6; }
+.doc{ max-width:1000px; margin:0 auto; padding:0 24px 110px; }
+@media(max-width:640px){ .doc{ padding:0 15px 70px; } }
+
+/* ── cabecera y navegación del documento ────────────────────────────────── */
+.dh{ position:sticky; top:0; z-index:50; background:var(--d-surf);
+     border-block-end:1px solid var(--d-line); }
+.dh-in{ max-width:1000px; margin:0 auto; padding:12px 24px; display:flex;
+        align-items:center; gap:13px; }
+.dh-marca{ font-size:1rem; font-weight:900; letter-spacing:-.05em; text-transform:uppercase;
+           color:var(--d-ink); }
+.dh-marca em{ color:var(--d-acc); font-style:normal; }
+.dh-tag{ font-family:var(--m); font-size:.56rem; font-weight:800; letter-spacing:.14em;
+         text-transform:uppercase; color:var(--d-acc);
+         border:1px solid color-mix(in srgb, var(--d-acc) 30%, transparent); padding:3px 7px; }
+.dh-sp{ flex:1 }
+.dh-meta{ font-family:var(--m); font-size:.6rem; color:var(--d-ink4); letter-spacing:.05em; }
+@media(max-width:600px){ .dh-meta{ display:none } }
+.dh-tema{ background:none; border:1px solid var(--d-line); color:var(--d-ink2);
+          inline-size:30px; block-size:30px; cursor:pointer; font-size:.86rem;
+          display:flex; align-items:center; justify-content:center; }
+.dh-tema:hover{ border-color:var(--d-ink4); color:var(--d-ink); }
+
+.idx{ position:sticky; top:55px; z-index:49; background:var(--d-surf2);
+      border-block-end:1px solid var(--d-line); }
+.idx-in{ max-width:1000px; margin:0 auto; padding:0 24px; display:flex; overflow-x:auto; }
+.idx a{ font-family:var(--m); font-size:.6rem; font-weight:700; letter-spacing:.1em;
+        text-transform:uppercase; color:var(--d-ink3); padding:10px 12px; white-space:nowrap;
+        border-block-end:2px solid transparent; text-decoration:none; }
+.idx a:hover{ color:var(--d-ink) }
+.idx a.on{ color:var(--d-acc); border-block-end-color:var(--d-acc) }
+
+.avance{ position:fixed; inset-block-start:0; inset-inline-start:0; z-index:60;
+         block-size:2px; background:var(--d-acc); inline-size:0 }
+.arriba{ position:fixed; inset-block-end:22px; inset-inline-end:22px; z-index:60;
+         inline-size:42px; block-size:42px; display:flex; align-items:center;
+         justify-content:center; background:var(--d-surf); color:var(--d-ink2);
+         border:1px solid var(--d-line); cursor:pointer; font-size:1rem;
+         opacity:0; pointer-events:none; transition:opacity .16s ease, border-color .16s ease; }
+.arriba.se-ve{ opacity:1; pointer-events:auto }
+.arriba:hover{ border-color:var(--d-ink4); color:var(--d-ink) }
+@media (pointer:coarse){ .arriba{ inline-size:48px; block-size:48px } }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PLANCHAS · la capa de presentación.
+
+   Una plancha, una idea, a sangre completa. Casi nada de texto encima: la
+   explicación vive en las reglas, debajo. Y lo que se muestra NO es una
+   maqueta — es el portal que sirve producción, dentro de un marco, con el
+   sistema dibujado encima.
+   ══════════════════════════════════════════════════════════════════════════ */
+.plancha{ margin-inline:calc(50% - 50vw); inline-size:100vw; padding:52px 0;
+          background:var(--d-surf2); border-block:1px solid var(--d-line);
+          margin-block-start:34px; overflow:hidden; }
+.plancha.oscura{ background:#0B0D11; border-color:#272C35; }
+.plancha-in{ max-width:1000px; margin:0 auto; padding:0 24px; }
+.plancha-ey{ font-family:var(--m); font-size:.58rem; font-weight:800; letter-spacing:.2em;
+             text-transform:uppercase; color:var(--d-ink4); }
+.plancha.oscura .plancha-ey{ color:#5F6875 }
+.plancha-t{ margin-block-start:8px; font-size:clamp(1.3rem,3vw,1.9rem); font-weight:900;
+            letter-spacing:-.03em; color:var(--d-ink); text-wrap:balance; max-width:26ch; }
+.plancha.oscura .plancha-t{ color:#E9ECF2 }
+.plancha-pie{ margin-block-start:14px; font-family:var(--m); font-size:.66rem;
+              color:var(--d-ink4); line-height:1.7; }
+.plancha.oscura .plancha-pie{ color:#8892A0 }
+
+/* el marco que sostiene el portal real, escalado */
+.marco{ position:relative; margin-block-start:26px; overflow:hidden;
+        border:1px solid var(--d-line); background:#fff; }
+.plancha.oscura .marco{ border-color:#272C35 }
+.marco-esc{ position:absolute; inset-block-start:0; inset-inline-start:0;
+            transform-origin:0 0; }
+.marco iframe{ border:0; display:block; background:#fff; }
+
+/* las columnas dibujadas encima del producto */
+.rejilla-encima{ position:absolute; inset-block:0; pointer-events:none;
+                 display:grid; gap:32px; }
+.rejilla-encima span{ background:color-mix(in srgb, var(--d-acc) 14%, transparent);
+                      border-inline:1px solid color-mix(in srgb, var(--d-acc) 40%, transparent); }
+
+/* la paleta a sangre */
+.paleta{ display:flex; margin-block-start:26px; block-size:132px; }
+.paleta div{ flex:1; display:flex; align-items:flex-end; padding:8px 9px;
+             font-family:var(--m); font-size:.5rem; font-weight:700; letter-spacing:.06em; }
+@media(max-width:700px){ .paleta{ flex-wrap:wrap; block-size:auto }
+  .paleta div{ flex:0 0 25%; block-size:64px } }
+
+/* dos gramáticas, lado a lado */
+.dos-marcos{ display:grid; grid-template-columns:340px 1fr; gap:26px; align-items:start;
+             margin-block-start:26px; }
+@media(max-width:820px){ .dos-marcos{ grid-template-columns:1fr } }
+
+/* ── portada y secciones ────────────────────────────────────────────────── */
+.tapa{ padding:52px 0 6px }
+.ey{ font-family:var(--m); font-size:.6rem; font-weight:800; letter-spacing:.18em;
+     text-transform:uppercase; color:var(--d-ink4) }
+.tapa h1{ margin-block-start:12px; font-size:clamp(1.9rem,5vw,2.8rem); font-weight:900;
+          letter-spacing:-.04em; line-height:1.04; text-wrap:balance; color:var(--d-ink) }
+.tapa p{ margin-block-start:15px; max-width:64ch; font-size:1.04rem; color:var(--d-ink2) }
+
+section{ padding-block-start:46px; scroll-margin-top:100px }
+h2{ font-size:1.46rem; font-weight:900; letter-spacing:-.03em; color:var(--d-ink) }
+h2 .n{ font-family:var(--m); font-size:.76rem; font-weight:800; color:var(--d-ink4);
+       margin-inline-end:11px; letter-spacing:0 }
+h3{ font-family:var(--m); font-size:.68rem; font-weight:800; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--d-ink3); margin-block-start:30px;
+    padding-block-end:7px; border-block-end:1px solid var(--d-line) }
+.intro{ margin-block-start:10px; max-width:70ch; color:var(--d-ink2) }
+p{ line-height:1.68; color:var(--d-ink2) }
+p+p{ margin-block-start:10px }
+b,strong{ color:var(--d-ink) }
+code{ font-family:var(--m); font-size:.84em; background:var(--d-surf2); padding:1px 5px;
+      color:var(--d-ink); border:1px solid var(--d-line2) }
+
+/* ── EL OBJETO REPETIDO · una regla ─────────────────────────────────────── */
+.rg{ border:1px solid var(--d-line); background:var(--d-surf); margin-block-start:14px }
+.rg-h{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; padding:8px 14px;
+       background:var(--d-surf2); border-block-end:1px solid var(--d-line) }
+.rg-id{ font-family:var(--m); font-size:.6rem; font-weight:800; color:var(--d-ink4);
+        letter-spacing:.06em }
+.rg-b{ padding:13px 15px }
+.rg-t{ font-size:.97rem; font-weight:800; line-height:1.42; color:var(--d-ink) }
+.rg-d{ margin-block-start:7px; font-size:.89rem; color:var(--d-ink2); line-height:1.62 }
+.rg-d b{ color:var(--d-ink) }
+.vf{ margin-block-start:11px; border-inline-start:2px solid var(--d-ok);
+     background:var(--d-ok-bg); padding:8px 12px }
+.vf-l{ font-family:var(--m); font-size:.53rem; font-weight:800; letter-spacing:.16em;
+       text-transform:uppercase; color:var(--d-ok) }
+.vf-t{ font-family:var(--m); font-size:.72rem; color:var(--d-ink2); margin-block-start:4px;
+       line-height:1.62; word-break:break-word }
+
+.mk{ font-family:var(--m); font-size:.53rem; font-weight:800; letter-spacing:.12em;
+     text-transform:uppercase; padding:3px 7px; white-space:nowrap; border:1px solid }
+.mk-p{ color:var(--d-ok); background:var(--d-ok-bg);
+       border-color:color-mix(in srgb, var(--d-ok) 32%, transparent) }
+.mk-r{ color:var(--d-acc); background:rgba(208,2,27,.05);
+       border-color:color-mix(in srgb, var(--d-acc) 28%, transparent) }
+.mk-o{ color:var(--d-ink3); background:var(--d-surf2); border-color:var(--d-line) }
+.mk-w{ color:var(--d-warn); background:var(--d-warn-bg);
+       border-color:color-mix(in srgb, var(--d-warn) 32%, transparent) }
+
+/* ── MUESTRA VIVA · el producto dentro del documento ────────────────────── */
+.mu{ border:1px solid var(--d-line); margin-block-start:14px; background:var(--d-surf) }
+.mu-h{ font-family:var(--m); font-size:.53rem; font-weight:800; letter-spacing:.16em;
+       text-transform:uppercase; color:var(--d-ink3); padding:7px 13px;
+       background:var(--d-surf2); border-block-end:1px solid var(--d-line);
+       display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.mu-h .pt{ color:var(--d-acc) }
+/* dentro de la muestra manda el producto: su fondo y sus fichas */
+.mu-b{ background:var(--bg); padding:18px; color:var(--ink); font-family:var(--f) }
+.mu-b.claro{ background:var(--surf) }
+.mu-fila{ display:flex; gap:10px; flex-wrap:wrap; align-items:center }
+
+/* ── tablas del documento ───────────────────────────────────────────────── */
+.t{ overflow-x:auto; margin-block-start:13px; border:1px solid var(--d-line);
+    background:var(--d-surf) }
+.t table{ inline-size:100%; border-collapse:collapse; font-size:.87rem }
+.t th{ text-align:left; font-family:var(--m); font-size:.55rem; font-weight:800;
+       letter-spacing:.13em; text-transform:uppercase; color:var(--d-ink3);
+       padding:9px 12px; background:var(--d-surf2);
+       border-block-end:1px solid var(--d-line); white-space:nowrap }
+.t td{ padding:10px 12px; border-block-end:1px solid var(--d-line2); color:var(--d-ink2);
+       vertical-align:top; line-height:1.55 }
+.t tr:last-child td{ border-block-end:none }
+.t td b{ color:var(--d-ink) }
+.mono{ font-family:var(--m); font-size:.78rem; font-variant-numeric:tabular-nums;
+       white-space:nowrap }
+.num{ text-align:right; font-family:var(--m); font-variant-numeric:tabular-nums }
+.sw{ inline-size:32px; block-size:17px; border:1px solid var(--d-line); display:inline-block;
+     vertical-align:middle }
+
+/* ── avisos del documento ───────────────────────────────────────────────── */
+.av{ border:1px solid var(--d-line); border-inline-start:3px solid var(--d-warn);
+     background:var(--d-surf); padding:13px 16px; margin-block-start:15px }
+.av.deuda{ border-inline-start-color:var(--d-debt) }
+.av-l{ font-family:var(--m); font-size:.54rem; font-weight:800; letter-spacing:.16em;
+       text-transform:uppercase; color:var(--d-warn) }
+.av.deuda .av-l{ color:var(--d-debt) }
+.av-t{ margin-block-start:5px; font-size:.89rem; color:var(--d-ink2); line-height:1.62 }
+
+/* ── pares y cadenas ────────────────────────────────────────────────────── */
+.par{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--d-line);
+      border:1px solid var(--d-line); margin-block-start:14px }
+@media(max-width:720px){ .par{ grid-template-columns:1fr } }
+.par-c{ background:var(--d-surf); padding:15px }
+.par-t{ font-family:var(--m); font-size:.58rem; font-weight:800; letter-spacing:.14em;
+        text-transform:uppercase; margin-block-end:9px; color:var(--d-ink3) }
+.par-c.b .par-t{ color:var(--d-acc) }
+.par-c ul{ list-style:none; display:flex; flex-direction:column; gap:7px }
+.par-c li{ font-size:.85rem; color:var(--d-ink2); padding-inline-start:14px; position:relative }
+.par-c li::before{ content:''; position:absolute; inset-inline-start:0; inset-block-start:.6em;
+                   inline-size:7px; block-size:1px; background:var(--d-ink4) }
+
+.cad{ margin-block-start:14px }
+.cad-n{ border:1px solid var(--d-line); background:var(--d-surf); padding:11px 15px }
+.cad-n+.cad-n{ border-block-start:none }
+.cad-l{ font-family:var(--m); font-size:.56rem; font-weight:800; letter-spacing:.14em;
+        text-transform:uppercase; color:var(--d-ink4) }
+.cad-v{ font-size:.95rem; font-weight:800; margin-block-start:2px; color:var(--d-ink) }
+.cad-d{ font-size:.84rem; color:var(--d-ink3); margin-block-start:3px; line-height:1.5 }
+.cad-f{ font-family:var(--m); font-size:.7rem; color:var(--d-ink4); padding:3px 0 3px 16px }
+
+/* ── fórmulas ───────────────────────────────────────────────────────────── */
+.eq{ border:1px solid var(--d-line); border-inline-start:3px solid var(--d-acc);
+     background:var(--d-surf); padding:14px 17px; margin-block-start:13px }
+.eq-f{ font-family:var(--m); font-size:.83rem; font-weight:700; line-height:2.05;
+       color:var(--d-ink) }
+.eq-f em{ font-style:normal; color:var(--d-acc) }
+.eq-g{ margin-block-start:10px; font-family:var(--m); font-size:.71rem; color:var(--d-ink3);
+       line-height:1.7 }
+.eq-g b{ color:var(--d-ink2) }
+
+/* ── maquetas de armazón ────────────────────────────────────────────────── */
+.arm{ display:grid; grid-template-columns:1fr 1.7fr; gap:14px; margin-block-start:14px }
+@media(max-width:760px){ .arm{ grid-template-columns:1fr } }
+.mq{ border:1px solid var(--d-line); background:var(--d-surf) }
+.mq-h{ font-family:var(--m); font-size:.53rem; font-weight:800; letter-spacing:.15em;
+       text-transform:uppercase; color:var(--d-ink3); padding:7px 12px;
+       background:var(--d-surf2); border-block-end:1px solid var(--d-line) }
+.mq-b{ padding:12px; background:var(--bg) }
+.z{ font-family:var(--m); font-size:.5rem; font-weight:800; letter-spacing:.1em;
+    text-transform:uppercase; display:flex; align-items:center; justify-content:center;
+    text-align:center; line-height:1.35; padding:4px }
+.z-hd{ background:var(--surf); border:1px solid var(--brd2); color:var(--ink3); block-size:34px }
+.z-nav{ background:var(--surf); border:1px solid var(--brd2); color:var(--red) }
+.z-sig{ background:var(--surf2); border:1px solid var(--brd2); color:var(--ink3) }
+.z-wk{ background:var(--surf); border:1px solid var(--brd2); color:var(--ink2) }
+.z-st{ background:var(--surf2); border:1px solid var(--brd2); color:var(--ink3); block-size:24px }
+.mq-doc{ display:flex; flex-direction:column; gap:6px; block-size:260px }
+.mq-doc .z-wk{ flex:1; display:flex; flex-direction:column; gap:6px; padding:6px }
+.mq-doc .bloque{ background:var(--surf2); border:1px solid var(--brd); block-size:34px }
+.mq-term{ display:flex; flex-direction:column; gap:6px; block-size:260px }
+.mq-term .celdas{ display:flex; gap:0; block-size:34px }
+.mq-term .celdas span{ flex:1; border:1px solid var(--brd2); border-inline-start:none;
+                       background:var(--surf); }
+.mq-term .celdas span:first-child{ border-inline-start:1px solid var(--brd2);
+                                   flex:0 0 82px; color:var(--red) }
+.mq-term .medio{ flex:1; display:flex; gap:6px; min-block-size:0 }
+.mq-term .z-nav{ flex:0 0 34px; writing-mode:vertical-rl }
+.mq-term .z-sig{ flex:0 0 88px }
+.mq-term .z-wk{ flex:1 }
+
+/* ── escala tipográfica ─────────────────────────────────────────────────── */
+.esc{ display:flex; flex-direction:column; gap:0 }
+.esc-f{ display:grid; grid-template-columns:120px 1fr; gap:14px; align-items:baseline;
+        padding:11px 0; border-block-end:1px solid var(--d-line2) }
+.esc-f:last-child{ border-block-end:none }
+.esc-m{ font-family:var(--m); font-size:.66rem; color:var(--d-ink4); line-height:1.5 }
+.esc-e{ color:var(--ink); font-family:var(--f) }
+@media(max-width:560px){ .esc-f{ grid-template-columns:1fr; gap:3px } }
+
+/* ── lista de comprobación ──────────────────────────────────────────────── */
+.chk{ display:flex; flex-direction:column; gap:0; margin-block-start:13px;
+      border:1px solid var(--d-line); background:var(--d-surf) }
+.chk div{ padding:10px 14px; font-size:.88rem; color:var(--d-ink2);
+          border-block-end:1px solid var(--d-line2); display:flex; gap:10px }
+.chk div:last-child{ border-block-end:none }
+.chk div::before{ content:'□'; font-family:var(--m); color:var(--d-ink4); flex-shrink:0 }
+
+footer.pie{ margin-block-start:58px; padding-block-start:20px;
+            border-block-start:1px solid var(--d-line); font-family:var(--m);
+            font-size:.65rem; color:var(--d-ink4); line-height:1.85 }
+:focus-visible{ outline:2px solid var(--d-acc); outline-offset:2px }
+</style>
+</head>
+<body>
+<div style="background:#20242c;color:#f2f4f7;padding:13px 22px;font:14px/1.5 'IBM Plex Sans',system-ui,sans-serif;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap"><b style="font-weight:600;letter-spacing:-.01em">Este documento aplica un sistema que no es suyo.</b><span style="color:#a9b1bf;font-size:.86rem">La estructura y el comportamiento los define <a href="../ds/" style="color:#fff;text-decoration:underline;text-underline-offset:2px">Ontikos · Sistema de funcionamiento</a> — 28 reglas, ninguna nombra el negocio. Aquí van los valores: fichas, tipografía, estados, piezas y pantallas de RetiCash.</span></div>
+<div style="max-width:1080px;margin:0 auto;padding:26px 32px 4px;font:14px/1.55 'IBM Plex Sans',system-ui,sans-serif">
+<h2 style="font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#868c9b;
+   margin:0 0 6px;padding-bottom:8px;border-bottom:1px solid #dfe2e8">Reconciliación con Ontikos · 4 sep 2026</h2>
+<p style="max-width:70ch;color:#4a4f5c;margin:14px 0">Al escribir el sistema de funcionamiento aparecieron seis contradicciones
+con este documento. <b style="color:#12141a">Cinco se resolvieron a favor de Ontikos y una en contra</b> — y esa última es la
+que importa, porque prueba que la regla de entrada funciona en las dos direcciones.</p>
+<table style="border-collapse:collapse;width:100%;font-size:.85rem;background:#fff;margin-bottom:8px">
+<tr style="background:#f4f5f7">
+  <th style="text-align:left;padding:10px 14px;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#868c9b;border-bottom:1px solid #dfe2e8">Regla</th>
+  <th style="text-align:left;padding:10px 14px;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#868c9b;border-bottom:1px solid #dfe2e8">Decía</th>
+  <th style="text-align:left;padding:10px 14px;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#868c9b;border-bottom:1px solid #dfe2e8">Qué pasó</th></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top"><b>03.1</b></td>
+  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top">«las cifras suben a la cabecera»</td>
+  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top;color:#4a4f5c">Corregida. La barra queda limpia; las cifras bajan al contenido. La medición de reversibilidad a 375 px sigue valiendo.</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top"><b>03.2</b></td>
+  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top">«si el alto baja de ~700 px el armazón se relaja y deja scrollear», y una tabla de <b>tres</b> gramáticas</td>
+  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top;color:#4a4f5c">Ambas derogadas por <a href="../ds/#r01" style="color:#0f62fe">01</a> y <a href="../ds/#r17" style="color:#0f62fe">17</a>. La tabla se deja tachada: legitimaba la tierra de nadie de 256 px.</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top"><b>03.3</b></td>
+  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top">reparto «cabecera · raíl de señales · trabajo»</td>
+  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top;color:#4a4f5c">Reemplazado por «lista · trabajo · contexto». Sobrevive el desempate: si se puede pulsar, no es señal.</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top"><b>08.0</b></td>
+  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top">«las celdas vienen de ahí» · IB y thinkorswim por igual</td>
+  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top;color:#4a4f5c">Corregida. thinkorswim se descarta: su densidad viene del <i>scalping</i>. Se suma el panel de contexto permanente, que es el hallazgo mayor.</td></tr>
+<tr><td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top"><b>08.2</b></td>
+  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top">«una cifra promovida no se repite»</td>
+  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top;color:#4a4f5c"><b style="color:#c8102e">Derogada.</b> Sin cifras promovidas se queda sin sujeto. Existía para tapar que la composición adivinaba.</td></tr>
+<tr style="background:#f4faf6"><td style="padding:10px 14px;vertical-align:top"><b>13.2</b></td>
+  <td style="padding:10px 14px;vertical-align:top">«el bloqueo no es un aviso: es una compuerta»</td>
+  <td style="padding:10px 14px;vertical-align:top;color:#4a4f5c"><b style="color:#1f7a3f">Ganó esta regla.</b> La tabla de superficies de Ontikos decía «banner de la región» y estaba mal: un banner deja los controles vivos debajo. <b>Se corrigió Ontikos.</b></td></tr>
+</table>
+<p style="max-width:70ch;color:#868c9b;font-size:.82rem;margin:12px 0 0">Las demás reglas —fichas, tipografía, estados, lenguaje,
+piezas, pantallas— no contradicen nada: son los valores que este producto le pone a la casa.</p>
+</div>
+
+
+
+<div class="avance" id="avance"></div>
+<button class="arriba" id="arriba" type="button" aria-label="Volver arriba" title="Volver arriba">↑</button>
+
+<header class="dh">
+  <div class="dh-in">
+    <div class="dh-marca">RETI<em>CASH</em></div>
+    <div class="dh-tag">Sistema · v5</div>
+    <div class="dh-sp"></div>
+    <div class="dh-meta">14 secciones · 3 sep 2026</div>
+    <button class="dh-tema" id="tema" type="button" aria-label="Cambiar tema">☾</button>
+  </div>
+</header>
+
+<nav class="idx">
+  <div class="idx-in">
+    <a href="#s00" class="on">00 Fundamentos</a>
+    <a href="#s01">01 Ontología</a>
+    <a href="#s02">02 Adopción</a>
+    <a href="#s03">03 Gramáticas</a>
+    <a href="#s04">04 Fichas</a>
+    <a href="#s05">05 Rejilla</a>
+    <a href="#s06">06 Tipografía</a>
+    <a href="#s07">07 Estados</a>
+    <a href="#s08">08 Armazón</a>
+    <a href="#s09">09 Piezas</a>
+    <a href="#s10">10 Datos</a>
+    <a href="#s11">11 Lenguaje</a>
+    <a href="#s12">12 Implementación</a>
+    <a href="#s13">13 Pantallas</a>
+    <a href="#s14">14 Verificación</a>
+  </div>
+</nav>
+
+<div class="doc">
+
+  <div class="tapa">
+    <div class="ey">Das Kapital One · sucede al Design System v4 y expande la sección de UI del documento maestro</div>
+    <h1>El sistema, escrito desde lo que opera</h1>
+    <p>Este documento gobierna la interfaz de RetiCash. Se diferencia de los tres que lo
+      preceden en dos cosas: <b>cada regla trae la medición que la sostiene</b>, y todo lo que
+      aparece dentro de un bloque de muestra <b>está pintado con las hojas de producción</b>,
+      no dibujado aquí. Si un ficha cambia, esta página cambia con él.</p>
+    <p>Cada regla lleva marcada su portabilidad. Las marcadas
+      <span class="mk mk-p">Portable</span> viajan a cualquier ERP o CRM sin traducción; las
+      marcadas <span class="mk mk-r">De este producto</span> no. Y por la regla 00.1, lo que
+      todavía no se puede verificar contra el producto lleva
+      <span class="mk mk-w">Propuesta</span>: es norma escrita, no norma cumplida.</p>
+  </div>
+
+  <!-- ═══════════════════ 00 ═══════════════════ -->
+  <section id="s00">
+    <h2><span class="n">00</span>Fundamentos</h2>
+    <p class="intro">Qué gobierna este documento, de dónde saca su autoridad, y bajo qué reglas
+      una pieza entra o no entra al sistema.</p>
+
+    <h3>Qué manda sobre qué</h3>
+    <div class="t"><table>
+      <thead><tr><th>Materia</th><th>Manda</th><th>Por qué</th></tr></thead>
+      <tbody>
+        <tr><td>Ontología, vocabulario, estados, economía</td><td><b>Documento maestro de MM</b></td><td>Pasó la prueba de la operación real</td></tr>
+        <tr><td>Composición de escritorio</td><td><b>Design System v4</b> y sus wireframes (v33 · v35 · v21 · v22 · v20)</td><td>MM nunca desarrolló el escritorio: por urgencia se saltó esos wireframes</td></tr>
+        <tr><td>Todo lo demás</td><td><b>Lo verificable</b></td><td>Si no se mide contra el código que corre, no es norma</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">00.1</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · v4 + maestro</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Una regla que no se puede verificar no es una regla: es una propuesta, y entra marcada como tal.</div>
+        <div class="rg-d">Corrige el modo de falla de los tres documentos anteriores. El v4 manda
+          <code>border-radius:0</code> en operador y producción sirve tres piezas con radio; manda
+          «Pasos» y el cliente dice «Puntos» veintiséis veces. Nada lo detectó porque ninguna regla
+          traía con qué comprobarse.</div>
+        <div class="vf"><div class="vf-l">Verificación · 3 sep 2026</div>
+          <div class="vf-t">.ubtn 7px · .modal 16px y 4px · .ord-empty 18px — cuatro piezas de operador fuera de norma, medidas sobre app.css de producción.</div></div>
+      </div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">00.2</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · demo index · diseño ontológico aplicado</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Una pieza entra al sistema por su verbo. Si no se traza a una acción, no pertenece.</div>
+        <div class="rg-d">Cada pantalla responde una pregunta de negocio y habilita una acción. De
+          ahí se sigue —no es preferencia estética— que haya <b>exactamente una acción primaria por
+          estado de pantalla</b>: si hay dos, son dos pantallas.</div>
+        <div class="vf"><div class="vf-l">Verificación · 3 sep 2026</div>
+          <div class="vf-t">Contadas las acciones primarias visibles por pantalla, sobre las páginas
+            que sirve producción. Vendedor: 0 · 0 · 0 · 1 · 0. Administrador: 0 · 1 · 0 · 0 · 0.
+            Ninguna pantalla pasa de una. Cumple.</div></div>
+      </div>
+    </div>
+
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> una acción primaria, dos salidas · pintado con app.css de producción</figcaption>
+      <div class="mu-b claro">
+        <div class="mu-fila">
+          <button class="btn btn-primary" type="button">Publicar TC</button>
+          <button class="btn btn-sec" type="button">Ver historial</button>
+          <button class="btn btn-ghost" type="button">Descartar cambios</button>
+        </div>
+        <div style="margin-top:12px" class="mu-fila">
+          <button class="btn btn-danger" type="button">Cancelar operación</button>
+          <span style="font-size:.78rem;color:var(--ink3)">La destructiva se confirma con la consecuencia visible · regla 4</span>
+        </div>
+      </div>
+    </figure>
+
+    <h3>La cadena de compromisos</h3>
+    <p class="intro">El ciclo del negocio: ninguna etapa procede si la anterior no ocurrió. Toda
+      pieza del sistema cuelga de uno de estos cuatro actos.</p>
+    <div class="cad">
+      <div class="cad-n"><div class="cad-l">Paso 1 · Admin del negocio</div><div class="cad-v">Publicar tipo de cambio</div><div class="cad-d">Costo del día y pisos de compra/venta · define los límites del vendedor</div></div>
+      <div class="cad-f">↓</div>
+      <div class="cad-n"><div class="cad-l">Paso 2 · Vendedor</div><div class="cad-v">Registrar orden</div><div class="cad-d">Compromiso de precio con un cliente · el extra que defiende sobre el límite es su comisión</div></div>
+      <div class="cad-f">↓</div>
+      <div class="cad-n"><div class="cad-l">Paso 3 · Cajero</div><div class="cad-v">Ejecutar en caja</div><div class="cad-d">Entrega o recepción de efectivo · puede ser parcial · produce la utilidad real</div></div>
+      <div class="cad-f">↓</div>
+      <div class="cad-n"><div class="cad-l">Paso 4 · Cajero</div><div class="cad-v">Cuadrar turno</div><div class="cad-d">Declaración de inventario físico · cierre del día operativo</div></div>
+    </div>
+
+    <h3>Las cinco reglas de acción</h3>
+    <div class="t"><table>
+      <thead><tr><th class="mono">#</th><th>Regla</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1</td><td>Máximo <b>un botón primario rojo</b> por estado de pantalla</td></tr>
+        <tr><td class="mono">2</td><td>Si está bloqueado, <b>la razón está visible</b></td></tr>
+        <tr><td class="mono">3</td><td>El estado de la pantalla es <b>inequívoco</b> en todo momento</td></tr>
+        <tr><td class="mono">4</td><td>Las acciones destructivas se confirman <b>con la consecuencia visible</b></td></tr>
+        <tr><td class="mono">5</td><td>El feedback es inmediato: nadie duda si su acción fue recibida</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ═══════════════════ 01 ═══════════════════ -->
+  <section id="s01">
+    <h2><span class="n">01</span>Ontología aplicada</h2>
+    <p class="intro">Objetos con máquina de estados. La regla de oro: <b>el estado define qué
+      acción es posible ahora</b>. La interfaz no decide qué se puede hacer — lo lee.</p>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">01.1</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · Palantir, vía maestro</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Objetos explícitos con máquina de estados. El dato deriva de la ontología, no al revés.</div>
+        <div class="rg-d">Cliente, orden, ejecución, centro, tipo de cambio, tesorería, turno.
+          Lo que la pantalla ofrece en un momento dado es función del estado, no del diseño.</div>
+        <div class="vf"><div class="vf-l">Frontera declarada</div><div class="vf-t">Tomamos la disciplina, no el motor: es una aplicación gobernada por ontología, no un motor de ontología en tiempo de ejecución.</div></div>
+      </div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">01.2</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · Flores / Winograd, vía maestro</span></div>
+      <div class="rg-b">
+        <div class="rg-t">La orden <b>es</b> un compromiso, no un registro.</div>
+        <div class="rg-d">La cadena es una conversación para la acción donde cada acto habilita el
+          siguiente. Los estados terminales —cancelada, caducada, no-show— modelan los
+          <b>quiebres</b> de esa conversación, y por eso merecen tanta interfaz como el camino feliz.</div>
+        <div class="vf"><div class="vf-l">Frontera declarada</div><div class="vf-t">Tomamos el espíritu —compromiso, quiebre, acción situada—. NO implementamos el protocolo formal de petición / promesa / cumplimiento / aceptación.</div></div>
+      </div>
+    </div>
+
+    <h3>Estados de la orden · y qué habilita cada uno</h3>
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> las insignias de estado, con las clases del producto</figcaption>
+      <div class="mu-b claro">
+        <div class="mu-fila">
+          <span class="bdg amber">pendiente</span>
+          <span class="bdg blue">parcial</span>
+          <span class="bdg green">completa</span>
+          <span class="bdg gray">caducada</span>
+          <span class="bdg red">cancelada</span>
+          <span class="bdg gray">no-show</span>
+        </div>
+      </div>
+    </figure>
+    <div class="t"><table>
+      <thead><tr><th>Camino</th><th class="mono">en la base</th><th class="mono">en el maestro</th><th>Qué habilita</th></tr></thead>
+      <tbody>
+        <tr><td>Viva, sin ejecuciones</td><td class="mono">pending</td><td class="mono">pendiente</td><td>Ejecutar · cancelar · marcar no-show</td></tr>
+        <tr><td>Viva, ejecutada a medias</td><td class="mono">partial</td><td class="mono">parcial</td><td>Ejecutar el saldo · cancelar</td></tr>
+        <tr><td>Cerrada, cumplida</td><td class="mono">completed</td><td class="mono">completa</td><td>Solo lectura</td></tr>
+        <tr><td>Cerrada, venció</td><td class="mono">expired</td><td class="mono">caducada</td><td>Solo lectura · el precio se liberó</td></tr>
+        <tr><td>Cerrada, cancelada</td><td class="mono">cancelled</td><td class="mono">cancelada</td><td>Solo lectura · definitiva y auditable</td></tr>
+        <tr><td>Cerrada, no se presentó</td><td class="mono">no_show</td><td class="mono">no_presentado</td><td>Solo lectura · libera la reserva</td></tr>
+      </tbody>
+    </table></div>
+    <div class="av deuda">
+      <div class="av-l">Deriva detectada · 3 sep 2026</div>
+      <div class="av-t">El maestro nombra los estados en español y la base los guarda en inglés.
+        <b>Manda la base</b>, porque es el hecho; el maestro debe actualizarse. Lo mismo con los
+        roles: <code>administrador_negocios</code> en el maestro,
+        <code>business_admin</code> en <code>app_user</code>.</div>
+    </div>
+
+    <h3>Motor económico</h3>
+    <div class="eq">
+      <div class="eq-f"><em>límite</em> = costo + piso_venta<br><em>extra</em>&nbsp; = precio − límite<br><em>margen</em> = precio − costo</div>
+      <div class="eq-g"><b>límite</b> — el piso por debajo del cual el vendedor no puede pactar («frontera» en código, «Límite» en interfaz)<br><b>extra</b> — el incremento que el vendedor defiende sobre el límite<br><b>margen</b> — distancia total del precio contra el costo de fondeo</div>
+    </div>
+    <div class="eq">
+      <div class="eq-f"><em>utilidad</em> = monto × margen<br><em>comisión_vendedor</em> = monto × extra × comisión_pct<br><em>utilidad_negocio</em> = utilidad − comisión_vendedor</div>
+      <div class="eq-g"><b>comisión_vendedor</b> — sale del extra defendido, no del volumen: gana más quien defiende mejor precio<br><b>utilidad_negocio</b> — lo que queda para el negocio, ya descontada la comisión</div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">01.3</span><span class="mk mk-r">De este producto</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Orden y ejecución son cosas distintas, a propósito.</div>
+        <div class="rg-d">La orden es el compromiso de precio; la ejecución es el hecho de caja.
+          <b>La brecha entre ambas es información de negocio, no un error.</b> Lo que sí viaja a
+          otro ERP es la disciplina: que la interfaz no calcule nada que la ontología no defina
+          primero.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 02 ═══════════════════ -->
+  <section id="s02">
+    <h2><span class="n">02</span>Adopción de un sistema externo</h2>
+    <p class="intro">Cómo entra Carbon —o cualquier otro— sin que la casa pierda su idioma. Es la
+      sección más portable del documento y no existía en ninguno de los tres anteriores. Cada
+      cláusula costó una corrección medida.</p>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">02.1</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · esta migración</span></div>
+      <div class="rg-b">
+        <div class="rg-t">La regla de adopción, en tres cláusulas</div>
+        <div class="rg-d"><b>1.</b> Si la plataforma ya tiene la pieza, <b>gana la plataforma</b>.<br>
+          <b>2.</b> El sistema externo entra <b>solo donde la hoja de la casa no llega</b>.<br>
+          <b>3.</b> Si la <b>idea</b> del sistema externo es mejor, se construye <b>con los materiales de la casa</b>.</div>
+        <div class="vf"><div class="vf-l">Por qué la tercera cláusula</div><div class="vf-t">El aviso accionable —que la alerta termine en un verbo— es idea de Carbon y es buena. El botón, en cambio, es el .ubtn de la casa. La idea se adopta; la pieza, no.</div></div>
+      </div>
+    </div>
+
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> la tercera cláusula: idea de Carbon, pieza de la casa</figcaption>
+      <div class="mu-b claro">
+        <div class="alert amber">
+          <div style="flex:1">
+            <div class="alert-t">2 clientes sin sobreprecio asignado — no cotizan</div>
+          </div>
+          <button class="ubtn" type="button">Ver cartera →</button>
+        </div>
+      </div>
+    </figure>
+
+    <h3>Lo que entró, y qué resolvió</h3>
+    <div class="t"><table>
+      <thead><tr><th>Pieza</th><th>Qué resolvió</th></tr></thead>
+      <tbody>
+        <tr><td><b>Rejilla de 16 columnas</b></td><td>Los ejes. Nada flota, la marca cae en el mismo eje del contenido, cero desborde a cualquier ancho</td></tr>
+        <tr><td><b>UI Shell</b> · barra global + riel</td><td>El esqueleto de escritorio: la barra cruza toda la pantalla, el riel arranca debajo, el contenido donde termina el riel</td></tr>
+        <tr><td><b>Panel lateral</b></td><td>El detalle entra por la derecha en vez de bloquear la estación con una caja centrada</td></tr>
+        <tr><td><b>@carbon/charts</b></td><td>Eje, escala, globo de datos y línea de meta. Antes eran <code>div</code> con altura</td></tr>
+        <tr><td><b>Esqueletos de carga</b></td><td>El parpadeo en blanco mientras llegan los datos</td></tr>
+        <tr><td><b>129 iconos</b></td><td>Recurso, no reemplazo: solo donde la casa no tiene el suyo</td></tr>
+        <tr><td><b>Mapeo de fichas</b> <code>--cds-*</code></td><td>Que sus piezas hablen el idioma de la casa, en claro y en oscuro</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Lo que se devolvió — con la medición que lo devolvió</h3>
+    <p class="intro">Esta tabla vale más que la anterior: es la prueba de que la regla funciona.
+      Adoptar un sistema entero sin devolver nada es exactamente el modo de falla que hay que evitar.</p>
+    <div class="t"><table>
+      <thead><tr><th>Se probó</th><th>Qué midió</th><th>Qué volvió</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">cds--number</td><td>Quitaba el borde del campo</td><td><code>RC.stepper</code> de la casa · dos idiomas para un control es uno de más</td></tr>
+        <tr><td class="mono">toggletip</td><td>Salía transparente y en mayúsculas</td><td><code>.hlp-pop</code> del original</td></tr>
+        <tr><td class="mono">c4p--page-header</td><td>Barra gris pegajosa que robaba altura</td><td>Rechazado</td></tr>
+        <tr><td>Iconos de navegación</td><td>Al lado, mismo glifo: <b>equivalentes</b></td><td>Se quedan los del original · manda la cláusula 1</td></tr>
+        <tr><td>Medidas en móvil</td><td>Hacían ver la barra de pulgar débil</td><td>La barra del original, con icono y rótulo</td></tr>
+        <tr><td>Ritmo uniforme de 16 px</td><td>Aplastaba la jerarquía (4 · 10 · 18–22) y alargaba la página 13 %</td><td>Manda el margen que cada bloque ya trae</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Las trampas · medidas, no supuestas</h3>
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> la trampa del relleno gris · izquierda como la deja Carbon, derecha como debe verse</figcaption>
+      <div class="mu-b claro">
+        <div class="mu-fila" style="gap:26px">
+          <div style="text-align:center">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="#525252" stroke="#2e2e42" stroke-width="2">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <div style="font-size:.6rem;color:var(--ink3);margin-top:5px;font-family:var(--f)">relleno #525252</div>
+          </div>
+          <div style="text-align:center">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="var(--ink2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <div style="font-size:.6rem;color:var(--ink3);margin-top:5px;font-family:var(--f)">trazo 2 px en tinta</div>
+          </div>
+        </div>
+      </div>
+    </figure>
+
+    <div class="t"><table>
+      <thead><tr><th>Trampa</th><th>Síntoma</th><th>Antídoto</th></tr></thead>
+      <tbody>
+        <tr><td>Fichas del tema ausentes</td><td>La mitad de las piezas no se ve: <code>var(--cds-popover-background-color, var(--cds-layer))</code> no resuelve a nada</td><td>Copiar el bloque de fichas del tema al <code>:root</code> antes que nada</td></tr>
+        <tr><td>Relleno gris en la barra global</td><td>Rellena de <code>#525252</code> todo icono, incluidos los de trazo de la casa</td><td>Separar por atributo: <code>svg[stroke="currentColor"]</code> hueco, <code>svg[fill="currentColor"]</code> relleno, ambos en tinta</td></tr>
+        <tr><td>Física contra lógica</td><td><code>width</code> e <code>inline-size</code> se resuelven por separado: gana la suya aunque usted tenga más especificidad</td><td>Usar el mismo nombre de propiedad que declara el sistema externo</td></tr>
+        <tr><td>Gráficos que dependen de fotogramas</td><td>Sin <code>requestAnimationFrame</code> quedan dibujados y vacíos: barras con geometría correcta y opacidad 0,015</td><td>Comprobar cuerpo, no presencia: un <code>path.bar</code> puede existir con ancho y alto 0</td></tr>
+        <tr><td>Peso del catálogo</td><td>1 MB de hoja para una fracción usada</td><td>Empaquetar desde las fuentes y podar solo con medición de uso real</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="av">
+      <div class="av-l">Nota de portabilidad</div>
+      <div class="av-t">Toda esta sección viaja tal cual. Cambie «Carbon» por el sistema que sea y
+        las tres cláusulas, la tabla de devoluciones y las cinco trampas siguen aplicando. Es la
+        sección que hay que leer <b>antes</b> de adoptar nada.</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 03 ═══════════════════ -->
+
+  <div class="plancha">
+    <div class="plancha-in">
+      <div class="plancha-ey">03 · Las dos gramáticas</div>
+      <div class="plancha-t">El mismo portal, dos idiomas</div>
+      <div class="dos-marcos">
+        <div>
+          <div class="marco" style="block-size:521px">
+            <div class="marco-esc" style="transform:scale(.64)">
+              <div style="width:375px;height:812px;display:flex;align-items:center;justify-content:center;text-align:center;background:#f2f2f7;color:#6b6b82;border:1px dashed #c9c9d4;font:600 15px/1.5 system-ui,sans-serif;padding:24px">Muestra viva<br>del vendedor a 375 px<br><span style="font-weight:400">requiere la aplicación servida</span></div>
+            </div>
+          </div>
+          <div class="plancha-pie">375 px · documento · una región scrollea</div>
+        </div>
+        <div>
+          <div class="marco" style="block-size:390px">
+            <div class="marco-esc" style="transform:scale(.4333)">
+              <div style="width:1440px;height:900px;display:flex;align-items:center;justify-content:center;text-align:center;background:#f2f2f7;color:#6b6b82;border:1px dashed #c9c9d4;font:600 22px/1.5 system-ui,sans-serif;padding:24px">Muestra viva<br>del vendedor a 1440 px<br><span style="font-weight:400">requiere la aplicación servida</span></div>
+            </div>
+          </div>
+          <div class="plancha-pie">1440 px · terminal · celdas de cifra, raíl de señales de 296, columna de trabajo con scroll propio y barra de estado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="s03">
+    <h2><span class="n">03</span>Las dos gramáticas</h2>
+    <p class="intro">Una sola página, dos idiomas. En el teléfono manda el documento; en el
+      escritorio, la terminal. <b>No es el mismo diseño ensanchado</b>: es otro idioma.</p>
+
+    <div class="arm">
+      <div class="mq">
+        <div class="mq-h">Documento · teléfono</div>
+        <div class="mq-b">
+          <div class="mq-doc">
+            <div class="z z-hd">barra · marca · reloj · acciones</div>
+            <div class="z z-wk">
+              <div class="bloque"></div><div class="bloque"></div>
+              <div class="bloque"></div><div class="bloque"></div>
+            </div>
+            <div class="z z-nav" style="block-size:38px">barra de pulgar · 5 destinos</div>
+          </div>
+        </div>
+      </div>
+      <div class="mq">
+        <div class="mq-h">Terminal · escritorio</div>
+        <div class="mq-b">
+          <div class="mq-term">
+            <div class="celdas">
+              <span class="z">marca</span><span class="z">TC 16.68</span><span class="z">ganado</span>
+              <span class="z">volumen</span><span class="z">ops</span><span class="z">quién</span>
+            </div>
+            <div class="medio">
+              <div class="z z-nav">riel</div>
+              <div class="z z-sig">raíl de señales<br>280–296</div>
+              <div class="z z-wk">columna de trabajo · scroll propio</div>
+            </div>
+            <div class="z z-st">barra de estado · qué falta para actuar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">03.1</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · wireframes v33 / v20</span></div>
+      <div class="rg-b">
+        <div class="rg-t">El operador trabaja de pie, en una estación, una operación a la vez. Lo que está bajo el pliegue no existe en el instante de decidir.</div>
+        <div class="rg-d">De ahí se sigue todo: la navegación es estado direccionable y no scroll, y el trabajo ocupa una sola columna. <b>Corregido el 4 de septiembre:</b> las cifras <i>no</i> suben a la cabecera. La barra queda limpia —marca, buscador, usuario— y las cifras bajan al contenido como tarjetas. Es la respuesta de Carbon, y coincide con la de IB, que pone dos y no siete. En el teléfono la
+          premisa se invierte: el pulgar recorre, y el documento es el idioma correcto.<br><br>
+          <b>Construida el 4 de septiembre de 2026</b> en el portal del vendedor. El
+          administrador sigue en gramática de documento: ahí la regla todavía es norma escrita, no
+          cumplida.</div>
+        <div class="vf"><div class="vf-l">Verificación · 4 sep 2026</div>
+          <div class="vf-t">Lo construido el 4 de septiembre y <b>hoy superado</b>: 7 celdas de cifra en la cabecera · raíl de señales de 296 px · columna de trabajo de 1094 px con scroll propio (1998 de alto contra 816 visibles) · barra de estado · 0 desborde. A 375 px: sin terminal, 12 columnas, barra de pulgar cerrando en 812, reversible en los dos sentidos — <b>eso sigue valiendo</b>. Lo que no vale es el reparto de arriba: las celdas se retiran y el raíl de señales lo reemplaza el reparto de tres regiones de <a href="../ds/#r02">Ontikos 02</a>.</div></div>
+      </div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">03.2</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · defecto medido en el wireframe</span></div>
+      <div class="rg-b">
+        <div class="rg-t"><code>overflow:hidden</code> solo es disciplina si la pantalla cabe.</div>
+        <div class="rg-d">Con alto fijo y sin regiones que declaren su scroll, en un portátil de
+          768 px la fila de acción queda cortada — y cortada es un fallo, no una decisión. La regla: <b>el armazón es fijo y cada región declara su propio scroll</b> — que es hoy <a href="../ds/#r01">Ontikos 01</a>, la única regla del tronco común. <b>Corregido:</b> la cláusula de escape que decía que «si el alto útil baja de ~700 px el armazón se relaja y deja scrollear» queda derogada: contradice la regla 01. Con poco alto no se relaja el armazón — se pliega una región, en el orden declarado por <a href="../ds/#r08">Ontikos 08</a>.</div>
+        <div class="vf"><div class="vf-l">Verificación</div><div class="vf-t">En v33 el raíl de señales ya corrigió: pasó de 280 a 296 px y ganó su propio overflow-y:auto. El resto de las regiones sigue sin declararlo.</div></div>
+      </div>
+    </div>
+
+    <h3>Dónde cambia el idioma</h3>
+    <p style="max-width:70ch;color:var(--d-ink2)">Esta tabla declaraba <b>tres</b> gramáticas en tres anchos. Eso no es una norma:
+    es el defecto que <a href="../ds/#r17">Ontikos 17</a> prohíbe — dos fronteras son una tercera gramática que nadie
+    diseñó y por lo tanto nadie probó. Se deja a la vista, tachada, porque el sistema anterior la legitimaba y conviene que se
+    vea de dónde salió la tierra de nadie de 256 px que hoy marca el verificador en rojo.</p>
+    <div class="t"><table>
+      <thead><tr><th class="mono">ancho</th><th>Gramática</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">&lt; 66 rem · 1056 px</td><td><b>Documento</b></td><td>vale · sistema de una región</td></tr>
+        <tr style="opacity:.55"><td class="mono"><s>≥ 66 rem</s></td><td><s><b>Terminal</b> sin raíl de señales</s></td><td><b style="color:var(--d-debt)">derogada</b> · es la tierra de nadie</td></tr>
+        <tr><td class="mono">≥ 82 rem · 1312 px</td><td><b>Terminal</b></td><td>vale · pero la frontera baja a un solo umbral</td></tr>
+      </tbody>
+    </table></div>
+    <p style="max-width:70ch;color:var(--d-ink2)"><b>Pendiente de decidir:</b> en qué ancho queda la frontera única. Si baja a
+    1056 hay que reordenar el reparto para que quepan tres regiones; si sube a 1312, entre 1056 y 1311 manda el documento entero,
+    sin celdas ni riel ni barra de estado.</p>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">03.3</span><span class="mk mk-p">Portable</span></div>
+      <div class="rg-b">
+        <div class="rg-t">La regla de reparto <span style="font-weight:400;color:var(--d-ink3)">· corregida</span></div>
+        <div class="rg-d"><b>Reparto anterior, derogado:</b> cabecera de cifras + raíl de señales + trabajo. La cabecera de cifras se retira y el raíl de señales queda absorbido por el reparto de tres regiones. <b>Reparto vigente:</b> <b>Lista</b> — lo que se recorre para elegir. <b>Trabajo</b> — lo que cambia por acción, y lleva las pestañas. <b>Contexto</b> — lo seleccionado, con sus dos acciones; no cambia al cambiar de pestaña (<a href="../ds/#r06">Ontikos 06</a>) y es la última en plegarse (<a href="../ds/#r08">Ontikos 08</a>). Lo que sí sobrevive del reparto anterior es el desempate: <b>si se puede pulsar, no es señal</b>. Y una condición que impide
+          operar no va a un raíl: va a una compuerta (13.2).</div>
+        <div class="vf"><div class="vf-l">Verificable en el código</div><div class="vf-t">Lo que de verdad actúa queda marcado con data-acc="1", y de ese marcador cuelgan los estados de hover y pulsación. Marcar por clase produjo una promesa falsa: una fila inerte que se iluminaba.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 04 ═══════════════════ -->
+
+  <div class="plancha oscura">
+    <div class="plancha-in">
+      <div class="plancha-ey">04 · Fichas</div>
+      <div class="plancha-t">Trece fichas sostienen todo el producto</div>
+      <div class="paleta"><div style="background:var(--surf);color:var(--ink)">--surf</div><div style="background:var(--surf2);color:var(--ink)">--surf2</div><div style="background:var(--surf3);color:var(--ink)">--surf3</div><div style="background:var(--bg);color:var(--ink)">--bg</div><div style="background:var(--ink4);color:#fff">--ink4</div><div style="background:var(--ink3);color:#fff">--ink3</div><div style="background:var(--ink2);color:#fff">--ink2</div><div style="background:var(--ink);color:#fff">--ink</div><div style="background:var(--red);color:#fff">--red</div><div style="background:var(--danger);color:#fff">--danger</div><div style="background:var(--amber);color:#fff">--amber</div><div style="background:var(--green);color:#fff">--green</div><div style="background:var(--blue);color:#fff">--blue</div></div>
+      <div class="plancha-pie">Pintados con las variables de app.css de producción · si un ficha cambia, esta banda cambia con él</div>
+    </div>
+  </div>
+
+  <section id="s04">
+    <h2><span class="n">04</span>Fichas</h2>
+    <p class="intro">Un origen de verdad, dos entregas. Las muestras de esta tabla están pintadas
+      con las variables reales: si alguien cambia un ficha, esta página cambia con él. Pulse la
+      luna de arriba y compruébelo.</p>
+
+    <div class="t"><table>
+      <thead><tr><th class="mono">ficha</th><th>muestra</th><th class="mono">valor claro</th><th>uso</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">--surf</td><td><span class="sw" style="background:var(--surf)"></span></td><td class="mono">#ffffff</td><td>Superficie principal · tarjetas, paneles, modales</td></tr>
+        <tr><td class="mono">--surf2</td><td><span class="sw" style="background:var(--surf2)"></span></td><td class="mono">#f4f4f8</td><td>Superficie secundaria · riel, encabezados de tabla, campos</td></tr>
+        <tr><td class="mono">--surf3</td><td><span class="sw" style="background:var(--surf3)"></span></td><td class="mono">#eeeef3</td><td>Estado de pulsación</td></tr>
+        <tr><td class="mono">--bg</td><td><span class="sw" style="background:var(--bg)"></span></td><td class="mono">#ebebf0</td><td>Fondo del documento · área entre paneles</td></tr>
+        <tr><td class="mono">--brd</td><td><span class="sw" style="background:var(--brd)"></span></td><td class="mono">rgba(0,0,0,.07)</td><td>Filetes internos</td></tr>
+        <tr><td class="mono">--brd2</td><td><span class="sw" style="background:var(--brd2)"></span></td><td class="mono">rgba(0,0,0,.12)</td><td>Bordes de tarjeta y componente</td></tr>
+        <tr><td class="mono">--brd3</td><td><span class="sw" style="background:var(--brd3)"></span></td><td class="mono">rgba(0,0,0,.22)</td><td>Borde en hover y foco</td></tr>
+        <tr><td class="mono">--ink</td><td><span class="sw" style="background:var(--ink)"></span></td><td class="mono">#09090f</td><td>Texto primario</td></tr>
+        <tr><td class="mono">--ink2</td><td><span class="sw" style="background:var(--ink2)"></span></td><td class="mono">#2e2e42</td><td>Texto secundario</td></tr>
+        <tr><td class="mono">--ink3</td><td><span class="sw" style="background:var(--ink3)"></span></td><td class="mono">#6b6b82</td><td>Texto terciario · rótulos · pistas</td></tr>
+        <tr><td class="mono">--ink4</td><td><span class="sw" style="background:var(--ink4)"></span></td><td class="mono">#a8a8c0</td><td>Texto mínimo · eyebrows · marcador de posición</td></tr>
+        <tr><td class="mono">--red</td><td><span class="sw" style="background:var(--red)"></span></td><td class="mono">#D0021B</td><td>Marca · primario · alerta crítica · destino activo</td></tr>
+        <tr><td class="mono">--green</td><td><span class="sw" style="background:var(--green)"></span></td><td class="mono">#16a34a</td><td>Positivo · TC favorable · ganancia · cumplido</td></tr>
+        <tr><td class="mono">--amber</td><td><span class="sw" style="background:var(--amber)"></span></td><td class="mono">#d97706</td><td>Atención · vencimientos · campañas</td></tr>
+        <tr><td class="mono">--blue</td><td><span class="sw" style="background:var(--blue)"></span></td><td class="mono">#2563eb</td><td>Información accionable</td></tr>
+        <tr><td class="mono">--danger</td><td><span class="sw" style="background:var(--danger)"></span></td><td class="mono">#c01c1c</td><td>Error · bloqueo · sesión caída</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">04.1</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · v4 + maestro, coincidentes</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Nunca se escribe un color, un tamaño ni un espaciado directamente en el código. Si el ficha no existe, se reporta y se espera.</div>
+        <div class="vf"><div class="vf-l">Verificación · 3 sep 2026</div><div class="vf-t">Los 16 fichas base del Design System v4 coinciden uno a uno con el :root de app.css de producción. 16 de 16.</div></div>
+      </div>
+    </div>
+
+    <div class="av deuda">
+      <div class="av-l">Deuda abierta · mía</div>
+      <div class="av-t">Las dos hojas escritas para la migración llevan <b>37 colores literales</b>:
+        13 en <code>reparto.css</code> —los grises <code>#525252</code> y <code>#8d8d8d</code> de
+        IBM que se están neutralizando, y varios <code>#fff</code>— y 24 en <code>linea.css</code>,
+        las sombras de pulso copiadas de Cash Market. Casi todos tokenizables. Pendiente.</div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">04.2</span><span class="mk mk-r">De este producto</span><span class="mk mk-o">Origen · maestro, literal</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Modo oscuro: <code>body.dk</code> redefine solo superficies, tintas y bordes · la marca es invariante · interruptor luna/sol en la cabecera vía <code>RC.theme</code> · claro por omisión.</div>
+        <div class="rg-d">El Design System v4 declara modo claro universal para la otra superficie.
+          No hay conflicto: <b>en Middle Market manda el maestro</b>, y el maestro pide el
+          interruptor. Claro por omisión en ambos.</div>
+      </div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">04.3</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · esta migración</span></div>
+      <div class="rg-b">
+        <div class="rg-t">A un sistema externo no se le pelean los selectores: se le cambian sus fichas.</div>
+        <div class="rg-d">Sus reglas escriben <code>fill:var(--cds-text-secondary, #525252)</code>.
+          Basta declarar ese ficha dentro del componente para que hable el idioma de la casa. Es su
+          propio mecanismo, no un parche, y sobrevive a sus actualizaciones.</div>
+        <div class="vf"><div class="vf-l">Ejemplo verificado</div><div class="vf-t">Los rótulos del gráfico pasaron de #525252 peso 400 a --ink3 peso 700, y sus ejes de #8d8d8d y #e0e0e0 a --ink4 y --brd2, sin tocar una sola regla de Carbon.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 05 ═══════════════════ -->
+
+  <div class="plancha">
+    <div class="plancha-in">
+      <div class="plancha-ey">05 · Rejilla y ejes</div>
+      <div class="plancha-t">Las dieciséis columnas, sobre el portal que corre</div>
+      <div class="marco" style="block-size:459px">
+        <div class="marco-esc" style="transform:scale(.51)">
+          <div style="width:1440px;height:900px;display:flex;align-items:center;justify-content:center;text-align:center;background:#f2f2f7;color:#6b6b82;border:1px dashed #c9c9d4;font:600 22px/1.5 system-ui,sans-serif;padding:24px">Muestra viva<br>del vendedor a 1440 px<br><span style="font-weight:400">requiere la aplicación servida</span></div>
+          <div class="rejilla-encima" style="inset-inline-start:109px; inline-size:1300px; grid-template-columns:repeat(16,1fr)"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <div class="plancha-pie">1440 px · 16 columnas · medianil 32 · eje único en x = 109, donde también abre la marca</div>
+    </div>
+  </div>
+
+  <section id="s05">
+    <h2><span class="n">05</span>Rejilla y ejes</h2>
+    <p class="intro">Los cuatro puntos de quiebre no son elección nuestra: son los que publica la
+      rejilla 2x de Carbon, verificados en el archivo que servimos.</p>
+
+    <div class="t"><table>
+      <thead><tr><th>Nombre</th><th class="mono">desde</th><th class="num">columnas</th><th class="num">medianil</th></tr></thead>
+      <tbody>
+        <tr><td>Small</td><td class="mono">20 rem · 320 px</td><td class="num">4</td><td class="num">0</td></tr>
+        <tr><td>Medium</td><td class="mono">42 rem · 672 px</td><td class="num">8</td><td class="num">16</td></tr>
+        <tr><td>Large</td><td class="mono">66 rem · 1056 px</td><td class="num">16</td><td class="num">16</td></tr>
+        <tr><td>X-Large</td><td class="mono">82 rem · 1312 px</td><td class="num">16</td><td class="num">16</td></tr>
+        <tr><td>Max</td><td class="mono">99 rem · 1584 px</td><td class="num">16</td><td class="num">24</td></tr>
+      </tbody>
+    </table></div>
+
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> cambie el ancho de la ventana y cuente las divisiones</figcaption>
+      <div class="mu-b claro">
+        <div class="rej-dm" style="display:grid;grid-template-columns:repeat(16,1fr);gap:8px">
+          <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span>
+          <span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span>
+        </div>
+      </div>
+    </figure>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">05.1</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · error propio, medido</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Una rejilla da <b>ejes y un vocabulario de anchos</b>. No decide la composición.</div>
+        <div class="rg-d">Es la lección más cara de esta migración. Se le pidió a la rejilla que
+          pusiera tarjetas dibujadas para 480 px en 16 columnas, y obedeció: las estiró a 1300 y la
+          pantalla se leyó frágil. La rejilla no falló — hizo exactamente lo que se le pidió. Una
+          rejilla no puede inventar contenido para llenar un ancho.</div>
+        <div class="vf"><div class="vf-l">Verificación · 3 sep 2026</div><div class="vf-t">El original dibuja sus bloques a 924 px en escritorio (.app 1040 · .wrap 980). Estirados a 1300 son un 41 % más anchos que la medida para la que fueron dibujados.</div></div>
+      </div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">05.2</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · diseño-ontikos, vía SCI</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Un solo eje abre todo el contenido de la pantalla.</div>
+        <div class="rg-d">Marca, rótulos y contenido arrancan en la misma <b>x</b>. Es lo que hace
+          que nada flote.</div>
+        <div class="vf"><div class="vf-l">Verificación</div><div class="vf-t">Medido a 1440 px: marca y primera columna de contenido, ambas en x = 109. Antes de la corrección, 77 contra 109.</div></div>
+      </div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">05.3</span><span class="mk mk-p">Portable</span></div>
+      <div class="rg-b">
+        <div class="rg-t">El reparto depende de la gramática, no del gusto.</div>
+        <div class="rg-d"><b>Documento</b> — una columna de bloques a todo el ancho útil; la rejilla
+          solo fija el eje y los medianiles.<br>
+          <b>Terminal</b> — la rejilla gobierna <b>las columnas del armazón</b>, no las tarjetas.<br>
+          Emparejar bloques de a dos en la gramática de documento produce filas medio desiertas: un
+          contenedor que puede quedar vacío nunca se empareja.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 06 ═══════════════════ -->
+  <section id="s06">
+    <h2><span class="n">06</span>Tipografía</h2>
+    <p class="intro">Dos familias, sin excepciones: <b>DM Sans</b> para todo lo que se lee y
+      <b>JetBrains Mono</b> para rótulos, cifras técnicas y fórmulas. La variedad viene del peso
+      (400–900) y del tamaño, no de más familias.</p>
+
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> escala de operador · alta densidad</figcaption>
+      <div class="mu-b claro">
+        <div class="esc">
+          <div class="esc-f"><div class="esc-m">.48–.5 rem · 800<br>eyebrow · columna</div><div class="esc-e" style="font-size:.5rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3)">TC MEMBRESÍA</div></div>
+          <div class="esc-f"><div class="esc-m">.58–.62 rem · 700<br>pista · fecha</div><div class="esc-e" style="font-size:.62rem;font-weight:700;color:var(--ink3)">Publicado 08:00 · 3 cajas</div></div>
+          <div class="esc-f"><div class="esc-m">.72–.78 rem · 600–700<br>tabla · descripción</div><div class="esc-e" style="font-size:.78rem;font-weight:600">Ventanilla 1 · María Rodríguez</div></div>
+          <div class="esc-f"><div class="esc-m">.82–.88 rem · 700–800<br>rótulo · botón</div><div class="esc-e" style="font-size:.86rem;font-weight:800">Publicar TC →</div></div>
+          <div class="esc-f"><div class="esc-m">1.05–1.15 rem · 800–900<br>título de sección</div><div class="esc-e" style="font-size:1.1rem;font-weight:900;letter-spacing:-.02em">Órdenes de tu cartera</div></div>
+          <div class="esc-f"><div class="esc-m">1.35 rem+ · 900<br>título de pantalla</div><div class="esc-e" style="font-size:1.4rem;font-weight:900;letter-spacing:-.03em">Hoy en la red</div></div>
+          <div class="esc-f"><div class="esc-m">1.6–2.0 rem · 900<br>cifra rectora</div><div class="esc-e" style="font-size:1.9rem;font-weight:900;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:var(--green)">16.6875</div></div>
+        </div>
+      </div>
+    </figure>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">06.1</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · v4 + maestro</span></div>
+      <div class="rg-b">
+        <div class="rg-t"><code>font-variant-numeric: tabular-nums</code> en <b>todos</b> los números financieros. Sin excepciones.</div>
+        <div class="rg-d">TC, montos, porcentajes en tabla, comisiones. Y alineación a la derecha en
+          columnas de valores. Sin cifras tabulares, una columna de números no se puede comparar de
+          un vistazo — que es justo para lo que existe.</div>
+      </div>
+    </div>
+
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> la misma columna, sin y con cifras tabulares</figcaption>
+      <div class="mu-b claro">
+        <div style="display:flex;gap:34px;font-family:var(--f)">
+          <div><div style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">sin</div>
+            <div style="font-size:.95rem;font-weight:800;line-height:1.7;text-align:right">18,000<br>226,80<br>9,500<br>1,872,500</div></div>
+          <div><div style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">con</div>
+            <div style="font-size:.95rem;font-weight:800;line-height:1.7;text-align:right;font-variant-numeric:tabular-nums">18,000<br>226,80<br>9,500<br>1,872,500</div></div>
+        </div>
+      </div>
+    </figure>
+  </section>
+
+  <!-- ═══════════════════ 07 ═══════════════════ -->
+  <section id="s07">
+    <h2><span class="n">07</span>Estados y gestos</h2>
+    <p class="intro">Todo lo que actúa cambia de color al pasar el cursor y al recibir el dedo.
+      Y —la otra mitad de la regla— <b>lo que no actúa, no cambia</b>.</p>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">07.1</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · defecto propio, corregido</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Los estados cuelgan de lo que de verdad actúa, no de la clase.</div>
+        <div class="rg-d">La misma clase puede servir a dos cosas distintas. En este producto,
+          <code>.vd-oprow</code> es la fila de Órdenes —que abre la operación— y también la de
+          «Últimas operaciones», que es inerte. Encender la clase entera le puso a una fila muerta
+          papel de botón, tabulación y anillo de foco: <b>una promesa falsa</b>.</div>
+        <div class="vf"><div class="vf-l">Cómo se decide, verificable</div><div class="vf-t">Actúa si tiene gancho de datos (data-ord, data-cli, data-open, data-go), si tiene manejador onclick, o si la página le puso cursor:pointer. Lo que pasa la prueba queda marcado data-acc="1", y de ahí cuelgan hover y pulsación.</div></div>
+      </div>
+    </div>
+
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> pase el cursor y pulse · lo de arriba actúa, lo de abajo no</figcaption>
+      <div class="mu-b claro">
+        <div class="lrow" data-acc="1" style="cursor:pointer;border:1px solid var(--brd2)">
+          <div style="flex:1"><div class="lrow-t">Vone X · $50,000 USD</div><div class="lrow-s">02-sep · TC 16.8100 → precio 16.9800</div></div>
+          <div style="color:var(--ink3)">›</div>
+        </div>
+        <div class="lrow" style="border:1px solid var(--brd2);border-top:none">
+          <div style="flex:1"><div class="lrow-t">Reyes · $30,000 USD</div><div class="lrow-s">19-ago · fila de referencia, no abre nada</div></div>
+        </div>
+        <div class="mu-fila" style="margin-top:14px">
+          <button class="btn btn-sec" type="button">Pulse con el tabulador para ver el foco</button>
+          <span class="fld-lbl" style="color:var(--ink3)">anillo rojo de 2 px, solo con teclado</span>
+        </div>
+      </div>
+    </figure>
+
+    <div class="t"><table>
+      <thead><tr><th>Gesto</th><th>Qué cambia</th><th class="mono">valor</th></tr></thead>
+      <tbody>
+        <tr><td>Cursor encima <span class="mono">:hover</span></td><td>Fondo a la superficie siguiente · borde de campo a <code>--brd3</code></td><td class="mono">--surf2</td></tr>
+        <tr><td>Dedo o clic <span class="mono">:active</span></td><td>Fondo un paso más · los primarios bajan brillo</td><td class="mono">--surf3 · brightness(.86)</td></tr>
+        <tr><td>Foco de teclado <span class="mono">:focus-visible</span></td><td>Anillo de la marca, nunca el azul del navegador</td><td class="mono">2px solid var(--red)</td></tr>
+        <tr><td>Objetivo de toque</td><td>Alto mínimo en punteros gruesos</td><td class="mono">44 px</td></tr>
+        <tr><td>Transición</td><td>Corta, para que el cambio se lea sin retrasar el toque</td><td class="mono">110 ms</td></tr>
+        <tr><td>Movimiento reducido</td><td>Se respeta siempre</td><td class="mono">prefers-reduced-motion</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ═══════════════════ 08 ═══════════════════ -->
+  <section id="s08">
+    <h2><span class="n">08</span>Armazón</h2>
+    <p class="intro">Las dos gramáticas, ahora con sus piezas nombradas y sus medidas.</p>
+
+    <h3>Documento · teléfono</h3>
+    <div class="t"><table>
+      <thead><tr><th>Región</th><th class="mono">medida</th><th>Regla</th></tr></thead>
+      <tbody>
+        <tr><td><code>.appbar</code> · barra superior</td><td class="mono">61 px</td><td>Marca, sello, reloj del TC, avisos, quién, salir. Se aprieta a 40 px por acción antes de tirar nada</td></tr>
+        <tr><td><code>.sa</code> · área de scroll</td><td class="mono">flex:1</td><td><b>La única región que scrollea</b></td></tr>
+        <tr><td><code>.bnav</code> · barra de pulgar</td><td class="mono">59–63 px</td><td>Icono y rótulo. Nunca hamburguesa</td></tr>
+        <tr><td>Ritmo entre bloques</td><td class="mono">4 · 10 · 18–22</td><td>Desigual a propósito: 4 entre un rótulo y su bloque, 10 entre hermanos, 18–22 entre grupos</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Terminal · escritorio</h3>
+    <div class="t"><table>
+      <thead><tr><th>Región</th><th class="mono">medida</th><th>Regla</th></tr></thead>
+      <tbody>
+        <tr><td>Cabecera de instrumentos</td><td class="mono">52 px</td><td>Celdas de cifra separadas por filete de 1 px. La cifra rectora encabeza; <b>un estado que impide operar no puede verse como una estadística</b></td></tr>
+        <tr><td>Riel de navegación</td><td class="mono">48 px · 220 expandido</td><td>Debajo de la cabecera, nunca compartiendo su fila. Destino activo con filete rojo</td></tr>
+        <tr><td>Raíl de señales</td><td class="mono">280–296 px</td><td>Fondo <code>--surf2</code>. <b>Si está vacío, se colapsa</b></td></tr>
+        <tr><td>Columna de trabajo</td><td class="mono">flex:1</td><td>Scroll propio. Una acción primaria, abajo a la derecha</td></tr>
+        <tr><td>Barra de estado</td><td class="mono">24–32 px</td><td>Qué falta para poder actuar</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">08.0</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · Interactive Brokers · thinkorswim descartada</span></div>
+      <div class="rg-b">
+        <div class="rg-t">La autoridad del escritorio no son los wireframes: son las terminales que
+          el negocio usó de verdad.</div>
+        <div class="rg-d">Los wireframes nunca se trabajaron más allá del cajero, y ahí fueron
+          funcionales, no de diseño. La referencia real de RetiCash en escritorio es
+          <b>Interactive Brokers</b> y <b>thinkorswim</b>; en teléfono, Robinhood. El juego del
+          producto es que el cliente de cambio opere como opera un trader.<br><br>
+          Lo que esas terminales hacen y hay que hacer:<br>
+          · <b>La barra queda limpia</b> — IBKR pone <i>dos</i> cifras arriba, chicas y a la derecha, y las
+          otras once tras un galón que se despliega. thinkorswim pone once de golpe. <b>Se descarta el camino de
+          thinkorswim</b>: la densidad de las terminales viene del <i>scalping</i>, que necesita todo a la vista para
+          actuar por reflejo, y ése no es nuestro caso. Se toma la respuesta de Carbon, que coincide con el espíritu
+          de la de IB: <b>cero cifras en la barra</b> y cuatro tarjetas en el contenido, con el número en peso liviano.
+          Las siete celdas que llegamos a construir <b>se retiran</b>.<br>
+          · <b>El riel lleva rótulo</b> — Portfolio · Watchlist · Quote · Screeners · Layouts · News en IBKR.
+          El icono nunca va solo.<br>
+          · <b>Un panel de contexto permanente</b> — instrumento, precio y las dos acciones, a un cuarto del ancho.
+          No cambia al cambiar de pestaña. Es el hallazgo que más pesa, y es hoy
+          <a href="../ds/#r06">Ontikos 06</a> y <a href="../ds/#r16">Ontikos 16</a>.<br>
+          · <b>Cada bloque es un panel con su barra de título.</b><br>
+          · <b>El número se colorea por signo</b>, no por categoría.</div>
+        <div class="vf"><div class="vf-l">Verificación · 4 sep 2026</div>
+          <div class="vf-t">Riel de 78 px con rótulo legible a 9,9 px —a 7,5 px el riel volvía a
+            ser de iconos, por debajo del piso de la escala—. Eje único mantenido: marca en 97 y
+            primera columna de contenido en 97. Celda de «Ganado mes» coloreada por signo.</div></div>
+      </div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">08.2</span><span class="mk" style="background:#fbe9ec;color:#a3102a">Derogada</span><span class="mk mk-o">Origen · defecto visto al construirla</span></div>
+      <div class="rg-b">
+        <div class="rg-t" style="text-decoration:line-through;opacity:.5">Una cifra promovida a la cabecera no se repite en la columna de trabajo.</div><div class="rg-d" style="border-left:2px solid var(--d-debt);padding-left:12px;margin-bottom:10px"><b>Derogada el 4 de septiembre.</b> Con la barra limpia no hay cifras promovidas, así que la regla se queda sin sujeto. Y su origen la condena: existía para tapar que la composición no sabía qué ya había puesto. Con la disposición declarada (<a href="../ds/#axioma">el axioma de Ontikos</a>) no se coloca dos veces la misma cifra, y no hace falta una regla que lo prohíba. Junto con ella caen el heurístico <code>SENAL</code> y <code>plegarVacios()</code>, por la misma razón.</div>
+        <div class="rg-d">Al poner las celdas, el TC y el «Ganado este mes» quedaron dos veces en
+          la misma pantalla: arriba en el tablero y abajo como tarjeta. En una terminal repetir una
+          cifra es ruido — el ojo la busca dos veces y no sabe cuál manda. Se retira del trabajo;
+          su contexto —vigencia, proyección, meta, comisión promedio— se queda.</div>
+        <div class="vf"><div class="vf-l">Verificación · 4 sep 2026</div>
+          <div class="vf-t" style="opacity:.55">Lo que llegó a medirse: vendedor en terminal, 7 celdas arriba,
+            y ni la tarjeta del TC ni el número grande de «Ganado» abajo. La medición era correcta; lo que ya no
+            existe es el reparto que la hacía necesaria.</div></div>
+      </div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">08.1</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · Carbon UI Shell + wireframes</span></div>
+      <div class="rg-b">
+        <div class="rg-t">La barra global cruza toda la pantalla; el riel arranca debajo; el contenido empieza donde termina el riel.</div>
+        <div class="rg-d">Es el orden del armazón de Carbon y coincide con el de los wireframes. El
+          riel no comparte la fila de la cabecera: así, al colapsarlo, la marca no se corta.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 09 ═══════════════════ -->
+  <section id="s09">
+    <h2><span class="n">09</span>Piezas</h2>
+    <p class="intro">El catálogo. Cada pieza con su procedencia — de la casa, de Carbon o de Cash
+      Market — porque dentro de un año hay que poder saber <b>por qué</b> es como es.</p>
+
+    <h3>Botones</h3>
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> casa · sin radio en operador</figcaption>
+      <div class="mu-b claro">
+        <div class="mu-fila">
+          <button class="btn btn-primary" type="button">Primario</button>
+          <button class="btn btn-sec" type="button">Secundario</button>
+          <button class="btn btn-ghost" type="button">Fantasma</button>
+          <button class="btn btn-danger" type="button">Destructivo</button>
+          <button class="ubtn" type="button">De fila →</button>
+        </div>
+      </div>
+    </figure>
+
+    <h3>Campos</h3>
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> casa</figcaption>
+      <div class="mu-b claro">
+        <div class="field" style="max-width:340px">
+          <label class="fld-lbl" for="dm-tc">TC con membresía *</label>
+          <input class="fld-in" id="dm-tc" type="text" value="16.6875" inputmode="decimal">
+        </div>
+      </div>
+    </figure>
+
+    <h3>Panel y cifras</h3>
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> casa</figcaption>
+      <div class="mu-b">
+        <div class="panel">
+          <div class="panel-h"><span>Ritmo del negocio · mes</span></div>
+          <div class="panel-b">
+            <div class="kv"><span class="kv-k">Volumen ejecutado</span><span class="kv-v">220,000 USD</span></div>
+            <div class="kv"><span class="kv-k">Esperado a la fecha</span><span class="kv-v">184,615 USD</span></div>
+            <div class="kv"><span class="kv-k">Meta del mes</span><span class="kv-v">1,600,000 USD</span></div>
+          </div>
+        </div>
+        <div class="kpis" style="margin-top:14px">
+          <div class="kpi"><div class="kpi-l">Volumen</div><div class="kpi-v">$220k</div></div>
+          <div class="kpi"><div class="kpi-l">Operaciones</div><div class="kpi-v">9</div></div>
+        </div>
+      </div>
+    </figure>
+
+    <h3>Alertas · los cuatro tonos</h3>
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> casa · la idea del verbo, de Carbon</figcaption>
+      <div class="mu-b claro">
+        <div class="alert danger"><div style="flex:1"><div class="alert-t">Sin sesión OPEN · abre caja para operar</div></div></div>
+        <div class="alert amber"><div style="flex:1"><div class="alert-t">Campaña «Referidos» vence en 16 días · 47 % de conversión</div></div><button class="ubtn" type="button">Extender →</button></div>
+        <div class="alert blue"><div style="flex:1"><div class="alert-t">2,840 miembros a un referido del umbral</div></div></div>
+        <div class="alert green"><div style="flex:1"><div class="alert-t">TC publicado · 3 cajas actualizadas</div></div></div>
+      </div>
+    </figure>
+
+    <h3>Insignias</h3>
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> casa</figcaption>
+      <div class="mu-b claro">
+        <div class="mu-fila">
+          <span class="bdg green">ejecutada</span><span class="bdg amber">por vencer</span>
+          <span class="bdg red">cancelada</span><span class="bdg blue">especial</span>
+          <span class="bdg gray">sin actividad</span>
+        </div>
+      </div>
+    </figure>
+
+    <h3>Vacío tipado</h3>
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> casa · disco, título y subtítulo</figcaption>
+      <div class="mu-b">
+        <div class="ord-empty">
+          <div class="ord-empty-ic">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--ink3)" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="3 3"><circle cx="12" cy="12" r="9"/></svg>
+          </div>
+          <div class="ord-empty-t">No hay campañas activas</div>
+          <div class="ord-empty-s">Cuando el negocio publique un bloque, lo ves aquí y puedes tomarlo.</div>
+        </div>
+      </div>
+    </figure>
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">09.1</span><span class="mk mk-p">Portable</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Un vacío no es una línea de texto: es una pieza con disco, título y una frase que dice qué lo llenará.</div>
+        <div class="rg-d">Y si el texto que trae la página es una frase larga, baja a subtítulo: en
+          peso 900 y 1,05 rem una oración de setenta caracteres se lee mal.</div>
+        <div class="vf"><div class="vf-l">Verificación · 3 sep 2026</div>
+          <div class="vf-t">Portal del vendedor en producción: 3 vacíos presentes, 3 tipados. Cumple.</div></div>
+      </div>
+    </div>
+
+    <h3>Línea de tiempo de una orden</h3>
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> de Cash Market · pintada con carbon/linea.css de producción</figcaption>
+      <div class="mu-b claro">
+        <div class="orden-hitos">
+          <div class="orden-hitos-track">
+            <div class="orden-hitos-dot done"><span class="orden-hitos-dot-i"></span><span class="orden-hitos-dot-l">Solicitada</span></div>
+            <div class="orden-hitos-line done"></div>
+            <div class="orden-hitos-dot done"><span class="orden-hitos-dot-i"></span><span class="orden-hitos-dot-l">Precio congelado</span></div>
+            <div class="orden-hitos-line"></div>
+            <div class="orden-hitos-dot active"><span class="orden-hitos-dot-i"></span><span class="orden-hitos-dot-l">Cobrada en caja</span></div>
+          </div>
+          <div class="orden-hitos-msg">
+            <div class="orden-hitos-msg-t">Falta que tu cliente pase por caja</div>
+            <div class="orden-hitos-msg-s">El precio queda congelado unos 14 min más, hasta las 14:32.</div>
+          </div>
+        </div>
+      </div>
+    </figure>
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">09.2</span><span class="mk" style="background:#eef1f6;color:#4a4f5c">Aplica Ontikos · proceso</span><span class="mk mk-o">Origen · Cash Market</span></div>
+      <div class="rg-b">
+        <div class="rg-t">El hito se llama distinto según quién mira, y el mensaje termina en un verbo.</div>
+        <div class="rg-d">Mismo recorrido, otras palabras: el vendedor lee «Cobrada en caja» y el
+          administrador «Ejecutada». Y el mensaje no dice el estado del sistema —«partial»— sino
+          qué toca hacer ahora.<br><br>
+          <b>La mitad portable de esta regla se fue.</b> La forma, los cuatro estados, el plazo del hito
+          y el rótulo que cambia según el rol son hoy la pieza
+          <a href="../ds/#piezas"><b>Ontikos · proceso</b></a>. Aquí se queda sólo lo que este
+          negocio le pone.</div>
+        <div class="rg-d" style="margin-top:14px"><b>Lo que RetiCash declara sobre la pieza:</b><br>
+          <b>Hitos, por rol</b> — vendedor: <code>Solicitada · Precio congelado · Cobrada en caja</code> ·
+          administrador: <code>Registrada · Precio congelado · Ejecutada</code>. Tres hitos, no cuatro:
+          el compromiso de cambio no tiene un cuarto acto.<br>
+          <b>Estados del negocio que mapean a los cuatro del sistema</b> —
+          <code>completed</code> → cumplido · <code>pending</code> y <code>partial</code> → actual ·
+          <code>expired</code>, <code>cancelled</code> y <code>no_show</code> → fallido.<br>
+          <b>Plazo</b> — el precio congelado vence, y el hito lo muestra en minutos.<br>
+          <b>Decoración que no viaja</b> — el pulso del hito activo, el conector de 3 px y el color por
+          lado (compra o venta). Son de este producto y se quedan aquí.</div>
+      </div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">09.3</span>
+        <span class="mk" style="background:#fdf0e2;color:#b06a00">Deuda declarada</span>
+        <span class="mk mk-o">Origen · consecuencia de generalizar la pieza</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Hoy la línea de tiempo está implementada dos veces, y eso es una deuda, no una decisión.</div>
+        <div class="rg-d"><code>carbon/linea.css</code> es la que <b>opera</b>: pasó la operación real, viene de
+          Cash Market y es la que ven el vendedor y el administrador ahora mismo.
+          <code>sistema/proceso.css</code> es la pieza del sistema, generalizada y sin negocio.
+          Las dos dibujan lo mismo y <b>no comparten una línea</b>.<br><br>
+          Se deja escrito porque es exactamente el mecanismo que permitió que la compuerta fuera falsa en un
+          documento y verdadera en el otro. Mientras las dos existan, el verificador lo marca en rojo.<br><br>
+          <b>Migración:</b> <code>linea.css</code> pasa a ser un tema delgado sobre <code>proceso.css</code> —sus
+          hitos, sus palabras y su decoración— y deja de redibujar la pieza. Se hace cuando se construya el
+          escritorio, no antes: tocar hoy lo que opera sin necesidad viola «un archivo de producción a la vez» (12.1).</div>
+        <div class="vf"><div class="vf-l">Verificación</div><div class="vf-t">Mientras existan las dos hojas,
+          <code>verificar.py</code> falla la comprobación «Pieza · proceso: una sola implementación».
+          Deja de fallar cuando <code>linea.css</code> no vuelva a declarar marca, conector ni estados.</div></div>
+      </div>
+    </div>
+
+    <h3>Tabla</h3>
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> casa · valores a la derecha, cifras tabulares</figcaption>
+      <div class="mu-b claro">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Vendedor</th><th style="text-align:right">Volumen</th><th style="text-align:right">Comisión</th></tr></thead>
+            <tbody>
+              <tr><td>Vendos Dos</td><td style="text-align:right;font-variant-numeric:tabular-nums">127,500</td><td style="text-align:right;font-variant-numeric:tabular-nums">$117</td></tr>
+              <tr><td>Vendedor Uno</td><td style="text-align:right;font-variant-numeric:tabular-nums">50,000</td><td style="text-align:right;font-variant-numeric:tabular-nums">$40</td></tr>
+              <tr><td>Juan Pérez</td><td style="text-align:right;font-variant-numeric:tabular-nums">42,500</td><td style="text-align:right;font-variant-numeric:tabular-nums">$51</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </figure>
+
+    <div class="t"><table>
+      <thead><tr><th>Pieza</th><th>Procedencia</th><th>Nota</th></tr></thead>
+      <tbody>
+        <tr><td>Botón, campo, panel, KPI, tabla, alerta, insignia, vacío</td><td><b>Casa</b></td><td>Existían antes de Carbon y se quedan</td></tr>
+        <tr><td>Rejilla, armazón, panel lateral, gráficos, esqueletos, iconos</td><td><b>Carbon</b></td><td>Entraron donde la casa no llegaba</td></tr>
+        <tr><td>Línea de tiempo</td><td><b>Cash Market</b></td><td>Misma casa, mismos fichas: entró sin traducir un color</td></tr>
+        <tr><td>Aviso con verbo</td><td><b>Idea de Carbon, pieza de la casa</b></td><td>La cláusula 3 en acción</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ═══════════════════ 10 ═══════════════════ -->
+  <section id="s10">
+    <h2><span class="n">10</span>Datos</h2>
+    <p class="intro">Cómo se muestran los números y cómo se dice el estado de un indicador.</p>
+
+    <figure class="mu">
+      <figcaption class="mu-h">Muestra viva <span class="pt">·</span> semáforos y veredicto de ritmo</figcaption>
+      <div class="mu-b claro">
+        <div class="mu-fila" style="gap:22px">
+          <span style="display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:700"><span style="inline-size:9px;block-size:9px;border-radius:50%;background:var(--green);display:inline-block"></span> Vas bien</span>
+          <span style="display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:700"><span style="inline-size:9px;block-size:9px;border-radius:50%;background:var(--amber);display:inline-block"></span> En ritmo</span>
+          <span style="display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:700"><span style="inline-size:9px;block-size:9px;border-radius:50%;background:var(--red);display:inline-block"></span> Vas bajo</span>
+        </div>
+      </div>
+    </figure>
+
+    <div class="t"><table>
+      <thead><tr><th>Regla</th><th class="mono">valor</th></tr></thead>
+      <tbody>
+        <tr><td>Veredicto de ritmo · bajo</td><td class="mono">ritmo &lt; .70 → rojo «Vas bajo»</td></tr>
+        <tr><td>Veredicto de ritmo · en curso</td><td class="mono">&lt; .95 → ámbar «En ritmo»</td></tr>
+        <tr><td>Veredicto de ritmo · cumpliendo</td><td class="mono">≥ .95 → verde «Vas bien»</td></tr>
+        <tr><td>Números financieros</td><td class="mono">font-variant-numeric: tabular-nums · siempre</td></tr>
+        <tr><td>Columnas de valor</td><td class="mono">text-align: right</td></tr>
+        <tr><td>Cifra rectora</td><td class="mono">1.6–2.0 rem · peso 900</td></tr>
+        <tr><td>Tendencia</td><td class="mono">↑ verde / ↓ danger · .72–.82 rem peso 700</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">10.1</span><span class="mk mk-p">Portable</span></div>
+      <div class="rg-b">
+        <div class="rg-t">El color semántico es independiente del acento de marca.</div>
+        <div class="rg-d">Verde, ámbar y rojo dicen estado. El rojo de marca dice acción y firma.
+          Que compartan tono no los hace lo mismo: un botón primario rojo no es una alerta.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 11 ═══════════════════ -->
+  <section id="s11">
+    <h2><span class="n">11</span>Lenguaje</h2>
+    <p class="intro">La terminología es parte del diseño. Usar la palabra incorrecta rompe la
+      consistencia entre el producto, el documento y el código.</p>
+
+    <h3>Vocabulario de interfaz contra nombre interno</h3>
+    <div class="t"><table>
+      <thead><tr><th>En la interfaz</th><th class="mono">en el código</th><th>Nota</th></tr></thead>
+      <tbody>
+        <tr><td><b>Límite</b></td><td class="mono">frontera</td><td>Nunca «Frontera» en rótulos visibles</td></tr>
+        <tr><td><b>Tipo de cambio</b></td><td class="mono">costo_fondeo</td><td>Nunca «Costo de fondeo» en la sección de TC</td></tr>
+        <tr><td><b>No-show</b></td><td class="mono">no_presentado</td><td></td></tr>
+      </tbody>
+    </table></div>
+    <div class="av">
+      <div class="av-l">Regla</div>
+      <div class="av-t">Los nombres internos —variables, campos, funciones— <b>no se cambian</b> al
+        actualizar el vocabulario de negocio. Cambiar la palabra visible es barato; cambiar el
+        campo rompe el código.</div>
+    </div>
+
+    <h3>Cómo se escribe · operador</h3>
+    <div class="par">
+      <div class="par-c a"><div class="par-t">No</div><ul>
+        <li>Por favor ingresa el monto de la operación</li>
+        <li>¡Operación completada exitosamente!</li>
+        <li>No se puede continuar en este momento</li>
+      </ul></div>
+      <div class="par-c b"><div class="par-t">Sí</div><ul>
+        <li>Monto USD *</li>
+        <li>Operación ejecutada · FXC-20260515-001</li>
+        <li>Sin sesión OPEN · abre caja para operar</li>
+      </ul></div>
+    </div>
+
+    <h3>Cómo se escribe · cliente</h3>
+    <div class="par">
+      <div class="par-c a"><div class="par-t">No</div><ul>
+        <li>Tu tipo de cambio está bloqueado hasta las 12:00</li>
+        <li>Tienes puntos acumulados</li>
+        <li>Puedes ganar más si refieres amigos</li>
+      </ul></div>
+      <div class="par-c b"><div class="par-t">Sí</div><ul>
+        <li>TC bloqueado ahora · 19.85 garantizado hasta las 12:00</li>
+        <li>1,240 Pasos · ×1.5 Pro · ↑ 80 esta semana</li>
+        <li>Faltan 2 referidos para TCLock +1h permanente</li>
+      </ul></div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">11.1</span><span class="mk mk-r">De este producto</span><span class="mk mk-o">Origen · maestro · decisión firme</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Español formal y neutro. Prohibido cualquier mexicanismo o coloquialismo.</div>
+        <div class="rg-d">Estricto y no negociable. Aplica a interfaz, mensajes, documentación y
+          conversación de trabajo.</div>
+      </div>
+    </div>
+
+    <div class="av deuda">
+      <div class="av-l">Deriva detectada · 3 sep 2026</div>
+      <div class="av-t">El Design System v4 manda llamar «Pasos» al sistema de puntos —nunca
+        «puntos», «rewards» ni «coins»—. El portal del cliente de Middle Market dice <b>«Puntos»
+        veintiséis veces y «Pasos» cero</b>. Si esa regla alcanza a MM, es un cambio de copia
+        pendiente; si no, el v4 debe decir a qué superficie aplica.</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 12 ═══════════════════ -->
+  <section id="s12">
+    <h2><span class="n">12</span>Implementación</h2>
+    <p class="intro">Reglas de trabajo y validación obligatoria. Vienen del documento maestro y no
+      se relajan.</p>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">12.1</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · maestro · decisión firme</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Propuesta → aprobación → ejecución. Nunca ejecutar sin aprobación explícita.</div>
+        <div class="rg-d">Con dos corolarios: <b>un archivo de producción a la vez</b>, porque el
+          usuario prueba en vivo; y <b>reconstruir todo lo existente</b> al elevar una pantalla —
+          nada se omite.</div>
+      </div>
+    </div>
+
+    <h3>Validación obligatoria antes de entregar</h3>
+    <div class="t"><table>
+      <thead><tr><th>Qué</th><th class="mono">cómo</th><th>Criterio</th></tr></thead>
+      <tbody>
+        <tr><td>PHP</td><td class="mono">php -l archivo.php</td><td>«No syntax errors»</td></tr>
+        <tr><td>JavaScript</td><td class="mono">node --check script.js</td><td>Sin errores</td></tr>
+        <tr><td>HTML</td><td class="mono">contar &lt;div y &lt;/div&gt;</td><td>Deben igualar</td></tr>
+        <tr><td>CSS</td><td class="mono">contar { y }</td><td>Deben igualar</td></tr>
+        <tr><td>Color</td><td class="mono">buscar #hex fuera de fichas</td><td>Cero</td></tr>
+        <tr><td>Despliegue</td><td class="mono">md5 local contra servidor</td><td>Idénticos</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Lista de comprobación de una pantalla</h3>
+    <div class="chk">
+      <div>¿Hay exactamente una acción primaria en cada estado?</div>
+      <div>¿Todo color sale de un ficha? ¿Ningún <code>#hex</code> suelto?</div>
+      <div>¿Los números financieros usan cifras tabulares?</div>
+      <div>¿Lo que cambia de color al pasar el cursor hace algo de verdad?</div>
+      <div>¿Cada región declara su propio scroll?</div>
+      <div>¿El vacío está tipado, con disco, título y frase?</div>
+      <div>¿La pantalla se lee en las dos gramáticas: teléfono y escritorio?</div>
+      <div>¿El estado bloqueante se ve distinto de una estadística?</div>
+      <div>¿El vocabulario coincide con la sección 11?</div>
+    </div>
+
+    
+  </section>
+
+  <!-- ═══════════════════ 13 · PANTALLAS ═══════════════════ -->
+  <section id="s13">
+    <h2><span class="n">13</span>Pantallas</h2>
+    <p class="intro">El puente entre la ontología y las piezas. Cada pantalla se declara por su
+      <b>verbo</b>: qué acto del negocio habilita. De ahí salen su acción primaria, sus señales y
+      el estado que la bloquea — no al revés.</p>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">13.1</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · demo index · diseño ontológico aplicado</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Una pantalla se declara con cinco casillas, y ninguna puede quedar vacía.</div>
+        <div class="rg-d"><b>Verbo</b> — el acto del negocio que habilita.<br>
+          <b>Pregunta</b> — la que responde de un vistazo.<br>
+          <b>Acción primaria</b> — una, y solo una.<br>
+          <b>Señales</b> — lo que condiciona esa acción.<br>
+          <b>Bloqueo</b> — el estado que la impide, y que debe verse.<br>
+          Si una pantalla no puede llenar la casilla del verbo, no es una pantalla: es un informe,
+          y va dentro de otra.</div>
+      </div>
+    </div>
+
+    <h3>Middle Market · las pantallas que operan</h3>
+    <div class="t"><table>
+      <thead><tr><th>Pantalla</th><th>Verbo</th><th>Acción primaria</th><th>Señales</th><th>Bloqueo</th></tr></thead>
+      <tbody>
+        <tr><td><b>Admin · Resumen</b></td><td class="mono">—</td><td>ninguna · es lectura</td><td>Ritmo del mes · avisos · ranking</td><td>—</td></tr>
+        <tr><td><b>Admin · Operación</b></td><td class="mono">CancelarOrden<br>MarcarNoShow</td><td>Cancelar operación</td><td>Estado de la orden · pagado contra registrado · quién la tomó</td><td>Orden ya cerrada · cancelar con pagos exige rol de sistema</td></tr>
+        <tr><td><b>Admin · Dinero</b></td><td class="mono">RegistrarMovimiento<br>CerrarDía</td><td>Cerrar día</td><td>Inventario por centro · cuentas por pagar · turnos abiertos</td><td>Turno abierto sin cuadrar</td></tr>
+        <tr><td><b>Admin · Clientes</b></td><td class="mono">AltaCliente<br>ReasignarVendedor</td><td>Dar de alta</td><td>Sin sobreprecio asignado · sin operar este mes</td><td>Reasignar exige rol de sistema</td></tr>
+        <tr><td><b>Admin · Config</b></td><td class="mono">PublicarTC<br>FijarMetas</td><td>Publicar TC</td><td>Costo del día · pisos · competencia · cajas activas</td><td>TC sin publicar bloquea a los vendedores</td></tr>
+        <tr><td><b>Vendedor · Resumen</b></td><td class="mono">—</td><td>ninguna · es lectura</td><td>TC vigente · ganado del mes · avisos · puesto</td><td>—</td></tr>
+        <tr><td><b>Vendedor · Órdenes</b></td><td class="mono">VerOrden</td><td>ninguna · es consulta</td><td>Vivas por vencer · el reloj de cada una</td><td>—</td></tr>
+        <tr><td><b>Vendedor · Clientes</b></td><td class="mono">RegistrarOrden<br>SolicitarEmergencia</td><td>Solicitar operación de emergencia</td><td>Clientes sin sobreprecio · los que no operan este mes</td><td>Sin TC publicado no se puede registrar</td></tr>
+        <tr><td><b>Vendedor · Campañas</b></td><td class="mono">PedirPrecioEspecial</td><td>Pedir un precio especial</td><td>Campañas activas del negocio · estado de tus solicitudes</td><td>—</td></tr>
+        <tr><td><b>Vendedor · Perfil</b></td><td class="mono">CambiarClave</td><td>ninguna · es lectura</td><td>Comisión del mes · meta · histórico</td><td>—</td></tr>
+        <tr><td><b>Caja</b></td><td class="mono">AbrirSesión<br>EjecutarFX<br>CerrarSesión</td><td>Ejecutar</td><td>Cola de órdenes · inventario declarado · reloj de cada orden</td><td><b>Sin sesión abierta no se opera</b></td></tr>
+        <tr><td><b>Cliente</b></td><td class="mono">RegistrarOrden</td><td>Registrar mi orden</td><td>TC vigente · su nivel · lo que dejó de ganar</td><td>Sin TC publicado no hay precio</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="av deuda">
+      <div class="av-l">Lo que esta tabla destapa</div>
+      <div class="av-t">Tres pantallas del vendedor —Resumen, Órdenes y Perfil— <b>no tienen
+        verbo</b>: son lectura pura. Por la regla 13.1 eso no las invalida, pero sí obliga a
+        decidir: o se les da el acto que les falta —registrar una orden desde el Resumen, por
+        ejemplo— o se aceptan como informes y dejan de competir por ser destino de primer nivel.
+        <b>Es una decisión de producto, y está abierta.</b></div>
+    </div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">13.2</span><span class="mk mk-p">Portable</span><span class="mk mk-o">Origen · v4 · gate de sesión</span></div>
+      <div class="rg-b">
+        <div class="rg-t">El bloqueo no es un aviso: es una compuerta.</div>
+        <div class="rg-d">Cuando el estado impide operar —caja sin sesión abierta, TC sin
+          publicar— la pantalla no muestra un banner y deja los controles vivos. <b>Cubre la
+          pantalla y ofrece el acto que desbloquea.</b> Un control que no va a funcionar no debe
+          poder tocarse.</div>
+        <div class="vf"><div class="vf-l">Estado en este producto · 4 sep 2026</div>
+          <div class="vf-t">En caja.html no se encontró una compuerta bloqueante: hay una sola
+            mención de sesión y ningún elemento fijo que cubra la pantalla. Pendiente.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 14 ═══════════════════ -->
+  <section id="s14">
+    <h2><span class="n">14</span>Verificación</h2>
+    <p class="intro">Los chequeos que sostienen las reglas de este documento, con su última
+      ejecución. Se vuelven a correr contra producción cuando haga falta, y este es el mecanismo
+      que impide que el sistema derive.</p>
+
+    <div class="t"><table>
+      <thead><tr><th>Qué comprueba</th><th>Última ejecución</th><th>Resultado</th></tr></thead>
+      <tbody>
+<!-- VERIFICACION:INICIO -->
+        <tr><td>Fichas base contra el <code>:root</code> de producción</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> 16 de 16 coinciden</td></tr>
+        <tr><td>Radio en piezas de operador</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 4 fuera de norma · .modal 16px · .modal 4px · .ord-empty 18px · .ubtn 7px</td></tr>
+        <tr><td>Colores literales en las hojas propias</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> cero</td></tr>
+        <tr><td>Modo oscuro: fichas de Carbon mapeados</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> 43 fichas de Carbon redeclarados bajo body.dk</td></tr>
+        <tr><td>Terminología «puntos» contra «Pasos» en el cliente</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> «puntos» 26 · «Pasos» 6 en el portal del cliente</td></tr>
+        <tr><td>Etiquetas equilibradas en las páginas generadas</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> equilibrados</td></tr>
+        <tr><td>Paquete al día con las páginas</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> al día</td></tr>
+        <tr><td>Despliegue: local contra servidor</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> 7 de 7 idénticos</td></tr>
+        <tr><td>Una acción primaria por pantalla <span class="mk mk-w" style="margin-left:6px">navegador</span></td><td class="mono">3 sep 2026</td><td>Cumple · vendedor 0·0·0·1·0 · admin 0·1·0·0·0</td></tr>
+        <tr><td>Vacíos tipados <span class="mk mk-w" style="margin-left:6px">navegador</span></td><td class="mono">3 sep 2026</td><td>3 de 3 en el portal del vendedor</td></tr>
+        <tr><td>Regiones con scroll propio <span class="mk mk-w" style="margin-left:6px">navegador</span></td><td class="mono">3 sep 2026</td><td>Vendedor: solo <code>.sa</code> · admin en escritorio: ninguna</td></tr>
+        <tr><td>Contraste de texto en modo oscuro <span class="mk mk-w" style="margin-left:6px">navegador</span></td><td class="mono">3 sep 2026</td><td>0 textos bajo 3:1 en original y en Carbon</td></tr>
+        <tr><td>Original contra Carbon, clase por clase <span class="mk mk-w" style="margin-left:6px">navegador</span></td><td class="mono">3 sep 2026</td><td>157 clases · 156 idénticas en 375 y en 1440</td></tr>
+        <tr><td>Eje de la marca contra el eje del contenido <span class="mk mk-w" style="margin-left:6px">navegador</span></td><td class="mono">3 sep 2026</td><td>ambos en x = 109 a 1440 px</td></tr>
+        <tr><td>Terminal · composición y reversibilidad <span class="mk mk-w" style="margin-left:6px">navegador</span></td><td class="mono">4 sep 2026</td><td>1440: 7 celdas · raíl 296 · trabajo 1094 con scroll propio · barra de estado. 375: sin terminal, 12 columnas en la rejilla. Reversible</td></tr>
+<!-- VERIFICACION:FIN -->
+      </tbody>
+    </table></div>
+
+    <div class="rg">
+      <div class="rg-h"><span class="rg-id">13.1</span><span class="mk mk-p">Portable</span></div>
+      <div class="rg-b">
+        <div class="rg-t">Un documento de sistema que no se puede correr contra el producto es una foto, no un contrato.</div>
+        <div class="rg-d">Cada fila de la tabla de arriba es una comprobación mecánica sobre el
+          código que sirve producción. Cuando una da distinto, o cambió el producto —y hay que
+          arreglarlo— o cambió la regla —y hay que escribirla—. Nunca queda en «se ve raro».</div>
+      </div>
+    </div>
+
+    <div class="av deuda">
+      <div class="av-l">Estado del propio documento · 3 sep 2026</div>
+      <div class="av-t">De <b>25 reglas</b>, <b>13 traen verificación</b> y <b>3 llevan la marca de
+        propuesta</b> por describir un armazón que aún no existe. Las <b>9 restantes</b> son
+        verificables y todavía no tienen su comprobación escrita: es la primera deuda a pagar, y
+        está aquí para que no se olvide.</div>
+    </div>
+
+    
+  </section>
+
+  <footer class="pie">
+    RetiCash · Sistema · v5 · secciones 00–13 · 3 de septiembre de 2026<br>
+    Sucede al Design System v4 y expande la sección de UI del documento maestro de Middle Market.<br>
+    Las muestras se pintan con <code>../app.css</code> y <code>../carbon/linea.css</code> de producción.<br>
+    Las reglas marcadas «portable» viajan a otro ERP o CRM sin traducción.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var b = document.getElementById('tema'), K = 'rc-ds-tema';
+  function pinta(){
+    var dk = document.body.classList.contains('dk');
+    b.textContent = dk ? '☀' : '☾';
+    b.setAttribute('aria-label', dk ? 'Modo claro' : 'Modo oscuro');
+  }
+  try{ if(localStorage.getItem(K) === 'dk') document.body.classList.add('dk'); }catch(e){}
+  pinta();
+  b.addEventListener('click', function(){
+    var dk = document.body.classList.toggle('dk');
+    try{ localStorage.setItem(K, dk ? 'dk' : 'lt'); }catch(e){}
+    pinta();
+  });
+
+  var enlaces = [].slice.call(document.querySelectorAll('.idx a'));
+  var secs = enlaces.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  var arriba = document.getElementById('arriba'), avance = document.getElementById('avance');
+  function marca(){
+    var y = window.scrollY + 130, i = 0;
+    secs.forEach(function(s, j){ if(s && s.offsetTop <= y) i = j; });
+    enlaces.forEach(function(a, j){ a.classList.toggle('on', j === i); });
+    var alto = document.documentElement.scrollHeight - window.innerHeight;
+    avance.style.width = (alto > 0 ? (window.scrollY / alto) * 100 : 0) + '%';
+    arriba.classList.toggle('se-ve', window.scrollY > 420);
+  }
+  window.addEventListener('scroll', marca, {passive:true});
+  window.addEventListener('resize', marca);
+  marca();
+  arriba.addEventListener('click', function(){
+    var suave = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top:0, behavior: suave ? 'smooth' : 'auto' });
+  });
+})();
+</script>
+</body>
+</html>

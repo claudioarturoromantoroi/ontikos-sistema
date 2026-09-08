@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sistema de diseño · Ontikos</title>
+<style>
+:root{ --bg:#F5F6F8; --surf:#fff; --ink:#12141a; --ink2:#4a4f5c; --ink3:#868c9b;
+       --brd:#dfe2e8; --acc:#D0021B; }
+@media(prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#0e0f13; --surf:#171920; --ink:#f2f2f7; --ink2:#c2c6d0; --ink3:#868c9b; --brd:#272a33; } }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font:16px/1.6 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.w{max-width:760px;margin:0 auto;padding:88px 28px 100px}
+.eyebrow{font-size:.66rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--acc)}
+h1{margin:10px 0 14px;font-size:2.4rem;font-weight:200;letter-spacing:-.035em;line-height:1.08;text-wrap:balance}
+h1 b{font-weight:600}
+.lead{margin:0 0 44px;color:var(--ink2);max-width:58ch}
+.dos{display:grid;gap:16px}
+a.doc{display:block;padding:24px 26px;background:var(--surf);border:1px solid var(--brd);
+      color:inherit;text-decoration:none;transition:border-color .13s,transform .13s}
+a.doc:hover{border-color:var(--acc);transform:translateY(-1px)}
+a.doc:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.k{font-size:.6rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3)}
+.t{font-size:1.16rem;font-weight:700;margin:5px 0 5px}
+.d{font-size:.9rem;color:var(--ink2);margin:0}
+footer{margin-top:52px;padding-top:20px;border-top:1px solid var(--brd);
+       font-size:.78rem;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="eyebrow">Ontikos</div>
+  <h1>Cómo se divide el espacio,<br>cómo se <b>despliega</b> lo que pasa en él.</h1>
+  <p class="lead">Dos documentos. Uno describe el sistema sobre el que se montan los
+  productos; el otro, el primer producto que lo puso a prueba.</p>
+
+  <div class="dos">
+    <a class="doc" href="ds/">
+      <div class="k">El sistema</div>
+      <div class="t">Ontikos · Sistema de funcionamiento</div>
+      <p class="d">Veintiocho reglas de estructura y comportamiento, cada una con su
+      verificación y sus láminas de bien y mal. Ninguna nombra un negocio.</p>
+    </a>
+    <a class="doc" href="dsr/">
+      <div class="k">El producto</div>
+      <div class="t">RetiCash · Sistema · v5</div>
+      <p class="d">Secciones 00 a 14: fichas de color, escala tipográfica, piezas,
+      pantallas y el vocabulario que operó en Middle Market.</p>
+    </a>
+  </div>
+
+  <footer>Las reglas marcadas «portable» viajan a otro ERP o CRM sin traducción.</footer>
+</div>
+</body>
+</html>
