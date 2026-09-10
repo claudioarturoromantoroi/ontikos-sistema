@@ -41,10 +41,23 @@
   --proc-tinta:        var(--ink,   #09090f);
   --proc-tinta2:       var(--ink2,  #2e2e42);
   --proc-tinta3:       var(--ink3,  #6b6b82);
+  /* RELLENO Y TINTA, OTRA VEZ, Y AHORA DENTRO DE UNA PIEZA COMPARTIDA.
+     La primera corrección puso aquí los valores oscuros para que el rótulo se
+     leyera. Pero estas fichas también pintan las marcas y los conectores, que
+     son RELLENO, y ahí el valor bueno es el de la casa. Al comparar la muestra
+     del documento contra app.css saltó la costura: la pieza pedía --green y le
+     ponía el verde de texto, así que el documento enseñaba un verde que no era
+     el del producto.
+     Dos familias, como en app.css: la ficha de relleno lee la de la casa, y la
+     de tinta —sólo la usan los tres sitios que pintan texto— lee la -txt.
+     Los respaldos son los que pasan la norma en cada papel: los de relleno,
+     con blanco encima; los de tinta, sobre su propio tinte. */
   --proc-cumplido:     var(--green, #16a34a);
   --proc-actual:       var(--blue,  #2563eb);
   --proc-fallido:      var(--danger,#c01c1c);
   --proc-plazo:        var(--amber, #d97706);
+  --proc-fallido-t:    var(--danger-txt, #B01818);
+  --proc-plazo-t:      var(--amber-txt,  #9A5C00);
   --proc-plazo-fondo:  rgba(217,119,6,.08);
   --proc-plazo-borde:  rgba(217,119,6,.3);
 }
@@ -86,7 +99,7 @@
 .proc-rot{ font-size:.72rem; font-weight:600; color:var(--proc-tinta3); line-height:1.25; letter-spacing:-.005em }
 .proc-paso.cumplido .proc-rot{ color:var(--proc-tinta) }
 .proc-paso.actual   .proc-rot{ color:var(--proc-tinta); font-weight:700 }
-.proc-paso.fallido  .proc-rot{ color:var(--proc-fallido); font-weight:700 }
+.proc-paso.fallido  .proc-rot{ color:var(--proc-fallido-t); font-weight:700 }
 .proc-sub{ font-size:.62rem; color:var(--proc-tinta3); line-height:1.35;
            font-variant-numeric:tabular-nums; margin-block-start:-3px }
 
@@ -94,10 +107,10 @@
 .proc-plazo{
   display:inline-flex; align-items:center; gap:4px; margin-block-start:1px;
   font-size:.6rem; font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:.02em;
-  color:var(--proc-plazo); background:var(--proc-plazo-fondo);
+  color:var(--proc-plazo-t); background:var(--proc-plazo-fondo);
   border:1px solid var(--proc-plazo-borde); padding:1px 6px; border-radius:2px;
 }
-.proc-plazo.vencido{ color:var(--proc-fallido); background:transparent; border-color:var(--proc-fallido) }
+.proc-plazo.vencido{ color:var(--proc-fallido-t); background:transparent; border-color:var(--proc-fallido) }
 
 /* ══ el mensaje · una frase que termina en verbo ═══════════════════════════ */
 .proc-msg{ margin-block-start:14px; padding:12px 14px;

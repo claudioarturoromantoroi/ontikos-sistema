@@ -5,10 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sistema de diseño · Ontikos</title>
 <style>
-:root{ --bg:#F5F6F8; --surf:#fff; --ink:#12141a; --ink2:#4a4f5c; --ink3:#868c9b;
-       --brd:#dfe2e8; --acc:#D0021B; }
+/* Esta portada llevaba --ink3:#868c9b, el mismo gris que explicaba 155 de los
+   178 defectos de contraste del documento de Ontikos: 3.37:1 sobre el blanco,
+   por debajo del 4.5 que pide WCAG 1.4.3. Estaba aquí porque este archivo vive
+   en otro repositorio y nunca entró en las mediciones — el verificador sólo
+   puede fallar por lo que sabe mirar, y a esta página no la miraba.
+   Y el rojo de la marca como TINTA sobre fondo oscuro daba 2.98:1, que es la
+   misma lección de siempre: la marca es invariante como relleno, no como
+   tinta. */
+:root{ --bg:#F5F6F8; --surf:#fff; --ink:#12141a; --ink2:#4a4f5c; --ink3:#545862;
+       --brd:#dfe2e8; --acc:#c8102e; }
 @media(prefers-color-scheme:dark){ :root:not([data-theme="light"]){
-  --bg:#0e0f13; --surf:#171920; --ink:#f2f2f7; --ink2:#c2c6d0; --ink3:#868c9b; --brd:#272a33; } }
+  --bg:#0e0f13; --surf:#171920; --ink:#f2f2f7; --ink2:#c2c6d0; --ink3:#9aa4b4;
+  --brd:#272a33; --acc:#FF6B7D; } }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
      font:16px/1.6 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}

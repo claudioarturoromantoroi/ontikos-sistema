@@ -3,9 +3,45 @@
 <title>Ontikos · Sistema de funcionamiento</title>
 <style>
 :root{
-  --bg:#F5F6F8; --surf:#fff; --ink:#12141a; --ink2:#4a4f5c; --ink3:#868c9b;
-  --brd:#dfe2e8; --brd2:#eceef2; --acc:#c8102e; --blue:#0f62fe; --grn:#1f7a3f; --amb:#b06a00;
+  /* LA RAMPA DE TINTAS PASA 4.5:1 SOBRE TODA SUPERFICIE DEL DOCUMENTO.
+     --ink3 valía #868c9b y daba 3.37:1 sobre el blanco, 3.11 sobre el papel
+     y 2.17 sobre el chip gris: 155 de los 178 defectos de contraste de este
+     documento salían de esa sola ficha. El valor de ahora es el más claro
+     que cumple sobre las NUEVE superficies que usa el documento, calculado,
+     no elegido. sistema/verificar-fichas.py lo vuelve a calcular en el CI. */
+  --bg:#F5F6F8; --surf:#fff; --ink:#12141a; --ink2:#4a4f5c; --ink3:#545862;
+  --deco:#868c9b;   /* el gris de antes · trazo y relleno, NUNCA texto */
+  --brd:#dfe2e8; --brd2:#eceef2; --acc:#c8102e; --blue:#0f62fe; --grn:#1f7a3f; --amb:#9A5C00;
   --sh:#20242c; --rg:#f2f4f7; --rgb:#cfd5df;
+
+  /* ── EL LÁPIZ, QUE NO ES LA TINTA ───────────────────────────────────────
+     Este documento dibuja maquetas: recuadros que representan pantallas.
+     Sus grises no son la rampa de texto —no llevan texto— pero llevaban 51
+     valores literales repartidos por la hoja, y mientras estén sueltos este
+     documento NO PUEDE TENER TEMA OSCURO: un literal no sabe en qué tema
+     está, y por eso es el único de los dos documentos que se mide sólo en
+     claro. Nombrarlos no es orden por el orden: es el requisito para que el
+     tema oscuro llegue hasta aquí.
+     Se conservan los pasos que había, uno por uno. Fundirlos es la tarea
+     siguiente y hay que hacerla mirando los diagramas: dos bloques vecinos
+     que se vuelven el mismo color dejan de ser dos bloques. ── */
+  /* papel · superficies suaves, de la más clara a la más gris */
+  --pl-1:#fbfcfd; --pl-2:#fafbfc; --pl-3:#f7f8fa; --pl-4:#f4f5f7; --pl-5:#eceef2;
+  /* maqueta · del bloque más claro al trazo más fuerte */
+  --mq-1:#e6e9ef; --mq-2:#e3e6ec; --mq-3:#dfe3ea; --mq-4:#dbe0e8;
+  --mq-5:#c9d0da; --mq-6:#c3cad5; --mq-7:#b9c1cd; --mq-8:#9aa4b4;
+  /* tintes de estado, y el azul con que la maqueta señala lo seleccionado */
+  --tn-ok:#e6f4ea; --tn-dec:#eef1f6; --tn-der:#fbe9ec; --tn-nadie:#fdf3f5;
+  --tn-hl:#eef3ff; --tn-cruce:#f4faf6; --mq-sel:#b6c6e8; --mq-acc:#3f6fd8;
+  /* sobre la banda oscura --sh, que es oscura en cualquier tema */
+  --sh-ink:#f2f4f7; --sh-ink2:#a9b1bf;
+
+  /* La tabla de verificación la escribe un guion compartido con el
+     documento de RetiCash, y pinta sus ✓ y ✗ con --d-ok y --d-debt. Ahí
+     existen; aquí no existían, así que las marcas salían SIN COLOR y no
+     lo notaba nadie: un var() roto no se queja, hereda. Se alían con las
+     fichas equivalentes de este documento. */
+  --d-ok:var(--grn); --d-debt:var(--acc);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -30,7 +66,7 @@ h1 b{font-weight:600}
 .toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--brd);
      border:1px solid var(--brd);margin:36px 0 0}
 .toc a{background:var(--surf);padding:16px 18px 18px;text-decoration:none;display:block;transition:background .12s}
-.toc a:hover{background:#fafbfc}
+.toc a:hover{background:var(--pl-2)}
 .toc a .n{display:block;font-size:.6rem;font-weight:700;letter-spacing:.14em;color:var(--acc);text-transform:uppercase}
 .toc a .t{display:block;font-size:.95rem;font-weight:600;color:var(--ink);margin-block-start:5px;letter-spacing:-.01em}
 .toc a .s{display:block;font-size:.74rem;color:var(--ink3);margin-block-start:3px;line-height:1.4}
@@ -43,23 +79,23 @@ p{max-width:70ch;color:var(--ink2);margin:0 0 14px}
 p.lead{color:var(--ink);font-size:.98rem}
 b.k{color:var(--ink);font-weight:600}
 code{font:.72rem/1.4 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-     background:#eceef2;padding:1px 5px;border-radius:2px;color:#333}
-.cq{border:1px solid var(--rgb);background:#fbfcfd;padding:10px 12px;
-    font:.68rem/1.65 "IBM Plex Mono",ui-monospace,monospace;color:#4a4f5c;white-space:pre;overflow-x:auto;margin:14px 0}
+     background:var(--pl-5);padding:1px 5px;border-radius:2px;color:var(--ink2)}
+.cq{border:1px solid var(--rgb);background:var(--pl-1);padding:10px 12px;
+    font:.68rem/1.65 "IBM Plex Mono",ui-monospace,monospace;color:var(--ink2);white-space:pre;overflow-x:auto;margin:14px 0}
 .cq b{color:var(--grn);font-weight:600} .cq u{text-decoration:none;color:var(--acc)}
 
-.ax{background:var(--sh);color:#f2f4f7;padding:28px 32px;margin:22px 0 8px}
+.ax{background:var(--sh);color:var(--sh-ink);padding:28px 32px;margin:22px 0 8px}
 .ax h4{margin:0 0 10px;font-size:1.4rem;font-weight:300;letter-spacing:-.02em;color:#fff}
 .ax h4 b{font-weight:600}
-.ax p{color:#a9b1bf;max-width:68ch;margin:0 0 12px}
+.ax p{color:var(--sh-ink2);max-width:68ch;margin:0 0 12px}
 .ax p:last-child{margin:0}
-.ax b.w{color:#f2f4f7;font-weight:600}
-.ax ul{margin:0;padding-inline-start:18px;color:#a9b1bf;font-size:.88rem}
-.ax li{margin-block-end:5px} .ax li b{color:#f2f4f7;font-weight:600}
+.ax b.w{color:var(--sh-ink);font-weight:600}
+.ax ul{margin:0;padding-inline-start:18px;color:var(--sh-ink2);font-size:.88rem}
+.ax li{margin-block-end:5px} .ax li b{color:var(--sh-ink);font-weight:600}
 
 /* vocabulario */
 .voc{display:flex;gap:16px;flex-wrap:wrap;margin:20px 0 0}
-.voc > div{flex:1 1 208px;background:var(--surf);border:1px solid var(--brd);padding:15px 17px}
+.voc > div{flex:1 1 208px;min-inline-size:0;overflow-wrap:anywhere;background:var(--surf);border:1px solid var(--brd);padding:15px 17px}
 .voc h5{margin:0 0 4px;font-size:.94rem;font-weight:600}
 .voc p{font-size:.8rem;margin:0}
 
@@ -73,9 +109,9 @@ code{font:.72rem/1.4 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace
 .rule .tx span{display:block;font-size:.84rem;color:var(--ink2);margin-block-start:3px;max-width:66ch}
 .st{flex:0 0 auto;font-size:.55rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
     padding:4px 8px;white-space:nowrap;margin-block-start:2px}
-.st.ganada{background:#e6f4ea;color:var(--grn)}
-.st.declarada{background:#eef1f6;color:var(--ink3)}
-.st.deriva{background:#fbe9ec;color:var(--acc)}
+.st.ganada{background:var(--tn-ok);color:var(--grn)}
+.st.declarada{background:var(--tn-dec);color:var(--ink3)}
+.st.deriva{background:var(--tn-der);color:var(--acc)}
 .pair{display:grid;grid-template-columns:1fr 1fr}
 .pair > div{padding:16px 20px 18px}
 .pair > div:first-child{border-inline-end:1px solid var(--brd)}
@@ -83,7 +119,7 @@ code{font:.72rem/1.4 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace
 .mk{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-block-end:10px}
 .mk.ok{color:var(--grn)} .mk.no{color:var(--acc)}
 .cm{font-size:.76rem;color:var(--ink3);margin:9px 0 0;max-width:48ch}
-.ver{padding:11px 20px;background:#f7f8fa;border-block-start:1px solid var(--brd);font-size:.74rem;color:var(--ink2)}
+.ver{padding:11px 20px;background:var(--pl-3);border-block-start:1px solid var(--brd);font-size:.74rem;color:var(--ink2)}
 .ver b{color:var(--ink);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.6rem;margin-inline-end:8px}
 
 /* ── piezas de dibujo (compartidas por todos los pliegos) ── */
@@ -91,35 +127,35 @@ code{font:.72rem/1.4 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace
     overflow:hidden;position:relative}
 .d-bar{height:15px;background:var(--sh);flex:0 0 auto}
 .d-bar.cut{margin-block-start:-8px}
-.d-st{height:9px;background:#e3e6ec;border-block-start:1px solid var(--rgb);flex:0 0 auto}
+.d-st{height:9px;background:var(--mq-2);border-block-start:1px solid var(--rgb);flex:0 0 auto}
 .d-bd{flex:1;display:flex;min-height:0}
-.d-rail{width:26px;background:#dfe3ea;flex:0 0 auto;border-inline-end:1px solid var(--rgb)}
+.d-rail{width:26px;background:var(--mq-3);flex:0 0 auto;border-inline-end:1px solid var(--rgb)}
 .rg{background:var(--rg);border-inline-end:1px solid var(--rgb);position:relative;min-width:0;
     display:flex;flex-direction:column}
 .rg:last-child{border-inline-end:none}
 .rg.act{background:#fff;box-shadow:inset 0 0 0 2px rgba(200,16,46,.45)}
-.rg.hl{background:#eef3ff;box-shadow:inset 0 0 0 1px rgba(15,98,254,.35)}
-.rg .tt{height:12px;background:#e6e9ef;border-block-end:1px solid var(--rgb);flex:0 0 auto;
-        font-size:.5rem;color:#7b8394;padding-inline:5px;display:flex;align-items:center;letter-spacing:.06em}
+.rg.hl{background:var(--tn-hl);box-shadow:inset 0 0 0 1px rgba(15,98,254,.35)}
+.rg .tt{height:12px;background:var(--mq-1);border-block-end:1px solid var(--rgb);flex:0 0 auto;
+        font-size:.5rem;color:var(--ink3);padding-inline:5px;display:flex;align-items:center;letter-spacing:.06em}
 .rg .b2{flex:1;padding:5px;min-height:0;overflow:hidden}
-.ln{height:5px;background:#dbe0e8;border-radius:1px;margin-block-end:4px}
-.ln.s{width:58%} .ln.m{width:82%} .ln.b{background:#c3cad5} .ln.sel{background:#b6c6e8}
-.sb{position:absolute;right:1px;top:16px;bottom:4px;width:3px;background:#b9c1cd;border-radius:2px}
+.ln{height:5px;background:var(--mq-4);border-radius:1px;margin-block-end:4px}
+.ln.s{width:58%} .ln.m{width:82%} .ln.b{background:var(--mq-6)} .ln.sel{background:var(--mq-sel)}
+.sb{position:absolute;right:1px;top:16px;bottom:4px;width:3px;background:var(--mq-7);border-radius:2px}
 .sb.page{right:-1px;top:0;bottom:0;background:var(--acc);opacity:.55}
 .vsplit{display:flex;flex-direction:column;flex:1;min-height:0}
 .vsplit > .rg{border-inline-end:none;border-block-end:1px solid var(--rgb)}
 .vsplit > .rg:last-child{border-block-end:none}
 .ruler{display:flex;height:9px;border-inline:1px solid var(--rgb)}
-.ruler i{flex:1;border-inline-end:1px dashed #c9d0da} .ruler i:last-child{border-inline-end:none}
+.ruler i{flex:1;border-inline-end:1px dashed var(--mq-5)} .ruler i:last-child{border-inline-end:none}
 .bad-gap{position:absolute;top:0;bottom:0;background:rgba(200,16,46,.13);border-inline:1px solid rgba(200,16,46,.5)}
-.lbl-float{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:#8d94a1;padding:4px 5px 2px}
+.lbl-float{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding:4px 5px 2px}
 .mini{display:flex;gap:7px;align-items:center}
 .mini > .dg,.mini > .sc{flex:1}
 .arrw{color:var(--ink3);font-size:.8rem;flex:0 0 auto}
 .tabs{display:flex;height:12px;flex:0 0 auto}
-.tabs i{flex:0 0 auto;width:26px;background:#e6e9ef;border-inline-end:1px solid var(--rgb);border-block-end:1px solid var(--rgb)}
+.tabs i{flex:0 0 auto;width:26px;background:var(--mq-1);border-inline-end:1px solid var(--rgb);border-block-end:1px solid var(--rgb)}
 .tabs i.on{background:var(--surf);border-block-end-color:transparent;box-shadow:inset 0 2px 0 var(--blue)}
-.tabs .fill{flex:1;background:#e6e9ef;border-block-end:1px solid var(--rgb)}
+.tabs .fill{flex:1;background:var(--mq-1);border-block-end:1px solid var(--rgb)}
 .depth{border:1px solid var(--rgb);background:var(--rg);padding:5px;flex:1;display:flex;gap:5px;min-width:0}
 .depth.v{flex-direction:column}
 .cap{font-size:.6rem;color:var(--ink3);text-align:center;margin-block-start:6px;letter-spacing:.04em}
@@ -131,10 +167,10 @@ code{font:.72rem/1.4 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace
     overflow:hidden;position:relative}
 .sc .bar{height:9px;background:var(--sh);flex:0 0 auto}
 .sc .bd2{flex:1;display:flex;min-height:0}
-.sc .rail{width:13px;background:#dfe3ea;border-inline-end:1px solid var(--rgb);flex:0 0 auto}
-.ov{position:absolute;background:var(--surf);border:1px solid #9aa4b4;box-shadow:0 2px 6px rgba(20,24,32,.22)}
+.sc .rail{width:13px;background:var(--mq-3);border-inline-end:1px solid var(--rgb);flex:0 0 auto}
+.ov{position:absolute;background:var(--surf);border:1px solid var(--mq-8);box-shadow:0 2px 6px rgba(20,24,32,.22)}
 .ov.anchor{width:34%;height:44%;right:8%;top:26%}
-.ov.drawer{top:0;bottom:0;right:0;width:46%;border-inline-start:1px solid #9aa4b4}
+.ov.drawer{top:0;bottom:0;right:0;width:46%;border-inline-start:1px solid var(--mq-8)}
 .ov.modal{left:14%;right:14%;top:16%;bottom:16%}
 .scrim{position:absolute;inset:9px 0 0 0;background:rgba(20,24,32,.42)}
 .lost{position:absolute;background:repeating-linear-gradient(45deg,rgba(200,16,46,.13) 0 4px,rgba(200,16,46,.04) 4px 8px);
@@ -146,10 +182,10 @@ code{font:.72rem/1.4 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace
 .ph .mid{flex:1;overflow:hidden;padding:7px;min-height:0;position:relative;background:var(--surf)}
 .ph .bot{height:25px;background:var(--surf);border-block-start:1px solid var(--rgb);flex:0 0 auto;
          display:flex;justify-content:space-around;align-items:center;padding-block-end:4px}
-.ph .bot i{width:10px;height:10px;border-radius:2px;background:#c9d0da}
+.ph .bot i{width:10px;height:10px;border-radius:2px;background:var(--mq-5)}
 .ph .bot i.on{background:var(--acc)}
 .sheet{position:absolute;left:0;right:0;bottom:0;height:66%;background:var(--surf);
-       border:1px solid #9aa4b4;border-radius:12px 12px 0 0;box-shadow:0 -3px 10px rgba(20,24,32,.16);padding:8px}
+       border:1px solid var(--mq-8);border-radius:12px 12px 0 0;box-shadow:0 -3px 10px rgba(20,24,32,.16);padding:8px}
 .pushed{position:absolute;inset:0;background:var(--surf);padding:7px}
 .phrow{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin:20px 0 4px}
 .phcell{text-align:center}
@@ -161,20 +197,20 @@ code{font:.72rem/1.4 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace
 .tape{margin:22px 0 6px;border:1px solid var(--rgb);background:var(--surf);position:relative;height:78px;display:flex}
 .tape .z{border-inline-end:1px solid var(--rgb);flex:1;position:relative}
 .tape .z:last-child{border-inline-end:none}
-.tape .z.doc{background:#f7f8fa} .tape .z.nadie{background:#fdf3f5} .tape .z.ter{background:#eef1f6}
+.tape .z.doc{background:var(--pl-3)} .tape .z.nadie{background:var(--tn-nadie)} .tape .z.ter{background:var(--tn-dec)}
 .tape .lb{position:absolute;top:6px;left:0;right:0;text-align:center;font-size:.56rem;color:var(--ink3);
           font-variant-numeric:tabular-nums;letter-spacing:.02em}
 .tape .nm{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:.64rem;font-weight:600;color:var(--ink2)}
 .tape .nm.bad{color:var(--acc)}
 .leg{display:flex;gap:18px;flex-wrap:wrap;font-size:.74rem;color:var(--ink3);margin-block-start:14px}
 .leg i{display:inline-block;width:20px;height:9px;vertical-align:-1px;margin-inline-end:6px;border:1px solid var(--rgb)}
-.leg i.d{background:#f7f8fa} .leg i.n{background:#fdf3f5} .leg i.t{background:#eef1f6}
+.leg i.d{background:var(--pl-3)} .leg i.n{background:var(--tn-nadie)} .leg i.t{background:var(--tn-dec)}
 /* tablas */
 table{border-collapse:collapse;width:100%;margin:16px 0 6px;font-size:.85rem;background:var(--surf)}
 th,td{text-align:left;padding:10px 14px;border-block-end:1px solid var(--brd);vertical-align:top}
-th{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:700;background:#f4f5f7}
+th{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:700;background:var(--pl-4)}
 td b{color:var(--ink);font-weight:600}
-td.cross,td.tronco{background:#f4faf6}
+td.cross,td.tronco{background:var(--tn-cruce)}
 td.why{color:var(--ink3);font-size:.8rem}
 tr:last-child td{border-block-end:none}
 .find{background:var(--surf);border:1px solid var(--brd);border-inline-start:3px solid var(--acc);padding:18px 22px;margin:16px 0}
@@ -182,24 +218,52 @@ tr:last-child td{border-block-end:none}
 .find h4{margin:0 0 5px;font-size:1.02rem;font-weight:600}
 .find p{margin:0 0 8px} .find p:last-child{margin:0}
 .bars{display:flex;align-items:flex-end;gap:5px;height:62px;margin:12px 0 24px}
-.bars div{flex:1;background:#c9d0da;position:relative}
+.bars div{flex:1;background:var(--mq-5);position:relative}
 .bars div.hi{background:var(--acc);opacity:.7}
 .bars span{position:absolute;bottom:-15px;left:0;right:0;text-align:center;font-size:.54rem;color:var(--ink3)}
 @media(max-width:900px){.surf5{grid-template-columns:repeat(2,1fr)}}
+
+/* EL ESTRECHO · WCAG 2.1 · 1.4.10 Reflow.
+   A 320 px este documento desbordaba 194 px, y es el documento que declara
+   la regla. Tres causas, ninguna de diseño: un ítem flexible con
+   min-inline-size:auto, tablas cuyo contenido empujaba el ancho, y ejemplos
+   de código con líneas largas. Lo que necesita dos dimensiones —una tabla
+   ancha, un trozo de código— la norma permite servirlo con scroll propio;
+   lo que no permite es empujar la página entera. */
+@media(max-width:42rem){
+  table{ table-layout:fixed }
+  th, td{ padding:8px 10px; overflow-wrap:anywhere }
+  .pair > div{ padding:14px 15px 16px; min-inline-size:0 }
+  .pair{ min-inline-size:0 }
+  .pair code, .ver code{ overflow-wrap:anywhere }
+  .cq{ font-size:.62rem }
+  /* los diagramas en miniatura van de dos en dos; a 320 no caben dos */
+  .mini{ flex-wrap:wrap }
+  .mini > .dg, .mini > .sc{ flex:1 1 100% }
+}
 @media(max-width:780px){.w{padding:0 18px 72px}h1{font-size:2.1rem}
   .pair{grid-template-columns:1fr}
   .pair > div:first-child{border-inline-end:none;border-block-end:1px solid var(--brd)}}
 </style>
 <link rel="stylesheet" href="proceso.css">
 <style>
-  /* la muestra hereda los fichas de la casa, que ahora son los de Ontikos */
+  /* FICHA-EXCEPCIÓN · ESPEJO DE app.css, no una paleta nueva.
+     Esta muestra existe para que la pieza se vea aquí como se ve en
+     producción, y este documento no carga app.css, así que sus valores hay
+     que repetirlos. Un espejo se ensucia solo: --ink3 decía #6b6b82, que era
+     el valor de producción ANTES de corregir el contraste, y llevaba así
+     desde entonces enseñando un gris que ya no existe. Por eso
+     sistema/verificar-fichas.py compara ahora este bloque contra el :root de
+     app.css y falla si se separan. */
   .muestra-proc{ --surf:#fff; --surf2:#f4f4f8; --surf3:#eeeef3; --brd2:rgba(0,0,0,.12);
-                 --ink:#09090f; --ink2:#2e2e42; --ink3:#6b6b82;
+                 --ink:#09090f; --ink2:#2e2e42; --ink3:#5f5f74; --ink4:#686877;
                  --green:#16a34a; --blue:#2563eb; --amber:#d97706; --danger:#c01c1c;
+                 --green-txt:#0E753B; --blue-txt:#1D4FD8; --amber-txt:#9A5C00;
+                 --danger-txt:#B01818;
                  background:var(--surf); border:1px solid var(--brd); padding:24px 26px 22px; margin:16px 0 6px }
   .muestra-proc + .cap-m{ font-size:.72rem;color:var(--ink3);margin:0 0 26px }
   .muestra-proc .titulo{ font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-                         color:#868c9b;margin-block-end:18px }
+                         color:var(--ink3);margin-block-end:18px }
 </style></head><body>
 <div class="w">
 
@@ -484,7 +548,7 @@ tr:last-child td{border-block-end:none}
   <div><h5>En sitio</h5><p style="font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--grn);margin-block-end:8px">no cobra nada</p>
     <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div>
       <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div>
-        <div style="background:#fff;border:1px solid #b9c1cd;padding:3px;margin-block-end:3px">
+        <div style="background:#fff;border:1px solid var(--mq-7);padding:3px;margin-block-end:3px">
           <div class="ln s" style="margin:0 0 3px"></div><div class="ln" style="width:70%;margin:0"></div></div>
         <div class="ln m"></div></div></div></div></div>
     <p>La fila crece donde está. Nada se corre salvo lo que viene debajo.</p></div>
@@ -539,7 +603,7 @@ tr:last-child td{border-block-end:none}
     <div class="mini">
       <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div>
         <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div>
-        <div class="rg act" style="width:36%"><div class="b2"><div class="ln" style="width:40%;background:#e6e9ef"></div></div></div></div></div>
+        <div class="rg act" style="width:36%"><div class="b2"><div class="ln" style="width:40%;background:var(--mq-1)"></div></div></div></div></div>
       <div class="arrw">→</div>
       <div class="sc"><div class="bar"></div><div class="bd2"><div class="rail"></div>
         <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln sel s"></div><div class="ln m"></div></div></div>
@@ -590,7 +654,7 @@ tr:last-child td{border-block-end:none}
       <div class="ov modal" style="top:22%;bottom:22%"><div style="padding:6px">
         <div class="ln s" style="margin-block-end:5px"></div>
         <div style="display:flex;gap:4px;margin-block-start:6px">
-          <div style="flex:1;height:8px;background:#e6e9ef"></div>
+          <div style="flex:1;height:8px;background:var(--mq-1)"></div>
           <div style="flex:1;height:8px;background:var(--acc);opacity:.75"></div></div></div></div></div>
     <p class="cm">Una pregunta y dos salidas. Detrás no hay nada que el usuario pueda seguir haciendo, y así debe ser.</p></div>
   <div><div class="mk no">✗ Mal</div>
@@ -611,7 +675,7 @@ tr:last-child td{border-block-end:none}
     <div class="sc" style="height:88px"><div class="bar"></div><div class="bd2"><div class="rail"></div>
       <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln b s"></div><div class="ln m"></div><div class="ln s"></div></div></div>
       <div class="rg act" style="width:40%"><div class="b2"><div class="ln m"></div><div class="ln s"></div>
-        <div style="display:flex;gap:3px;margin-block-start:4px"><div style="flex:1;height:7px;background:#3f6fd8"></div><div style="flex:1;height:7px;background:#c8102e;opacity:.8"></div></div></div></div>
+        <div style="display:flex;gap:3px;margin-block-start:4px"><div style="flex:1;height:7px;background:var(--mq-acc)"></div><div style="flex:1;height:7px;background:var(--acc);opacity:.8"></div></div></div></div>
     </div></div>
     <p class="cm">El formulario y el dato que lo justifica están en pantalla al mismo tiempo.</p></div>
   <div><div class="mk no">✗ Mal</div>
@@ -651,7 +715,7 @@ tr:last-child td{border-block-end:none}
   <div><div class="mk ok">✓ Bien</div>
     <div class="sc" style="height:80px"><div class="bar"></div><div class="bd2"><div class="rail"></div>
       <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div>
-        <div class="ln sel s" style="height:6px;box-shadow:0 0 0 1px #3f6fd8"></div><div class="ln m"></div></div></div></div>
+        <div class="ln sel s" style="height:6px;box-shadow:0 0 0 1px var(--mq-acc)"></div><div class="ln m"></div></div></div></div>
       <div class="ov drawer" style="width:44%"><div style="padding:5px"><div class="ln m"></div><div class="ln s"></div></div></div>
     </div>
     <p class="cm">La fila que abrió el cajón queda marcada y a la vista. <code>Esc</code> o volver a ella lo cierran.</p></div>
@@ -699,7 +763,7 @@ tr:last-child td{border-block-end:none}
       <div class="rg" style="width:24%"><div class="b2"><div class="ln s"></div><div class="ln m"></div></div></div>
       <div class="rg" style="flex:1"><div class="b2"><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div>
       <div class="rg act" style="width:32%"><div class="b2"><div class="ln m"></div><div class="ln b s"></div>
-        <div style="display:flex;gap:3px;margin-block-start:5px"><div style="flex:1;height:8px;background:#3f6fd8"></div><div style="flex:1;height:8px;background:#c8102e;opacity:.8"></div></div></div></div>
+        <div style="display:flex;gap:3px;margin-block-start:5px"><div style="flex:1;height:8px;background:var(--mq-acc)"></div><div style="flex:1;height:8px;background:var(--acc);opacity:.8"></div></div></div></div>
     </div></div>
     <p class="cm">Las dos acciones están en pantalla desde que la vista abre. Cero clics para poder actuar.</p></div>
   <div><div class="mk no">✗ Mal</div>
@@ -709,7 +773,7 @@ tr:last-child td{border-block-end:none}
         <div class="ov anchor" style="right:4%;top:14%;width:22%;height:24%"></div></div>
       <div class="arrw">→</div>
       <div class="sc" style="height:58px"><div class="bar"></div><div class="bd2"><div class="rail"></div><div class="rg" style="flex:1"></div></div>
-        <div class="ov drawer" style="width:46%"><div style="padding:4px"><div style="height:7px;background:#3f6fd8;width:60%"></div></div></div></div>
+        <div class="ov drawer" style="width:46%"><div style="padding:4px"><div style="height:7px;background:var(--mq-acc);width:60%"></div></div></div></div>
     </div>
     <p class="cm">Menú, después cajón, y recién ahí el botón. Dos aperturas para hacer lo único que la pantalla existe para hacer.</p></div>
 </div>
@@ -856,7 +920,7 @@ si no:               <u>una región</u>
   <div class="phcell">
     <div class="ph"><div class="top"></div><div class="mid">
       <div class="ln m"></div>
-      <div style="border:1px solid #b9c1cd;border-radius:6px;padding:4px;margin-block-end:5px">
+      <div style="border:1px solid var(--mq-7);border-radius:6px;padding:4px;margin-block-end:5px">
         <div class="ln s" style="margin:0 0 4px"></div><div class="ln" style="width:70%;margin:0"></div></div>
       <div class="ln m"></div><div class="ln s"></div></div>
       <div class="bot"><i class="on"></i><i></i><i></i><i></i></div></div>
@@ -866,7 +930,7 @@ si no:               <u>una región</u>
       <div class="ln m"></div><div class="ln s"></div>
       <div class="sheet"><div class="ln m"></div><div class="ln s"></div>
         <div style="position:absolute;left:8px;right:8px;bottom:8px;display:flex;gap:4px">
-          <div style="flex:1;height:10px;background:#e6e9ef"></div><div style="flex:1;height:10px;background:var(--acc);opacity:.75"></div></div></div>
+          <div style="flex:1;height:10px;background:var(--mq-1)"></div><div style="flex:1;height:10px;background:var(--acc);opacity:.75"></div></div></div>
       <div class="lost" style="left:0;right:0;bottom:0;height:66%"></div></div>
       <div class="bot"><i class="on"></i><i></i><i></i><i></i></div></div>
     <div class="nm">Hoja inferior</div><div class="g z">1</div><div class="gl">toca fuera y vuelve</div></div>
@@ -882,7 +946,7 @@ si no:               <u>una región</u>
       <div class="scrim" style="inset:0"></div>
       <div class="sheet" style="height:52%"><div class="ln s"></div>
         <div style="position:absolute;left:8px;right:8px;bottom:8px;display:flex;gap:4px">
-          <div style="flex:1;height:10px;background:#e6e9ef"></div><div style="flex:1;height:10px;background:var(--acc);opacity:.75"></div></div></div>
+          <div style="flex:1;height:10px;background:var(--mq-1)"></div><div style="flex:1;height:10px;background:var(--acc);opacity:.75"></div></div></div>
       <div class="lost" style="inset:0"></div></div>
       <div class="bot"><i class="on"></i><i></i><i></i><i></i></div></div>
     <div class="nm">Modal</div><div class="g f">1 + decidir</div><div class="gl">no se sale sin resolver</div></div>
@@ -923,13 +987,20 @@ si no:               <u>una región</u>
 <div class="ver"><b>Verificación</b> la hoja cambia de forma en la frontera declarada y en ningún otro ancho.</div></div>
 
 <div class="rule" id="r26"><div class="hd"><span class="no">26</span><span class="tx">
-  <b>Una sola orientación, y está defendida</b>
-  <span>Si el producto se diseñó vertical, el horizontal no se tolera a medias: se declara y se bloquea con una pantalla que lo dice.</span></span><span class="st ganada">Ganada</span></div>
-<div class="bd"><div class="cq">@media (orientation: landscape) and (max-width: …){
-  body::before{ content: <b>"Gira tu dispositivo"</b>; position:fixed; inset:0; … }
-}</div>
-  <p class="cm">Es la regla más inusual del sistema y la más firme. Al lado ancho no le aplica: allá el ancho es el material de trabajo.</p></div>
-<div class="ver"><b>Verificación</b> en la orientación no soportada, la pantalla de bloqueo cubre todo y ninguna vista queda operable por debajo.</div></div>
+  <b>La orientación no se restringe</b>
+  <span>El producto se adapta a la orientación que tenga el aparato. Nunca se bloquea una orientación ni se pide girar el dispositivo.</span></span><span class="st ganada">Ganada</span></div>
+<div class="bd">
+  <p class="cm"><b>Esta regla decía lo contrario, estaba marcada Ganada, y era falsa por partida doble.</b></p>
+  <p class="cm">Decía «se declara y se bloquea»: en apaisado por debajo de 900 px la aplicación se tapaba entera con «Gira tu dispositivo».
+  Contradice <b>WCAG 2.1 · 1.3.4 Orientation (AA)</b>, que sólo admite restringir la orientación cuando es <i>esencial</i> —el ejemplo de la norma es un piano, o un cheque que se fotografía—. Una terminal de operación no lo es. Y no era un aviso: era una compuerta que dejaba sin la aplicación entera a quien tiene el teléfono en un soporte o no puede girarlo.</p>
+  <p class="cm">Lo segundo lo destapó la medición. Retirado el bloqueo, en los cuatro tamaños de teléfono en apaisado:</p>
+  <div class="cq">667×375   desborde <b>0</b>   barra 61   útil 314 (84%)
+736×414   desborde <b>0</b>   barra 61   útil 353 (85%)
+844×390   desborde <b>0</b>   barra 61   útil 329 (84%)
+932×430   desborde <b>0</b>   barra 71   útil 359 (83%)</div>
+  <p class="cm">Cero desborde horizontal y entre el 81 y el 86 por ciento de pantalla utilizable. <b>La composición no se rompe en apaisado.</b> El bloqueo defendía contra un problema que no existe, y por eso no se sustituyó por ninguna adaptación: escribir un arreglo para algo que la medición dice que no está roto es el trabajo al ojo que este sistema existe para no hacer.</p>
+  <p class="cm">Queda como <i>Ganada</i> en su forma nueva, y esta vez con la medición al lado: es lo que separa una regla ganada de una declarada.</p></div>
+<div class="ver"><b>Verificación</b> <code>sistema/verificar-pantallas.mjs</code> mide apaisado en las cuatro superficies y falla si alguna vuelve a bloquear la orientación. Antes de retirarlo, las cuatro bloqueaban: eran los últimos cuatro defectos de pantalla del sistema.</div></div>
 
 <div class="rule" id="r27"><div class="hd"><span class="no">27</span><span class="tx">
   <b>Cada sistema tiene su escala de esquina, y son distintas</b>
@@ -1062,17 +1133,17 @@ onpopstate → confirm(<u>"¿Salir?"</u>)     ← el gesto se intercepta</div>
 <table>
 <tr><th>Regla</th><th>Comprobación</th><th>Fecha</th><th>Resultado</th></tr>
 <!-- VERIFICACION-SISTEMA:INICIO -->
-<tr><td><b>17</b></td><td>Hay una frontera, y una sola</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 2 umbrales de terminal · 1056 · 1312</td></tr>
-<tr><td><b>17</b></td><td>Ancho de la tierra de nadie</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 256 px en total · 1056–1311 px (256)</td></tr>
-<tr><td><b>19</b></td><td>Ninguna regla cruza · reglas inertes</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 5 regla(s) declaradas antes de que exista la región · nace en 1312 px</td></tr>
-<tr><td><b>—</b></td><td>Umbrales que deciden algo en la plataforma</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 12 umbrales distintos · 400 · 430 · 520 · 560 · 561 · 600 · 671 · 860 · 900 · 1055 · 1056 · 1312</td></tr>
-<tr><td><b>02</b></td><td>Regiones declaradas en columnas, no en píxeles</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 4 en píxeles · #rc-menu → 78px · .bnav.cds--side-nav--rail: → 74px · .bnav.cds--side-nav.cds--s → 78px</td></tr>
-<tr><td><b>21</b></td><td>La gramática no consulta el agente de usuario</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> cero en el compositor · 2 en core.js, ajenos a la disposición</td></tr>
-<tr><td><b>21</b></td><td>Un ancho de cero no decide nada</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> guarda presente en el compositor</td></tr>
-<tr><td><b>27</b></td><td>Escala de esquina por sistema</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> una región: 17 valores (meta 4) · varias regiones: 0</td></tr>
-<tr><td><b>28</b></td><td>Cambiar de vista es navegar</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> el gesto atrás está interceptado para preguntar si salir, no para volver a la vista anterior</td></tr>
-<tr><td><b>—</b></td><td>Pieza · proceso: de sistema, no de negocio</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> sin literales · sin negocio · 1 umbral (1055 px) · sin animación</td></tr>
-<tr><td><b>—</b></td><td>Pieza · proceso: una sola implementación</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> dos implementaciones · carbon/linea.css aún dibuja: marca · conector · estados · animación</td></tr>
+<tr><td><b>17</b></td><td>Hay una frontera, y una sola</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 2 umbrales de terminal · 1056 · 1312</td></tr>
+<tr><td><b>17</b></td><td>Ancho de la tierra de nadie</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 256 px en total · 1056–1311 px (256)</td></tr>
+<tr><td><b>19</b></td><td>Ninguna regla cruza · reglas inertes</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 5 regla(s) declaradas antes de que exista la región · nace en 1312 px</td></tr>
+<tr><td><b>—</b></td><td>Umbrales que deciden algo en la plataforma</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> 5 umbrales distintos · 671 · 672 · 1055 · 1056 · 1312</td></tr>
+<tr><td><b>02</b></td><td>Regiones declaradas en columnas, no en píxeles</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 4 en píxeles · #rc-menu → 78px · .bnav.cds--side-nav--rail: → 74px · .bnav.cds--side-nav.cds--s → 78px</td></tr>
+<tr><td><b>21</b></td><td>La gramática no consulta el agente de usuario</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> cero en el compositor · 2 en core.js, ajenos a la disposición</td></tr>
+<tr><td><b>21</b></td><td>Un ancho de cero no decide nada</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> guarda presente en el compositor</td></tr>
+<tr><td><b>27</b></td><td>Escala de esquina por sistema</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> una región: 17 valores (meta 4) · varias regiones: 0</td></tr>
+<tr><td><b>28</b></td><td>Cambiar de vista es navegar</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> el gesto atrás está interceptado para preguntar si salir, no para volver a la vista anterior</td></tr>
+<tr><td><b>—</b></td><td>Pieza · proceso: de sistema, no de negocio</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> sin literales · sin negocio · 1 umbral (1055 px) · sin animación</td></tr>
+<tr><td><b>—</b></td><td>Pieza · proceso: una sola implementación</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> dos implementaciones · carbon/linea.css aún dibuja: marca · conector · estados · animación</td></tr>
 <tr><td><b>01</b></td><td>El armazón nunca baja <i style="color:var(--ink3)">· navegador</i></td><td class="mono">4 sep 2026</td><td>Cumple en una región; en varias, sin medir</td></tr>
 <tr><td><b>06</b></td><td>Las pestañas no mueven la región <i style="color:var(--ink3)">· navegador</i></td><td class="mono">—</td><td>No aplica todavía: no hay pestañas de región</td></tr>
 <tr><td><b>16</b></td><td>La acción primaria no se abre <i style="color:var(--ink3)">· navegador</i></td><td class="mono">4 sep 2026</td><td>No cumple: registrar orden exige abrir un panel</td></tr>

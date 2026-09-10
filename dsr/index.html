@@ -25,31 +25,53 @@
    ============================================================ */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap');
 
+/* ═══ RELLENO Y TINTA NO SON LA MISMA FICHA ══════════════════════════════
+   Medido sobre las cuatro superficies de cada tema: el verde daba 2.77:1
+   como texto en claro, el ámbar 2.68; en oscuro el rojo daba 2.98, el azul
+   3.26 y el danger 2.75. Ninguno se leía, y llevaban así desde el principio
+   porque nadie los había medido.
+   La causa está en el comentario de abajo: «la marca es invariante» se
+   escribió pensando en el RELLENO —y ahí es cierto, el rojo de RetiCash no
+   cambia— pero gobernaba también la TINTA. Un relleno no tiene que
+   contrastar con el papel; un texto sí.
+   Así que cada color semántico tiene dos fichas: la de siempre para rellenar
+   y bordear, y una -txt que sí cambia de tema. Es lo que hace Carbon con
+   $link-primary, que tampoco es el mismo en los dos temas.
+   sistema/verificar-fichas.py recalcula todos estos pares en el CI.
+   ═══════════════════════════════════════════════════════════════════════ */
 :root{
   --bg:#ebebf0; --surf:#fff; --surf2:#f4f4f8; --surf3:#eeeef3;
   --brd:rgba(0,0,0,.07); --brd2:rgba(0,0,0,.12); --brd3:rgba(0,0,0,.22);
-  --ink:#09090f; --ink2:#2e2e42; --ink3:#6b6b82; --ink4:#a8a8c0;
+  --ink:#09090f; --ink2:#2e2e42; --ink3:#5f5f74; --ink4:#686877;
+  --deco:#a8a8c0;   /* el --ink4 de antes · trazo y relleno, NUNCA texto */
   --red:#D0021B; --red-bg:rgba(208,2,27,.06); --red-brd:rgba(208,2,27,.18); --red-h:#b8011a;
   --green:#16a34a; --green-bg:rgba(22,163,74,.07); --green-brd:rgba(22,163,74,.2);
   --amber:#d97706; --amber-bg:rgba(217,119,6,.07); --amber-brd:rgba(217,119,6,.22);
   --blue:#2563eb; --blue-bg:rgba(37,99,235,.07); --blue-brd:rgba(37,99,235,.18);
   --danger:#c01c1c; --danger-bg:rgba(192,28,28,.06); --danger-brd:rgba(192,28,28,.18);
+  --red-txt:#C00219; --green-txt:#0E753B; --amber-txt:#9A5C00;
+  --blue-txt:#1D4FD8; --danger-txt:#B01818;
   --f:'DM Sans',system-ui,-apple-system,sans-serif;
   --ease:cubic-bezier(.4,0,.2,1); --t-fast:.14s; --t:.2s; --t-slow:.22s;
 }
-/* ---- modo oscuro: solo redefine superficies, tintas y bordes; la marca es invariante ---- */
+/* ---- modo oscuro: redefine superficies, tintas, bordes y las fichas -txt.
+       La marca es invariante como RELLENO —el rojo de RetiCash no cambia—
+       pero no como TINTA: sobre las superficies oscuras daba 2.98:1. ---- */
 body.dk{
   --bg:#08080f; --surf:#111118; --surf2:#16161f; --surf3:#1c1c27;
   --brd:rgba(255,255,255,.06); --brd2:rgba(255,255,255,.10); --brd3:rgba(255,255,255,.18);
-  --ink:#ededf5; --ink2:#a0a0b8; --ink3:#8a8aa2; --ink4:#66667e;
+  --ink:#ededf5; --ink2:#a0a0b8; --ink3:#8a8aa2; --ink4:#8383a1;
+  --deco:#66667e;
   --red-bg:rgba(208,2,27,.13); --green-bg:rgba(22,163,74,.12);
   --amber-bg:rgba(217,119,6,.12); --blue-bg:rgba(37,99,235,.12); --danger-bg:rgba(192,28,28,.13);
+  --red-txt:#FF6B7D; --green-txt:#3FB574; --amber-txt:#E0A340;
+  --blue-txt:#7FA9FF; --danger-txt:#F2626B;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{font-family:var(--f);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;
   transition:background var(--t) var(--ease),color var(--t) var(--ease)}
-a{color:var(--blue);text-decoration:none}
+a{color:var(--blue-txt);text-decoration:none}
 
 /* transición suave de superficies al alternar modo */
 .app,.appbar,.bnav,.panel,.kpis,.kpi,.seg,.seg button,.tcbig,.fld-in,.alert,.bdg,.modal,.tbl th,.tbl td,.lrow,.kv,.stp,.ubtn{
@@ -65,18 +87,64 @@ a{color:var(--blue);text-decoration:none}
 .app{max-width:480px;margin:0 auto;min-height:100dvh;height:100dvh;display:flex;flex-direction:column;background:var(--surf);overflow:hidden}
 .appbar{flex-shrink:0;display:flex;align-items:center;gap:11px;padding:calc(env(safe-area-inset-top,0px) + 13px) max(20px,env(safe-area-inset-right)) 13px max(20px,env(safe-area-inset-left));border-bottom:1px solid var(--brd);background:var(--surf)}
 .appbar .back{font-size:1.1rem;color:var(--ink2);cursor:pointer;margin:-4px 2px -4px -4px;padding:4px;display:none}
-.appbar .brand{flex-shrink:0;font-size:1.32rem;font-weight:900;letter-spacing:-.05em;text-transform:uppercase;line-height:1;user-select:none}
-.appbar .brand em{color:var(--red);font-style:normal}
-.appbar .role{flex-shrink:0;font-size:.5rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--red);border:1px solid var(--red-brd);padding:3px 7px;background:var(--red-bg);white-space:nowrap}
+/* LA MARCA CEDE, LOS CONTROLES NO, Y ESO NO ES UNA OPINIÓN DE DISEÑO.
+   A 320 px la barra pedía más de lo que hay. Todos sus elementos menos uno
+   tienen un piso fijado por una norma: los cuatro objetivos de toque miden 44
+   por WCAG 2.5.8, y WCAG 1.4.10 prohíbe que a 320 px se pierda funcionalidad o
+   haya scroll horizontal. La marca es el único elemento sin piso normativo,
+   así que es la única variable libre de la ecuación — no porque importe menos,
+   sino porque es la única que la norma deja mover.
+   Cede encogiéndose y truncando, nunca empujando: la identidad sigue ahí y
+   RETI<em>CASH</em> conserva su letra roja, que va primero. Antes tenía
+   flex-shrink:0, que es lo que forzaba a los controles fuera de la pantalla. */
+.appbar .brand{flex-shrink:1;min-inline-size:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-size:1.32rem;font-weight:900;letter-spacing:-.05em;
+  text-transform:uppercase;line-height:1;user-select:none}
+.appbar .brand em{color:var(--red-txt);font-style:normal}
+.appbar .role{flex-shrink:0;font-size:.5rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--red-txt);border:1px solid var(--red-brd);padding:3px 7px;background:var(--red-bg);white-space:nowrap}
 .appbar .title{font-size:.92rem;font-weight:800;letter-spacing:-.01em}
 .appbar .sp{flex:1}
 .appbar .clock{flex-shrink:0;font-variant-numeric:tabular-nums;font-size:.68rem;font-weight:700;color:var(--ink3);display:flex;align-items:center;gap:5px;text-transform:uppercase;letter-spacing:.04em}
-.appbar .clock.warn{color:var(--amber)}
+.appbar .clock.warn{color:var(--amber-txt)}
 .appbar .clock .cdot{width:6px;height:6px;border-radius:50%;background:var(--green)}
 .appbar .clock.warn .cdot{background:var(--amber)}
 .appbar .who{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;min-width:0}
 .appbar .who b{font-size:.74rem;font-weight:700;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .appbar .ubtn{flex-shrink:0}
+
+/* ---------- la barra se pliega en orden declarado ----------
+   Regla 08 de Ontikos: al angostar, las regiones se pliegan en un orden
+   declarado, y la que lleva la acción se pliega última.
+
+   MEDIDO, no estimado. En Caja la barra lleva nueve elementos y siete no
+   se pliegan, así que necesita 418 px pase lo que pase: a 320 se salía
+   98 px y a 360, 58. El botón «Salir» quedaba fuera de la pantalla, que
+   es una acción fuera del alcance del dedo.
+
+   418 cabe desde 672, que es el quiebre md del contrato de rejilla. Ese
+   es el ancho de plegado, y sale de la medición, no del gusto.
+
+   ORDEN DE PLEGADO, del que menos cuesta perder al que más:
+     1 · el reloj de inactividad — informa, no habilita. El reloj sigue
+         corriendo; lo único que se pliega es su lectura.
+     2 · el «Salir» de la barra — NO se pierde la salida: vive también en
+         el menú del avatar (core.js, #rc-miniperfil-salir, mismo logout),
+         que es donde la ponen todos los sistemas. Se pliega la copia, no
+         la acción.
+   No se pliegan: la marca, la campana ni el avatar. La campana avisa y el
+   avatar es el que ahora guarda la salida. */
+@media(max-width:41.98rem){
+  .appbar .clock{display:none}
+  .appbar #rc-logout{display:none}
+  /* 3 · el chip de rol — informa, no habilita, y su contenido NO se pierde:
+       el menú del avatar muestra nombre y rol (core.js). caja.css ya lo
+       plegaba con este mismo argumento; aquí pasa a valer para los tres
+       portales, que es donde el argumento también es cierto.
+       Va ANTES que la marca en la escalera por lo que dice la regla: se
+       pliega lo que informa, se conserva lo que identifica y lo que
+       habilita. */
+  .appbar .role{display:none}
+}
 .appbar .who span{font-size:.54rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
 .appbar .lvl-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:.56rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);background:var(--surf3);border:1px solid var(--brd2);border-radius:9999px;padding:3px 9px;white-space:nowrap;line-height:1}
 
@@ -91,10 +159,16 @@ a{color:var(--blue);text-decoration:none}
 .ni{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex:1 1 0;min-width:0;padding:2px 4px;background:none;border:none;font-family:inherit}
 .ni svg{width:23px;height:23px;stroke:var(--ink4);stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:stroke var(--t-fast)}
 .ni-lbl{font-size:.56rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink4);line-height:1;transition:color var(--t-fast)}
-.ni.on svg{stroke:var(--red)} .ni.on .ni-lbl{color:var(--red)}
+.ni.on svg{stroke:var(--red)} .ni.on .ni-lbl{color:var(--red-txt)}
 
-/* escritorio: nav arriba, horizontal */
-@media(min-width:860px){
+/* escritorio: nav arriba, horizontal.
+   DOS FRONTERAS PARA LA MISMA DECISIÓN, Y ESTE ERA EL HALLAZGO GORDO.
+   Esta hoja movía la navegación de abajo a arriba en 860 px; carbon/
+   reparto.css la manda al riel lateral en 66rem (1056). Las dos se sirven
+   juntas, así que entre 860 y 1055 había un tramo con la tira todavía
+   abajo y la caja ya en modo escritorio. La regla 17 de Ontikos dice que
+   hay una frontera y una sola, y la declara en 1056. Gana la declarada. */
+@media(min-width:66rem){
   .app{max-width:1040px;border-left:1px solid var(--brd);border-right:1px solid var(--brd)}
   .appbar{order:0} .bnav{order:1} .sa{order:2}
   .wrap{padding:24px 28px 48px;max-width:980px;margin:0 auto;width:100%}
@@ -122,7 +196,7 @@ a{color:var(--blue);text-decoration:none}
 .kpi{background:var(--surf);padding:15px 16px}
 .kpi-l{font-size:.5rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
 .kpi-v{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
-.kpi-v.green{color:var(--green)} .kpi-v.red{color:var(--red)} .kpi-v.amber{color:var(--amber)} .kpi-v.ink{color:var(--ink2)}
+.kpi-v.green{color:var(--green-txt)} .kpi-v.red{color:var(--red-txt)} .kpi-v.amber{color:var(--amber-txt)} .kpi-v.ink{color:var(--ink2)}
 .kpi-sub{font-size:.6rem;font-weight:600;color:var(--ink3);margin-top:6px}
 
 /* ---------- segmentado (cuadrado, activo negro) ---------- */
@@ -136,10 +210,10 @@ a{color:var(--blue);text-decoration:none}
 .alert .ic{font-size:.95rem;flex:none;line-height:1.3}
 .alert-t{font-size:.78rem;font-weight:800;margin-bottom:2px}
 .alert-b{font-size:.74rem;color:var(--ink2);line-height:1.5}
-.alert.danger{background:var(--danger-bg);border-color:var(--danger-brd);border-left-color:var(--danger)} .alert.danger .alert-t,.alert.danger .ic{color:var(--danger)}
-.alert.amber{background:var(--amber-bg);border-color:var(--amber-brd);border-left-color:var(--amber)} .alert.amber .alert-t,.alert.amber .ic{color:var(--amber)}
-.alert.green{background:var(--green-bg);border-color:var(--green-brd);border-left-color:var(--green)} .alert.green .alert-t,.alert.green .ic{color:var(--green)}
-.alert.blue{background:var(--blue-bg);border-color:var(--blue-brd);border-left-color:var(--blue)} .alert.blue .alert-t,.alert.blue .ic{color:var(--blue)}
+.alert.danger{background:var(--danger-bg);border-color:var(--danger-brd);border-left-color:var(--danger)} .alert.danger .alert-t,.alert.danger .ic{color:var(--danger-txt)}
+.alert.amber{background:var(--amber-bg);border-color:var(--amber-brd);border-left-color:var(--amber)} .alert.amber .alert-t,.alert.amber .ic{color:var(--amber-txt)}
+.alert.green{background:var(--green-bg);border-color:var(--green-brd);border-left-color:var(--green)} .alert.green .alert-t,.alert.green .ic{color:var(--green-txt)}
+.alert.blue{background:var(--blue-bg);border-color:var(--blue-brd);border-left-color:var(--blue)} .alert.blue .alert-t,.alert.blue .ic{color:var(--blue-txt)}
 
 /* ---------- TC en grande ---------- */
 .tcbig{border:1.5px solid var(--brd2);background:var(--surf);margin-bottom:14px}
@@ -148,7 +222,7 @@ a{color:var(--blue);text-decoration:none}
 .tcbig .c{flex:1;padding:13px 14px;border-right:1px solid var(--brd)} .tcbig .c:last-child{border-right:none}
 .tcbig .l{font-size:.5rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink4);margin-top:5px}
 .tcbig .v{font-size:1.3rem;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.tcbig .v.min{color:var(--green)}
+.tcbig .v.min{color:var(--green-txt)}
 .tcbig-foot{padding:9px 14px;border-top:1px solid var(--brd);font-size:.62rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums;line-height:1.5}
 .tcbig-foot b{font-weight:900;color:var(--ink2)}
 .log-eq{margin-top:9px;font-size:.66rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums;line-height:1.5}
@@ -157,7 +231,7 @@ a{color:var(--blue);text-decoration:none}
 .log-row-h{display:flex;gap:8px;align-items:center;margin-bottom:10px}
 .log-row-h .fld-in{margin:0;flex:1 1 auto;min-width:0;font-weight:800}
 .log-del{flex:0 0 auto;width:36px;height:36px;border:1px solid var(--brd2);background:var(--surf);color:var(--ink3);font-size:1.15rem;line-height:1;cursor:pointer;font-family:var(--f)}
-.log-del:active{background:var(--surf2);color:var(--red)}
+.log-del:active{background:var(--surf2);color:var(--red-txt)}
 .log-row-eq{margin-top:9px;font-size:.62rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums;line-height:1.5}
 .log-seg{margin-bottom:11px}
 .log-seg button{font-size:.58rem;letter-spacing:.04em;padding:9px 4px}
@@ -169,7 +243,7 @@ a{color:var(--blue);text-decoration:none}
 .log-item-n{font-size:.82rem;font-weight:900;letter-spacing:-.01em}
 .log-item-d{font-size:.66rem;font-weight:700;color:var(--ink3);margin-top:3px;font-variant-numeric:tabular-nums}
 .log-item-p{flex:0 0 auto;font-size:.78rem;font-weight:900;font-variant-numeric:tabular-nums}
-.log-item.cross .log-item-p,.log-item.cross .log-item-d{color:var(--red)}
+.log-item.cross .log-item-p,.log-item.cross .log-item-d{color:var(--red-txt)}
 .log-item-w{font-size:.58rem;font-weight:700;color:var(--ink4);margin-top:4px}
 .log-hist-i{padding:11px 14px;border-bottom:1px solid var(--brd)}
 .log-hist-i:last-child{border-bottom:none}
@@ -182,14 +256,14 @@ a{color:var(--blue);text-decoration:none}
 .cxp-n{font-size:.8rem;font-weight:900;letter-spacing:-.01em}
 .cxp-ag{font-size:.58rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink4);margin-left:5px}
 .cxp-d{font-size:.62rem;font-weight:700;color:var(--ink3);margin-top:3px;font-variant-numeric:tabular-nums}
-.cxp-m{flex:0 0 auto;font-size:.8rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--red)}
+.cxp-m{flex:0 0 auto;font-size:.8rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--red-txt)}
 .log-eq{padding:11px 14px;margin:0;border-top:1px solid var(--brd)}
 .log-row .row-2 .field{margin-bottom:0}
 .log-row .fld-lbl{font-size:.55rem;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .log-row .row-2 .fld-in{font-size:.85rem;padding:10px;font-variant-numeric:tabular-nums}
 .log-row.cross{border-color:var(--red)}
-.log-row-eq.bad{color:var(--red)}
-.log-row-eq.bad b{color:var(--red)}
+.log-row-eq.bad{color:var(--red-txt)}
+.log-row-eq.bad b{color:var(--red-txt)}
 .tc-logline{margin-top:9px;font-size:.62rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums;line-height:1.5}
 .tc-logline b{font-weight:900;color:var(--ink2)}
 .tc-sum{border:1px solid var(--brd);margin:12px 0}
@@ -200,25 +274,31 @@ a{color:var(--blue);text-decoration:none}
 .tc-sum-r.tot{border-top:1px solid var(--brd2)}
 .tc-sum-r.tot span{color:var(--ink2);font-weight:800}
 .tc-sum-r.util{background:var(--surf2)}
-.tc-sum-r.util b{color:var(--green)}
+.tc-sum-r.util b{color:var(--green-txt)}
 
 /* ---------- campos / formularios ---------- */
 .field{margin-bottom:13px}
 .fld-lbl{display:block;font-size:.62rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2);margin-bottom:6px}
-.fld-lbl .req{color:var(--red)}
+.fld-lbl .req{color:var(--red-txt)}
 .fld-in,select.fld-in,textarea.fld-in{width:100%;font-family:var(--f);font-size:.92rem;font-weight:600;color:var(--ink);background:var(--surf);border:1.5px solid var(--brd2);padding:11px 12px;-webkit-appearance:none;appearance:none;transition:border-color var(--t-fast),background var(--t),color var(--t)}
 .fld-in:focus{outline:none;border-color:var(--red)}
 .fld-in::placeholder{color:var(--ink4);font-weight:500}
 .fld-hint{font-size:.66rem;color:var(--ink3);margin-top:5px}
-.row-2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-@media(max-width:430px){.row-2{grid-template-columns:1fr}}
+/* Cuatro rejillas de dos columnas llevaban cuatro quiebres distintos
+   —430, 520, 560 y 560— para la misma decisión: «dos columnas hasta que
+   se estrechan demasiado». Ninguno era un quiebre del sistema; eran
+   anchos de ventana que quedaron bien en la pantalla de quien los
+   escribió. Ahora se declara la restricción de verdad —cuánto puede
+   estrecharse una columna— y el reparto sale solo. Además vale dentro de
+   un panel lateral, cosa que un media query nunca supo hacer. */
+.row-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:11px}
 
 /* ---------- ojo de contraseña (dentro del cajón de la clave) ---------- */
 .fld-pass{position:relative;display:block}
 .fld-pass .fld-in{padding-right:44px}
 .fld-eye{position:absolute;right:3px;top:50%;transform:translateY(-50%);background:none;border:none;padding:8px;cursor:pointer;color:var(--ink4);display:flex;align-items:center}
 .fld-eye:active{color:var(--ink2)}
-.fld-eye.on{color:var(--red)}
+.fld-eye.on{color:var(--red-txt)}
 .fld-eye svg{width:19px;height:19px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
 
 /* ---------- stepper +/− (precio con clamp a frontera · montos enteros) ---------- */
@@ -246,16 +326,16 @@ a{color:var(--blue);text-decoration:none}
 .btn-sm{padding:7px 11px;font-size:.66rem}
 .ubtn{font-family:var(--f);font-size:.66rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:6px 10px;background:var(--surf);border:1.5px solid var(--brd2);color:var(--ink);cursor:pointer;border-radius:7px}
 .ubtn:active{background:var(--surf2)}
-.ubtn.ok{color:var(--green);border-color:var(--green-brd);background:var(--green-bg)}
-.ubtn.no{color:var(--red);border-color:var(--red-brd);background:var(--red-bg)}
+.ubtn.ok{color:var(--green-txt);border-color:var(--green-brd);background:var(--green-bg)}
+.ubtn.no{color:var(--red-txt);border-color:var(--red-brd);background:var(--red-bg)}
 
 /* ---------- badges ---------- */
 .bdg{display:inline-flex;align-items:center;gap:5px;font-size:.56rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--brd2);background:var(--surf2);color:var(--ink2);white-space:nowrap}
-.bdg.green{color:var(--green);background:var(--green-bg);border-color:var(--green-brd)}
-.bdg.amber{color:var(--amber);background:var(--amber-bg);border-color:var(--amber-brd)}
+.bdg.green{color:var(--green-txt);background:var(--green-bg);border-color:var(--green-brd)}
+.bdg.amber{color:var(--amber-txt);background:var(--amber-bg);border-color:var(--amber-brd)}
 .bdg.gray{color:var(--ink3);background:var(--surf3);border-color:var(--brd2)}
-.bdg.blue{color:var(--blue);background:var(--blue-bg);border-color:var(--blue-brd)}
-.bdg.red{color:var(--red);background:var(--red-bg);border-color:var(--red-brd)}
+.bdg.blue{color:var(--blue-txt);background:var(--blue-bg);border-color:var(--blue-brd)}
+.bdg.red{color:var(--red-txt);background:var(--red-bg);border-color:var(--red-brd)}
 
 /* ---------- tablas ---------- */
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;cursor:grab}
@@ -290,12 +370,10 @@ a{color:var(--blue);text-decoration:none}
 .empty{text-align:center;padding:34px 18px;color:var(--ink3);font-size:.8rem}
 .divider{height:1px;background:var(--brd);margin:14px 0}
 .hidden{display:none!important}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-@media(max-width:520px){.grid-2{grid-template-columns:1fr}}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:11px}
 
 /* ---------- tendencias (barras diarias que crecen, sobrio) ---------- */
-.charts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-@media(max-width:560px){.charts{grid-template-columns:1fr}}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:14px}
 .chart{position:relative;display:flex;align-items:flex-end;gap:5px;height:118px;border-bottom:1px solid var(--brd3)}
 .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0;gap:3px}
 .bar-val{font-size:.5rem;font-weight:800;color:var(--ink2);white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1}
@@ -304,23 +382,23 @@ a{color:var(--blue);text-decoration:none}
 .chart-x{display:flex;gap:5px;margin-top:6px}
 .chart-x span{flex:1;text-align:center;font-size:.54rem;font-weight:700;color:var(--ink4)}
 .objline{position:absolute;left:0;right:0;border-top:1px dashed var(--amber)}
-.objlbl{position:absolute;right:0;font-size:.52rem;font-weight:800;color:var(--amber);transform:translateY(-50%);background:var(--surf);padding:0 3px}
+.objlbl{position:absolute;right:0;font-size:.52rem;font-weight:800;color:var(--amber-txt);transform:translateY(-50%);background:var(--surf);padding:0 3px}
 /* barra de progreso / ritmo */
 .bar-track{height:7px;background:var(--surf3);overflow:hidden;margin:11px 0 0}
 .bar-fill{height:100%;background:var(--danger);width:0;transition:width .6s var(--ease)}
 .bar-fill.g{background:var(--green)} .bar-fill.a{background:var(--amber)}
 .pace-lbl{font-size:.72rem;font-weight:800;margin-top:9px}
-.pace-lbl.green{color:var(--green)} .pace-lbl.amber{color:var(--amber)} .pace-lbl.red{color:var(--red)}
+.pace-lbl.green{color:var(--green-txt)} .pace-lbl.amber{color:var(--amber-txt)} .pace-lbl.red{color:var(--red-txt)}
 .pace-verdict{font-size:.76rem;color:var(--ink2);line-height:1.5;margin-top:6px}
 .pace-verdict strong{font-weight:900;color:var(--ink)}
 /* TABLERO de control "Cómo vamos" — instrumentos (números), no alertas */
 .dash-hero{margin-bottom:14px}
 .dash-core{margin-bottom:16px}
 .dash-var{display:inline-block;font-size:.58rem;font-weight:800;letter-spacing:0;padding:0 5px;border-radius:9999px;white-space:nowrap;text-transform:none;vertical-align:middle}
-.dash-var.up{color:var(--green);background:var(--green-bg)}
-.dash-var.down{color:var(--red);background:var(--red-bg)}
+.dash-var.up{color:var(--green-txt);background:var(--green-bg)}
+.dash-var.down{color:var(--red-txt);background:var(--red-bg)}
 .dash-more{font-size:.7rem;font-weight:800;color:var(--ink3);padding:9px 4px;text-align:center}
-.cli-fuga{display:inline-block;font-size:.54rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--red);background:var(--red-bg);border:1px solid var(--red-brd);border-radius:9999px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+.cli-fuga{display:inline-block;font-size:.54rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--red-txt);background:var(--red-bg);border:1px solid var(--red-brd);border-radius:9999px;padding:2px 7px;margin-left:6px;vertical-align:middle}
 .cli-row.fuga{box-shadow:inset 3px 0 0 var(--red)}
 /* Operación: 3 accesos grandes (Órdenes · Caja · Campañas) */
 .op-access{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;margin-bottom:14px}
@@ -328,9 +406,9 @@ a{color:var(--blue);text-decoration:none}
 .op-card:active{background:var(--surf2)} .op-card:hover{border-color:var(--brd3)}
 .op-card-t{font-size:.92rem;font-weight:900;color:var(--ink);letter-spacing:-.01em}
 .op-card-s{font-size:.66rem;color:var(--ink3);margin-top:2px;line-height:1.3}
-@media(max-width:560px){.op-access{gap:7px}.op-card{text-align:center;padding:12px 6px}.op-card-s{display:none}}
+@media(max-width:41.98rem){.op-access{gap:7px}.op-card{text-align:center;padding:12px 6px}.op-card-s{display:none}}
 /* ARREGLO 1 — filtros de Órdenes: chips en wrap (móvil únicamente) */
-@media(max-width:560px){
+@media(max-width:41.98rem){
   #ord-filtro{flex-wrap:wrap;border:none;gap:6px;background:transparent;margin-bottom:12px}
   #ord-filtro button{flex:0 0 auto;border:1.5px solid var(--brd2);border-radius:99px;padding:7px 13px;border-right:1.5px solid var(--brd2)}
   #ord-filtro button.on{background:var(--ink);border-color:var(--ink);color:var(--surf)}
@@ -338,31 +416,35 @@ a{color:var(--blue);text-decoration:none}
 /* Publicar TC: cajas con signo (= costo, + venta, − compra) */
 .tc-cbox{display:flex;gap:12px;align-items:stretch;border:1.5px solid var(--brd3);border-radius:12px;padding:13px;background:var(--surf2);margin-bottom:12px}
 .tc-cbox-b{flex:1;min-width:0}
-.tc-margins{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px}
+.tc-margins{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:6px}
 .tc-mbox{display:flex;gap:11px;align-items:stretch;border:1.5px solid var(--brd2);border-radius:12px;padding:13px;background:var(--surf);transition:border-color .15s,background .15s}
 .tc-mbox.sell{border-color:var(--green-brd);background:var(--green-bg)}
 .tc-mbox.cross{border-color:var(--red);background:var(--red-bg)}
 .tc-mbox-b{flex:1;min-width:0}
 .tc-sign{font-size:1.7rem;font-weight:900;line-height:1;align-self:center;width:24px;text-align:center;flex:none}
-.tc-sign.base{color:var(--ink3)} .tc-mbox.sell .tc-sign{color:var(--green)} .tc-mbox.buy .tc-sign{color:var(--ink2)} .tc-mbox.cross .tc-sign{color:var(--red)}
+.tc-sign.base{color:var(--ink3)} .tc-mbox.sell .tc-sign{color:var(--green-txt)} .tc-mbox.buy .tc-sign{color:var(--ink2)} .tc-mbox.cross .tc-sign{color:var(--red-txt)}
 .tc-cbox .fld-in,.tc-mbox .fld-in{margin:6px 0 0}
 .tc-result{font-size:.82rem;font-weight:900;margin-top:9px;font-variant-numeric:tabular-nums;color:var(--ink)}
-.tc-result.green{color:var(--green)} .tc-mbox.cross .tc-result{color:var(--red)}
-@media(max-width:560px){.tc-margins{grid-template-columns:1fr}}
+.tc-result.green{color:var(--green-txt)} .tc-mbox.cross .tc-result{color:var(--red-txt)}
 
 /* ---------- toast ---------- */
 .toast-wrap{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,12px) + 78px);transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center;width:max-content;max-width:90vw}
-@media(min-width:860px){.toast-wrap{bottom:28px}}
+/* el aviso sube cuando la tira de abajo deja de estar, no antes: misma
+   frontera que la navegación, o el aviso flota sobre nada. */
+@media(min-width:66rem){.toast-wrap{bottom:28px}}
 .toast{background:var(--ink);color:var(--surf);font-size:.76rem;font-weight:700;padding:11px 18px;box-shadow:0 10px 40px rgba(0,0,0,.18);animation:fadeIn var(--t) var(--ease)}
 .toast.ok{background:var(--green);color:#fff} .toast.err{background:var(--danger);color:#fff}
 
 /* ---------- modal (hoja inferior en móvil) ---------- */
 .ovl{position:fixed;inset:0;background:rgba(9,9,15,.5);z-index:150;display:flex;align-items:flex-end;justify-content:center;animation:fin .15s ease}
-@media(min-width:561px){.ovl{align-items:center}.modal{border-radius:16px}}   /* escritorio (admin): modal centrado; móvil/cliente sigue como hoja inferior */
-@media(min-width:600px){.ovl{align-items:center}}
+/* Eran tres reglas con dos umbrales inventados y una contradicción: 561
+   ponía el radio en 16 y 600 lo dejaba en 4, y 600 repetía el centrado que
+   561 ya había puesto. Queda una, en el quiebre md de Carbon: por debajo
+   es hoja inferior, por encima es modal centrado. */
+@media(min-width:42rem){.ovl{align-items:center}}
 @keyframes fin{from{opacity:0}to{opacity:1}}
 .modal{background:var(--surf);width:100%;max-width:460px;padding:22px 20px calc(env(safe-area-inset-bottom,0px) + 22px);max-height:90vh;overflow:auto;animation:sup .2s var(--ease)}
-@media(min-width:600px){.modal{border-radius:4px;padding-bottom:22px}}
+@media(min-width:42rem){.modal{border-radius:4px;padding-bottom:22px}}
 @keyframes sup{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
 .modal-h{font-size:1.02rem;font-weight:900;letter-spacing:-.02em;margin-bottom:3px}
 .modal-x{position:absolute;top:14px;right:14px;font-size:1.5rem;line-height:1;color:var(--ink3);background:none;border:none;cursor:pointer;padding:2px 8px;font-family:var(--f)}
@@ -376,17 +458,17 @@ a{color:var(--blue);text-decoration:none}
 .login-wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(180deg,var(--bg),var(--surf3))}
 .login-card{background:var(--surf);border:1.5px solid var(--brd2);width:100%;max-width:370px;padding:30px 26px}
 .login-brand{font-size:1.7rem;font-weight:900;letter-spacing:-.055em;text-transform:uppercase;line-height:1;margin-bottom:6px}
-.login-brand em{color:var(--red);font-style:normal}
+.login-brand em{color:var(--red-txt);font-style:normal}
 .login-tag{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:24px}
-.login-err{background:var(--red-bg);border:1px solid var(--red-brd);border-left:3px solid var(--red);color:var(--red);font-size:.74rem;font-weight:700;padding:10px 12px;margin-bottom:14px}
+.login-err{background:var(--red-bg);border:1px solid var(--red-brd);border-left:3px solid var(--red);color:var(--red-txt);font-size:.74rem;font-weight:700;padding:10px 12px;margin-bottom:14px}
 .login-foot{font-size:.56rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink4);text-align:center;margin-top:18px}
 .login-ok{text-align:center}
-.login-ok .ico{font-size:2rem;color:var(--green);margin-bottom:8px}
+.login-ok .ico{font-size:2rem;color:var(--green-txt);margin-bottom:8px}
 
 .appfoot{text-align:center;padding:20px 16px 28px;margin-top:20px;border-top:1.5px solid var(--brd2);color:var(--ink4);font-size:.72rem;letter-spacing:.02em;line-height:1.5}
 
 /* móvil: header compacto (sin desbordes ni rol duplicado) · KPIs en una columna */
-@media(max-width:560px){
+@media(max-width:41.98rem){
   .appbar{gap:7px;padding-left:12px;padding-right:12px}
   .appbar .role{font-size:.46rem;letter-spacing:.1em;padding:3px 5px}
   .appbar .clock{font-size:.6rem}
@@ -418,7 +500,7 @@ a{color:var(--blue);text-decoration:none}
 .wk-lbl{margin-top:4px;font-size:.62rem;letter-spacing:.06em;color:var(--ink4);text-transform:uppercase}
 /* Tendencia de ganancias del vendedor: barras diarias vs línea de meta */
 .trend{position:relative;display:flex;align-items:flex-end;gap:3px;height:90px;border-bottom:1.5px solid var(--brd2)}
-.trend-bar{flex:1;min-height:2px;background:var(--ink4)}
+.trend-bar{flex:1;min-height:2px;background:var(--deco)}
 .trend-bar.hit{background:var(--green)}
 .trend-meta{position:absolute;left:0;right:0;height:0;border-top:1.5px dashed var(--ink3)}
 
@@ -457,29 +539,28 @@ a{color:var(--blue);text-decoration:none}
 .beh-nudge{display:flex;align-items:center;gap:11px;background:var(--green-bg);border:1.5px solid var(--green-brd);border-radius:12px;padding:13px 14px}
 .beh-nudge-ic{width:26px;height:26px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;flex-shrink:0}
 .beh-nudge-txt{font-size:.74rem;color:var(--ink2);line-height:1.45}
-.beh-nudge-txt strong{color:var(--green);font-weight:800}
+.beh-nudge-txt strong{color:var(--green-txt);font-weight:800}
 
 /* ── encabezado de campaña (4 estados, tarjeta redondeada) ── */
 .camp{display:flex;align-items:flex-start;gap:12px;padding:14px 15px;border-radius:14px;margin-bottom:16px;border:1.5px solid var(--brd2);background:var(--surf)}
 .camp-ic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;color:#fff}
 .camp-t{font-size:.84rem;font-weight:800;margin-bottom:3px;letter-spacing:-.01em}
 .camp-s{font-size:.74rem;color:var(--ink2);line-height:1.5}
-.camp.blue{background:var(--blue-bg);border-color:var(--blue-brd)} .camp.blue .camp-t{color:var(--blue)} .camp.blue .camp-ic{background:var(--blue)}
-.camp.green{background:var(--green-bg);border-color:var(--green-brd)} .camp.green .camp-t{color:var(--green)} .camp.green .camp-ic{background:var(--green)}
-.camp.amber{background:var(--amber-bg);border-color:var(--amber-brd)} .camp.amber .camp-t{color:var(--amber)} .camp.amber .camp-ic{background:var(--amber)}
+.camp.blue{background:var(--blue-bg);border-color:var(--blue-brd)} .camp.blue .camp-t{color:var(--blue-txt)} .camp.blue .camp-ic{background:var(--blue)}
+.camp.green{background:var(--green-bg);border-color:var(--green-brd)} .camp.green .camp-t{color:var(--green-txt)} .camp.green .camp-ic{background:var(--green)}
+.camp.amber{background:var(--amber-bg);border-color:var(--amber-brd)} .camp.amber .camp-t{color:var(--amber-txt)} .camp.amber .camp-ic{background:var(--amber)}
 
 /* ── cotización · hero del cliente ── */
 /* Componente teléfono con selector de país (RC.phoneInput) */
 .rc-phone{display:flex;gap:8px;align-items:stretch}
-.rc-phone-cc{flex:0 0 auto;min-width:120px;background:var(--surf2);border:1px solid var(--brd2);border-radius:8px;padding:8px 10px;font-family:var(--f);font-size:.86rem;color:var(--ink);cursor:pointer}
+.rc-phone-cc{flex:0 0 auto;min-width:clamp(96px,26vw,120px);background:var(--surf2);border:1px solid var(--brd2);border-radius:8px;padding:8px 10px;font-family:var(--f);font-size:.86rem;color:var(--ink);cursor:pointer}
 .rc-phone-cc:focus{outline:none;border-color:var(--red)}
 .rc-phone-num{flex:1;min-width:0}
-@media(max-width:400px){ .rc-phone-cc{min-width:96px;font-size:.78rem} }
 .quote{background:var(--surf);border:1.5px solid var(--brd2);border-radius:16px;padding:20px 18px;margin-bottom:16px}
 /* modo campaña vendedor · oferta cerrada: borde verde + input verde. Sentido y stepper quedan sin pointer-events desde JS. */
 .quote.mercado-locked{border:2px solid var(--green);box-shadow:0 0 0 4px var(--green-bg)}
 .quote.mercado-locked #q-seg{opacity:.6;pointer-events:none}
-.quote.mercado-locked .q-amt-inp{color:var(--green)}
+.quote.mercado-locked .q-amt-inp{color:var(--green-txt)}
 .quote-ey{font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin-bottom:14px}
 .quote-inp-row{display:flex;align-items:baseline;gap:8px;border-bottom:2px solid var(--brd2);padding-bottom:10px;transition:border-color .15s}
 .quote-inp-row:focus-within{border-bottom-color:var(--red)}
@@ -492,9 +573,9 @@ a{color:var(--blue);text-decoration:none}
 .quote-sug-l{font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3)}
 .quote-sug-v{font-size:1.15rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 .quote-util-card{background:var(--green-bg);border:1.5px solid var(--green-brd);border-radius:14px;padding:15px 16px;margin-top:14px}
-.quote-util-l{font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);opacity:.9;margin-bottom:5px}
-.quote-util-v{font-size:1.9rem;font-weight:900;color:var(--green);letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
-.quote-util-sub{font-size:.74rem;font-weight:600;color:var(--green);opacity:.85;margin-top:3px}
+.quote-util-l{font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-txt);opacity:.9;margin-bottom:5px}
+.quote-util-v{font-size:1.9rem;font-weight:900;color:var(--green-txt);letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.quote-util-sub{font-size:.74rem;font-weight:600;color:var(--green-txt);opacity:.85;margin-top:3px}
 
 /* ── tabla de 3 columnas · más aire, redondeada ── */
 .t3-lbl{font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin:6px 2px 10px}
@@ -507,7 +588,7 @@ a{color:var(--blue);text-decoration:none}
 .t3-row.on{background:var(--red-bg)}
 .t3-c{padding:15px 14px;font-size:.88rem;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
 .t3-c.num{text-align:right;color:var(--ink)}
-.t3-c.green{color:var(--green);font-weight:800}
+.t3-c.green{color:var(--green-txt);font-weight:800}
 
 /* ── botón ejecutar con peso ── */
 .cli-exec{width:100%;background:var(--red);color:#fff;border:none;border-radius:14px;padding:18px;font-family:var(--f);font-size:1rem;font-weight:800;letter-spacing:-.01em;cursor:pointer;margin-top:18px;box-shadow:0 4px 16px rgba(208,2,27,.22);transition:transform .12s,box-shadow .12s,background .12s}
@@ -521,7 +602,7 @@ a{color:var(--blue);text-decoration:none}
 .beh-w{background:var(--surf2);border-radius:16px;padding:18px;margin-bottom:12px}
 .beh-w.green{background:var(--green-bg);border:1.5px solid var(--green-brd)}
 .beh-w-ey{font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin-bottom:12px}
-.beh-w-ey.green{color:var(--green);opacity:.9}
+.beh-w-ey.green{color:var(--green-txt);opacity:.9}
 .beh-w-main{display:flex;align-items:baseline;gap:9px;margin-bottom:12px}
 .beh-w-n{font-size:2.1rem;font-weight:900;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
 .beh-w-l{font-size:.85rem;font-weight:500;color:var(--ink2)}
@@ -530,7 +611,7 @@ a{color:var(--blue);text-decoration:none}
 .beh-sq.e{background:var(--brd2);box-shadow:none}
 .beh-sq.cur{background:transparent;border:2px dashed var(--amber)}
 .beh-w-m{font-size:.74rem;font-weight:500;color:var(--ink2)}
-.beh-w-m strong{color:var(--amber);font-weight:800}
+.beh-w-m strong{color:var(--amber-txt);font-weight:800}
 
 /* ══ Cuadrícula de semanas del cliente (mismo lenguaje visual que la semana del vendedor) ══ */
 .cli-week{display:flex;gap:6px;margin-bottom:12px}
@@ -545,8 +626,12 @@ a{color:var(--blue);text-decoration:none}
 /* ══ Perfil · sección "Cómo ganas puntos" · reglas del motor SCI ══ */
 .pf-rules{display:flex;flex-direction:column;gap:10px}
 /* Badge ⓘ visible pero contenido: abre modal "Cómo ganas puntos" desde la barra de progreso (Mercado y Perfil). */
-.rule-info{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;margin-left:10px;border:1.5px solid #3b82f6;background:rgba(59,130,246,.14);color:#3b82f6;font-size:.85rem;font-weight:800;line-height:1;cursor:pointer;border-radius:6px;vertical-align:middle;transition:background .15s,color .15s,box-shadow .15s}
-.rule-info:hover,.rule-info:focus{background:#3b82f6;color:#fff;outline:none;box-shadow:0 2px 8px rgba(59,130,246,.35)}
+.rule-info{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;margin-left:10px;border:1.5px solid var(--blue);background:rgba(59,130,246,.14);color:var(--blue-txt);font-size:.85rem;font-weight:800;line-height:1;cursor:pointer;border-radius:6px;vertical-align:middle;transition:background .15s,color .15s,box-shadow .15s}
+/* Era #3b82f6: un SEGUNDO azul, distinto del --blue de la casa, escrito a
+   mano en cinco sitios. Con blanco encima daba 3.68:1 y no se leía; --blue
+   da 5.17. Un literal al lado de una ficha que ya existe no es desorden:
+   es una decisión tomada dos veces, y sólo una está medida. */
+.rule-info:hover,.rule-info:focus{background:var(--blue);color:#fff;outline:none;box-shadow:0 2px 8px rgba(37,99,235,.35)}
 .pf-rule{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--surf3)}
 .pf-rule.pos{background:color-mix(in srgb,var(--green) 8%,var(--surf3))}
 .pf-rule.neg{background:color-mix(in srgb,var(--red) 8%,var(--surf3))}
@@ -564,7 +649,7 @@ a{color:var(--blue);text-decoration:none}
 .chart-month-t{font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
 .chart-month-sub{font-size:.7rem;font-weight:600;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase}
 .chart-month-svg{width:100%;height:auto;display:block}
-.cm-bar{fill:#3b82f6;opacity:.85}
+.cm-bar{fill:var(--blue);opacity:.85}
 .cm-bar.zero{fill:var(--brd2);opacity:.5}
 .cm-line{fill:none;stroke:var(--amber);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
 .cm-dot{fill:var(--amber);stroke:var(--surf2);stroke-width:1.5}
@@ -572,13 +657,13 @@ a{color:var(--blue);text-decoration:none}
 .chart-month-lgd{display:flex;gap:16px;margin-top:10px;font-size:.7rem;font-weight:600;color:var(--ink3);letter-spacing:.03em}
 .lgd-item{display:inline-flex;align-items:center;gap:6px}
 .lgd-swatch{display:inline-block;width:12px;height:12px;border-radius:3px}
-.lgd-swatch.bar{background:#3b82f6}
+.lgd-swatch.bar{background:var(--blue)}
 .lgd-swatch.line{background:var(--amber);height:3px;border-radius:2px}
 
 /* empujón de ganancia (tarjeta verde) */
 .beh-nudge2{}
-.beh-nudge2-v{font-size:2.3rem;font-weight:900;color:var(--green);letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums;margin-bottom:6px}
-.beh-nudge2-l{font-size:.82rem;font-weight:500;color:var(--green);opacity:.92;line-height:1.45}
+.beh-nudge2-v{font-size:2.3rem;font-weight:900;color:var(--green-txt);letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums;margin-bottom:6px}
+.beh-nudge2-l{font-size:.82rem;font-weight:500;color:var(--green-txt);opacity:.92;line-height:1.45}
 .beh-nudge2-l strong{font-weight:800}
 
 /* la barra de progreso conductual usa la animación de growBars (data-w) */
@@ -592,7 +677,7 @@ a{color:var(--blue);text-decoration:none}
 /* ── TC del día (animado) ── */
 .q-tc-row{margin-bottom:16px}
 .q-tc-ey{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px}
-.q-tc{font-size:2.6rem;font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--green);font-variant-numeric:tabular-nums}
+.q-tc{font-size:2.6rem;font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--green-txt);font-variant-numeric:tabular-nums}
 .q-tc-cur{font-size:.82rem;font-weight:500;color:var(--ink3);letter-spacing:0}
 
 /* ── monto con stepper +/− ── */
@@ -612,10 +697,10 @@ a{color:var(--blue);text-decoration:none}
 .q-fast-btn.on{background:var(--red);color:#fff;border-color:var(--red)}
 
 /* etiqueta de nivel del cliente en el header */
-.cli-tag{font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#d97706;padding:5px 11px;border-radius:9999px;white-space:nowrap}
+.cli-tag{font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--amber-txt);padding:5px 11px;border-radius:9999px;white-space:nowrap}
 
 /* MDO · monto restante como aviso importante: rojo, peso, y palpitando */
-.mdo-rest{color:var(--red);font-weight:900;animation:mdo-pulse 1.1s ease-in-out infinite;display:inline-block}
+.mdo-rest{color:var(--red-txt);font-weight:900;animation:mdo-pulse 1.1s ease-in-out infinite;display:inline-block}
 @keyframes mdo-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(1.06)}}
 @media(prefers-reduced-motion:reduce){.mdo-rest{animation:none}}
 
@@ -623,24 +708,24 @@ a{color:var(--blue);text-decoration:none}
 .clk{display:flex;gap:13px;align-items:flex-start;background:var(--amber-bg);border:1.5px solid var(--amber-brd);border-radius:16px;padding:16px 17px;margin:26px 0 12px}
 .clk-ic{width:36px;height:36px;border-radius:50%;background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0}
 .clk-body{flex:1;min-width:0}
-.clk-ey{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
-.clk-time{font-size:1.8rem;font-weight:900;letter-spacing:-.03em;color:var(--amber);line-height:1;font-variant-numeric:tabular-nums;margin-bottom:6px}
-.clk-time.warn{color:var(--red)}   /* últimos 10 min del regresivo: escala a rojo */
+.clk-ey{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--amber-txt);margin-bottom:4px}
+.clk-time{font-size:1.8rem;font-weight:900;letter-spacing:-.03em;color:var(--amber-txt);line-height:1;font-variant-numeric:tabular-nums;margin-bottom:6px}
+.clk-time.warn{color:var(--red-txt)}   /* últimos 10 min del regresivo: escala a rojo */
 .clk-msg{font-size:.76rem;color:var(--ink2);line-height:1.45}
-.clk-msg strong{color:var(--amber);font-weight:800}
+.clk-msg strong{color:var(--amber-txt);font-weight:800}
 
 /* ── flecha de subir (círculo flotante, aparece al bajar) ── */
 .to-top{position:absolute;right:16px;bottom:calc(env(safe-area-inset-bottom,12px) + 78px);width:46px;height:46px;border-radius:50%;background:var(--surf);border:1.5px solid var(--brd2);box-shadow:0 4px 18px rgba(0,0,0,.14);cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(8px) scale(.9);pointer-events:none;transition:opacity .2s var(--ease),transform .2s var(--ease)}
 .to-top.on{opacity:1;transform:none;pointer-events:auto}
 .to-top svg{width:22px;height:22px;stroke:var(--ink2);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .to-top:active{background:var(--surf2)}
-@media(min-width:860px){.to-top{bottom:28px}}
+@media(min-width:66rem){.to-top{bottom:28px}}
 
 /* ════════ ÓRDENES ════════ */
 
 /* ── tarjeta del QR (la herramienta de ejecución, protagonista) ── */
 .qr-card{background:var(--surf);border:1.5px solid var(--brd2);border-radius:18px;padding:22px 20px;text-align:center;margin-bottom:4px;box-shadow:0 4px 20px rgba(0,0,0,.05)}
-.qr-tag{display:inline-flex;align-items:center;gap:7px;font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:16px}
+.qr-tag{display:inline-flex;align-items:center;gap:7px;font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green-txt);margin-bottom:16px}
 .qr-pulse{width:8px;height:8px;border-radius:50%;background:var(--green);animation:mdo-pulse 1.3s ease-in-out infinite}
 .qr-img{display:inline-block;padding:14px;background:#fff;border:1.5px solid var(--brd2);border-radius:14px;line-height:0;margin-bottom:14px}
 .qr-img svg{display:block}
@@ -651,7 +736,7 @@ a{color:var(--blue);text-decoration:none}
 .qr-d-l{font-size:.54rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
 .qr-d-v{font-size:1.05rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 .qr-timer{font-size:.74rem;color:var(--ink2);background:var(--green-bg);border:1.5px solid var(--green-brd);border-radius:10px;padding:10px 12px;line-height:1.4}
-.qr-timer strong{color:var(--green);font-weight:800}
+.qr-timer strong{color:var(--green-txt);font-weight:800}
 
 /* ── estado SIN orden pendiente (invitación a operar) ── */
 .ord-empty{background:var(--surf2);border-radius:18px;padding:32px 24px;text-align:center}
@@ -662,9 +747,9 @@ a{color:var(--blue);text-decoration:none}
 
 /* ── aviso de ganancias perdidas (J-01) ── */
 .ord-perdido{display:flex;gap:11px;align-items:flex-start;background:var(--red-bg);border:1.5px solid var(--red-brd);border-radius:14px;padding:13px 15px;margin-top:20px}
-.ord-perdido-ic{color:var(--red);font-weight:900;font-size:.9rem;flex-shrink:0;line-height:1.4}
+.ord-perdido-ic{color:var(--red-txt);font-weight:900;font-size:.9rem;flex-shrink:0;line-height:1.4}
 .ord-perdido-txt{font-size:.76rem;color:var(--ink2);line-height:1.5}
-.ord-perdido-txt strong{color:var(--red);font-weight:900}
+.ord-perdido-txt strong{color:var(--red-txt);font-weight:900}
 
 /* ── filas del historial (estado de cuenta) ── */
 .ord-list-card{border:1.5px solid var(--brd2);border-radius:14px;overflow:hidden;background:var(--surf)}
@@ -676,18 +761,18 @@ a{color:var(--blue);text-decoration:none}
 .ord-dir{font-size:.66rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;margin-left:4px}
 .ord-row-s{font-size:.72rem;color:var(--ink3);margin-top:3px}
 .ord-est{font-weight:800}
-.ord-est.green{color:var(--green)} .ord-est.amber{color:var(--amber)} .ord-est.red{color:var(--red)} .ord-est.gray{color:var(--ink4)}
+.ord-est.green{color:var(--green-txt)} .ord-est.amber{color:var(--amber-txt)} .ord-est.red{color:var(--red-txt)} .ord-est.gray{color:var(--ink4)}
 .ord-row-r{text-align:right;flex-shrink:0}
-.ord-util{font-size:.92rem;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums}
-.ord-util.red{color:var(--red)} .ord-util.amber{color:var(--amber)}
-.ord-util-sub{font-size:.6rem;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.04em;margin-top:1px}
-.ord-perd{font-size:.68rem;font-weight:700;color:var(--red);margin-top:2px}
+.ord-util{font-size:.92rem;font-weight:900;color:var(--green-txt);font-variant-numeric:tabular-nums}
+.ord-util.red{color:var(--red-txt)} .ord-util.amber{color:var(--amber-txt)}
+.ord-util-sub{font-size:.6rem;font-weight:700;color:var(--amber-txt);text-transform:uppercase;letter-spacing:.04em;margin-top:1px}
+.ord-perd{font-size:.68rem;font-weight:700;color:var(--red-txt);margin-top:2px}
 
 /* reloj regresivo de la orden vigente (cuenta hacia cero) */
 .qr-clock{font-size:.74rem;color:var(--ink2);background:var(--green-bg);border:1.5px solid var(--green-brd);border-radius:10px;padding:10px 12px;line-height:1.4}
-.qr-clock-v{color:var(--green);font-weight:900;font-variant-numeric:tabular-nums}
-.qr-clock-v.warn{color:var(--amber)}
-.qr-clock-v.exp{color:var(--red)}
+.qr-clock-v{color:var(--green-txt);font-weight:900;font-variant-numeric:tabular-nums}
+.qr-clock-v.warn{color:var(--amber-txt)}
+.qr-clock-v.exp{color:var(--red-txt)}
 
 /* empuje por inventario (dibujo demo): la moneda con MENOS inventario va apagada (gris).
    Es señal visual, NO deshabilita — si el cliente la toca, se activa normal (.on manda). */
@@ -719,7 +804,7 @@ a{color:var(--blue);text-decoration:none}
 .pf-stat-l{font-size:.58rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);margin-top:3px}
 .pf-ref-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .pf-ref-big{font-size:1.3rem;font-weight:900;color:var(--ink)}
-.pf-ref-big span{color:var(--green)}
+.pf-ref-big span{color:var(--green-txt)}
 .pf-ref-btn{font-family:var(--f);font-size:.82rem;font-weight:800;padding:9px 18px;border-radius:10px;border:none;background:var(--red);color:#fff;cursor:pointer}
 .pf-ref-sub{font-size:.74rem;color:var(--ink3)}
 .pf-data{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--brd);font-size:.84rem}
@@ -732,17 +817,17 @@ a{color:var(--blue);text-decoration:none}
 .pf-toggle.on{background:var(--green)}
 .pf-toggle-dot{position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .pf-toggle.on .pf-toggle-dot{transform:translateX(19px)}
-.pf-logout{width:100%;font-family:var(--f);font-size:.86rem;font-weight:800;padding:13px;border-radius:11px;border:1.5px solid var(--brd2);background:transparent;color:var(--red);cursor:pointer}
+.pf-logout{width:100%;font-family:var(--f);font-size:.86rem;font-weight:800;padding:13px;border-radius:11px;border:1.5px solid var(--brd2);background:transparent;color:var(--red-txt);cursor:pointer}
 
 /* resumen del estado de cuenta en Órdenes */
 .ord-sum{display:flex;gap:10px;margin:18px 0 4px}
 .ord-sum-c{flex:1;background:var(--surf2);border-radius:13px;padding:14px 8px;text-align:center}
 .ord-sum-v{font-size:1.2rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.ord-sum-v.green{color:var(--green)} .ord-sum-v.red{color:var(--red)} .ord-sum-v.amber{color:var(--amber)}
+.ord-sum-v.green{color:var(--green-txt)} .ord-sum-v.red{color:var(--red-txt)} .ord-sum-v.amber{color:var(--amber-txt)}
 .ord-sum-l{font-size:.56rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);margin-top:4px}
 .ord-sum-sub{font-size:.58rem;font-weight:700;color:var(--ink4);margin-top:5px;font-variant-numeric:tabular-nums}
 .ord-sum-sub .m{font-weight:900}
-.ord-sum-sub.green .m{color:var(--green)} .ord-sum-sub.red .m{color:var(--red)}
+.ord-sum-sub.green .m{color:var(--green-txt)} .ord-sum-sub.red .m{color:var(--red-txt)}
 
 /* filtros del historial de Órdenes */
 .ord-filtros{display:flex;gap:7px;margin:10px 0 4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -763,22 +848,22 @@ a{color:var(--blue);text-decoration:none}
 .od-row:last-child{border-bottom:none}
 .od-l{color:var(--ink3)}
 .od-v{color:var(--ink);font-weight:700}
-.od-v.green{color:var(--green)}
-.od-v.red{color:var(--red)}
+.od-v.green{color:var(--green-txt)}
+.od-v.red{color:var(--red-txt)}
 .od-sep{height:1px;background:var(--brd);margin:8px 0}
 .od-note{font-size:.78rem;color:var(--ink3);line-height:1.5;padding-top:4px}
 /* pop-up de detalle: número-héroe (utilidad de la orden) + mensaje conductual */
 .od-hero{text-align:center;padding:6px 0 16px;border-bottom:1px solid var(--brd);margin-bottom:6px}
 .od-hero-l{font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
 .od-hero-v{font-size:2.1rem;font-weight:900;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
-.od-hero-v.green{color:var(--green)} .od-hero-v.red{color:var(--red)} .od-hero-v.amber{color:var(--amber)}
+.od-hero-v.green{color:var(--green-txt)} .od-hero-v.red{color:var(--red-txt)} .od-hero-v.amber{color:var(--amber-txt)}
 .od-msg{font-size:.82rem;line-height:1.5;padding:12px 13px;border-radius:11px;margin-top:12px}
 .od-msg.green{background:var(--green-bg);color:var(--ink2);border:1px solid var(--green-brd)}
 .od-msg.red{background:var(--red-bg);color:var(--ink2);border:1px solid var(--red-brd)}
 .od-msg.amber{background:var(--amber-bg);color:var(--ink2);border:1px solid var(--amber-brd)}
 .od-msg.gray{background:var(--surf2);color:var(--ink3)}
 .od-msg strong{font-weight:900}
-.od-msg.green strong{color:var(--green)} .od-msg.red strong{color:var(--red)} .od-msg.amber strong{color:var(--amber)}
+.od-msg.green strong{color:var(--green-txt)} .od-msg.red strong{color:var(--red-txt)} .od-msg.amber strong{color:var(--amber-txt)}
 
 /* ---------- ayuda contextual "?" (Bloque 6) ---------- */
 .hlp{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1.2px solid var(--brd3);background:var(--surf2);color:var(--ink3);font-size:.6rem;font-weight:800;cursor:pointer;vertical-align:middle;line-height:1;padding:0;flex:none}
@@ -807,17 +892,17 @@ a{color:var(--blue);text-decoration:none}
 
 .rcp-frame{background:var(--surf);border:1.5px solid var(--brd);border-radius:14px;padding:18px 16px;margin:6px 0 12px}
 .rcp-logo{font-family:-apple-system,system-ui,sans-serif;font-size:1.35rem;font-weight:900;letter-spacing:-.055em;text-transform:uppercase;line-height:1;text-align:center;margin-bottom:2px}
-.rcp-logo em{color:var(--red);font-style:normal}
+.rcp-logo em{color:var(--red-txt);font-style:normal}
 .rcp-sub{text-align:center;font-size:.62rem;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px}
 .rcp-folio{text-align:center;font-size:.66rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
 .rcp-folio strong{color:var(--ink);font-weight:900;letter-spacing:.01em;font-size:.94rem;display:block;margin-top:2px}
-.rcp-done{background:var(--green-bg);color:var(--green);border:1px solid var(--green-brd);border-radius:10px;padding:8px 12px;text-align:center;font-size:.78rem;font-weight:800;margin-top:12px}
-.rcp-part{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-brd);border-radius:10px;padding:8px 12px;text-align:center;font-size:.78rem;font-weight:800;margin-top:12px}
+.rcp-done{background:var(--green-bg);color:var(--green-txt);border:1px solid var(--green-brd);border-radius:10px;padding:8px 12px;text-align:center;font-size:.78rem;font-weight:800;margin-top:12px}
+.rcp-part{background:var(--amber-bg);color:var(--amber-txt);border:1px solid var(--amber-brd);border-radius:10px;padding:8px 12px;text-align:center;font-size:.78rem;font-weight:800;margin-top:12px}
 .rcp-btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 .rcp-btn{padding:12px 8px;border-radius:12px;border:1.5px solid var(--brd2);background:var(--surf);color:var(--ink);font-family:-apple-system,system-ui,sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.02em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;line-height:1}
 .rcp-btn:hover{background:var(--surf2);border-color:var(--ink3)}
 .rcp-btn.pri{background:var(--red);color:#fff;border-color:transparent}
-.rcp-btn.pri:hover{background:#a90116}
+.rcp-btn.pri:hover{background:var(--red-h)}
 .rcp-btn.disabled{opacity:.5;cursor:not-allowed}
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -831,7 +916,7 @@ a{color:var(--blue);text-decoration:none}
 .rc-notif-panel{position:fixed;z-index:1200;background:var(--surf);border:1.5px solid var(--brd2);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.18);max-height:70vh;display:flex;flex-direction:column;overflow:hidden}
 .rc-notif-h{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--brd);background:var(--surf2)}
 .rc-notif-h b{font-size:.85rem;color:var(--ink);font-weight:800}
-.rc-notif-all{background:none;border:none;color:var(--blue);font-size:.72rem;font-weight:700;cursor:pointer;padding:2px 4px;border-radius:6px}
+.rc-notif-all{background:none;border:none;color:var(--blue-txt);font-size:.72rem;font-weight:700;cursor:pointer;padding:2px 4px;border-radius:6px}
 .rc-notif-all:hover{background:var(--blue-bg)}
 .rc-notif-body{overflow-y:auto;flex:1}
 .rc-notif-empty{padding:22px 14px;text-align:center;color:var(--ink3);font-size:.78rem}
@@ -841,7 +926,7 @@ a{color:var(--blue);text-decoration:none}
 .rc-notif-item.p-info:before{background:var(--blue)}
 .rc-notif-item.p-action:before{background:var(--amber)}
 .rc-notif-item.p-critical:before{background:var(--red)}
-.rc-notif-item.p-passive:before{background:var(--ink4)}
+.rc-notif-item.p-passive:before{background:var(--deco)}
 .rc-notif-item.read{opacity:.72}
 .rc-notif-item.read .rc-notif-title{font-weight:600}
 .rc-notif-item.unread .rc-notif-title{font-weight:800}
@@ -850,7 +935,7 @@ a{color:var(--blue);text-decoration:none}
 .rc-notif-ago{font-size:.66rem;color:var(--ink3);font-weight:500;flex-shrink:0;font-variant-numeric:tabular-nums}
 .rc-notif-body-txt{font-size:.74rem;color:var(--ink2);line-height:1.35}
 .rc-notif-foot{display:flex;align-items:center;justify-content:space-between;margin-top:5px;gap:8px}
-.rc-notif-act{font-size:.7rem;font-weight:700;color:var(--blue);cursor:pointer;padding:2px 8px;border-radius:6px;background:var(--blue-bg);text-decoration:none}
+.rc-notif-act{font-size:.7rem;font-weight:700;color:var(--blue-txt);cursor:pointer;padding:2px 8px;border-radius:6px;background:var(--blue-bg);text-decoration:none}
 .rc-notif-act:hover{background:var(--blue-bg);filter:brightness(.95)}
 .rc-notif-dis{background:none;border:none;color:var(--ink3);font-size:1rem;line-height:1;cursor:pointer;padding:2px 6px;border-radius:6px;margin-left:auto}
 .rc-notif-dis:hover{background:var(--brd);color:var(--ink)}
@@ -862,38 +947,73 @@ a{color:var(--blue);text-decoration:none}
 .rc-legal-footer p:last-child{margin-bottom:0}
 .rc-legal-footer .rc-legal-en{color:var(--ink4);opacity:.85}
 .rc-legal-footer .rc-legal-links{margin-top:12px;padding-top:10px;border-top:1px dashed var(--brd2);font-size:.72rem;font-weight:700;letter-spacing:.02em;text-align:center}
-.rc-legal-footer .rc-legal-links a{color:var(--red);text-decoration:underline;text-underline-offset:2px}
-.rc-legal-footer .rc-legal-links a:hover{color:var(--red);filter:brightness(.85)}
+.rc-legal-footer .rc-legal-links a{color:var(--red-txt);text-decoration:underline;text-underline-offset:2px}
+.rc-legal-footer .rc-legal-links a:hover{color:var(--red-txt);filter:brightness(.85)}
 .rc-legal-footer .rc-legal-credits{margin-top:16px;padding-top:12px;border-top:1px solid var(--brd);font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;font-weight:800;color:var(--ink4);text-align:center}
 /* Compatibilidad: .login-inst dejó de usarse en index/acceso-interno (se solapaba con el legal footer);
    se mantiene el estilo por si otros archivos aún lo referencian. */
 
 /* ═══ Landscape en móvil/tablet: overlay pidiendo rotar. La app está diseñada 100% vertical. ═══
    Complementa el manifest orientation:portrait (que solo funciona en PWA instalada). */
-@media (orientation: landscape) and (max-width: 900px){
-  body::before{
-    content: "Gira tu dispositivo";
-    position: fixed; inset: 0; z-index: 2147483646;
-    background: var(--surf,#fff); color: var(--ink,#09090f);
-    display: flex; align-items: center; justify-content: center;
-    text-align: center; padding: 40px 30px;
-    font-family: -apple-system,system-ui,sans-serif;
-    font-size: 1.3rem; font-weight: 900; letter-spacing: -.02em; line-height: 1.4;
-    white-space: pre-line;
-  }
-  body::after{
-    content: "Esta app funciona en vertical";
-    position: fixed; inset: 55% 0 0 0; z-index: 2147483647;
-    color: var(--ink3,#6b6b82);
-    display: flex; align-items: flex-start; justify-content: center;
-    text-align: center; padding: 20px 40px 0;
-    font-family: -apple-system,system-ui,sans-serif;
-    font-size: .95rem; font-weight: 600; line-height: 1.4;
-    pointer-events: none;
-  }
-}
+/* LA ORIENTACIÓN NO SE BLOQUEA · WCAG 2.1 · 1.3.4 (AA)
+   Aquí vivía la r26 —«se declara y se bloquea»—: en apaisado por debajo de
+   900 px la aplicación se tapaba entera con «Gira tu dispositivo».
+
+   La norma sólo admite restringir la orientación cuando es ESENCIAL, y pone
+   ejemplos: un piano, un cheque que se fotografía. Una terminal de operación
+   no lo es. Y el bloqueo no era un aviso: era una compuerta que dejaba al
+   usuario sin la aplicación entera, incluido a quien tiene el teléfono fijado
+   en un soporte o no puede girarlo.
+
+   Se retira. Y NO SE SUSTITUYE POR NADA, porque al medir apaisado sin el
+   bloqueo resultó que no había nada que arreglar:
+
+     667×375  desborde 0 · barra 61 · útil 314 (84%)
+     736×414  desborde 0 · barra 61 · útil 353 (85%)
+     844×390  desborde 0 · barra 61 · útil 329 (84%)
+     932×430  desborde 0 · barra 71 · útil 359 (83%)
+
+   Cero desborde horizontal y entre el 81 y el 86 por ciento de la pantalla
+   utilizable, en los cuatro tamaños de teléfono en apaisado. La premisa de la
+   regla —«en apaisado la composición se rompe»— es falsa, y llevaba meses
+   marcada como ganada.
+
+   Este comentario prometía en su primera versión una adaptación por alto
+   «más abajo en esta misma hoja». No se escribió, y a propósito: escribir un
+   arreglo para algo que la medición dice que no está roto es exactamente el
+   trabajo al ojo que este sistema existe para no hacer. */
 /* Altura del app: el CSS usa dvh, pero Chrome Android tiene bugs de recálculo tras cerrar el teclado.
    core.js sobreescribe app.style.height con innerHeight real y lo re-actualiza en resize/focusout/visibilitychange. */
+
+/* ---------- objetivo de toque · una ficha, no veinte paddings ----------
+   La sección 06 del documento declara 44 px de alto mínimo en punteros
+   gruesos. Ninguna hoja lo obligaba: cada control fijaba su propio
+   padding y salía donde salía. Medido a 390 px con puntero grueso
+   emulado: .ubtn 26, .btn 41, .ni 43, .fld-in 43, .who-avatar 30×30,
+   .rc-bell 36×32, .back 18×33. Veintitantos defectos con una sola causa.
+
+   POR QUÉ VA DENTRO DE pointer:coarse Y NO SIEMPRE. Los 44 px son la
+   medida del DEDO, y así está escrita la regla: «alto mínimo en punteros
+   gruesos». Aplicarla también al ratón engordaría la terminal, que es
+   una pantalla de densidad alta operada con puntero fino. WCAG 2.5.8
+   pide 24 px como mínimo AA y eso se cumple en los dos casos; los 44 son
+   la exigencia de la casa, más dura, y sólo donde corresponde.
+
+   Se cambia el mínimo, no el tamaño: un control que ya mide más, sigue
+   igual. ---------- */
+:root{ --tap:44px }
+
+@media(pointer:coarse){
+  .btn,.ubtn,.ni,
+  input.fld-in,select.fld-in,textarea.fld-in{ min-block-size:var(--tap) }
+
+  /* los cuadrados de icono necesitan también el ancho, y hay que soltar
+     el alto fijo que traen puesto para que el mínimo pueda ganarle */
+  .appbar .back,.appbar .who-avatar,.rc-bell,.rail-btn{
+    min-block-size:var(--tap); min-inline-size:var(--tap);
+    block-size:auto; inline-size:auto;
+  }
+}
 
 </style>
 <style>
@@ -1000,7 +1120,7 @@ a{color:var(--blue);text-decoration:none}
 }
 
 .orden-hitos-dot.active .orden-hitos-dot-l{
-  color:var(--red);font-weight:800;
+  color:var(--red-txt);font-weight:800;
 }
 
 .orden-hitos.venta .orden-hitos-dot.active .orden-hitos-dot-i{
@@ -1008,20 +1128,20 @@ a{color:var(--blue);text-decoration:none}
   animation:ordenHitoPulseVerde 1.4s ease-in-out infinite;
 }
 
-.orden-hitos.venta .orden-hitos-dot.active .orden-hitos-dot-l{color:var(--green)}
+.orden-hitos.venta .orden-hitos-dot.active .orden-hitos-dot-l{color:var(--green-txt)}
 
 /* Tonos alternos del hito activo · avisos de excepción */
 .orden-hitos-dot.active.tone-warn .orden-hitos-dot-i{
   border-color:var(--amber);box-shadow:0 0 0 4px var(--hito-halo-ambar);animation:none;
 }
 
-.orden-hitos-dot.active.tone-warn .orden-hitos-dot-l{color:var(--amber)}
+.orden-hitos-dot.active.tone-warn .orden-hitos-dot-l{color:var(--amber-txt)}
 
 .orden-hitos-dot.active.tone-danger .orden-hitos-dot-i{
   border-color:var(--red);background:var(--red);animation:none;
 }
 
-.orden-hitos-dot.active.tone-danger .orden-hitos-dot-l{color:var(--red)}
+.orden-hitos-dot.active.tone-danger .orden-hitos-dot-l{color:var(--red-txt)}
 
 @keyframes ordenHitoPulse{
   0%,100%{box-shadow:0 0 0 4px var(--hito-halo-rojo)}
@@ -1058,13 +1178,13 @@ a{color:var(--blue);text-decoration:none}
   border-color:var(--hito-borde-rojo);background:var(--hito-fondo-rojo);
 }
 
-.orden-hitos-msg.tone-danger .orden-hitos-msg-t{color:var(--red)}
+.orden-hitos-msg.tone-danger .orden-hitos-msg-t{color:var(--red-txt)}
 
 .orden-hitos-msg.tone-ok{
   border-color:var(--hito-borde-verde);background:var(--hito-fondo-verde);
 }
 
-.orden-hitos-msg.tone-ok .orden-hitos-msg-t{color:var(--green)}
+.orden-hitos-msg.tone-ok .orden-hitos-msg-t{color:var(--green-txt)}
 
 /* Stepper vertical · 7 estados */
 .orden-stepper{
@@ -1146,12 +1266,28 @@ a{color:var(--blue);text-decoration:none}
    FICHAS DEL DOCUMENTO · deliberadamente distintos de los del producto.
    El papel es más frío y más claro que el --bg del producto (#ebebf0), para
    que se note de un vistazo qué es documento y qué es muestra.
+
+   TODA FICHA DE TINTA PASA 4.5:1 SOBRE LAS TRES SUPERFICIES DE SU TEMA.
+   No es una aspiración: sistema/verificar-fichas.py lo calcula y el CI falla
+   si deja de cumplirse. Los valores de aquí abajo salieron de ese cálculo,
+   no del ojo.
+
+   LO QUE ENSEÑÓ LA PRIMERA MEDICIÓN. La rampa tenía cuatro tintas y las dos
+   últimas no pasaban: --d-ink3 daba 4.22:1 y --d-ink4, 2.27:1. Al corregir se
+   ve por qué: la tinta más clara que cumple es #666C75 y la penúltima acaba
+   en #57606E — quedan casi pegadas. Una rampa de cuatro pasos de texto no
+   cabe dentro de la norma; Carbon lo sabe y por eso su tinta más clara es
+   text-helper y lo más pálido que ofrece ya no es texto, es borde. Aquí se
+   conserva --d-ink4 como cuarta tinta legal, y lo verdaderamente pálido pasó
+   a --d-deco, que no puede llevar texto.
    ═══════════════════════════════════════════════════════════════════════════ */
 :root{
   --d-bg:#F5F6F8; --d-surf:#FFFFFF; --d-surf2:#EDEFF3;
   --d-line:#DCE0E6; --d-line2:#E8EBEF;
-  --d-ink:#14171C; --d-ink2:#414855; --d-ink3:#697280; --d-ink4:#98A1AE;
-  --d-acc:#D0021B; --d-ok:#0F7A3D; --d-warn:#B45309; --d-debt:#B01B1B;
+  --d-ink:#14171C; --d-ink2:#414855; --d-ink3:#57606E; --d-ink4:#666C75;
+  --d-deco:#98A1AE;            /* trazo y relleno decorativo · NUNCA texto */
+  --d-acc:#D0021B; --d-ok:#0E753B; --d-warn:#A44C09; --d-debt:#B01B1B;
+  --d-acc-txt:#D0021B;         /* la marca como TINTA, no como relleno */
   --d-ok-bg:rgba(15,122,61,.06); --d-warn-bg:rgba(180,83,9,.06); --d-debt-bg:rgba(176,27,27,.05);
   --m:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --s:'DM Sans',system-ui,-apple-system,sans-serif;
@@ -1159,8 +1295,17 @@ a{color:var(--blue);text-decoration:none}
 body.dk{
   --d-bg:#0B0D11; --d-surf:#14171D; --d-surf2:#1A1E26;
   --d-line:#272C35; --d-line2:#1F242C;
-  --d-ink:#E9ECF2; --d-ink2:#AEB6C2; --d-ink3:#8892A0; --d-ink4:#5F6875;
+  --d-ink:#E9ECF2; --d-ink2:#AEB6C2; --d-ink3:#8892A0; --d-ink4:#7C8798;
+  --d-deco:#5F6875;
   --d-ok:#3FB574; --d-warn:#E0A340; --d-debt:#F2626B;
+  /* LA MARCA ES INVARIANTE COMO RELLENO, NO COMO TINTA.
+     El rojo #D0021B sobre las superficies oscuras da 2.95:1. La regla de la
+     casa decía que la marca no cambia entre temas; la norma dice que ese
+     texto no se lee. Gana la norma: el relleno y el borde siguen siendo el
+     rojo de la marca —ahí --d-acc no se toca— y el TEXTO de marca usa el
+     tono claro de la misma familia. Es lo que hace Carbon con $link-primary,
+     que tampoco es el mismo en los dos temas. */
+  --d-acc-txt:#FF6B7D;
   --d-ok-bg:rgba(63,181,116,.10); --d-warn-bg:rgba(224,163,64,.10); --d-debt-bg:rgba(242,98,107,.09);
 }
 
@@ -1176,9 +1321,9 @@ body{ background:var(--d-bg); color:var(--d-ink); font-family:var(--s);
         align-items:center; gap:13px; }
 .dh-marca{ font-size:1rem; font-weight:900; letter-spacing:-.05em; text-transform:uppercase;
            color:var(--d-ink); }
-.dh-marca em{ color:var(--d-acc); font-style:normal; }
+.dh-marca em{ color:var(--d-acc-txt); font-style:normal; }
 .dh-tag{ font-family:var(--m); font-size:.56rem; font-weight:800; letter-spacing:.14em;
-         text-transform:uppercase; color:var(--d-acc);
+         text-transform:uppercase; color:var(--d-acc-txt);
          border:1px solid color-mix(in srgb, var(--d-acc) 30%, transparent); padding:3px 7px; }
 .dh-sp{ flex:1 }
 .dh-meta{ font-family:var(--m); font-size:.6rem; color:var(--d-ink4); letter-spacing:.05em; }
@@ -1186,7 +1331,7 @@ body{ background:var(--d-bg); color:var(--d-ink); font-family:var(--s);
 .dh-tema{ background:none; border:1px solid var(--d-line); color:var(--d-ink2);
           inline-size:30px; block-size:30px; cursor:pointer; font-size:.86rem;
           display:flex; align-items:center; justify-content:center; }
-.dh-tema:hover{ border-color:var(--d-ink4); color:var(--d-ink); }
+.dh-tema:hover{ border-color:var(--d-deco); color:var(--d-ink); }
 
 .idx{ position:sticky; top:55px; z-index:49; background:var(--d-surf2);
       border-block-end:1px solid var(--d-line); }
@@ -1195,7 +1340,7 @@ body{ background:var(--d-bg); color:var(--d-ink); font-family:var(--s);
         text-transform:uppercase; color:var(--d-ink3); padding:10px 12px; white-space:nowrap;
         border-block-end:2px solid transparent; text-decoration:none; }
 .idx a:hover{ color:var(--d-ink) }
-.idx a.on{ color:var(--d-acc); border-block-end-color:var(--d-acc) }
+.idx a.on{ color:var(--d-acc-txt); border-block-end-color:var(--d-acc) }
 
 .avance{ position:fixed; inset-block-start:0; inset-inline-start:0; z-index:60;
          block-size:2px; background:var(--d-acc); inline-size:0 }
@@ -1205,8 +1350,21 @@ body{ background:var(--d-bg); color:var(--d-ink); font-family:var(--s);
          border:1px solid var(--d-line); cursor:pointer; font-size:1rem;
          opacity:0; pointer-events:none; transition:opacity .16s ease, border-color .16s ease; }
 .arriba.se-ve{ opacity:1; pointer-events:auto }
-.arriba:hover{ border-color:var(--d-ink4); color:var(--d-ink) }
+.arriba:hover{ border-color:var(--d-deco); color:var(--d-ink) }
 @media (pointer:coarse){ .arriba{ inline-size:48px; block-size:48px } }
+
+/* OBJETIVOS DE TOQUE DEL DOCUMENTO · WCAG 2.5.8.
+   El botón de subir ya tenía su regla táctil, y las otras dos piezas
+   pulsables del documento no: el interruptor de tema medía 30×30 y los quince
+   enlaces del índice, 37 de alto. Quien escribió la regla la aplicó a un
+   control y se olvidó de los demás, que es lo que pasa cuando el mínimo
+   táctil se pone control por control en vez de medirse.
+   Los enlaces dentro de prosa NO entran: la norma los exime expresamente
+   cuando van en una frase, y el verificador ya los descuenta. */
+@media (pointer:coarse){
+  .dh-tema{ inline-size:44px; block-size:44px }
+  .idx a{ padding-block:14px }
+}
 
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -1220,24 +1378,46 @@ body{ background:var(--d-bg); color:var(--d-ink); font-family:var(--s);
 .plancha{ margin-inline:calc(50% - 50vw); inline-size:100vw; padding:52px 0;
           background:var(--d-surf2); border-block:1px solid var(--d-line);
           margin-block-start:34px; overflow:hidden; }
+/* FICHA-EXCEPCIÓN · la plancha es OSCURA EN LOS DOS TEMAS: es una muestra,
+   y una muestra que cambia con el tema del documento deja de ser la misma
+   muestra. Sus valores son los del tema oscuro de este documento —los que
+   están arriba bajo body.dk— escritos aquí porque tienen que aplicarse
+   también cuando el documento está en claro, y una ficha no puede hacer
+   eso: una ficha vale lo que valga en el tema activo, que es justo lo que
+   aquí no queremos. Verificado: el contraste de esta plancha se mide en
+   los dos temas y pasa en los dos. */
 .plancha.oscura{ background:#0B0D11; border-color:#272C35; }
 .plancha-in{ max-width:1000px; margin:0 auto; padding:0 24px; }
 .plancha-ey{ font-family:var(--m); font-size:.58rem; font-weight:800; letter-spacing:.2em;
              text-transform:uppercase; color:var(--d-ink4); }
-.plancha.oscura .plancha-ey{ color:#5F6875 }
+/* FICHA-EXCEPCIÓN · tinta del tema oscuro sobre la plancha, en los dos temas. */
+.plancha.oscura .plancha-ey{ color:#7C8798 }
 .plancha-t{ margin-block-start:8px; font-size:clamp(1.3rem,3vw,1.9rem); font-weight:900;
             letter-spacing:-.03em; color:var(--d-ink); text-wrap:balance; max-width:26ch; }
+/* FICHA-EXCEPCIÓN · tinta del tema oscuro sobre la plancha, en los dos temas. */
 .plancha.oscura .plancha-t{ color:#E9ECF2 }
 .plancha-pie{ margin-block-start:14px; font-family:var(--m); font-size:.66rem;
               color:var(--d-ink4); line-height:1.7; }
+/* FICHA-EXCEPCIÓN · tinta del tema oscuro sobre la plancha, en los dos temas. */
 .plancha.oscura .plancha-pie{ color:#8892A0 }
 
 /* el marco que sostiene el portal real, escalado */
+/* LA ESCALA SE MIDE, NO SE ESCRIBE.
+   Estos tres marcos llevaban scale(.64), scale(.4333) y scale(.51),
+   elegidos a ojo sobre una pantalla ancha. A 320 px el marco de 1440
+   quedaba en 624 px dentro de 290 disponibles: la mitad del terminal
+   simplemente no estaba, y overflow:hidden se encargaba de que no se
+   notara. El marco declara ahora el tamaño de la FUENTE en data-w/data-h
+   y el navegador calcula la escala contra el ancho que de verdad hay.
+   Es la misma diferencia que separa este sistema de lo de antes: tres
+   números escritos a mano pasan a ser una medición. */
 .marco{ position:relative; margin-block-start:26px; overflow:hidden;
-        border:1px solid var(--d-line); background:#fff; }
+        border:1px solid var(--d-line); background:#fff;
+        block-size:calc(var(--esc, 1) * var(--fuente-h, 0px)); }
+/* FICHA-EXCEPCIÓN · el borde del marco, sobre la misma plancha oscura. */
 .plancha.oscura .marco{ border-color:#272C35 }
 .marco-esc{ position:absolute; inset-block-start:0; inset-inline-start:0;
-            transform-origin:0 0; }
+            transform-origin:0 0; transform:scale(var(--esc, 1)); }
 .marco iframe{ border:0; display:block; background:#fff; }
 
 /* las columnas dibujadas encima del producto */
@@ -1248,8 +1428,9 @@ body{ background:var(--d-bg); color:var(--d-ink); font-family:var(--s);
 
 /* la paleta a sangre */
 .paleta{ display:flex; margin-block-start:26px; block-size:132px; }
-.paleta div{ flex:1; display:flex; align-items:flex-end; padding:8px 9px;
-             font-family:var(--m); font-size:.5rem; font-weight:700; letter-spacing:.06em; }
+.paleta div{ flex:1; display:flex; align-items:flex-end; padding:8px 9px; }
+.paleta i{ font-family:var(--m); font-size:.5rem; font-weight:700; letter-spacing:.06em;
+           font-style:normal; background:var(--d-surf); color:var(--d-ink); padding:2px 5px; }
 @media(max-width:700px){ .paleta{ flex-wrap:wrap; block-size:auto }
   .paleta div{ flex:0 0 25%; block-size:64px } }
 
@@ -1298,10 +1479,12 @@ code{ font-family:var(--m); font-size:.84em; background:var(--d-surf2); padding:
        line-height:1.62; word-break:break-word }
 
 .mk{ font-family:var(--m); font-size:.53rem; font-weight:800; letter-spacing:.12em;
-     text-transform:uppercase; padding:3px 7px; white-space:nowrap; border:1px solid }
+     text-transform:uppercase; padding:3px 7px; white-space:nowrap; border:1px solid;
+     max-inline-size:100%; overflow-wrap:anywhere }
+@media(max-width:42rem){ .mk{ white-space:normal } }
 .mk-p{ color:var(--d-ok); background:var(--d-ok-bg);
        border-color:color-mix(in srgb, var(--d-ok) 32%, transparent) }
-.mk-r{ color:var(--d-acc); background:rgba(208,2,27,.05);
+.mk-r{ color:var(--d-acc-txt); background:rgba(208,2,27,.05);
        border-color:color-mix(in srgb, var(--d-acc) 28%, transparent) }
 .mk-o{ color:var(--d-ink3); background:var(--d-surf2); border-color:var(--d-line) }
 .mk-w{ color:var(--d-warn); background:var(--d-warn-bg);
@@ -1313,7 +1496,7 @@ code{ font-family:var(--m); font-size:.84em; background:var(--d-surf2); padding:
        text-transform:uppercase; color:var(--d-ink3); padding:7px 13px;
        background:var(--d-surf2); border-block-end:1px solid var(--d-line);
        display:flex; align-items:center; gap:8px; flex-wrap:wrap }
-.mu-h .pt{ color:var(--d-acc) }
+.mu-h .pt{ color:var(--d-acc-txt) }
 /* dentro de la muestra manda el producto: su fondo y sus fichas */
 .mu-b{ background:var(--bg); padding:18px; color:var(--ink); font-family:var(--f) }
 .mu-b.claro{ background:var(--surf) }
@@ -1353,11 +1536,11 @@ code{ font-family:var(--m); font-size:.84em; background:var(--d-surf2); padding:
 .par-c{ background:var(--d-surf); padding:15px }
 .par-t{ font-family:var(--m); font-size:.58rem; font-weight:800; letter-spacing:.14em;
         text-transform:uppercase; margin-block-end:9px; color:var(--d-ink3) }
-.par-c.b .par-t{ color:var(--d-acc) }
+.par-c.b .par-t{ color:var(--d-acc-txt) }
 .par-c ul{ list-style:none; display:flex; flex-direction:column; gap:7px }
 .par-c li{ font-size:.85rem; color:var(--d-ink2); padding-inline-start:14px; position:relative }
 .par-c li::before{ content:''; position:absolute; inset-inline-start:0; inset-block-start:.6em;
-                   inline-size:7px; block-size:1px; background:var(--d-ink4) }
+                   inline-size:7px; block-size:1px; background:var(--d-deco) }
 
 .cad{ margin-block-start:14px }
 .cad-n{ border:1px solid var(--d-line); background:var(--d-surf); padding:11px 15px }
@@ -1373,7 +1556,7 @@ code{ font-family:var(--m); font-size:.84em; background:var(--d-surf2); padding:
      background:var(--d-surf); padding:14px 17px; margin-block-start:13px }
 .eq-f{ font-family:var(--m); font-size:.83rem; font-weight:700; line-height:2.05;
        color:var(--d-ink) }
-.eq-f em{ font-style:normal; color:var(--d-acc) }
+.eq-f em{ font-style:normal; color:var(--d-acc-txt) }
 .eq-g{ margin-block-start:10px; font-family:var(--m); font-size:.71rem; color:var(--d-ink3);
        line-height:1.7 }
 .eq-g b{ color:var(--d-ink2) }
@@ -1390,7 +1573,7 @@ code{ font-family:var(--m); font-size:.84em; background:var(--d-surf2); padding:
     text-transform:uppercase; display:flex; align-items:center; justify-content:center;
     text-align:center; line-height:1.35; padding:4px }
 .z-hd{ background:var(--surf); border:1px solid var(--brd2); color:var(--ink3); block-size:34px }
-.z-nav{ background:var(--surf); border:1px solid var(--brd2); color:var(--red) }
+.z-nav{ background:var(--surf); border:1px solid var(--brd2); color:var(--red-txt) }
 .z-sig{ background:var(--surf2); border:1px solid var(--brd2); color:var(--ink3) }
 .z-wk{ background:var(--surf); border:1px solid var(--brd2); color:var(--ink2) }
 .z-st{ background:var(--surf2); border:1px solid var(--brd2); color:var(--ink3); block-size:24px }
@@ -1402,7 +1585,7 @@ code{ font-family:var(--m); font-size:.84em; background:var(--d-surf2); padding:
 .mq-term .celdas span{ flex:1; border:1px solid var(--brd2); border-inline-start:none;
                        background:var(--surf); }
 .mq-term .celdas span:first-child{ border-inline-start:1px solid var(--brd2);
-                                   flex:0 0 82px; color:var(--red) }
+                                   flex:0 0 82px; color:var(--red-txt) }
 .mq-term .medio{ flex:1; display:flex; gap:6px; min-block-size:0 }
 .mq-term .z-nav{ flex:0 0 34px; writing-mode:vertical-rl }
 .mq-term .z-sig{ flex:0 0 88px }
@@ -1429,41 +1612,74 @@ footer.pie{ margin-block-start:58px; padding-block-start:20px;
             border-block-start:1px solid var(--d-line); font-family:var(--m);
             font-size:.65rem; color:var(--d-ink4); line-height:1.85 }
 :focus-visible{ outline:2px solid var(--d-acc); outline-offset:2px }
+
+/* ── reconciliación con Ontikos ──────────────────────────────────────────────
+   Este bloque estaba escrito con colores literales dentro de atributos
+   style=. Se veía bien en claro y se rompía entero en oscuro: el fondo se
+   quedaba blanco mientras la tinta se aclaraba, y daba 1.02:1 — texto
+   invisible sobre su propio fondo. Un literal no sabe en qué tema está; una
+   ficha sí. Por eso el verificador de fichas prohíbe el literal fuera del
+   bloque de arriba: no por pulcritud, porque el tema oscuro depende de ello. */
+.rec-tira{ background:var(--d-ink); color:var(--d-bg); padding:13px 22px;
+           display:flex; gap:14px; align-items:baseline; flex-wrap:wrap; }
+.rec-tira b{ font-weight:600; letter-spacing:-.01em; color:var(--d-bg) }
+.rec-tira span{ font-size:.86rem; color:var(--d-bg) }
+.rec-tira a{ color:var(--d-bg); text-decoration:underline; text-underline-offset:2px }
+.rec{ max-width:1080px; margin:0 auto; padding:26px 32px 4px; }
+.rec h2{ font-size:.7rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+         color:var(--d-ink3); margin:0 0 6px; padding-bottom:8px;
+         border-block-end:1px solid var(--d-line) }
+.rec p{ max-width:70ch; color:var(--d-ink2); margin:14px 0 }
+.rec p.nota{ color:var(--d-ink3); font-size:.82rem; margin:12px 0 0 }
+.rec table{ border-collapse:collapse; inline-size:100%; font-size:.85rem;
+            background:var(--d-surf); margin-block-end:8px }
+@media(max-width:42rem){ .rec{ padding-inline:15px }
+  .rec table{ table-layout:fixed }
+  .rec th, .rec td{ padding:8px 10px; overflow-wrap:anywhere } }
+.rec thead tr{ background:var(--d-surf2) }
+.rec th{ text-align:start; padding:10px 14px; font-size:.6rem; letter-spacing:.12em;
+         text-transform:uppercase; color:var(--d-ink3);
+         border-block-end:1px solid var(--d-line) }
+.rec td{ padding:10px 14px; border-block-end:1px solid var(--d-line2); vertical-align:top }
+.rec td.q{ color:var(--d-ink2) }
+.rec tr.gana{ background:var(--d-ok-bg) }
+.rec tr.gana td{ border-block-end:0 }
+.rec b.der{ color:var(--d-acc-txt) }
+.rec b.gan{ color:var(--d-ok) }
+.rec a{ color:var(--d-acc-txt) }
 </style>
 </head>
 <body>
-<div style="background:#20242c;color:#f2f4f7;padding:13px 22px;font:14px/1.5 'IBM Plex Sans',system-ui,sans-serif;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap"><b style="font-weight:600;letter-spacing:-.01em">Este documento aplica un sistema que no es suyo.</b><span style="color:#a9b1bf;font-size:.86rem">La estructura y el comportamiento los define <a href="../ds/" style="color:#fff;text-decoration:underline;text-underline-offset:2px">Ontikos · Sistema de funcionamiento</a> — 28 reglas, ninguna nombra el negocio. Aquí van los valores: fichas, tipografía, estados, piezas y pantallas de RetiCash.</span></div>
-<div style="max-width:1080px;margin:0 auto;padding:26px 32px 4px;font:14px/1.55 'IBM Plex Sans',system-ui,sans-serif">
-<h2 style="font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#868c9b;
-   margin:0 0 6px;padding-bottom:8px;border-bottom:1px solid #dfe2e8">Reconciliación con Ontikos · 4 sep 2026</h2>
-<p style="max-width:70ch;color:#4a4f5c;margin:14px 0">Al escribir el sistema de funcionamiento aparecieron seis contradicciones
-con este documento. <b style="color:#12141a">Cinco se resolvieron a favor de Ontikos y una en contra</b> — y esa última es la
+<div class="rec-tira"><b>Este documento aplica un sistema que no es suyo.</b><span>La estructura y el comportamiento los define <a href="../ds/">Ontikos · Sistema de funcionamiento</a> — 28 reglas, ninguna nombra el negocio. Aquí van los valores: fichas, tipografía, estados, piezas y pantallas de RetiCash.</span></div>
+<div class="rec">
+<h2>Reconciliación con Ontikos · 4 sep 2026</h2>
+<p>Al escribir el sistema de funcionamiento aparecieron seis contradicciones
+con este documento. <b>Cinco se resolvieron a favor de Ontikos y una en contra</b> — y esa última es la
 que importa, porque prueba que la regla de entrada funciona en las dos direcciones.</p>
-<table style="border-collapse:collapse;width:100%;font-size:.85rem;background:#fff;margin-bottom:8px">
-<tr style="background:#f4f5f7">
-  <th style="text-align:left;padding:10px 14px;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#868c9b;border-bottom:1px solid #dfe2e8">Regla</th>
-  <th style="text-align:left;padding:10px 14px;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#868c9b;border-bottom:1px solid #dfe2e8">Decía</th>
-  <th style="text-align:left;padding:10px 14px;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#868c9b;border-bottom:1px solid #dfe2e8">Qué pasó</th></tr>
-<tr><td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top"><b>03.1</b></td>
-  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top">«las cifras suben a la cabecera»</td>
-  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top;color:#4a4f5c">Corregida. La barra queda limpia; las cifras bajan al contenido. La medición de reversibilidad a 375 px sigue valiendo.</td></tr>
-<tr><td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top"><b>03.2</b></td>
-  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top">«si el alto baja de ~700 px el armazón se relaja y deja scrollear», y una tabla de <b>tres</b> gramáticas</td>
-  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top;color:#4a4f5c">Ambas derogadas por <a href="../ds/#r01" style="color:#0f62fe">01</a> y <a href="../ds/#r17" style="color:#0f62fe">17</a>. La tabla se deja tachada: legitimaba la tierra de nadie de 256 px.</td></tr>
-<tr><td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top"><b>03.3</b></td>
-  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top">reparto «cabecera · raíl de señales · trabajo»</td>
-  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top;color:#4a4f5c">Reemplazado por «lista · trabajo · contexto». Sobrevive el desempate: si se puede pulsar, no es señal.</td></tr>
-<tr><td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top"><b>08.0</b></td>
-  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top">«las celdas vienen de ahí» · IB y thinkorswim por igual</td>
-  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top;color:#4a4f5c">Corregida. thinkorswim se descarta: su densidad viene del <i>scalping</i>. Se suma el panel de contexto permanente, que es el hallazgo mayor.</td></tr>
-<tr><td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top"><b>08.2</b></td>
-  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top">«una cifra promovida no se repite»</td>
-  <td style="padding:10px 14px;border-bottom:1px solid #eceef2;vertical-align:top;color:#4a4f5c"><b style="color:#c8102e">Derogada.</b> Sin cifras promovidas se queda sin sujeto. Existía para tapar que la composición adivinaba.</td></tr>
-<tr style="background:#f4faf6"><td style="padding:10px 14px;vertical-align:top"><b>13.2</b></td>
-  <td style="padding:10px 14px;vertical-align:top">«el bloqueo no es un aviso: es una compuerta»</td>
-  <td style="padding:10px 14px;vertical-align:top;color:#4a4f5c"><b style="color:#1f7a3f">Ganó esta regla.</b> La tabla de superficies de Ontikos decía «banner de la región» y estaba mal: un banner deja los controles vivos debajo. <b>Se corrigió Ontikos.</b></td></tr>
+<table>
+<thead><tr><th>Regla</th><th>Decía</th><th>Qué pasó</th></tr></thead>
+<tbody>
+<tr><td><b>03.1</b></td>
+  <td>«las cifras suben a la cabecera»</td>
+  <td class="q">Corregida. La barra queda limpia; las cifras bajan al contenido. La medición de reversibilidad a 375 px sigue valiendo.</td></tr>
+<tr><td><b>03.2</b></td>
+  <td>«si el alto baja de ~700 px el armazón se relaja y deja scrollear», y una tabla de <b>tres</b> gramáticas</td>
+  <td class="q">Ambas derogadas por <a href="../ds/#r01">01</a> y <a href="../ds/#r17">17</a>. La tabla se deja tachada: legitimaba la tierra de nadie de 256 px.</td></tr>
+<tr><td><b>03.3</b></td>
+  <td>reparto «cabecera · raíl de señales · trabajo»</td>
+  <td class="q">Reemplazado por «lista · trabajo · contexto». Sobrevive el desempate: si se puede pulsar, no es señal.</td></tr>
+<tr><td><b>08.0</b></td>
+  <td>«las celdas vienen de ahí» · IB y thinkorswim por igual</td>
+  <td class="q">Corregida. thinkorswim se descarta: su densidad viene del <i>scalping</i>. Se suma el panel de contexto permanente, que es el hallazgo mayor.</td></tr>
+<tr><td><b>08.2</b></td>
+  <td>«una cifra promovida no se repite»</td>
+  <td class="q"><b class="der">Derogada.</b> Sin cifras promovidas se queda sin sujeto. Existía para tapar que la composición adivinaba.</td></tr>
+<tr class="gana"><td><b>13.2</b></td>
+  <td>«el bloqueo no es un aviso: es una compuerta»</td>
+  <td class="q"><b class="gan">Ganó esta regla.</b> La tabla de superficies de Ontikos decía «banner de la región» y estaba mal: un banner deja los controles vivos debajo. <b>Se corrigió Ontikos.</b></td></tr>
+</tbody>
 </table>
-<p style="max-width:70ch;color:#868c9b;font-size:.82rem;margin:12px 0 0">Las demás reglas —fichas, tipografía, estados, lenguaje,
+<p class="nota">Las demás reglas —fichas, tipografía, estados, lenguaje,
 piezas, pantallas— no contradicen nada: son los valores que este producto le pone a la casa.</p>
 </div>
 
@@ -1791,16 +2007,16 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
       <div class="plancha-t">El mismo portal, dos idiomas</div>
       <div class="dos-marcos">
         <div>
-          <div class="marco" style="block-size:521px">
-            <div class="marco-esc" style="transform:scale(.64)">
+          <div class="marco" data-w="375" data-h="812">
+            <div class="marco-esc">
               <div style="width:375px;height:812px;display:flex;align-items:center;justify-content:center;text-align:center;background:#f2f2f7;color:#6b6b82;border:1px dashed #c9c9d4;font:600 15px/1.5 system-ui,sans-serif;padding:24px">Muestra viva<br>del vendedor a 375 px<br><span style="font-weight:400">requiere la aplicación servida</span></div>
             </div>
           </div>
           <div class="plancha-pie">375 px · documento · una región scrollea</div>
         </div>
         <div>
-          <div class="marco" style="block-size:390px">
-            <div class="marco-esc" style="transform:scale(.4333)">
+          <div class="marco" data-w="1440" data-h="900">
+            <div class="marco-esc">
               <div style="width:1440px;height:900px;display:flex;align-items:center;justify-content:center;text-align:center;background:#f2f2f7;color:#6b6b82;border:1px dashed #c9c9d4;font:600 22px/1.5 system-ui,sans-serif;padding:24px">Muestra viva<br>del vendedor a 1440 px<br><span style="font-weight:400">requiere la aplicación servida</span></div>
             </div>
           </div>
@@ -1906,7 +2122,7 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
     <div class="plancha-in">
       <div class="plancha-ey">04 · Fichas</div>
       <div class="plancha-t">Trece fichas sostienen todo el producto</div>
-      <div class="paleta"><div style="background:var(--surf);color:var(--ink)">--surf</div><div style="background:var(--surf2);color:var(--ink)">--surf2</div><div style="background:var(--surf3);color:var(--ink)">--surf3</div><div style="background:var(--bg);color:var(--ink)">--bg</div><div style="background:var(--ink4);color:#fff">--ink4</div><div style="background:var(--ink3);color:#fff">--ink3</div><div style="background:var(--ink2);color:#fff">--ink2</div><div style="background:var(--ink);color:#fff">--ink</div><div style="background:var(--red);color:#fff">--red</div><div style="background:var(--danger);color:#fff">--danger</div><div style="background:var(--amber);color:#fff">--amber</div><div style="background:var(--green);color:#fff">--green</div><div style="background:var(--blue);color:#fff">--blue</div></div>
+      <div class="paleta"><div style="background:var(--surf)"><i>--surf</i></div><div style="background:var(--surf2)"><i>--surf2</i></div><div style="background:var(--surf3)"><i>--surf3</i></div><div style="background:var(--bg)"><i>--bg</i></div><div style="background:var(--ink4)"><i>--ink4</i></div><div style="background:var(--ink3)"><i>--ink3</i></div><div style="background:var(--ink2)"><i>--ink2</i></div><div style="background:var(--ink)"><i>--ink</i></div><div style="background:var(--red)"><i>--red</i></div><div style="background:var(--danger)"><i>--danger</i></div><div style="background:var(--amber)"><i>--amber</i></div><div style="background:var(--green)"><i>--green</i></div><div style="background:var(--blue)"><i>--blue</i></div></div>
       <div class="plancha-pie">Pintados con las variables de app.css de producción · si un ficha cambia, esta banda cambia con él</div>
     </div>
   </div>
@@ -1929,8 +2145,8 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
         <tr><td class="mono">--brd3</td><td><span class="sw" style="background:var(--brd3)"></span></td><td class="mono">rgba(0,0,0,.22)</td><td>Borde en hover y foco</td></tr>
         <tr><td class="mono">--ink</td><td><span class="sw" style="background:var(--ink)"></span></td><td class="mono">#09090f</td><td>Texto primario</td></tr>
         <tr><td class="mono">--ink2</td><td><span class="sw" style="background:var(--ink2)"></span></td><td class="mono">#2e2e42</td><td>Texto secundario</td></tr>
-        <tr><td class="mono">--ink3</td><td><span class="sw" style="background:var(--ink3)"></span></td><td class="mono">#6b6b82</td><td>Texto terciario · rótulos · pistas</td></tr>
-        <tr><td class="mono">--ink4</td><td><span class="sw" style="background:var(--ink4)"></span></td><td class="mono">#a8a8c0</td><td>Texto mínimo · eyebrows · marcador de posición</td></tr>
+        <tr><td class="mono">--ink3</td><td><span class="sw" style="background:var(--ink3)"></span></td><td class="mono">#5f5f74</td><td>Texto terciario · rótulos · pistas</td></tr>
+        <tr><td class="mono">--ink4</td><td><span class="sw" style="background:var(--ink4)"></span></td><td class="mono">#686877</td><td>Texto mínimo · eyebrows · marcador de posición · lo pálido de antes (#a8a8c0) pasó a <b>--deco</b>, que no lleva texto</td></tr>
         <tr><td class="mono">--red</td><td><span class="sw" style="background:var(--red)"></span></td><td class="mono">#D0021B</td><td>Marca · primario · alerta crítica · destino activo</td></tr>
         <tr><td class="mono">--green</td><td><span class="sw" style="background:var(--green)"></span></td><td class="mono">#16a34a</td><td>Positivo · TC favorable · ganancia · cumplido</td></tr>
         <tr><td class="mono">--amber</td><td><span class="sw" style="background:var(--amber)"></span></td><td class="mono">#d97706</td><td>Atención · vencimientos · campañas</td></tr>
@@ -1958,7 +2174,7 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
     <div class="rg">
       <div class="rg-h"><span class="rg-id">04.2</span><span class="mk mk-r">De este producto</span><span class="mk mk-o">Origen · maestro, literal</span></div>
       <div class="rg-b">
-        <div class="rg-t">Modo oscuro: <code>body.dk</code> redefine solo superficies, tintas y bordes · la marca es invariante · interruptor luna/sol en la cabecera vía <code>RC.theme</code> · claro por omisión.</div>
+        <div class="rg-t">Modo oscuro: <code>body.dk</code> redefine superficies, tintas, bordes y las fichas <code>-txt</code> · la marca es invariante como <b>relleno</b>, no como <b>tinta</b>: el rojo sobre superficie oscura da 2.98:1 y no se lee · interruptor luna/sol en la cabecera vía <code>RC.theme</code> · claro por omisión.</div>
         <div class="rg-d">El Design System v4 declara modo claro universal para la otra superficie.
           No hay conflicto: <b>en Middle Market manda el maestro</b>, y el maestro pide el
           interruptor. Claro por omisión en ambos.</div>
@@ -1983,8 +2199,8 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
     <div class="plancha-in">
       <div class="plancha-ey">05 · Rejilla y ejes</div>
       <div class="plancha-t">Las dieciséis columnas, sobre el portal que corre</div>
-      <div class="marco" style="block-size:459px">
-        <div class="marco-esc" style="transform:scale(.51)">
+      <div class="marco" data-w="1440" data-h="900">
+        <div class="marco-esc">
           <div style="width:1440px;height:900px;display:flex;align-items:center;justify-content:center;text-align:center;background:#f2f2f7;color:#6b6b82;border:1px dashed #c9c9d4;font:600 22px/1.5 system-ui,sans-serif;padding:24px">Muestra viva<br>del vendedor a 1440 px<br><span style="font-weight:400">requiere la aplicación servida</span></div>
           <div class="rejilla-encima" style="inset-inline-start:109px; inline-size:1300px; grid-template-columns:repeat(16,1fr)"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         </div>
@@ -2012,7 +2228,7 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
     <figure class="mu">
       <figcaption class="mu-h">Muestra viva <span class="pt">·</span> cambie el ancho de la ventana y cuente las divisiones</figcaption>
       <div class="mu-b claro">
-        <div class="rej-dm" style="display:grid;grid-template-columns:repeat(16,1fr);gap:8px">
+        <div class="rej-dm" style="display:grid;grid-template-columns:repeat(16,minmax(18px,1fr));gap:8px;overflow-x:auto">
           <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span>
           <span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span>
         </div>
@@ -2071,7 +2287,7 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
           <div class="esc-f"><div class="esc-m">.82–.88 rem · 700–800<br>rótulo · botón</div><div class="esc-e" style="font-size:.86rem;font-weight:800">Publicar TC →</div></div>
           <div class="esc-f"><div class="esc-m">1.05–1.15 rem · 800–900<br>título de sección</div><div class="esc-e" style="font-size:1.1rem;font-weight:900;letter-spacing:-.02em">Órdenes de tu cartera</div></div>
           <div class="esc-f"><div class="esc-m">1.35 rem+ · 900<br>título de pantalla</div><div class="esc-e" style="font-size:1.4rem;font-weight:900;letter-spacing:-.03em">Hoy en la red</div></div>
-          <div class="esc-f"><div class="esc-m">1.6–2.0 rem · 900<br>cifra rectora</div><div class="esc-e" style="font-size:1.9rem;font-weight:900;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:var(--green)">16.6875</div></div>
+          <div class="esc-f"><div class="esc-m">1.6–2.0 rem · 900<br>cifra rectora</div><div class="esc-e" style="font-size:1.9rem;font-weight:900;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:var(--green-txt)">16.6875</div></div>
         </div>
       </div>
     </figure>
@@ -2206,7 +2422,7 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
     </div>
 
     <div class="rg">
-      <div class="rg-h"><span class="rg-id">08.2</span><span class="mk" style="background:#fbe9ec;color:#a3102a">Derogada</span><span class="mk mk-o">Origen · defecto visto al construirla</span></div>
+      <div class="rg-h"><span class="rg-id">08.2</span><span class="mk mk-r">Derogada</span><span class="mk mk-o">Origen · defecto visto al construirla</span></div>
       <div class="rg-b">
         <div class="rg-t" style="text-decoration:line-through;opacity:.5">Una cifra promovida a la cabecera no se repite en la columna de trabajo.</div><div class="rg-d" style="border-left:2px solid var(--d-debt);padding-left:12px;margin-bottom:10px"><b>Derogada el 4 de septiembre.</b> Con la barra limpia no hay cifras promovidas, así que la regla se queda sin sujeto. Y su origen la condena: existía para tapar que la composición no sabía qué ya había puesto. Con la disposición declarada (<a href="../ds/#axioma">el axioma de Ontikos</a>) no se coloca dos veces la misma cifra, y no hace falta una regla que lo prohíba. Junto con ella caen el heurístico <code>SENAL</code> y <code>plegarVacios()</code>, por la misma razón.</div>
         <div class="rg-d">Al poner las celdas, el TC y el «Ganado este mes» quedaron dos veces en
@@ -2347,7 +2563,7 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
       </div>
     </figure>
     <div class="rg">
-      <div class="rg-h"><span class="rg-id">09.2</span><span class="mk" style="background:#eef1f6;color:#4a4f5c">Aplica Ontikos · proceso</span><span class="mk mk-o">Origen · Cash Market</span></div>
+      <div class="rg-h"><span class="rg-id">09.2</span><span class="mk mk-o">Aplica Ontikos · proceso</span><span class="mk mk-o">Origen · Cash Market</span></div>
       <div class="rg-b">
         <div class="rg-t">El hito se llama distinto según quién mira, y el mensaje termina en un verbo.</div>
         <div class="rg-d">Mismo recorrido, otras palabras: el vendedor lee «Cobrada en caja» y el
@@ -2372,7 +2588,7 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
 
     <div class="rg">
       <div class="rg-h"><span class="rg-id">09.3</span>
-        <span class="mk" style="background:#fdf0e2;color:#b06a00">Deuda declarada</span>
+        <span class="mk mk-w">Deuda declarada</span>
         <span class="mk mk-o">Origen · consecuencia de generalizar la pieza</span></div>
       <div class="rg-b">
         <div class="rg-t">Hoy la línea de tiempo está implementada dos veces, y eso es una deuda, no una decisión.</div>
@@ -2646,14 +2862,14 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
       <thead><tr><th>Qué comprueba</th><th>Última ejecución</th><th>Resultado</th></tr></thead>
       <tbody>
 <!-- VERIFICACION:INICIO -->
-        <tr><td>Fichas base contra el <code>:root</code> de producción</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> 16 de 16 coinciden</td></tr>
-        <tr><td>Radio en piezas de operador</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 4 fuera de norma · .modal 16px · .modal 4px · .ord-empty 18px · .ubtn 7px</td></tr>
-        <tr><td>Colores literales en las hojas propias</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> cero</td></tr>
-        <tr><td>Modo oscuro: fichas de Carbon mapeados</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> 43 fichas de Carbon redeclarados bajo body.dk</td></tr>
-        <tr><td>Terminología «puntos» contra «Pasos» en el cliente</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> «puntos» 26 · «Pasos» 6 en el portal del cliente</td></tr>
-        <tr><td>Etiquetas equilibradas en las páginas generadas</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> equilibrados</td></tr>
-        <tr><td>Paquete al día con las páginas</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> al día</td></tr>
-        <tr><td>Despliegue: local contra servidor</td><td class="mono">4 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> 7 de 7 idénticos</td></tr>
+        <tr><td>Fichas base contra el <code>:root</code> de producción</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> 16 de 16 coinciden</td></tr>
+        <tr><td>Radio en piezas de operador</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> 3 fuera de norma · .modal 4px · .ord-empty 18px · .ubtn 7px</td></tr>
+        <tr><td>Colores literales en las hojas propias</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> cero</td></tr>
+        <tr><td>Modo oscuro: fichas de Carbon mapeados</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> 43 fichas de Carbon redeclarados bajo body.dk</td></tr>
+        <tr><td>Terminología «puntos» contra «Pasos» en el cliente</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-debt)">✗</b> «puntos» 26 · «Pasos» 6 en el portal del cliente</td></tr>
+        <tr><td>Etiquetas equilibradas en las páginas generadas</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> equilibrados</td></tr>
+        <tr><td>Paquete al día con las páginas</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-ok)">✓</b> al día</td></tr>
+        <tr><td>Despliegue: local contra servidor</td><td class="mono">9 sep 2026</td><td><b style="color:var(--d-ink4)">—</b> no se pudo consultar el servidor (FileNotFoundError)</td></tr>
         <tr><td>Una acción primaria por pantalla <span class="mk mk-w" style="margin-left:6px">navegador</span></td><td class="mono">3 sep 2026</td><td>Cumple · vendedor 0·0·0·1·0 · admin 0·1·0·0·0</td></tr>
         <tr><td>Vacíos tipados <span class="mk mk-w" style="margin-left:6px">navegador</span></td><td class="mono">3 sep 2026</td><td>3 de 3 en el portal del vendedor</td></tr>
         <tr><td>Regiones con scroll propio <span class="mk mk-w" style="margin-left:6px">navegador</span></td><td class="mono">3 sep 2026</td><td>Vendedor: solo <code>.sa</code> · admin en escritorio: ninguna</td></tr>
@@ -2729,6 +2945,30 @@ piezas, pantallas— no contradicen nada: son los valores que este producto le p
     var suave = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo({ top:0, behavior: suave ? 'smooth' : 'auto' });
   });
+})();
+</script>
+<script>
+/* Mide cada marco contra el ancho que tiene, y vuelve a medir cuando cambia.
+   Sin esto la escala es una constante escrita a mano, que es exactamente lo
+   que falla al cambiar de pantalla. */
+(function(){
+  var marcos = document.querySelectorAll('.marco[data-w]');
+  function medir(){
+    marcos.forEach(function(m){
+      var w = +m.dataset.w, h = +m.dataset.h, disponible = m.clientWidth;
+      if (!w || !disponible) return;
+      var esc = Math.min(1, disponible / w);
+      m.style.setProperty('--esc', esc);
+      m.style.setProperty('--fuente-h', h + 'px');
+    });
+  }
+  medir();
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(medir);
+    marcos.forEach(function(m){ ro.observe(m); });
+  } else {
+    addEventListener('resize', medir);
+  }
 })();
 </script>
 </body>

@@ -5,11 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Estado medido · Ontikos</title>
 <style>
-:root{ --bg:#F5F6F8; --surf:#fff; --ink:#12141a; --ink2:#4a4f5c; --ink3:#868c9b;
-       --brd:#dfe2e8; --acc:#D0021B; --ok:#1f7a3f; --mal:#c01c1c; }
+/* Las tintas pasan 4.5:1 sobre las superficies de su tema — la misma regla
+   que gobierna los dos documentos, aplicada también a esta página. */
+:root{ --bg:#F5F6F8; --surf:#fff; --ink:#12141a; --ink2:#4a4f5c; --ink3:#545862;
+       --brd:#dfe2e8; --acc:#c8102e; --ok:#0E753B; --mal:#B01818; }
 @media(prefers-color-scheme:dark){ :root:not([data-theme="light"]){
-  --bg:#0e0f13; --surf:#171920; --ink:#f2f2f7; --ink2:#c2c6d0; --ink3:#868c9b;
-  --brd:#272a33; --ok:#4ec27d; --mal:#ff6b6b; } }
+  --bg:#0e0f13; --surf:#171920; --ink:#f2f2f7; --ink2:#c2c6d0; --ink3:#9aa4b4;
+  --brd:#272a33; --acc:#FF6B7D; --ok:#3FB574; --mal:#F2626B; } }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
   font:16px/1.6 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
@@ -17,99 +19,124 @@ body{margin:0;background:var(--bg);color:var(--ink);
 .eyebrow{font-size:.64rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--acc)}
 h1{margin:10px 0 12px;font-size:2.1rem;font-weight:200;letter-spacing:-.035em;line-height:1.1;text-wrap:balance}
 h1 b{font-weight:600}
-.lead{margin:0 0 40px;color:var(--ink2);max-width:60ch}
+.lead{margin:0 0 40px;color:var(--ink2);max-width:62ch}
 h2{margin:44px 0 4px;font-size:1.02rem;font-weight:700;letter-spacing:-.01em}
-h2 + p{margin:0 0 16px;color:var(--ink3);font-size:.86rem}
+h2 + p{margin:0 0 16px;color:var(--ink3);font-size:.86rem;max-width:62ch}
 .cifras{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:26px 0 8px}
-.c{background:var(--surf);border:1px solid var(--brd);padding:16px 18px}
+.c{background:var(--surf);border:1px solid var(--brd);padding:16px 18px;min-inline-size:0}
 .c s{display:block;font-size:1.9rem;font-weight:800;letter-spacing:-.04em;text-decoration:none;
   font-variant-numeric:tabular-nums;line-height:1.1}
-.c u{display:block;text-decoration:none;font-size:.72rem;color:var(--ink3);margin-top:4px;line-height:1.35}
-.c.mal s{color:var(--mal)} .c.ok s{color:var(--ok)}
-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:4px 0 8px}
-th{text-align:left;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--ink3);padding:8px 10px;border-bottom:1px solid var(--brd)}
-td{padding:9px 10px;border-bottom:1px solid var(--brd);font-variant-numeric:tabular-nums}
-td.n{text-align:right;width:5.5em}
+.c u{display:block;text-decoration:none;font-size:.72rem;color:var(--ink3);margin-top:4px;line-height:1.35;
+  overflow-wrap:anywhere}
+.c.ok s{color:var(--ok)} .c.mal s{color:var(--mal)}
+table{inline-size:100%;border-collapse:collapse;font-size:.86rem;margin:4px 0 8px}
+th{text-align:start;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink3);padding:8px 10px;border-block-end:1px solid var(--brd)}
+td{padding:9px 10px;border-block-end:1px solid var(--brd);font-variant-numeric:tabular-nums}
+td.n{text-align:end;inline-size:6.5em}
 .b{color:var(--mal);font-weight:700} .g{color:var(--ok);font-weight:700}
-.nota{background:var(--surf);border:1px solid var(--brd);border-left:3px solid var(--acc);
+.nota{background:var(--surf);border:1px solid var(--brd);border-inline-start:3px solid var(--acc);
   padding:14px 18px;margin:18px 0;font-size:.88rem;color:var(--ink2)}
-code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em;color:var(--ink)}
-footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--brd);font-size:.76rem;color:var(--ink3)}
+code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em;color:var(--ink);
+  overflow-wrap:anywhere}
+.cq{border:1px solid var(--brd);background:var(--surf);padding:12px 14px;margin:14px 0;
+  font:.72rem/1.7 "IBM Plex Mono",ui-monospace,monospace;color:var(--ink2);
+  white-space:pre;overflow-x:auto}
+footer{margin-block-start:56px;padding-block-start:18px;border-block-start:1px solid var(--brd);
+  font-size:.76rem;color:var(--ink3)}
 a{color:var(--acc)}
+@media(max-width:42rem){
+  .w{padding:48px 16px 72px} h1{font-size:1.7rem}
+  table{table-layout:fixed} th,td{padding:8px;overflow-wrap:anywhere}
+}
 </style>
 </head>
 <body>
 <div class="w">
   <div class="eyebrow">Ontikos · estado medido</div>
   <h1>Lo que <b>mide</b> el sistema, no lo que opina.</h1>
-  <p class="lead">Tres verificadores recorren el producto y fallan en rojo cuando algo se sale
-  del contrato. Esta página es su salida, no un resumen escrito a mano.</p>
+  <p class="lead">Cinco verificadores recorren el producto y los documentos en cada empujón,
+  y el CI falla si alguna cifra sube. Esta página es su salida, no un resumen escrito a mano.</p>
 
   <div class="cifras">
-    <div class="c mal"><s>33</s><u>defectos de pantalla<br>en 55 medidas</u></div>
-    <div class="c mal"><s>21</s><u>anchos fuera del<br>contrato de rejilla</u></div>
-    <div class="c mal"><s>19</s><u>correcciones a Carbon<br>sin declarar</u></div>
-    <div class="c"><s>1</s><u>pantalla que no se<br>puede medir aún</u></div>
+    <div class="c ok"><s>0</s><u>defectos de pantalla<br>en 55 medidas</u></div>
+    <div class="c ok"><s>0</s><u>textos bajo el contraste<br>de la norma</u></div>
+    <div class="c ok"><s>0</s><u>anchos fuera del<br>contrato de rejilla</u></div>
+    <div class="c ok"><s>0</s><u>correcciones a Carbon<br>sin declarar</u></div>
+    <div class="c ok"><s>0</s><u>infracciones del<br>contrato de fichas</u></div>
+    <div class="c mal"><s>1</s><u>pantalla que no se<br>puede medir aún</u></div>
   </div>
 
-  <h2>Pantallas</h2>
-  <p>Diez anchos, de 320 a 1584. Desborde según WCAG 1.4.10, orientación según 1.3.4,
-  objetivo táctil contra los 44 px que declara la casa — medido con dedo, no con ratón.</p>
+  <h2>De dónde vienen esos ceros</h2>
+  <p>No estaban ahí. Cada uno es la diferencia entre la primera medición y la de hoy.</p>
   <table>
-    <thead><tr><th>Pantalla</th><th class="n">Desborde</th><th class="n">Táctil</th><th>Apaisado</th></tr></thead>
+    <thead><tr><th>Verificador</th><th class="n">Al empezar</th><th class="n">Ahora</th></tr></thead>
     <tbody>
-      <tr><td>Vendedor</td><td class="n b">1</td><td class="n b">2</td><td class="b">bloquea</td></tr>
-      <tr><td>Administrador</td><td class="n b">1</td><td class="n b">2</td><td class="b">bloquea</td></tr>
-      <tr><td>Caja</td><td class="n b">1</td><td class="n b">5</td><td class="b">bloquea</td></tr>
-      <tr><td>Documento · Ontikos</td><td class="n b">6</td><td class="n g">0</td><td class="g">—</td></tr>
-      <tr><td>Documento · RetiCash</td><td class="n b">6</td><td class="n b">5</td><td class="b">bloquea</td></tr>
-      <tr><td>Cliente</td><td class="n">—</td><td class="n">—</td><td>sin construir</td></tr>
+      <tr><td>Contraste · WCAG 1.4.3</td><td class="n b">554</td><td class="n g">0</td></tr>
+      <tr><td>Pantallas · 1.4.10 / 1.3.4 / 2.5.8</td><td class="n b">34</td><td class="n g">0</td></tr>
+      <tr><td>Rejilla · anchos inventados</td><td class="n b">21</td><td class="n g">0</td></tr>
+      <tr><td>Carbon · correcciones sin declarar</td><td class="n b">19</td><td class="n g">0</td></tr>
+      <tr><td>Fichas · contrato de paleta</td><td class="n">—</td><td class="n g">0</td></tr>
     </tbody>
   </table>
 
-  <div class="nota"><b>El apaisado bloqueado es una regla del sistema, no un descuido.</b>
-  La regla 26 de Ontikos dice «se declara y se bloquea» y lleva la marca de <i>ganada</i>.
-  Contradice WCAG 2.1 · 1.3.4, que sólo admite restringir la orientación cuando es esencial;
-  una terminal de operación no lo es. Hay tabletas montadas en soporte fijo que no giran.
-  La regla está propuesta para reescribirse — «declara una orientación preferida y se adapta» —
-  y bajar a <i>en deriva</i> hasta que el producto la cumpla.</div>
+  <div class="nota"><b>Qué significa un cero y qué no.</b> No significa que el sistema esté
+  terminado: significa que el trinquete ya no admite ni una infracción nueva <i>de lo que sabe
+  medir</i>. El primer texto que no se lea, el primer ancho inventado o la primera disposición
+  que rompa, tumban la rama el mismo día en que entran. Lo que el sistema todavía no sabe mirar
+  está más abajo, y está ahí a propósito.</div>
 
-  <h2>Rejilla</h2>
-  <p>Cinco quiebres de Carbon: 320 · 672 · 1056 · 1312 · 1584. Ninguna hoja debería inventar otro.</p>
+  <h2>El contraste era el peor, y estaba donde menos se esperaba</h2>
+  <p>De los 554 textos por debajo de la norma, 515 estaban en estos dos documentos —los que
+  declaran cómo se hacen las cosas— y no en el producto.</p>
   <table>
-    <thead><tr><th>Hoja</th><th class="n">Fuera de contrato</th></tr></thead>
+    <thead><tr><th>Dónde</th><th class="n">Textos</th></tr></thead>
     <tbody>
-      <tr><td><code>app.css</code></td><td class="n b">15</td></tr>
-      <tr><td><code>carbon/carbon.css</code></td><td class="n b">2</td></tr>
-      <tr><td><code>carbon/puente.css</code></td><td class="n b">2</td></tr>
-      <tr><td><code>carbon/caja.css</code></td><td class="n b">1</td></tr>
-      <tr><td><code>carbon/cliente.css</code></td><td class="n b">1</td></tr>
-      <tr><td>Las otras nueve</td><td class="n g">0</td></tr>
+      <tr><td>Documento · RetiCash</td><td class="n">337</td></tr>
+      <tr><td>Documento · Ontikos</td><td class="n">178</td></tr>
+      <tr><td>Vendedor, Administrador y Caja</td><td class="n">39</td></tr>
     </tbody>
   </table>
-  <p style="font-size:.84rem;color:var(--ink3)">Los inventados: 400 · 430 · 520 · 544 · 560 · 561 · 600 · 860 · 900.</p>
+  <p style="font-size:.84rem;color:var(--ink3)">Y no eran 554 decisiones: una sola ficha
+  —el <code>--ink3</code> de Ontikos, que daba 3.37:1 sobre el blanco— explicaba 155 de ellos.</p>
 
-  <h2>Qué le corregimos a Carbon</h2>
-  <p>La hoja de la casa se empaqueta después de Carbon para poder corregirlo. Eso hace falta
-  para la marca; no para la geometría, que es aquello por lo que se adoptó.</p>
+  <h2>La regla 26 se retiró, y no la retiró la norma</h2>
+  <p>Decía «se declara y se bloquea» y estaba marcada <i>ganada</i>: en apaisado por debajo de
+  900 px la aplicación se tapaba entera con «Gira tu dispositivo».</p>
+  <div class="nota">Contradice <b>WCAG 2.1 · 1.3.4</b>, que sólo admite restringir la orientación
+  cuando es <i>esencial</i> —el ejemplo de la norma es un piano, o un cheque que se fotografía—.
+  Una terminal de operación no lo es, y el bloqueo dejaba sin la aplicación entera a quien tiene
+  el teléfono en un soporte fijo.<br><br>
+  <b>Pero lo decisivo fue medirla.</b> Retirado el bloqueo:</div>
+  <div class="cq">667×375   desborde 0   útil 314 px (84%)
+736×414   desborde 0   útil 353 px (85%)
+844×390   desborde 0   útil 329 px (84%)
+932×430   desborde 0   útil 359 px (83%)</div>
+  <p>Cero desborde horizontal y entre el 81 y el 86 por ciento de pantalla utilizable. La premisa
+  de la regla —«en apaisado la composición se rompe»— <b>era falsa</b>. Por eso no se sustituyó
+  por ninguna adaptación: escribir un arreglo para algo que la medición dice que no está roto es
+  el trabajo al ojo que este sistema existe para no hacer.</p>
+
+  <h2>Lo que el sistema todavía no sabe mirar</h2>
+  <p>Un verificador sólo puede fallar por lo que sabe mirar. Esto no lo mira nadie:</p>
   <table>
-    <thead><tr><th>&nbsp;</th><th class="n">Reglas</th></tr></thead>
+    <thead><tr><th>Hueco</th><th>Por qué importa</th></tr></thead>
     <tbody>
-      <tr><td>Caen sobre clases de Carbon</td><td class="n">35</td></tr>
-      <tr><td>Pisan geometría, tipografía o espaciado</td><td class="n b">19</td></tr>
-      <tr><td>Declaran su porqué</td><td class="n b">0</td></tr>
+      <tr><td>El portal del cliente</td><td>No se construye sin datos. El verificador lo dice:
+        «eso no es un aprobado».</td></tr>
+      <tr><td>18 acciones sin fixture</td><td>Responden por omisión, así que esas rutas están
+        medidas por aproximación.</td></tr>
+      <tr><td>Cuatro comprobaciones</td><td>Siguen dadas por no medibles, y ya no lo son.</td></tr>
+      <tr><td>Ningún segundo producto</td><td>Mientras nadie más consuma Ontikos, la portabilidad
+        está <i>declarada</i>, no <i>ganada</i>.</td></tr>
     </tbody>
   </table>
-
-  <div class="nota"><b>Ya se corrigió una.</b> La barra global bajaba las cajas de Carbon de 48 a 40
-  y el disco de iniciales a 30, con un comentario que afirmaba que el objetivo de toque seguía
-  siendo de 40. Medido con dedo: era 30×30. Se quitó, Carbon recuperó sus 48, y la barra ahora
-  se pliega en el orden que manda la regla 08 en vez de encogerse.</div>
 
   <footer>
-    Generado por <code>verificar-pantallas.mjs</code>, <code>verificar-rejilla.py</code> y
-    <code>verificar-carbon.py</code> · 8 de septiembre de 2026 ·
+    Generado por <code>verificar-pantallas.mjs</code>, <code>verificar-contraste.mjs</code>,
+    <code>verificar-rejilla.py</code>, <code>verificar-carbon.py</code> y
+    <code>verificar-fichas.py</code>, atados por <code>trinquete.py</code> ·
+    cifras de la corrida del CI, no de una máquina local · 9 de septiembre de 2026 ·
     <a href="../">volver a los documentos</a>
   </footer>
 </div>
