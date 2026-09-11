@@ -200,8 +200,20 @@ body {
 
 /* La región: alto declarado, no medido del contenido. Es la regla
    `.ont-region-fija` de `estilos.scss`, con su mismo descuento. */
+/* ── [CORRECCIÓN · el gráfico no se aplasta] ─────────────────────────
+   Medido en WebKit (el motor de iOS) y en pantalla corta: con
+   `overflow:hidden` y el gráfico en `flex:1`, cuando la ventana es
+   corta —el cromo de Safari o la barra de Firefox se comen el alto— el
+   gráfico caía a 29 px y se encimaba sobre su título. En Chrome de
+   Android no pasaba porque su ventana es más alta. Un gráfico aplastado
+   es peor que un poco de scroll, así que la región **scrollea cuando no
+   cabe** y el gráfico tiene un piso. La promesa de «sin scroll» se
+   cumple donde el alto alcanza —la mayoría de los teléfonos— y cede,
+   legible, donde no. */
 .sa {
-  flex: 1; min-block-size: 0; overflow: hidden;
+  flex: 1; min-block-size: 0;
+  overflow-y: auto; overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   display: flex; flex-direction: column;
   padding: var(--e06) var(--e05);
 }
@@ -329,7 +341,7 @@ h1 {                                         /* LD.h con ANGOSTO.h */
 
    Van tres pasos de 60 ms, que es la mitad de `rapido`: bastante para
    que se perciba la secuencia, poco para que nadie espere. */
-.pane { display: none; flex: 1; min-block-size: 0; flex-direction: column; }
+.pane { display: none; flex: 1 0 auto; min-block-size: 0; flex-direction: column; }
 .pane.on { display: flex; }
 .pane.on > * {
   animation: entra var(--t-normal) var(--e-entra) both;
@@ -380,8 +392,11 @@ h1 {                                         /* LD.h con ANGOSTO.h */
 .historia .cifra { font-weight: 900; color: var(--cds-text-primary); }
 
 /* ═══ EL PANEL · la pieza `Panel`, con `llena` ═══ */
+/* **El piso.** 260 px = cabecera (~40) + un gráfico que se lee (~220).
+   Es lo que impide el colapso medido en WebKit; por encima, el panel
+   crece con la ventana. */
 .panel {
-  flex: 1; min-block-size: 0; display: flex; flex-direction: column;
+  flex: 1 1 auto; min-block-size: 260px; display: flex; flex-direction: column;
   background: var(--cds-layer-02);
   border: var(--f-grueso) solid var(--cds-border-subtle);
   border-radius: var(--r-panel); overflow: hidden;
@@ -399,7 +414,7 @@ h1 {                                         /* LD.h con ANGOSTO.h */
 }
 /* El gráfico recibe el hueco medido, no lo decide: `@carbon/charts`
    pide `height` y d3 dibuja contra ese número. */
-.grafico { flex: 1; min-block-size: 0; inline-size: 100%; }
+.grafico { flex: 1; min-block-size: 200px; inline-size: 100%; }
 .panel .cuerpo svg { max-inline-size: 100%; }
 /* El hueco declarado, dicho en la pantalla en vez de rellenado con un
    número inventado. */
