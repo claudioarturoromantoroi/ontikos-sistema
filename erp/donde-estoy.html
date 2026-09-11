@@ -1,3 +1,11 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#161616">
+<meta name="robots" content="noindex, nofollow">
 <title>Dónde estoy · Dirección</title>
 <!-- ═══════════════════════════════════════════════════════════════
      Dónde estoy · Dirección · **corregido contra el sistema**
@@ -345,6 +353,8 @@ h1 {                                         /* LD.h con ANGOSTO.h */
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
+</head>
+<body>
 <header class="appbar">
   <svg class="ic burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
   <!-- **La marca se referencia del archivo, nunca se redibuja** ·
@@ -599,3 +609,6 @@ window.addEventListener('load', pintar)
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(pintar)
 window.addEventListener('resize', function () { clearTimeout(window.__t); window.__t = setTimeout(pintar, 200) })
 </script>
+
+</body>
+</html>
