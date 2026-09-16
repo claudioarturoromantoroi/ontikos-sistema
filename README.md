@@ -26,8 +26,7 @@ Sus dos archivos tampoco se editan aquí. Las fuentes viven en el monorepo
 
 | Aquí | Fuente |
 |---|---|
-| `/erp/donde-estoy.html` | `ERP-CRM/wireframes/04_fuente.html` + `04_graficos-entrada.js`, empaquetados |
-| `/erp/app.html` | `ERP-CRM/producto/app/`, con `vite build` y las hojas en línea |
+| `/erp/polizario.html` | `ERP-CRM/producto/app/`, con `vite build` y las hojas en línea |
 
 Los dos son **autocontenidos**: la tipografía —DM Sans e IBM Plex Mono—, la marca
 y `@carbon/charts` viajan dentro del archivo, así que abren sin red y sin depender
