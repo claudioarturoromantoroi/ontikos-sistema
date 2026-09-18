@@ -4,8 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Ontikos · el marco</title>
-    <script type="module" crossorigin src="./assets/marco-DkG140VT.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/marco-D9delwyG.css">
+    <!-- El favicon estaba en `public/` desde la sesión del kit de marca y
+         este archivo NUNCA lo enlazaba, así que la pestaña del navegador
+         salía con el icono genérico. Lo vio el dueño, no el medidor: no
+         había comprobación que mirara el `<head>`. Ahora la hay.
+         Es el símbolo del Kit de Marca v1.1, copiado y no redibujado. -->
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <script type="module" crossorigin src="./assets/marco-BnUnJYWk.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/marco-Dnc9KWBb.css">
   </head>
   <body>
     <div id="raiz"></div>
