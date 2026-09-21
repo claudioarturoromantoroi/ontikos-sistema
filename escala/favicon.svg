@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="27 29 144 144" width="144" height="144" aria-label="Ontikos">
+  <!-- El símbolo, del Kit de Marca v1.1 (LEEME.txt · guia/ontikos-marca.html).
+       Reemplaza la esfera del manual v1.0. Copiado, no redibujado, de
+       /simbolo/ontikos-symbol-color.svg del kit del dueño del dominio.
+
+       Construcción (v1.1 §Símbolo):
+         Anillo abierto sobre una sola curva gobernada — centro (99,101),
+         radio exterior 67, interior 42, con la boca en el cuadrante
+         nororiente exacto (labio superior al norte, inferior al este).
+         Tres módulos que ascienden y se reducen —28 → 20 → 18— hacia la
+         esquina superior derecha. Eje: lo fluido contenido contra lo
+         modular en ascenso.
+
+       Plano, en el rojo de marca #D80404 — ya no hay gradiente ni cruz de
+       meridiano: el símbolo v1.1 es una silueta sólida.
+
+       ── El recuadro · [15-sep-2026] ──────────────────────────────────
+       El kit entrega el símbolo en una caja de 200 con aire alrededor
+       (contenido en x[32,166], y[33,168], centrado en el anillo (99,101)).
+       Aquí se recorta a un cuadrado de 144 centrado en (99,101), con ~4 px
+       de margen, para que el símbolo llene su caja como lo hacía la esfera
+       —«a sangre»— y así lea como la «o» del logotipo a tamaño de letra, y
+       conserve masa a 16 px (a ese tamaño los módulos se funden pero el
+       anillo se sostiene, v1.1 §Ícono). La geometría del kit no se toca:
+       sólo cambia la ventana. -->
+  <g fill="#D80404">
+    <path d="M166 101A67 67 0 1 1 99 34L99 59A42 42 0 1 0 141 101Z"/>
+    <rect x="114" y="72" width="28" height="28"/>
+    <rect x="142" y="52" width="20" height="20"/>
+    <rect x="124" y="33" width="18" height="18"/>
+  </g>
+</svg>
