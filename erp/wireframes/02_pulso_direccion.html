@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="es" data-carbon-theme="white">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>insurance.ontikos · Pulso de Dirección · wireframe</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/carbon.css">
+<link rel="stylesheet" href="assets/ibm-products.css">
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   PULSO DE DIRECCIÓN · wireframe 02 · móvil-first
+   Superficie `trabajo.dirigir` · modelo/superficies.js:580
+
+   TODO valor de aquí está LEÍDO, ninguno inventado. La procedencia va
+   junto al valor, no en un archivo aparte:
+
+     espacio    composicion.js · UNIDAD 8 · u(n)=8n · m2=2px · m4=4px
+     radios     lenguajeDG.js RD · panel 12 · fila 10 · barra 8 · píldora 9999
+     filetes    lenguajeDG.js FD · fino 1 · grueso 1.5 · estado 3
+     tipo       lenguajeDG.js LD · pulsoV/pulsoL/bandaT/filaT/filaS/
+                filaPeso/filaVerbo/insignia/miniH · y ANGOSTO
+     cejilla    lenguajeDG.js CEJILLA · única mono del producto
+     color      marco.js C · token contextual, NUNCA un hex
+     plazo      marco.js CONSECUENCIA · los cinco grados
+     umbrales   modelo/plazos.js UMBRALES · 0.70 configurable · 1.00 no
+     rótulos    modelo/superficies.js trabajo.dirigir.rotulos
+
+   HUECO MEDIDO · `carbon.css` NO publica los tokens de espacio:
+     grep -c -- "--cds-spacing-05:" assets/carbon.css  →  0
+   Los de color sí (10 de 10 comprobados). Así que el espacio se
+   escribe con la escala del proyecto —`u(n)` de composicion.js— y no
+   con un nombre de token que esta hoja no resolvería. Se anota aquí
+   porque un token que no existe no avisa: se descarta en silencio.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Los tokens de marca · copiados de diseño-ontikos/estilos.scss ──
+   Sobre la clase de tema, no en `:root`: «Carbon declara estas
+   variables por tema, así que se sobreescriben por tema y no en
+   :root, para no aplanar lo que él resuelve por capa». Sus valores ya
+   están verificados contra WCAG allá; aquí no se re-derivan. */
+.cds--white{
+  --cds-button-primary:#D80404; --cds-button-primary-hover:#AD0303; --cds-button-primary-active:#7B0202;
+  --cds-border-interactive:#D80404; --cds-focus:#D80404;
+  --cds-link-primary:#D80404; --cds-link-primary-hover:#AD0303;
+}
+
+/* ── La escala, una sola vez ────────────────────────────────────── */
+:root{
+  --u1:8px; --u2:16px; --u3:24px; --u4:32px; --u6:48px;   /* composicion.js u(n) */
+  --m2:2px; --m4:4px;                                      /* los medios pasos */
+  --r-panel:12px; --r-fila:10px; --r-barra:8px; --r-pil:9999px;  /* RD */
+  --f-fino:1px; --f-grueso:1.5px; --f-estado:3px;                /* FD */
+  --armazon:48px;   /* BarraInferior.jsx · «spacing-09, 6 unidades mínimas» */
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  margin:0; font-family:'DM Sans',system-ui,sans-serif;
+  background:var(--cds-background); color:var(--cds-text-primary);
+  /* R01 · el armazón nunca baja · sólo la región tiene scroll */
+  block-size:100dvh; overflow:hidden;
+}
+
+/* ═══ ARMAZÓN · barra arriba, región al medio, alcance abajo ═══════
+   R22 ganada · «Barra arriba, región al medio, barra de alcance
+   abajo; las dos barras no bajan y respetan el área segura.» */
+.ont-barra-sup{
+  position:fixed; inset-block-start:0; inset-inline:0; block-size:var(--armazon);
+  display:flex; align-items:center; gap:var(--u2); padding-inline:var(--u2);
+  background:var(--cds-background); z-index:8000;
+  border-block-end:var(--f-fino) solid var(--cds-border-subtle-01);
+}
+.marca{display:flex; align-items:center; gap:var(--u1); min-inline-size:0}
+/* La marca se referencia del archivo, nunca se redibuja · contrato §4.
+   Aquí va el SVG de diseño-ontikos/marca/favicon.svg por <img>. */
+.marca img{inline-size:20px; block-size:20px; display:block}
+.marca b{font-size:.875rem; font-weight:700; letter-spacing:-.01em; white-space:nowrap}
+.sup-quien{margin-inline-start:auto; display:flex; align-items:center; gap:var(--u2)}
+.avisos{position:relative; display:grid; place-items:center; inline-size:32px; block-size:32px;
+  border:0; background:none; cursor:pointer; border-radius:var(--r-barra); color:inherit}
+.avisos:hover{background:var(--cds-layer-hover)}
+.avisos:active{background:var(--cds-layer-active)}
+.avisos:focus-visible{outline:2px solid var(--cds-focus); outline-offset:-2px}
+.punto-aviso{position:absolute; inset-block-start:6px; inset-inline-end:6px;
+  inline-size:var(--u1); block-size:var(--u1); border-radius:50%;   /* RD.disco */
+  background:var(--cds-support-error)}
+.quien{inline-size:28px; block-size:28px; border-radius:50%;
+  background:var(--cds-layer-02); display:grid; place-items:center;
+  font-size:.75rem; font-weight:700}
+
+/* La región única · la ÚNICA que scrollea */
+.region{
+  position:fixed; inset-block:var(--armazon) calc(var(--armazon) + env(safe-area-inset-bottom,0px));
+  inset-inline:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  /* El relleno inferior deja sitio a la zona del acto, que es fija.
+     [medido] Sin esto, el acto tapaba la tercera y la cuarta cifra:
+     `position:sticky` dentro de un contenedor con scroll se pega al
+     borde del viewport y **se dibuja encima** de lo que sigue. Lo
+     delató el render a 390, no el código. */
+  padding:var(--u3) var(--u2) calc(var(--u6) + var(--u4));
+}
+
+/* R24 ganada · «navegación, acción y aviso viven abajo».
+   Geometría de diseño-ontikos/estilos.scss .ont-barra-inferior:
+   fixed · inset-block-end 0 · inset-inline 0 · background es
+   `--cds-background` («la barra no es contenido apoyado sobre el
+   lienzo, es el lienzo») · sin borde que la subraye. */
+.ont-barra-inferior{
+  position:fixed; inset-block-end:0; inset-inline:0; z-index:8000;
+  background:var(--cds-background);
+  padding-block-end:env(safe-area-inset-bottom,0px);
+  display:grid; grid-template-columns:repeat(5,minmax(0,1fr));
+}
+.destino{
+  block-size:var(--armazon); display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:var(--m2);
+  border:0; background:none; cursor:pointer; color:var(--cds-text-secondary);
+  font-family:inherit; transition:background-color 110ms cubic-bezier(0,0,.38,.9);
+}
+.destino span{font-size:.625rem; font-weight:600; letter-spacing:.02em}
+.destino svg{inline-size:20px; block-size:20px; fill:currentColor}
+.destino:hover{background:var(--cds-layer-hover)}
+.destino:active{background:var(--cds-layer-active)}
+.destino:focus-visible{outline:2px solid var(--cds-focus); outline-offset:-2px}
+/* El activo se distingue por FORMA, no sólo por color · contrato §5:
+   «un estado codificado sólo por color, sin forma que lo distinga»
+   aborta. Lleva subrayado superior además del color. */
+.destino[aria-current="page"]{
+  color:var(--cds-text-primary);
+  box-shadow:inset 0 var(--f-estado) 0 0 var(--cds-border-interactive);
+}
+
+/* ═══ LA CEJILLA · CEJILLA de lenguajeDG.js · única mono ═══════════ */
+.cejilla{
+  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-size:.62rem; font-weight:500; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--cds-text-helper); margin-block-end:var(--u1);
+}
+
+/* ═══ A · EL VEREDICTO ════════════════════════════════════════════
+   Pieza `Veredicto` de piezas/dg.jsx: filete de 3px SÓLO a la
+   izquierda («una banda que señala de qué lado leer, no una caja»),
+   fondo teñido, y una frase. LD.bandaT para la frase. */
+.veredicto{
+  display:flex; gap:var(--u2); align-items:flex-start;
+  background:var(--cds-notification-background-warning);
+  border-inline-start:var(--f-estado) solid var(--cds-support-warning);
+  border-radius:var(--r-panel); padding:var(--u2);
+  margin-block-end:var(--u3);
+}
+.veredicto .icono{font-size:1.25rem; line-height:1.2; color:var(--cds-support-warning)}
+.veredicto p{
+  margin:0; font-size:1.25rem; font-weight:700; letter-spacing:-.015em; line-height:1.4;
+  color:var(--cds-text-primary);          /* LD.bandaT */
+}
+/* La cifra dentro del veredicto conserva su grado de plazo y su peso.
+   Cada `<b>` declara su grado; el color sale de CONSECUENCIA. */
+.veredicto b{font-weight:900; font-variant-numeric:tabular-nums}
+[data-grado="cumplido"]{color:var(--cds-support-success)}
+[data-grado="vencido"] {color:var(--cds-support-error)}
+[data-grado="cerca"]   {color:var(--cds-support-warning)}
+[data-grado="espera"]  {color:var(--cds-support-info)}
+/* holgado = SIN color · CONSECUENCIA.holgado usa C.segundo, que es
+   texto secundario: no es un color de señal, es ausencia de señal. */
+[data-grado="holgado"] {color:var(--cds-text-secondary)}
+
+/* ═══ B · LAS CUATRO CIFRAS RECTORAS ══════════════════════════════
+   `TarjetaMetrica`: «rótulo · corte · cifra · frase». Cinco cosas y
+   ni una más. LD.pulsoL para el rótulo, LD.pulsoV para la cifra. */
+.cifras{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--f-grueso); background:var(--cds-border-subtle-01);
+  border:var(--f-grueso) solid var(--cds-border-subtle-01);
+  border-radius:var(--r-panel); overflow:hidden; margin-block-end:var(--u3);
+}
+.cifra{background:var(--cds-layer-01); padding:var(--u2); min-inline-size:0}
+.cifra .rot{
+  font-size:.75rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--cds-text-secondary);        /* LD.pulsoL */
+}
+.cifra .val{
+  font-size:2rem; font-weight:900; line-height:1.15; letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums; margin-block:var(--m4) var(--m2);
+}                                          /* LD.pulsoV */
+.cifra .frase{
+  font-size:.875rem; font-weight:400; letter-spacing:.16px; line-height:1.5;
+  color:var(--cds-text-secondary);        /* LD.filaS */
+}
+/* ANGOSTO de lenguajeDG.js: «lo que cambia en angosto es la cifra, no
+   el rótulo». Nada baja de 12px. */
+@media (max-width:22rem){ .cifra .val{font-size:1.75rem} }
+
+/* ═══ C · LOS QUIEBRES ════════════════════════════════════════════
+   Pieza `Alerta`: filete de estado a la izquierda, título, cuerpo, y
+   el verbo al final de la fila. «Una alerta sin destino es un aviso;
+   con destino es un enrutador a la acción.» */
+.grupo-rot{
+  display:flex; align-items:baseline; gap:var(--u1); margin-block-end:var(--u1);
+  font-size:.75rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--cds-text-secondary);        /* LD.miniH */
+}
+.grupo-rot .cuenta{font-weight:700; color:var(--cds-text-primary); font-variant-numeric:tabular-nums}
+.quiebres{display:flex; flex-direction:column; gap:var(--u1); margin-block-end:var(--u3)}
+.fila{
+  inline-size:100%; text-align:start; cursor:pointer; font-family:inherit;
+  display:grid; grid-template-columns:auto 1fr auto; gap:var(--u2);
+  align-items:start; padding:var(--u2); border-radius:var(--r-fila);
+  border:0; border-inline-start:var(--f-estado) solid transparent;
+  background:var(--cds-layer-01);
+  transition:background-color 110ms cubic-bezier(0,0,.38,.9), transform 110ms cubic-bezier(0,0,.38,.9);
+}
+/* Los CUATRO estados · contrato §5: «una superficie con un solo
+   estado en vez de los cuatro» aborta. gestos.js los resuelve con los
+   tokens de capa; el presionado con scale(.98). */
+.fila:hover{background:var(--cds-layer-hover)}
+.fila:active{background:var(--cds-layer-active); transform:scale(.98)}
+.fila:focus-visible{outline:2px solid var(--cds-focus); outline-offset:-2px}
+.fila[aria-current="true"]{background:var(--cds-layer-selected)}
+.fila[data-grado="vencido"]{border-inline-start-color:var(--cds-support-error);
+  background:var(--cds-notification-background-error)}
+.fila[data-grado="cerca"]{border-inline-start-color:var(--cds-support-warning);
+  background:var(--cds-notification-background-warning)}
+.fila[data-grado="espera"]{border-inline-start-color:var(--cds-support-info);
+  background:var(--cds-notification-background-info)}
+
+/* El peso · «peso = magnitud del interés asegurable, no la prima:
+   el grande grita, el chico susurra». Ordena Y dimensiona. */
+.peso{
+  font-size:1.5rem; font-weight:900; letter-spacing:-.025em; line-height:1.2;
+  font-variant-numeric:tabular-nums; min-inline-size:0;   /* LD.filaPeso */
+}
+@media (max-width:22rem){ .peso{font-size:1.25rem} }
+.peso small{display:block; font-size:.625rem; font-weight:600; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--cds-text-helper)}
+.fila .cuerpo{min-inline-size:0}
+.fila .t{font-size:1rem; font-weight:600; letter-spacing:-.005em; line-height:1.375}  /* LD.filaT */
+.fila .s{font-size:.875rem; font-weight:400; letter-spacing:.16px; line-height:1.5;
+  color:var(--cds-text-secondary); margin-block-start:var(--m2)}                       /* LD.filaS */
+.fila .quien-lo-sostiene{
+  display:inline-flex; align-items:center; gap:var(--m4); margin-block-start:var(--u1);
+  font-size:.75rem; font-weight:600; letter-spacing:.04em;
+  padding:var(--m4) var(--u1); border-radius:var(--r-pil);
+  background:var(--cds-layer-02); color:var(--cds-text-secondary);   /* LD.insignia */
+}
+.fila .verbo{
+  font-size:.875rem; font-weight:600; letter-spacing:.16px; white-space:nowrap;
+  color:var(--cds-button-primary); align-self:center;                /* LD.filaVerbo */
+  transition:transform 110ms cubic-bezier(0,0,.38,.9);
+}
+.fila:hover .verbo{transform:translateX(var(--m4))}
+
+/* La dirección · «→ lo que se debe · ← lo que le deben» · acta.js:32.
+   El color NO decora: dice de qué lado está la obligación. */
+.dir{font-variant-numeric:tabular-nums; font-weight:700; color:var(--cds-text-helper)}
+
+/* ═══ D · EL ACTO ═════════════════════════════════════════════════
+   Pieza `Acto`: «la pantalla no termina en información, termina en
+   una escritura». Una sola acción primaria, en el tercio inferior. */
+/* Fija sobre la barra de destinos, no `sticky` dentro de la región.
+   El acto vive al alcance del pulgar (R24) sin taparle nada a la
+   región, que conserva su propio scroll (R01). */
+.zona-acto{
+  position:fixed; inset-inline:0; z-index:7900;
+  inset-block-end:calc(var(--armazon) + env(safe-area-inset-bottom,0px));
+  padding:var(--u1) var(--u2);
+  background:var(--cds-background);
+  border-block-start:var(--f-fino) solid var(--cds-border-subtle-01);
+}
+/* [medido] Envolvía a 320 y la zona pasaba de 67 a 83 px, por encima
+   del relleno inferior de la región: el acto tapaba cuatro piezas. Un
+   acto que cambia de alto según el largo del nombre de la cuenta es
+   frágil por diseño. Se fija a una línea y el nombre elide — la fila
+   elegida, arriba, ya lo muestra entero. */
+.acto{
+  inline-size:100%; font-family:inherit;
+  font-size:.875rem; font-weight:600; letter-spacing:.16px;   /* LD.filaVerbo */
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;
+  padding:var(--u2) var(--u3); border-radius:var(--r-barra);
+  cursor:pointer; border:var(--f-grueso) solid transparent;
+  background:var(--cds-button-primary); color:var(--cds-text-on-color);
+  text-align:center;
+  transition:background-color 110ms cubic-bezier(0,0,.38,.9), transform 110ms cubic-bezier(0,0,.38,.9);
+}
+.acto:hover{background:var(--cds-button-primary-hover)}
+.acto:active{background:var(--cds-button-primary-active); transform:scale(.98)}
+.acto:focus-visible{outline:2px solid var(--cds-focus); outline-offset:-2px}
+
+/* ═══ EL VACÍO TIPADO · pieza `Vacio` ═════════════════════════════
+   «La ausencia se dibuja, no se deja en blanco.» Caja punteada,
+   pictograma —no prosa—, y la frase. Verde de CUMPLIDO. */
+.vacio{
+  text-align:center; padding:var(--u6) var(--u3); margin:var(--u2) 0;
+  border:var(--f-fino) dashed var(--cds-border-strong-01); border-radius:var(--r-fila);
+  color:var(--cds-text-helper);
+}
+.vacio svg{inline-size:48px; block-size:48px; color:var(--cds-support-success);
+  margin:0 auto var(--u2); display:block}
+.vacio .t{font-size:1rem; font-weight:600; color:var(--cds-text-primary)}
+.vacio .s{font-size:.875rem; margin-block-start:var(--m4)}
+
+/* ═══ ANOTACIÓN DE HUECO ONTOLÓGICO · §6.2 del método ═════════════
+   «Donde el wireframe saque a la superficie decisiones que el brief
+   aún no documenta, esto debe ser visible en línea.» */
+/* [medido] La anotación pesaba tanto como el veredicto y partía el
+   hilo entre la frase y sus cifras. Una anotación es subordinada: se
+   lee si se busca, no compite. Baja a 12px —el suelo del sistema, no
+   menos— y pierde el fondo teñido. */
+.hueco{
+  border-inline-start:var(--f-fino) solid var(--cds-border-strong-01);
+  padding-inline-start:var(--u1); margin-block:var(--u2);
+  font-size:.75rem; line-height:1.45; color:var(--cds-text-helper);
+}
+.hueco b{color:var(--cds-text-secondary); font-weight:600}
+.hueco code{font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:.6875rem}
+body[data-huecos="ocultos"] .hueco{display:none}
+
+/* ═══ LA BANDEJA DE DEMO · §6.2 · «pill de posición fija» ═════════ */
+/* Abajo a la izquierda, que es donde §6.2 la pone. Vive **sobre** las
+   dos barras fijas, y eso ahora es una medida y no una estimación: la
+   zona del acto quedó estable en 67 px al fijar el acto a una línea.
+   [medido] Antes chocaba contra el acto; después, arriba a la derecha,
+   libraba el texto de la cejilla por 1 px —coincidencia, no diseño—. */
+.bandeja{
+  position:fixed;
+  inset-block-end:calc(var(--armazon) + 67px + var(--u1) + env(safe-area-inset-bottom,0px));
+  inset-inline-start:var(--u2); z-index:9000; display:flex; gap:var(--m4);
+  background:var(--cds-layer-01); border:var(--f-fino) solid var(--cds-border-subtle-01);
+  border-radius:var(--r-pil); padding:var(--m4); box-shadow:0 2px 6px rgba(0,0,0,.12);
+}
+.bandeja button{
+  font-family:inherit; font-size:.6875rem; font-weight:600; cursor:pointer;
+  padding:var(--m4) var(--u1); border-radius:var(--r-pil); border:0;
+  background:none; color:var(--cds-text-secondary);
+}
+.bandeja button:hover{background:var(--cds-layer-hover)}
+.bandeja button[aria-pressed="true"]{background:var(--cds-highlight); color:var(--cds-text-primary)}
+.bandeja button:focus-visible{outline:2px solid var(--cds-focus); outline-offset:-2px}
+
+/* R26 ganada · «una sola orientación, y está defendida». Vertical:
+   el horizontal no se tolera a medias, se declara y se bloquea. */
+.horizontal{display:none}
+@media (orientation:landscape) and (max-height:26rem){
+  .region,.ont-barra-inferior,.bandeja,.ont-barra-sup{display:none}
+  .horizontal{
+    display:grid; place-content:center; text-align:center; gap:var(--u2);
+    block-size:100dvh; padding:var(--u3); color:var(--cds-text-secondary);
+  }
+  .horizontal b{color:var(--cds-text-primary); font-size:1.25rem; font-weight:700}
+}
+</style>
+<style id="ont-poppins-v11">
+/* Poppins · Kit de Marca v1.1 · [15-sep-2026] — la cara de marca en el
+   registro de wireframes. Embebida en base64, como la DM Sans de estos
+   archivos (no de un CDN). Entra sólo en la marca (wordmark) y en el
+   título de pantalla; el resto sigue en DM Sans. Latin cubre el español. */
+@font-face{font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;src:url(data:font/woff2;base64,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) format('woff2')}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:700;font-display:swap;src:url(data:font/woff2;base64,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) format('woff2')}
+.marca,.marca *{font-family:'Poppins','DM Sans',system-ui,sans-serif !important}
+.marca{font-weight:700 !important;letter-spacing:.01em !important}
+.marca__pre{font-weight:400 !important}
+.marca__pre{display:none !important}                 /* [15-sep-2026] fuera «insurance» del todo */
+@media (max-width:671px){ .marca__n span{display:none !important} }  /* teléfono · sólo el ícono */
+h1{font-family:'Poppins','DM Sans',system-ui,sans-serif !important}
+</style>
+</head>
+<body class="cds--white" data-huecos="visibles">
+
+<!-- ══ ARMAZÓN · barra superior ══════════════════════════════════ -->
+<header class="ont-barra-sup">
+  <span class="marca">
+    <!-- La marca se IMPORTA del SVG, no se redibuja · contrato §4 -->
+    <img src="../diseño-ontikos/marca/favicon.svg" alt="">
+    <b>insurance.ontikos</b>
+  </span>
+  <span class="sup-quien">
+    <button class="avisos" type="button" aria-label="Avisos, 3 sin leer">
+      <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M28 24v-2h-2v-9a10 10 0 10-20 0v9H4v2h9v1a3 3 0 006 0v-1zm-11 1a1 1 0 01-2 0v-1h2zM8 22v-9a8 8 0 1116 0v9z"/></svg>
+      <i class="punto-aviso"></i>
+    </button>
+    <span class="quien" aria-label="Claudio Román">CR</span>
+  </span>
+</header>
+
+<!-- ══ LA REGIÓN ÚNICA · lo único que scrollea ═══════════════════ -->
+<main class="region">
+
+  <p class="cejilla">Pulso · lunes 10 de septiembre</p>
+
+  <!-- ══ A · EL VEREDICTO · tres cláusulas ═════════════════════════
+       1 · meta con trayectoria (goal gradient)
+       2 · lo que se apaga esta semana (pérdida + presión temporal)
+       3 · el riesgo estructural (proporcionalidad)              -->
+  <section class="veredicto" aria-labelledby="v">
+    <span class="icono" aria-hidden="true">▲</span>
+    <p id="v">
+      Vas al <b data-grado="holgado">62%</b> de la meta del mes, con 9 días por delante.
+      Pero <b data-grado="cerca">4 renovaciones por $180,000</b> de prima se apagan
+      esta semana si nadie las toca — y <b data-grado="cerca">un cliente pesa el 38%</b>
+      de tu cartera.
+    </p>
+  </section>
+
+  <!-- ══ B · LAS CUATRO CIFRAS RECTORAS ═══════════════════════════
+       Van pegadas al veredicto: son su respaldo, y nada debe partir
+       ese hilo. La anotación del hueco va DESPUÉS, subordinada.   -->
+  <section class="cifras" aria-label="Cómo va">
+    <div class="cifra">
+      <p class="rot">Prima colocada</p>
+      <p class="val" data-grado="holgado">$1.24M</p>
+      <p class="frase">62% de $2M. Al ritmo de hoy cierras en $1.86M.</p>
+    </div>
+    <div class="cifra">
+      <p class="rot">Se apaga</p>
+      <p class="val" data-grado="cerca">$180K</p>
+      <p class="frase">4 renovaciones, la primera en 3 días.</p>
+    </div>
+    <div class="cifra">
+      <p class="rot">Le deben</p>
+      <p class="val" data-grado="vencido">$96K</p>
+      <p class="frase">Comisión y contingente vencidos de 2 aseguradoras.</p>
+    </div>
+    <div class="cifra">
+      <p class="rot">Concentración</p>
+      <p class="val" data-grado="cerca">38%</p>
+      <p class="frase">Grupo Alterra es más de un tercio de la cartera.</p>
+    </div>
+  </section>
+
+  <div class="hueco">
+    <b>Hueco del sistema de diseño ·</b> el veredicto usa <code>LD.bandaT</code>
+    (1.25rem/700), que es lo que la pieza <code>Veredicto</code> declara. A 390 px
+    ocupa <b>ocho líneas · 284 px · el 34% de la primera pantalla</b>, medido en el
+    render, no estimado.
+    <code>lenguajeDG.js ANGOSTO</code> declara paso angosto para <code>metaV</code>,
+    <code>h</code>, <code>filaPeso</code> y <code>pulsoV</code> — <b>no para
+    <code>bandaT</code></b>. No se inventa el valor aquí. Decide el dueño del
+    dominio: o el veredicto baja a dos cláusulas en angosto, o el sistema declara
+    su paso. Hasta entonces queda al valor declarado.
+  </div>
+
+  <div class="hueco">
+    <b>Hueco ontológico ·</b> el <b>umbral de concentración</b> de cartera no está
+    declarado en ningún archivo del modelo. El 38% se pinta como «cerca» por
+    decisión de este wireframe, no por una regla leída: <code>plazos.js</code>
+    declara umbrales <b>de plazo</b> (0.70 y 1.00) y la concentración no es un
+    plazo. Falta declararla, y quién la configura.
+  </div>
+
+  <!-- ══ C · LOS QUIEBRES · las dos direcciones ═══════════════════
+       Rótulo del modelo: trabajo.dirigir.rotulos.quiebres
+       = «Necesita atención». NO «Quiebres»: el director nunca ve la
+       ontología (superficies.js:566). Ordenados por peso, que es la
+       magnitud del interés asegurable, no la prima.            -->
+  <p class="grupo-rot">Necesita tu acción <span class="cuenta">6</span></p>
+
+  <div class="quiebres" id="lista">
+    <button class="fila" data-grado="vencido" type="button" aria-current="true">
+      <span class="peso">$8.4M<small>interés</small></span>
+      <span class="cuerpo">
+        <span class="t"><span class="dir" aria-label="lo que el negocio debe">→</span> Grupo Alterra · parque vehicular</span>
+        <span class="s">Renovación cruzada hace 2 días. Sin cotización en firme.</span>
+        <span class="quien-lo-sostiene">Colocación · M. Fuentes</span>
+      </span>
+      <span class="verbo">Pedir acción →</span>
+    </button>
+
+    <button class="fila" data-grado="vencido" type="button">
+      <span class="peso">$6.1M<small>interés</small></span>
+      <span class="cuerpo">
+        <span class="t"><span class="dir" aria-label="lo que le deben">←</span> Aseguradora Norte · contingente 2025</span>
+        <span class="s">$62,000 vencidos hace 11 días.</span>
+        <span class="quien-lo-sostiene">Administración · L. Reyes</span>
+      </span>
+      <span class="verbo">Pedir acción →</span>
+    </button>
+
+    <button class="fila" data-grado="cerca" type="button">
+      <span class="peso">$4.9M<small>interés</small></span>
+      <span class="cuerpo">
+        <span class="t"><span class="dir" aria-label="lo que el negocio debe">→</span> Textiles del Bajío · gastos médicos</span>
+        <span class="s">Renovación en 3 días. El padrón no está conciliado.</span>
+        <span class="quien-lo-sostiene">Servicio al cliente · A. Vega</span>
+      </span>
+      <span class="verbo">Pedir acción →</span>
+    </button>
+
+    <button class="fila" data-grado="cerca" type="button">
+      <span class="peso">$3.2M<small>interés</small></span>
+      <span class="cuerpo">
+        <span class="t"><span class="dir" aria-label="lo que el negocio debe">→</span> Constructora Mier · daños a bienes</span>
+        <span class="s">Prima cobrada sin pagar a la aseguradora. Día 7 de 10 hábiles.</span>
+        <span class="quien-lo-sostiene">Administración · L. Reyes</span>
+      </span>
+      <span class="verbo">Pedir acción →</span>
+    </button>
+
+    <div class="hueco">
+      <b>Hueco ontológico ·</b> la fila de arriba consume un plazo <b>de ley</b>
+      —diez días hábiles, LISF 99— y las otras un plazo <b>de la casa</b>.
+      <code>plazos.js CLASES</code> las distingue («el regulatorio lo fija la ley
+      y no se toca»), pero <b>el wireframe las pinta igual</b>. Falta decidir si
+      un plazo de ley se ve distinto de uno que el broker fijó.
+    </div>
+
+    <button class="fila" data-grado="espera" type="button">
+      <span class="peso">$2.7M<small>interés</small></span>
+      <span class="cuerpo">
+        <span class="t"><span class="dir" aria-label="lo que el negocio debe">→</span> Agroindustrial Sur · siniestro 4471</span>
+        <span class="s">19 días sin movimiento. No hay plazo cruzado: hay silencio.</span>
+        <span class="quien-lo-sostiene">Siniestros · A. Vega</span>
+      </span>
+      <span class="verbo">Pedir acción →</span>
+    </button>
+
+    <button class="fila" data-grado="espera" type="button">
+      <span class="peso">$1.5M<small>interés</small></span>
+      <span class="cuerpo">
+        <span class="t"><span class="dir" aria-label="lo que le deben">←</span> Aseguradora Centro · comisión agosto</span>
+        <span class="s">$34,000 en revisión desde hace 6 días.</span>
+        <span class="quien-lo-sostiene">Administración · L. Reyes</span>
+      </span>
+      <span class="verbo">Pedir acción →</span>
+    </button>
+  </div>
+
+  <!-- ══ EL ESTADO SANO · vacío tipado, no pantalla vacía ═════════ -->
+  <div class="vacio" id="sano" hidden>
+    <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M14 21.414l-5-5.001L10.413 15 14 18.586 21.585 11 23 12.415l-9 8.999z"/><path d="M16 2A14 14 0 1030 16 14.016 14.016 0 0016 2zm0 26a12 12 0 1112-12 12.014 12.014 0 01-12 12z"/></svg>
+    <p class="t">Nada está por vencerse.</p>
+    <p class="s">La cartera está al día.</p>
+  </div>
+
+  <!-- ══ D · EL ACTO · una sola acción primaria ═══════════════════
+       `trabajo.pedirAccion` · superficies.js:90 · «un pedido colgado
+       de la cuenta, con su responsable y su fecha». La superficie
+       ESCRIBE: sin esto sería un compromiso roto.              -->
+  <div class="hueco">
+    <b>Anotado ·</b> el acto <b>va en la fila</b>, no en una barra
+    (<code>superficies.js:670</code>: «el pedido es sobre esa cuenta y ese
+    responsable»). Este botón inferior es el mismo acto sobre la fila
+    <b>elegida</b>, que es lo que permite tenerlo al pulgar sin desligarlo de
+    su cuenta. Si el dueño del dominio lo lee como una barra, se retira y se
+    queda sólo el verbo de la fila.
+  </div>
+
+</main>
+
+<!-- ══ D · EL ACTO · una sola acción primaria ═══════════════════════
+     `trabajo.pedirAccion` · superficies.js:90 · «un pedido colgado de
+     la cuenta, con su responsable y su fecha». La superficie ESCRIBE:
+     sin esto sería un compromiso roto y el guardián la abortaría.
+     Fuera de la región a propósito: es armazón, no contenido.     -->
+<div class="zona-acto">
+  <button class="acto" type="button" id="acto">
+    Pedir acción sobre Grupo Alterra
+  </button>
+</div>
+
+<!-- ══ ARMAZÓN · barra de alcance · R24 ══════════════════════════ -->
+<nav class="ont-barra-inferior" aria-label="Destinos">
+  <button class="destino" type="button" aria-current="page">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M30 16h-5l-4 10-6-20-4 10H6"  fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    <span>Pulso</span>
+  </button>
+  <button class="destino" type="button">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 26h24v2H4zM7 18h3v7H7zM14 12h3v13h-3zM21 6h3v19h-3z"/></svg>
+    <span>Negocio</span>
+  </button>
+  <button class="destino" type="button">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2a14 14 0 1014 14A14 14 0 0016 2zm0 26a12 12 0 1112-12 12 12 0 01-12 12z"/><path d="M15 8h2v11h-2zM16 22a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 22z"/></svg>
+    <span>Atención</span>
+  </button>
+  <button class="destino" type="button">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M26 4H6a2 2 0 00-2 2v20a2 2 0 002 2h20a2 2 0 002-2V6a2 2 0 00-2-2zM6 26V6h20v20zM10 12h12v2H10zM10 18h8v2h-8z"/></svg>
+    <span>Pedidos</span>
+  </button>
+  <button class="destino" type="button">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4a5 5 0 105 5 5 5 0 00-5-5zm0 8a3 3 0 113-3 3 3 0 01-3 3zM26 28h-2v-4a3 3 0 00-3-3H11a3 3 0 00-3 3v4H6v-4a5 5 0 015-5h10a5 5 0 015 5z"/></svg>
+    <span>Perfil</span>
+  </button>
+</nav>
+
+<!-- ══ LA BANDEJA DE DEMO · §6.2 · cerrada al cargar ═════════════ -->
+<div class="bandeja" role="group" aria-label="Simulaciones">
+  <button type="button" id="b-sano" aria-pressed="false">Estado sano</button>
+  <button type="button" id="b-huecos" aria-pressed="true">Huecos</button>
+</div>
+
+<!-- ══ El horizontal, declarado y bloqueado · R26 ════════════════ -->
+<div class="horizontal">
+  <b>Gira el teléfono</b>
+  <span>El Pulso se diseñó vertical. En horizontal no se muestra a medias.</span>
+</div>
+
+<script>
+/* Sólo lo que la §6.2 pide simular. Nada de lógica de negocio. */
+const $ = (s) => document.querySelector(s)
+
+/* La fila elegida manda el acto · el pedido es sobre ESA cuenta */
+const filas = [...document.querySelectorAll('.fila')]
+filas.forEach((f) => f.addEventListener('click', () => {
+  filas.forEach((o) => o.removeAttribute('aria-current'))
+  f.setAttribute('aria-current', 'true')
+  const quien = f.querySelector('.t').textContent.replace(/^[→←]\s*/, '').split('·')[0].trim()
+  $('#acto').textContent = `Pedir acción sobre ${quien}`
+}))
+
+/* R28 · cambiar de vista es navegar: cada destino es entrada de
+   historia y el «atrás» del aparato vuelve, no pregunta si salir. */
+const destinos = [...document.querySelectorAll('.destino')]
+destinos.forEach((d) => d.addEventListener('click', () => {
+  destinos.forEach((o) => o.removeAttribute('aria-current'))
+  d.setAttribute('aria-current', 'page')
+  history.pushState({ destino: d.textContent.trim() }, '')
+}))
+addEventListener('popstate', (e) => {
+  const n = e.state?.destino ?? 'Pulso'
+  destinos.forEach((o) =>
+    o.textContent.trim() === n ? o.setAttribute('aria-current', 'page') : o.removeAttribute('aria-current'))
+})
+
+/* El estado sano · vacío tipado */
+$('#b-sano').addEventListener('click', (e) => {
+  const on = e.currentTarget.getAttribute('aria-pressed') === 'true'
+  e.currentTarget.setAttribute('aria-pressed', String(!on))
+  $('#lista').hidden = !on ? true : false
+  $('#sano').hidden = !on ? false : true
+  $('.zona-acto').hidden = !on ? true : false
+  document.querySelector('.grupo-rot .cuenta').textContent = !on ? '0' : '6'
+})
+
+$('#b-huecos').addEventListener('click', (e) => {
+  const on = e.currentTarget.getAttribute('aria-pressed') === 'true'
+  e.currentTarget.setAttribute('aria-pressed', String(!on))
+  document.body.dataset.huecos = on ? 'ocultos' : 'visibles'
+})
+</script>
+</body>
+</html>
