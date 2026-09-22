@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ontikos — Mi Desempeño</title>
+  <link rel="icon" href="marca/favicon.svg" type="image/svg+xml" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
+
+  <style>
+    /* ══ Marca de Ontikos · Kit de Marca v1.1 ═══════════════════════
+       Leída del sitio vivo sistema.ontikos.com/carbondesign/ en su código.
+       Sustituye al manual v1.0, que es lo que este demo traía mal.
+
+       El símbolo ya NO es la esfera con gradiente y cruz de meridiano:
+       es un anillo abierto sobre una sola curva, con la boca al nororeste,
+       y tres módulos que ascienden reduciéndose (28 → 20 → 18). Plano,
+       sin gradiente. `marca/favicon.svg` es copia byte a byte del que
+       sirve el sitio — sha256 1180974d…f0a420. Se importa, no se redibuja.
+
+       La rampa del rojo, de `marco.css` sobre los tokens de Carbon:
+         #D80404  --cds-button-primary · --cds-border-interactive · --cds-focus
+         #AD0303  hover                #7B0202  presionado
+         #DE4E5F  inverso (g90/g100)   #ffd7d9  --cds-highlight
+       El acento pasa de #D0021B a #D80404: no es el mismo rojo. */
+    :root {
+      --acento:            #D80404;
+      --acento-encima:     #AD0303;
+      --acento-presionado: #7B0202;
+      --acento-inverso:    #DE4E5F;
+      --tinte-acento:      #ffd7d9;
+      /* `--ont-fuente-marca` del sitio vivo, con su pila tal cual */
+      --fuente-marca: "Poppins", "DM Sans", system-ui, sans-serif;
+      --fuente-texto: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+      --unidad: 8px;
+    }
+
+    /* ══ El logotipo · copiado del componente vivo ══════════════════
+       Del bundle: fontFamily var(--ont-fuente-marca), fontWeight 700,
+       letterSpacing .01em (positivo, ya no negativo), lineHeight 1,
+       gap max(1px,.06em) y el símbolo a 1.2em con overflow visible.
+       `aria-label` es «Ontikos», sin prefijo: el símbolo hace de «o» y
+       lo que se lee es la palabra entera. */
+    .marca { display: inline-flex; align-items: center;
+             gap: max(1px, .06em);
+             font-family: var(--fuente-marca);
+             font-size: 1.25rem; font-weight: 700;
+             letter-spacing: .01em; line-height: 1; color: #161616; }
+    .marca__sim { display: block; inline-size: 1.2em; block-size: 1.2em;
+                  overflow: visible; flex: none; }
+
+    /* El titular se reduce en el teléfono para que no parta. */
+    @media (max-width: 560px) { .greeting { font-size: 1.75rem !important; } }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    a { text-decoration: none !important; color: inherit; }
+    a:hover { color: inherit; }
+    nav.navbar, footer.web-footer { display: none; }
+
+    body { margin: 0; font-family: var(--fuente-texto); background-color: #f8f9fa; color: #212529; display: flex; flex-direction: column; min-height: 100vh; }
+    @supports (-webkit-touch-callout: none) { body { transform: scale(.95); transform-origin: top left; width: 105.26%; min-height: 105.26vh; overflow-x: hidden; } }
+
+    .container { max-width: 480px; margin: 0 auto; padding: 1.5rem 1rem 0; flex: 1; width: 100%; position: relative; }
+
+    /* TOP BAR */
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-top: 0.6rem; }
+    .top-icons { display: flex; align-items: center; gap: 1rem; }
+    .top-icons i { font-size: 20px; color: #333; cursor: pointer; }
+    .notifications { position: relative; }
+    .badge { position: absolute; top: -6px; right: -8px; background-color: var(--acento); color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 999px; font-weight: 600; }
+
+    /* ENCABEZADO */
+    .header-section { margin-bottom: 1.5rem; }
+    .greeting { font-size: 2rem; font-weight: 600; letter-spacing: -.03em; line-height: 1.15; color: #212529; margin-bottom: 0.2rem; animation: fadeIn 0.8s ease-out; }
+    .desc { font-size: 0.9rem; color: #6c757d; margin: 0; }
+
+    /* SECTION CARD */
+    .section-card { background: #fff; border-radius: 16px; padding: 1.2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.03); margin-bottom: 1rem; animation: fadeIn 0.6s ease-out; }
+    .section-title-plain { font-size: 0.8rem; font-weight: 600; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; }
+
+    /* SECTION HEADER */
+    .section-header { display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .section-icon { font-size: 1.4rem; color: #6c757d; margin-top: 2px; }
+    .section-text { flex: 1; }
+    .section-title { font-size: 0.88rem; font-weight: 600; color: #212529; line-height: 1.3; }
+    .section-sub { font-size: 0.78rem; color: #6c757d; }
+    .alert-badge { background: #dc3545; color: #fff; font-size: 0.7rem; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
+    .pulse { animation: pulse-anim 2s infinite; }
+    @keyframes pulse-anim { 0% { box-shadow: 0 0 0 0 rgba(220,53,69,0.5); } 70% { box-shadow: 0 0 0 6px rgba(220,53,69,0); } 100% { box-shadow: 0 0 0 0 rgba(220,53,69,0); } }
+
+    .chart-container { height: 130px; position: relative; margin-bottom: 1rem; }
+    .campana-footer { display: flex; align-items: center; gap: 1rem; padding-top: 0.8rem; border-top: 1px solid #f1f3f5; }
+    .campana-stat { display: flex; flex-direction: column; align-items: center; min-width: 60px; }
+    .campana-num { font-size: 1.8rem; font-weight: 600; line-height: 1; }
+    .campana-lbl { font-size: 0.72rem; color: #6c757d; margin-top: 2px; }
+    .campana-msg { font-size: 0.82rem; color: #495057; line-height: 1.5; }
+
+    /* CARAS / AVATARES */
+    .rival-face { width: 42px; height: 42px; border-radius: 50%; background: #f8f9fa; border: 2px solid #f1f3f5; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .you-face { border: 3px solid #ffc107 !important; }
+    .actua-face { width: 38px; height: 38px; border-radius: 50%; background: #f8f9fa; border: 2px solid #f1f3f5; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+
+    /* RANKING */
+    .rivals-title { font-size: 0.8rem; font-weight: 600; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .rivals-list { display: flex; flex-direction: column; }
+    .rival-row { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 0; border-bottom: 1px solid #f1f3f5; }
+    .rival-row:last-child { border-bottom: none; }
+    .rival-info { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+    .rival-name { font-size: 0.88rem; font-weight: 600; color: #212529; }
+    .rival-level { font-size: 0.72rem; color: #6c757d; }
+    .rival-pts { font-size: 0.82rem; font-weight: 600; color: #495057; white-space: nowrap; }
+    .rival-gap { font-size: 0.75rem; font-weight: 600; white-space: nowrap; min-width: 60px; text-align: right; }
+    .rival-you { background: #fff8e1; border-radius: 12px; padding: 0.8rem !important; margin: 0.4rem 0; border: 2px solid #ffc107 !important; }
+    .you-tag { font-size: 0.78rem; font-weight: 600; color: #e0a800; }
+    .rival-below { border-left: 3px solid #dc3545; padding-left: 0.4rem; }
+
+    /* CARTERA CLIENTES (equivalente RFM para vendedor) */
+    .rfm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
+    .rfm-col { border-radius: 12px; padding: 0.8rem 0.5rem; text-align: center; }
+    .rfm-green { background: #d1e7dd; }
+    .rfm-yellow { background: #fff3cd; }
+    .rfm-red { background: #f8d7da; }
+    .rfm-num { font-size: 2rem; font-weight: 600; line-height: 1; margin-bottom: 4px; }
+    .rfm-green .rfm-num { color: #0a3622; }
+    .rfm-yellow .rfm-num { color: #664d03; }
+    .rfm-red .rfm-num { color: #58151c; }
+    .rfm-label { font-size: 0.78rem; font-weight: 600; margin-bottom: 4px; }
+    .rfm-sub { font-size: 0.7rem; color: #6c757d; line-height: 1.2; }
+
+    /* ACTÚA HOY */
+    .actua-list { display: flex; flex-direction: column; }
+    .actua-row { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 0; border-bottom: 1px solid #f1f3f5; }
+    .actua-row:last-child { border-bottom: none; }
+    .actua-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+    .actua-name { font-size: 0.9rem; font-weight: 600; color: #212529; }
+    .actua-days { font-size: 0.78rem; font-weight: 400; display: flex; align-items: center; gap: 4px; }
+    .btn-actua { border: none; border-radius: 20px; padding: 6px 16px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; color: #fff; transition: transform 0.1s; }
+    .btn-actua:active { transform: scale(0.95); }
+    .btn-actua-risk { background: #dc3545; }
+    .btn-actua-warn { background: #e0a800; }
+    .btn-actua-ok { background: #28a745; }
+
+    /* MISIONES */
+    .misiones-list { display: flex; flex-direction: column; gap: 0.9rem; }
+    .mision-row { display: flex; align-items: center; gap: 0.7rem; }
+    .mision-icon { font-size: 1rem; width: 18px; flex-shrink: 0; }
+    .mision-label { font-size: 0.84rem; color: #495057; flex: 1; }
+    .mision-track { width: 90px; height: 6px; background: #e9ecef; border-radius: 999px; overflow: hidden; flex-shrink: 0; }
+    .mision-fill { height: 100%; border-radius: 999px; transition: width 1s ease-out; }
+    .mision-num { font-size: 0.8rem; font-weight: 600; color: #495057; min-width: 34px; text-align: right; }
+
+    /* DOBLE ROW */
+    .double-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .half-card { margin-bottom: 0 !important; }
+
+    /* DONUT */
+    .donut-wrapper { position: relative; width: 90px; height: 90px; margin: 0.8rem auto; }
+    .donut-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .donut-bg { fill: none; stroke: #e9ecef; stroke-width: 3; }
+    .donut-seg { fill: none; stroke: #28a745; stroke-width: 3; stroke-linecap: round; transition: stroke-dasharray 1s ease-out; }
+    .donut-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.1rem; font-weight: 600; color: #212529; }
+    .donut-label { font-size: 0.72rem; color: #6c757d; text-align: center; line-height: 1.3; }
+
+    /* RACHA */
+    .racha-card { text-align: center; }
+    .racha-num { font-size: 3.2rem; font-weight: 600; color: #f7c400; line-height: 1; margin: 0.8rem 0 0.2rem; }
+    .racha-label { font-size: 0.78rem; color: #6c757d; margin-bottom: 0.8rem; }
+    .racha-warning { font-size: 0.85rem; font-weight: 600; color: #dc3545; }
+
+    /* RECONOCIMIENTO */
+    .reconocimiento-hero { display: flex; align-items: center; gap: 1rem; background: linear-gradient(135deg, #212529 0%, #343a40 100%); border-radius: 16px; padding: 1.2rem; margin-bottom: 0.8rem; }
+    .reco-hero-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .reco-hero-text { flex: 1; }
+    .reco-hero-title { font-size: 1rem; font-weight: 600; color: #f7c400; margin-bottom: 4px; }
+    .reco-hero-sub { font-size: 0.78rem; color: #adb5bd; line-height: 1.4; }
+    .reco-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+    .reco-card { border-radius: 14px; padding: 1rem 0.8rem; text-align: center; }
+    .reco-card-icon { font-size: 1.6rem; margin-bottom: 6px; }
+    .reco-card-num { font-size: 1.5rem; font-weight: 600; line-height: 1; margin-bottom: 4px; }
+    .reco-card-label { font-size: 0.75rem; font-weight: 600; margin-bottom: 3px; }
+    .reco-card-sub { font-size: 0.7rem; opacity: 0.8; line-height: 1.2; }
+    .reco-fire { background: linear-gradient(135deg, #fff3cd, #ffe69c); color: #664d03; }
+    .reco-star { background: linear-gradient(135deg, #d1e7dd, #a3cfbb); color: #0a3622; }
+    .reco-bolt { background: linear-gradient(135deg, #f8f9fa, #e9ecef); color: #212529; }
+    .reco-people { background: linear-gradient(135deg, #cfe2ff, #9ec5fe); color: #084298; }
+
+    /* BOTTOM BAR */
+    .resistance-text { text-align: center; color: #6c757d; font-size: 0.85rem; margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 400; }
+    .bottom-actions-container { position: relative; width: 100%; padding-bottom: 2rem; }
+    .bottom-bar { display: flex; justify-content: space-between; padding: 0.8rem 1rem; position: relative; z-index: 5; }
+    .dropdown-wrapper { position: relative; }
+    .circle-btn { width: 50px; height: 50px; border-radius: 50%; border: none; background-color: #212529; color: #fff; font-size: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+    .circle-btn:active { transform: scale(0.92); }
+    .level-dropdown { display: none; position: absolute; bottom: 60px; left: 0; width: 90vw; max-width: 280px; background-color: #f8f9fa; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 999; padding: 1rem; animation: fadeIn 0.3s ease-out; }
+    .missions-dropdown { display: none; position: absolute; bottom: 100px; right: 0; width: 90vw; max-width: 280px; background-color: #f8f9fa; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); z-index: 999; padding: 1rem; animation: fadeIn 0.3s ease-out; }
+    .level-dropdown.show, .missions-dropdown.show { display: block; }
+    .dropdown-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem; font-size: 0.95rem; color: #212529; background-color: #fff; border-radius: 8px; margin-bottom: 0.5rem; border-bottom: 1px solid #e9ecef; cursor: pointer; transition: background-color 0.2s; }
+    .dropdown-item:hover { background-color: #f1f3f5; }
+    .dropdown-item:last-child { border-bottom: none; margin-bottom: 0; }
+    .dropdown-item i { font-size: 1rem; color: #495057; }
+    .missions-header { text-align: center; margin-bottom: 0.8rem; }
+    .missions-header strong { font-size: 1rem; display: block; color: #212529; }
+    .missions-header span { font-size: 0.85rem; color: #6c757d; }
+    .missions-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem; font-size: 0.95rem; color: #212529; background-color: #fff; border-radius: 8px; margin-bottom: 0.5rem; border-bottom: 1px solid #e9ecef; cursor: pointer; }
+    .missions-item:hover { background-color: #f1f3f5; }
+    .missions-item:last-child { border-bottom: none; margin-bottom: 0; }
+    .missions-icon { font-size: 1rem; color: #495057; }
+    .missions-label { flex: 1; }
+
+    /* INTEL */
+    .intel-dropdown { display: none; position: absolute; top: 70px; left: 1rem; right: 1rem; background-color: #fff; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 1rem; z-index: 11; animation: fadeIn 0.3s ease-out; }
+    .intel-dropdown.show { display: block; }
+    .intel-subtitle { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #212529; text-align: center; }
+    .intel-events-grid { display: flex; flex-direction: column; gap: 0.6rem; }
+    .intel-event { font-size: 0.9rem; padding: 0.6rem 0.8rem; background-color: #f8f9fa; border-radius: 8px; color: #212529; display: flex; align-items: center; gap: 0.6rem; }
+    .intel-event i { font-size: 1rem; color: #495057; }
+
+    /* FOOTER */
+    .clean-footer { background: #f8f9fa; padding: 1.3rem 0.1rem; text-align: center; width: 100%; margin-top: auto; }
+    .footer-content { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-content strong { font-weight: 600; font-size: 0.9rem; color: #495057; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes popup-animation { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.92); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+
+    /* DESKTOP */
+    @media (min-width: 768px) {
+      .container { max-width: 780px; padding: 2rem 2rem 0; }
+      .desktop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+      .reco-grid { grid-template-columns: repeat(4, 1fr); }
+      .double-row { grid-template-columns: 1fr 1fr; }
+      .section-card { padding: 1.5rem; }
+      .level-dropdown, .missions-dropdown { max-width: 320px; }
+    }
+    @media (min-width: 1024px) { .container { max-width: 960px; } }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <a href="mi-semana.html" class="marca" aria-label="Ontikos"><img class="marca__sim" src="marca/favicon.svg" alt=""><span aria-hidden="true">ntikos</span></a>
+    <div class="top-icons">
+      <div class="notifications" id="notif-btn">
+        <i class="fa-regular fa-bell"></i>
+        <span class="badge">4</span>
+      </div>
+      <i class="fa-regular fa-user"></i>
+    </div>
+  </div>
+
+  <!-- ENCABEZADO -->
+  <div class="header-section">
+    <h1 class="greeting">Mi Desempeño</h1>
+    <p class="desc">Vendedor: <strong>Carlos Mendoza</strong> · Piso Moda Hombre · Perisur</p>
+  </div>
+
+  <div class="desktop-grid">
+  <div>
+
+  <!-- TENDENCIA SEMANAL -->
+  <div class="section-card">
+    <div class="section-header">
+      <i class="fa-solid fa-chart-line section-icon"></i>
+      <div class="section-text">
+        <div class="section-title">Tendencia Semanal</div>
+        <div class="section-sub">Puntos acumulados por día</div>
+      </div>
+      <span class="alert-badge pulse">Semana 3</span>
+    </div>
+    <div class="chart-container">
+      <canvas id="campanaChart"></canvas>
+    </div>
+    <div class="campana-footer">
+      <div class="campana-stat">
+        <div class="campana-num" style="color:#28a745;">1,240</div>
+        <div class="campana-lbl">Puntos hoy</div>
+      </div>
+      <div class="campana-msg">
+        Llevas 3 semanas activo. Tu racha te coloca en el <strong>top 20%</strong> del piso Perisur esta semana.
+      </div>
+    </div>
+  </div>
+
+  <!-- RANKING DEL PISO -->
+  <div class="section-card">
+    <div class="rivals-title">Ranking de mi Piso — Perisur</div>
+    <div class="rivals-list">
+
+      <!-- #15 — arriba -->
+      <div class="rival-row">
+        <div class="rival-face">🙍</div>
+        <div class="rival-info">
+          <div class="rival-name">Ana Solís</div>
+          <div class="rival-level">Vendedora Pro · Dama</div>
+        </div>
+        <div class="rival-pts">1,490 pts</div>
+        <div class="rival-gap" style="color:#28a745;">+250 pts</div>
+      </div>
+
+      <!-- #16 — arriba -->
+      <div class="rival-row">
+        <div class="rival-face">🙍</div>
+        <div class="rival-info">
+          <div class="rival-name">Roberto Vega</div>
+          <div class="rival-level">Vendedor Activo · Hogar</div>
+        </div>
+        <div class="rival-pts">1,380 pts</div>
+        <div class="rival-gap" style="color:#28a745;">+140 pts</div>
+      </div>
+
+      <!-- #17 — arriba -->
+      <div class="rival-row">
+        <div class="rival-face">🙍</div>
+        <div class="rival-info">
+          <div class="rival-name">Laura Méndez</div>
+          <div class="rival-level">Vendedora Pro · Calzado</div>
+        </div>
+        <div class="rival-pts">1,290 pts</div>
+        <div class="rival-gap" style="color:#28a745;">+50 pts</div>
+      </div>
+
+      <!-- TÚ — #18 -->
+      <div class="rival-row rival-you">
+        <div class="rival-face you-face">😊</div>
+        <div class="rival-info">
+          <div class="you-tag">TÚ</div>
+          <div class="rival-name">Carlos Mendoza</div>
+          <div class="rival-level">Vendedor Activo · Hombre</div>
+        </div>
+        <div class="rival-pts">1,240 pts</div>
+        <div class="rival-gap" style="color:#e0a800;">Lugar 18</div>
+      </div>
+
+      <!-- #19 — abajo -->
+      <div class="rival-row rival-below">
+        <div class="rival-face">🙍</div>
+        <div class="rival-info">
+          <div class="rival-name">Jorge Peña</div>
+          <div class="rival-level">Vendedor Nuevo · Hombre</div>
+        </div>
+        <div class="rival-pts">1,180 pts</div>
+        <div class="rival-gap" style="color:#dc3545;">−60 pts</div>
+      </div>
+
+      <!-- #20 — abajo -->
+      <div class="rival-row rival-below">
+        <div class="rival-face">🙍</div>
+        <div class="rival-info">
+          <div class="rival-name">Sofía Ramos</div>
+          <div class="rival-level">Vendedora Nueva · Niños</div>
+        </div>
+        <div class="rival-pts">1,050 pts</div>
+        <div class="rival-gap" style="color:#dc3545;">−190 pts</div>
+      </div>
+
+    </div>
+  </div>
+
+  </div><!-- col izq -->
+  <div>
+
+  <!-- CARTERA DE CLIENTES (equivalente RFM) -->
+  <div class="section-card">
+    <div class="section-title-plain">Mi Cartera de Clientes</div>
+    <div class="rfm-grid">
+      <div class="rfm-col rfm-green">
+        <div class="rfm-num">10</div>
+        <div class="rfm-label">Activos</div>
+        <div class="rfm-sub">Compraron este mes</div>
+      </div>
+      <div class="rfm-col rfm-yellow">
+        <div class="rfm-num">4</div>
+        <div class="rfm-label">Tibios</div>
+        <div class="rfm-sub">Sin compra en 30 días</div>
+      </div>
+      <div class="rfm-col rfm-red">
+        <div class="rfm-num">3</div>
+        <div class="rfm-label">Fríos</div>
+        <div class="rfm-sub">Sin compra en 60+ días</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTÚA HOY -->
+  <div class="section-card">
+    <div class="section-title-plain">Actúa Hoy</div>
+    <div class="actua-list">
+      <div class="actua-row">
+        <div class="actua-face">😐</div>
+        <div class="actua-info">
+          <div class="actua-name">Ricardo Torres</div>
+          <div class="actua-days" style="color:#dc3545;"><i class="fa-solid fa-circle-exclamation"></i> Sin visita: 65 días</div>
+        </div>
+        <button class="btn-actua btn-actua-risk">Contactar</button>
+      </div>
+      <div class="actua-row">
+        <div class="actua-face">😑</div>
+        <div class="actua-info">
+          <div class="actua-name">Patricia Ruiz</div>
+          <div class="actua-days" style="color:#e0a800;"><i class="fa-solid fa-clock"></i> Sin visita: 38 días</div>
+        </div>
+        <button class="btn-actua btn-actua-warn">Contactar</button>
+      </div>
+      <div class="actua-row">
+        <div class="actua-face">😊</div>
+        <div class="actua-info">
+          <div class="actua-name">Héctor Díaz</div>
+          <div class="actua-days" style="color:#28a745;"><i class="fa-solid fa-check"></i> Visitó hace 12 días</div>
+        </div>
+        <button class="btn-actua btn-actua-ok">Ver historial</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DONUT + RACHA -->
+  <div class="double-row">
+    <div class="section-card half-card">
+      <div class="section-title-plain">Prácticas</div>
+      <div class="donut-wrapper">
+        <svg class="donut-svg" viewBox="0 0 36 36">
+          <circle class="donut-bg" cx="18" cy="18" r="15.9"/>
+          <circle class="donut-seg" id="donut-seg" cx="18" cy="18" r="15.9" stroke-dasharray="62.5 37.5"/>
+        </svg>
+        <div class="donut-text">62%</div>
+      </div>
+      <div class="donut-label">25 de 39<br>prácticas esta semana</div>
+    </div>
+    <div class="section-card half-card racha-card">
+      <div class="section-title-plain">Mi Racha</div>
+      <div class="racha-num">3</div>
+      <div class="racha-label">semanas activo</div>
+      <div class="racha-warning"><i class="fa-solid fa-fire"></i> Completa hoy para mantenerla</div>
+    </div>
+  </div>
+
+  <!-- RESUMEN PRÁCTICAS -->
+  <div class="section-card">
+    <div class="section-title-plain">Esta Semana</div>
+    <div class="misiones-list">
+      <div class="mision-row">
+        <i class="fa-solid fa-box mision-icon" style="color:#dc3545;"></i>
+        <div class="mision-label">Un Hueco Lleno</div>
+        <div class="mision-track"><div class="mision-fill" style="width:25%; background:#dc3545;"></div></div>
+        <div class="mision-num">2/8</div>
+      </div>
+      <div class="mision-row">
+        <i class="fa-solid fa-layer-group mision-icon" style="color:#ffc107;"></i>
+        <div class="mision-label">Todo en su Lugar</div>
+        <div class="mision-track"><div class="mision-fill" style="width:60%; background:#ffc107;"></div></div>
+        <div class="mision-num">9/15</div>
+      </div>
+      <div class="mision-row">
+        <i class="fa-solid fa-id-card mision-icon" style="color:#28a745;"></i>
+        <div class="mision-label">Un Cliente Más</div>
+        <div class="mision-track"><div class="mision-fill" style="width:100%; background:#28a745;"></div></div>
+        <div class="mision-num">10/10</div>
+      </div>
+      <div class="mision-row">
+        <i class="fa-solid fa-arrow-trend-up mision-icon" style="color:#ffc107;"></i>
+        <div class="mision-label">Venta Arriba</div>
+        <div class="mision-track"><div class="mision-fill" style="width:67%; background:#ffc107;"></div></div>
+        <div class="mision-num">4/6</div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- col der -->
+  </div><!-- desktop-grid -->
+
+  <!-- RECONOCIMIENTO -->
+  <div style="margin-bottom:1rem;">
+    <div class="reconocimiento-hero">
+      <div class="reco-hero-icon">🏆</div>
+      <div class="reco-hero-text">
+        <div class="reco-hero-title">Tu Historial de Reconocimientos</div>
+        <div class="reco-hero-sub">3 semanas activo — tu consistencia te pone en el top 20% del piso</div>
+      </div>
+    </div>
+    <div class="reco-grid">
+      <div class="reco-card reco-fire">
+        <div class="reco-card-icon">🔥</div>
+        <div class="reco-card-num">3</div>
+        <div class="reco-card-label">Racha activa</div>
+        <div class="reco-card-sub">Semanas consecutivas</div>
+      </div>
+      <div class="reco-card reco-star">
+        <div class="reco-card-icon">⭐</div>
+        <div class="reco-card-num">10</div>
+        <div class="reco-card-label">Clientes captados</div>
+        <div class="reco-card-sub">Meta cumplida esta semana</div>
+      </div>
+      <div class="reco-card reco-bolt">
+        <div class="reco-card-icon">⚡</div>
+        <div class="reco-card-num">1,240</div>
+        <div class="reco-card-label">Puntos acumulados</div>
+        <div class="reco-card-sub">Top 20% del piso</div>
+      </div>
+      <div class="reco-card reco-people">
+        <div class="reco-card-icon">📦</div>
+        <div class="reco-card-num">4</div>
+        <div class="reco-card-label">Ventas cruzadas</div>
+        <div class="reco-card-sub">Ticket arriba del promedio</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="resistance-text">Tu piso, tu práctica · Ontikos</div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-actions-container">
+    <div class="bottom-bar">
+      <div class="dropdown-wrapper">
+        <button class="circle-btn" id="layer-btn"><i class="fa-solid fa-layer-group"></i></button>
+        <div class="level-dropdown" id="dropdown-menu">
+          <a class="dropdown-item" href="mi-semana.html"><i class="fa-solid fa-calendar-week"></i> Mi Semana</a>
+          <a class="dropdown-item" href="mi-negocio.html"><i class="fa-solid fa-chart-column"></i> Mi Negocio</a>
+          <div class="dropdown-item"><i class="fa-solid fa-map-location-dot"></i> Mapa de Piso (próximo)</div>
+        </div>
+      </div>
+      <div class="dropdown-wrapper">
+        <button class="circle-btn" id="plus-btn"><i class="fa-solid fa-plus"></i></button>
+        <div class="missions-dropdown" id="missions-menu">
+          <div class="missions-header"><strong>Mi Plan Semanal</strong><span>Tus 4 prácticas</span></div>
+          <div class="missions-item"><div class="missions-icon"><i class="fa-solid fa-box"></i></div><div class="missions-label">Un Hueco Lleno</div></div>
+          <div class="missions-item"><div class="missions-icon"><i class="fa-solid fa-layer-group"></i></div><div class="missions-label">Todo en su Lugar</div></div>
+          <div class="missions-item"><div class="missions-icon"><i class="fa-solid fa-id-card"></i></div><div class="missions-label">Un Cliente Más</div></div>
+          <div class="missions-item"><div class="missions-icon"><i class="fa-solid fa-arrow-trend-up"></i></div><div class="missions-label">Venta Arriba</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTEL PANEL -->
+  <div class="intel-dropdown" id="intel-panel">
+    <div class="intel-subtitle">Mi Piso</div>
+    <div class="intel-events-grid">
+      <div class="intel-event"><i class="fa-solid fa-satellite-dish"></i> 7 vendedores de Perisur completaron las 4 prácticas esta semana.</div>
+      <div class="intel-event"><i class="fa-solid fa-triangle-exclamation"></i> Tienes 6 faltantes activos — el volumen más alto de tu piso hoy.</div>
+      <div class="intel-event"><i class="fa-solid fa-fire"></i> Ranking cierra el viernes. Estás a 50 pts de entrar al top 15%.</div>
+      <div class="intel-event"><i class="fa-solid fa-bullhorn"></i> Los 3 clientes fríos de tu cartera llevan 60+ días sin visita.</div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer class="clean-footer">
+  <div class="footer-content">
+    <strong>Tu piso, tu práctica</strong>
+    <div style="margin-top:0.8rem; text-align:center;">
+      <span class="marca" style="font-size:1rem;" aria-label="Ontikos" role="img"><img class="marca__sim" src="marca/favicon.svg" alt=""><span aria-hidden="true">ntikos</span></span>
+    </div>
+    <div style="font-size:0.68rem; color:#6c757d; text-align:center; margin-top:0.4rem;">&copy; <span id="year"></span></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// GRÁFICA TENDENCIA
+(function() {
+  const ctx = document.getElementById("campanaChart");
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
+      datasets: [{
+        label: "Puntos",
+        data: [160, 210, 180, 270, 220, 140, 60],
+        backgroundColor: ["#28a745","#28a745","#28a745","#28a745","#ffc107","#ffc107","#e9ecef"],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      legend: { display: false },
+      scales: {
+        xAxes: [{ gridLines: { display: false }, ticks: { fontFamily: "IBM Plex Sans", fontSize: 11 } }],
+        yAxes: [{ gridLines: { color: "#f1f3f5" }, ticks: { fontFamily: "IBM Plex Sans", fontSize: 10, maxTicksLimit: 4 } }]
+      }
+    }
+  });
+})();
+
+// MENÚS
+function toggleMenu(menu) {
+  ["dropdown-menu","missions-menu","intel-panel"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el !== menu) el.classList.remove("show");
+  });
+  menu && menu.classList.toggle("show");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("layer-btn")?.addEventListener("click", () => toggleMenu(document.getElementById("dropdown-menu")));
+  document.getElementById("plus-btn")?.addEventListener("click",  () => toggleMenu(document.getElementById("missions-menu")));
+  document.getElementById("notif-btn")?.addEventListener("click", e => { e.stopPropagation(); toggleMenu(document.getElementById("intel-panel")); });
+  document.addEventListener("click", e => {
+    [["dropdown-menu","layer-btn"],["missions-menu","plus-btn"],["intel-panel","notif-btn"]].forEach(([mId, bId]) => {
+      const m = document.getElementById(mId), b = document.getElementById(bId);
+      if (m && b && !m.contains(e.target) && !b.contains(e.target)) m.classList.remove("show");
+    });
+  });
+});
+</script>
+</body>
+</html>
