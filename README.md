@@ -8,6 +8,15 @@ Sitio estático. Se publica con GitHub Pages en **sistema.ontikos.com**.
 | `/ds/` | **Ontikos · Sistema de funcionamiento** — 28 reglas, cada una con su verificación y sus láminas |
 | `/dsr/` | **RetiCash · Sistema · v5** — secciones 00 a 14 |
 | `/erp/` | **insurance.ontikos** — el wireframe vigente del Director y la aplicación |
+| `/erp/wireframes/` | los wireframes 01–04 de Dirección, copia de `ERP-CRM/wireframes/` · **01–03 abren sin estilos**: piden `assets/carbon.css` y el favicon, que no se publicaron |
+| `/carbondesign/` | **Ontikos · el marco** — El Futuro armado sobre el marco (`index.html` = `marco.html`) |
+| `/estado/` | **Estado medido · Ontikos** |
+| `/futuro/` · `/panel-actos/` · `/panel-lista/` · `/panel-patron/` · `/pulso/` | sondas de El Futuro (22–23 sep): card 1, el panel de Colocación, la lista de auditoría, el patrón a nivel CEO, las formas del Pulso |
+| `/anatomia/` · `/cruda/` · `/escala/` · `/repertorio/` | sondas del 21 sep: zonas de la tarjeta, Carbon contra «simplón y crudo», el hueco, el repertorio |
+| `/ontikos/` | **Ontikos — Mi Semana** · no pertenece a `ERP-CRM/` |
+
+Las sondas son bancos para elegir sobre el render, no pantallas del producto. Tabla
+puesta al día el 24-sep-2026, contra `ls` y el `<title>` de cada ruta.
 
 ## Esto no se edita aquí
 
