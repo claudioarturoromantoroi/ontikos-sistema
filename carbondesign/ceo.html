@@ -3,6 +3,29 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- ── Enrutado por dispositivo · [01-oct-2026] ─────────────────────
+         Escritorio y móvil son DOS construcciones, no un responsive (método
+         carbon-app). Esta es la entrada canónica: en un CELULAR reemplaza la
+         vista por la móvil (estructura.html); en una COMPUTADORA sigue de
+         largo y carga el escritorio. Corre lo PRIMERO, antes de bajar el
+         bundle del escritorio, para que el teléfono no descargue lo que no va
+         a usar. Conserva la query y el hash (p. ej. ?f=colocacion). Ante la
+         duda, el escritorio. El móvil (estructura.html) NO reenvía de vuelta:
+         es también la entrada directa de la versión móvil. -->
+    <script>
+      (function () {
+        try {
+          var ua = navigator.userAgent || '';
+          var esFono = /Mobi|Android|iPhone|iPod|IEMobile|BlackBerry|Opera Mini/i.test(ua);
+          var mm = window.matchMedia;
+          var angosto = mm && mm('(max-width: 671px)').matches;   // < md de Carbon
+          var toque = mm && mm('(pointer: coarse)').matches;
+          if (esFono || (angosto && toque)) {
+            location.replace('./estructura.html' + location.search + location.hash);
+          }
+        } catch (e) { /* ante la duda, el escritorio */ }
+      })();
+    </script>
     <title>Ontikos · Dirección General</title>
     <!-- El favicon estaba en `public/` desde la sesión del kit de marca y
          este archivo NUNCA lo enlazaba, así que la pestaña del navegador
@@ -11,7 +34,7 @@
          Es el símbolo del Kit de Marca v1.1, copiado y no redibujado. -->
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
-    <script type="module" crossorigin src="./assets/ceo-BQNHxBUX.js"></script>
+    <script type="module" crossorigin src="./assets/ceo-Rha5flJD.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/ceo-BkcZQbsh.css">
   </head>
   <body>
