@@ -1,0 +1,373 @@
+
+/* ═══ VENDEDOR — clases específicas (aditivas, mínimas) ═══ */
+
+/* saludo de la pestaña · idéntico patrón del cliente en tamaño y ritmo */
+.vd-greet{font-size:1.05rem;font-weight:400;color:var(--ink2);margin-bottom:4px}
+.vd-greet strong{font-weight:700;color:var(--ink)}
+.vd-ey{font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:18px}
+
+/* tarjetas de "número héroe" — 4 celdas grandes, respirando (base del beh-cell del cliente) */
+.vd-hero{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.vd-hero-c{background:var(--surf2);border-radius:14px;padding:15px 14px}
+.vd-hero-l{font-size:.54rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.vd-hero-v{font-size:1.55rem;font-weight:900;letter-spacing:-.03em;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums}
+.vd-hero-v.green{color:var(--green)} .vd-hero-v.amber{color:var(--amber)}
+.vd-hero-sub{font-size:.66rem;color:var(--ink3);margin-top:6px}
+
+/* comisión del mes — tarjeta verde protagonista (base quote-util-card) */
+.vd-com{background:var(--green-bg);border:1.5px solid var(--green-brd);border-radius:14px;padding:16px 17px;margin-bottom:16px}
+.vd-com-l{font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);opacity:.9;margin-bottom:5px}
+.vd-com-v{font-size:2rem;font-weight:900;color:var(--green);letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.vd-com-sub{font-size:.74rem;font-weight:600;color:var(--green);opacity:.85;margin-top:5px}
+
+/* ranking del vendedor — solo su posición, en tarjeta calma */
+.vd-rank{display:flex;align-items:center;gap:14px;background:var(--surf2);border-radius:14px;padding:15px 16px;margin-bottom:16px}
+.vd-rank-pos{width:52px;height:52px;border-radius:50%;background:var(--ink);color:var(--surf);display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;letter-spacing:-.02em;flex-shrink:0}
+.vd-rank-body{flex:1;min-width:0}
+.vd-rank-t{font-size:.92rem;font-weight:800;color:var(--ink);letter-spacing:-.01em}
+.vd-rank-s{font-size:.72rem;color:var(--ink3);margin-top:2px;line-height:1.4}
+
+/* título de sección inline · idéntico al del cliente */
+.vd-lbl{font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin:6px 2px 10px}
+
+/* fila de operación reciente (base ord-row del cliente) */
+.vd-oplist{border:1.5px solid var(--brd2);border-radius:14px;overflow:hidden;background:var(--surf);margin-bottom:16px}
+.vd-oprow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px;border-top:1px solid var(--brd)}
+.vd-oprow:first-child{border-top:none}
+.vd-oprow-main{flex:1;min-width:0}
+.vd-oprow-t{font-size:.88rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.vd-oprow-cli{font-size:.66rem;font-weight:600;color:var(--ink3);text-transform:none;letter-spacing:0}
+.vd-oprow-s{font-size:.7rem;color:var(--ink3);margin-top:3px}
+.vd-oprow-r{text-align:right;flex-shrink:0}
+.vd-oprow-com{font-size:.9rem;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums}
+.vd-oprow-com-l{font-size:.55rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+
+/* KPIs cartera (2×2, más discreto que el hero) */
+.vd-kg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.vd-kg-c{background:var(--surf);border:1px solid var(--brd2);border-radius:12px;padding:12px 13px}
+.vd-kg-v{font-size:1.15rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1}
+.vd-kg-l{font-size:.54rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-top:6px}
+
+/* sub-segmentado (Actuales/Nuevos) — píldoras redondeadas, no ink */
+.vd-subseg{display:flex;gap:8px;margin-bottom:14px}
+.vd-subseg button{flex:1;font-family:var(--f);font-size:.76rem;font-weight:800;letter-spacing:.02em;padding:10px 8px;border:1.5px solid var(--brd2);border-radius:11px;background:var(--surf);color:var(--ink3);cursor:pointer}
+.vd-subseg button.on{background:var(--ink);color:var(--surf);border-color:var(--ink)}
+.vd-subseg-count{margin-left:5px;font-weight:900;opacity:.9}
+
+/* buscador amable (dentro de un pcard) */
+.vd-search{background:var(--surf2);border-radius:12px;padding:10px 12px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.vd-search input{flex:1;border:none;background:transparent;font-family:var(--f);font-size:.9rem;font-weight:600;color:var(--ink);outline:none}
+.vd-search svg{width:18px;height:18px;stroke:var(--ink3);stroke-width:2;fill:none;flex-shrink:0}
+
+/* tarjeta de cliente (base tarjeta del cliente customer.html — respiro grande) */
+.vd-cli{display:flex;align-items:center;gap:12px;background:var(--surf);border:1.5px solid var(--brd2);border-radius:14px;padding:14px 15px;margin-bottom:10px;cursor:pointer;transition:border-color .12s,background .12s}
+.vd-cli:hover{border-color:var(--brd3)}
+.vd-cli:active{background:var(--surf2)}
+.vd-cli-av{width:40px;height:40px;border-radius:50%;background:var(--surf3);color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.98rem;font-weight:900;flex-shrink:0}
+.vd-cli-body{flex:1;min-width:0}
+.vd-cli-n{font-size:.92rem;font-weight:800;color:var(--ink);letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.vd-cli-s{font-size:.7rem;color:var(--ink3);margin-top:3px;line-height:1.4}
+.vd-cli-r{text-align:right;flex-shrink:0}
+.vd-cli-vol{font-size:.86rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.vd-cli-vol-l{font-size:.5rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+/* badge Operador vs Negocio */
+.vd-badge{display:inline-flex;align-items:center;font-size:.5rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:99px;border:1px solid var(--brd2);background:var(--surf2);color:var(--ink3);white-space:nowrap;line-height:1.4}
+.vd-badge.op{color:var(--blue);background:var(--blue-bg);border-color:var(--blue-brd)}
+.vd-badge.ng{color:var(--amber);background:var(--amber-bg);border-color:var(--amber-brd)}
+.vd-badge.pend{color:var(--amber);background:var(--amber-bg);border-color:var(--amber-brd)}
+
+/* toggle Operador/Negocio en formulario alta */
+.vd-typetgl{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1.5px solid var(--brd2);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.vd-typetgl button{font-family:var(--f);font-size:.78rem;font-weight:800;padding:13px 8px;background:var(--surf);color:var(--ink3);border:none;cursor:pointer;text-align:center;letter-spacing:.02em;display:flex;flex-direction:column;align-items:center;gap:3px}
+.vd-typetgl button + button{border-left:1.5px solid var(--brd2)}
+.vd-typetgl button.on{background:var(--ink);color:var(--surf)}
+.vd-typetgl-t{font-size:.86rem;font-weight:900;letter-spacing:-.01em}
+.vd-typetgl-s{font-size:.6rem;font-weight:600;opacity:.75;letter-spacing:.02em;text-transform:none}
+
+/* detalle de cliente en modal */
+.vd-cli-dtl{background:var(--surf2);border-radius:14px;padding:14px 15px;margin-bottom:14px}
+.vd-cli-dtl-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.vd-cli-dtl-l{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.vd-cli-dtl-v{font-size:1rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums}
+.vd-cli-fee{display:flex;align-items:end;gap:10px;margin-top:10px}
+.vd-cli-fee .field{flex:1;margin-bottom:0}
+.vd-emer{background:var(--red-bg);border:1.5px solid var(--red-brd);border-radius:12px;padding:12px 14px;margin-top:14px}
+.vd-emer-t{font-size:.72rem;font-weight:800;color:var(--red);margin-bottom:6px;letter-spacing:.02em}
+.vd-emer-s{font-size:.72rem;color:var(--ink2);line-height:1.5;margin-bottom:10px}
+.vd-emer-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:10px;padding:12px;font-family:var(--f);font-size:.82rem;font-weight:800;letter-spacing:.02em;cursor:pointer}
+.vd-emer-btn:active{background:var(--red-h)}
+
+/* campaña: botón grande "Pedir precio especial" + estado del cupo */
+.vd-camp-cta{background:var(--surf);border:1.5px solid var(--brd2);border-radius:16px;padding:18px 18px 20px;margin-bottom:16px;text-align:center}
+.vd-camp-cta.disabled{background:var(--surf2);border-style:dashed}
+.vd-camp-cta-ic{font-size:1.6rem;margin-bottom:8px}
+.vd-camp-cta-t{font-size:1.05rem;font-weight:900;letter-spacing:-.02em;color:var(--ink);margin-bottom:6px}
+.vd-camp-cta-s{font-size:.76rem;color:var(--ink3);line-height:1.5;margin-bottom:14px;max-width:340px;margin-left:auto;margin-right:auto}
+.vd-camp-cta-btn{background:var(--red);color:#fff;border:none;border-radius:12px;padding:13px 22px;font-family:var(--f);font-size:.86rem;font-weight:800;letter-spacing:.02em;cursor:pointer;box-shadow:0 3px 12px rgba(208,2,27,.18)}
+.vd-camp-cta-btn:disabled{background:var(--surf3);color:var(--ink4);box-shadow:none;cursor:not-allowed}
+.vd-camp-cta-cupo{font-size:.66rem;font-weight:700;color:var(--amber);margin-top:12px;letter-spacing:.02em}
+
+/* fila de solicitud de campaña */
+.vd-camp-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border-top:1px solid var(--brd)}
+.vd-camp-row:first-child{border-top:none}
+.vd-camp-row-main{flex:1;min-width:0}
+.vd-camp-row-t{font-size:.86rem;font-weight:800;color:var(--ink)}
+.vd-camp-row-s{font-size:.7rem;color:var(--ink3);margin-top:3px;font-variant-numeric:tabular-nums}
+.vd-camp-est{font-size:.56rem;font-weight:800;padding:4px 10px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
+.vd-camp-est.pending{color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-brd)}
+.vd-camp-est.approved{color:var(--green);background:var(--green-bg);border:1px solid var(--green-brd)}
+.vd-camp-est.rejected{color:var(--red);background:var(--red-bg);border:1px solid var(--red-brd)}
+.vd-camp-est.used{color:var(--ink3);background:var(--surf3);border:1px solid var(--brd2)}
+.vd-camp-est.gray{color:var(--ink3);background:var(--surf3);border:1px solid var(--brd2)}
+.vd-camp-row-r{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;text-align:right}
+.vd-camp-row-com{font-size:.85rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1}
+.vd-camp-row-com.green{color:var(--green)}
+.vd-camp-row-com.amber{color:var(--amber)}
+.vd-camp-row-com.gray{color:var(--ink3)}
+.vd-camp-row-com-l{font-size:.58rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+.vd-camp-row-x{font-size:.62rem;color:var(--ink3);margin-top:3px;font-variant-numeric:tabular-nums}
+
+/* barra progreso de meta (perfil) — similar a pf-bar del cliente */
+.vd-meta-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.vd-meta-v{font-size:1.6rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1}
+.vd-meta-of{font-size:.78rem;color:var(--ink3)}
+.vd-meta-bar{height:8px;background:var(--surf3);border-radius:99px;overflow:hidden;margin-bottom:9px}
+.vd-meta-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--red));border-radius:99px}
+.vd-meta-msg{font-size:.76rem;color:var(--ink2);line-height:1.5}
+.vd-meta-msg strong{color:var(--ink);font-weight:800}
+
+/* histórico de metas cumplidas — tabla mini */
+.vd-hist{border-top:1px solid var(--brd)}
+.vd-hist-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--brd);font-size:.8rem}
+.vd-hist-row:last-child{border-bottom:none}
+.vd-hist-mes{font-weight:800;color:var(--ink2)}
+.vd-hist-pct{font-weight:900;font-variant-numeric:tabular-nums}
+.vd-hist-pct.green{color:var(--green)} .vd-hist-pct.amber{color:var(--amber)} .vd-hist-pct.red{color:var(--red)}
+
+/* aviso "estos datos son de ejemplo" en la pasada de diseño */
+.vd-demo-tag{background:var(--amber-bg);border:1.5px dashed var(--amber-brd);border-radius:10px;padding:9px 13px;margin-bottom:14px;font-size:.7rem;color:var(--amber);font-weight:700;letter-spacing:.02em;text-align:center}
+
+/* modal · el detalle del cliente respira más */
+.vd-mo-avat{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.vd-mo-avat .vd-cli-av{width:46px;height:46px;font-size:1.1rem}
+.vd-mo-name{font-size:1.05rem;font-weight:900;letter-spacing:-.02em}
+.vd-mo-sub{font-size:.72rem;color:var(--ink3);margin-top:2px}
+
+/* referrer del alta (fila búsqueda cliente que refirió) */
+.vd-search-res{margin-top:6px;max-height:180px;overflow-y:auto;border:1px solid var(--brd);border-radius:10px}
+.vd-search-res:empty{display:none;border:none}
+.vd-search-r{padding:10px 12px;border-bottom:1px solid var(--brd);font-size:.82rem;color:var(--ink);cursor:pointer}
+.vd-search-r:last-child{border-bottom:none}
+.vd-search-r:active{background:var(--surf2)}
+
+/* ═══ GRÁFICOS ═══ */
+.vd-chart-card{background:var(--surf2);border-radius:14px;padding:16px 16px 14px;margin-bottom:14px}
+.vd-chart-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;gap:10px}
+.vd-chart-t{font-size:.6rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3)}
+.vd-chart-tot{font-size:.9rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.vd-chart-sub{font-size:.7rem;color:var(--ink3);margin-top:8px;line-height:1.4}
+.vd-chart-sub strong{color:var(--ink);font-weight:800}
+
+/* barras verticales (tendencia diaria) */
+.vd-bars{position:relative;display:flex;align-items:flex-end;gap:5px;height:104px;border-bottom:1.5px solid var(--brd2);padding-bottom:0}
+.vd-bar{flex:1;background:var(--ink4);border-radius:4px 4px 0 0;min-height:3px;transition:height .55s var(--ease);position:relative}
+.vd-bar.hit{background:var(--green)}
+.vd-bar.today{background:var(--red);box-shadow:0 0 0 2px var(--red-bg)}
+.vd-bars-x{display:flex;gap:5px;margin-top:8px}
+.vd-bars-x span{flex:1;text-align:center;font-size:.5rem;font-weight:700;color:var(--ink4);letter-spacing:.05em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.vd-metaline{position:absolute;left:-6px;right:-6px;height:0;border-top:1.5px dashed var(--amber);pointer-events:none}
+.vd-metalbl{position:absolute;right:0;transform:translateY(-100%);font-size:.5rem;font-weight:800;color:var(--amber);background:var(--surf2);padding:0 6px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;line-height:1.4}
+
+/* semana operativa (base .week del cliente pero con más aire) */
+.vd-week{display:flex;gap:6px}
+.vd-wk-d{flex:1;text-align:center}
+.vd-wk-box{height:40px;display:flex;align-items:center;justify-content:center;border-radius:9px;font-weight:800;font-size:.9rem;color:var(--surf);background:var(--surf3)}
+.vd-wk-box.on{background:var(--green)}
+.vd-wk-box.off{background:var(--red)}
+.vd-wk-box.cur{outline:2px dashed var(--amber);outline-offset:2px;background:var(--amber);color:#fff}
+.vd-wk-box.fut{background:transparent;border:1.5px dashed var(--brd2);color:var(--ink4)}
+.vd-wk-lbl{margin-top:6px;font-size:.6rem;font-weight:700;letter-spacing:.06em;color:var(--ink4);text-transform:uppercase}
+.vd-wk-num{font-size:.5rem;font-weight:700;color:var(--ink4);margin-top:2px;font-variant-numeric:tabular-nums;letter-spacing:0;text-transform:none}
+
+/* top clientes: barras horizontales */
+.vd-topc-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--brd)}
+.vd-topc-row:first-child{border-top:none}
+.vd-topc-n{flex:0 0 105px;font-size:.78rem;font-weight:700;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vd-topc-bar{flex:1;height:10px;background:var(--surf3);border-radius:99px;overflow:hidden;min-width:0}
+.vd-topc-fill{height:100%;background:linear-gradient(90deg,#16a34a,#0d8a3a);border-radius:99px;transition:width .7s var(--ease)}
+.vd-topc-v{flex:0 0 auto;font-size:.75rem;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums;text-align:right;min-width:56px}
+
+/* ═══ EMERGENCIA ═══ */
+.vd-emercta{background:var(--red-bg);border:1.5px solid var(--red-brd);border-radius:14px;padding:14px 15px;margin-bottom:16px;display:flex;gap:12px;align-items:center;cursor:pointer;transition:background .15s}
+.vd-emercta:active{background:rgba(208,2,27,.11)}
+.vd-emercta-ic{width:38px;height:38px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;font-weight:900}
+.vd-emercta-body{flex:1;min-width:0}
+.vd-emercta-t{font-size:.86rem;font-weight:900;color:var(--red);letter-spacing:-.01em}
+.vd-emercta-s{font-size:.7rem;color:var(--ink2);margin-top:2px;line-height:1.4}
+.vd-emercta-go{color:var(--red);font-size:1.15rem;font-weight:800;flex-shrink:0}
+
+/* emergencias en curso (lista con estado) */
+.vd-emer-row{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-top:1px solid var(--brd);gap:10px}
+.vd-emer-row:first-child{border-top:none}
+.vd-emer-row-main{flex:1;min-width:0}
+.vd-emer-row-t{font-size:.84rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.vd-emer-row-t .cli{font-weight:600;color:var(--ink3);font-size:.72rem;letter-spacing:0;text-transform:none;margin-left:6px}
+.vd-emer-row-s{font-size:.7rem;color:var(--ink3);margin-top:3px}
+.vd-emer-est{font-size:.54rem;font-weight:800;padding:4px 9px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
+.vd-emer-est.pending{color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-brd)}
+.vd-emer-est.approved{color:var(--green);background:var(--green-bg);border:1px solid var(--green-brd)}
+.vd-emer-est.rejected{color:var(--red);background:var(--red-bg);border:1px solid var(--red-brd)}
+
+/* modal emergencia — aviso rojo protagonista arriba */
+.vd-emer-warn{background:var(--red-bg);border:1.5px solid var(--red-brd);border-left:4px solid var(--red);border-radius:10px;padding:11px 13px;margin-bottom:14px;font-size:.74rem;color:var(--ink2);line-height:1.45}
+.vd-emer-warn strong{color:var(--red);font-weight:900}
+
+/* ═══ DINERO HÉROE (Resumen) — comisión gigante + proyección + falta meta ═══ */
+.vd-money{background:linear-gradient(135deg, var(--green-bg), rgba(22,163,74,.03));border:1.5px solid var(--green-brd);border-radius:18px;padding:20px 20px 18px;margin-bottom:16px}
+.vd-money-l{font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--green);opacity:.9;margin-bottom:8px}
+.vd-money-v{font-size:2.7rem;font-weight:900;color:var(--green);letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.vd-money-v .cur{font-size:1rem;font-weight:700;color:var(--green);opacity:.75;margin-left:8px;letter-spacing:0}
+.vd-money-sub{font-size:.75rem;font-weight:600;color:var(--green);opacity:.85;margin-top:8px}
+.vd-money-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:16px;background:var(--green-brd);border:1px solid var(--green-brd);border-radius:11px;overflow:hidden}
+.vd-money-cell{background:var(--surf);padding:11px 13px}
+.vd-money-cell-l{font-size:.5rem;font-weight:800;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.vd-money-cell-v{font-size:1.1rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1}
+.vd-money-cell-v.amber{color:var(--amber)}
+.vd-money-cell-v.green{color:var(--green)}
+
+/* nudge de meta: cuánto falta */
+.vd-nudge{background:var(--amber-bg);border:1.5px solid var(--amber-brd);border-radius:12px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.vd-nudge-ic{width:30px;height:30px;border-radius:50%;background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;flex-shrink:0}
+.vd-nudge-body{flex:1;min-width:0}
+.vd-nudge-t{font-size:.78rem;font-weight:800;color:var(--amber);letter-spacing:-.01em}
+.vd-nudge-s{font-size:.7rem;color:var(--ink2);margin-top:2px;line-height:1.4}
+.vd-nudge-s strong{color:var(--ink);font-weight:800}
+
+/* ═══ EMERGENCIA: precio calculado (no editable) ═══ */
+.vd-price-calc{background:var(--surf2);border:1.5px solid var(--brd2);border-radius:12px;padding:13px 15px;margin-bottom:14px}
+.vd-price-calc-l{font-size:.56rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.vd-price-calc-v{font-size:1.8rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.03em;line-height:1}
+.vd-price-calc-desc{font-size:.68rem;color:var(--ink3);margin-top:8px;line-height:1.45}
+.vd-price-calc-desc code{font-weight:700;color:var(--ink2);font-family:var(--f);font-variant-numeric:tabular-nums}
+.vd-lock{display:inline-flex;align-items:center;gap:4px;font-size:.5rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);background:var(--surf3);border:1px solid var(--brd2);padding:2px 8px;border-radius:99px;margin-left:8px;vertical-align:middle}
+.vd-lock::before{content:'🔒';font-size:.72rem}
+
+/* ═══ CAMPAÑAS · TC vigente como referencia + validación en vivo ═══ */
+.vd-tc-ref{background:var(--surf2);border-radius:10px;padding:10px 13px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.vd-tc-ref-l{font-size:.56rem;font-weight:800;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase}
+.vd-tc-ref-v{font-size:.98rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.vd-tc-ref-hint{font-size:.6rem;color:var(--ink3);margin-top:2px}
+
+.vd-price-in{width:100%;font-family:var(--f);font-size:1.4rem;font-weight:900;color:var(--ink);background:var(--surf);border:2px solid var(--brd2);padding:14px 16px;text-align:center;border-radius:12px;font-variant-numeric:tabular-nums;letter-spacing:-.02em;transition:border-color .12s,background .12s,color .12s;-webkit-appearance:none;appearance:none}
+.vd-price-in:focus{outline:none;border-color:var(--red)}
+.vd-price-in.err{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.vd-price-in.ok{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+
+.vd-price-msg{font-size:.72rem;font-weight:700;padding:9px 12px;border-radius:9px;margin-top:8px;line-height:1.4}
+.vd-price-msg.err{background:var(--red-bg);color:var(--red);border:1px solid var(--red-brd)}
+.vd-price-msg.ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-brd)}
+.vd-price-msg.hint{background:var(--surf2);color:var(--ink3);border:1px solid var(--brd)}
+
+/* ganancia proyectada en el modal de campaña */
+.vd-gain{background:var(--green-bg);border:1.5px solid var(--green-brd);border-radius:12px;padding:14px 15px;margin-top:14px}
+.vd-gain-l{font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--green);opacity:.9;margin-bottom:6px}
+.vd-gain-v{font-size:1.6rem;font-weight:900;color:var(--green);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.vd-gain-sub{font-size:.7rem;color:var(--green);opacity:.85;margin-top:5px;line-height:1.45}
+
+/* ═══ CAMPAÑAS ACTIVAS DEL NEGOCIO ═══ */
+.vd-camp-active{background:var(--surf);border:1.5px solid var(--brd2);border-radius:14px;padding:0;margin-bottom:14px;overflow:hidden}
+.vd-camp-active.mdo{border-color:var(--amber-brd);background:linear-gradient(180deg, rgba(217,119,6,.05), var(--surf) 40%)}
+.vd-camp-active.vol{border-color:var(--blue-brd);background:linear-gradient(180deg, rgba(37,99,235,.04), var(--surf) 40%)}
+.vd-camp-hd{display:flex;align-items:center;gap:11px;padding:14px 15px 12px;border-bottom:1px solid var(--brd)}
+.vd-camp-hd-ic{width:34px;height:34px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;flex-shrink:0}
+.vd-camp-active.mdo .vd-camp-hd-ic{background:var(--amber)}
+.vd-camp-active.vol .vd-camp-hd-ic{background:var(--blue)}
+.vd-camp-hd-body{flex:1;min-width:0}
+.vd-camp-hd-t{font-size:.94rem;font-weight:900;color:var(--ink);letter-spacing:-.01em}
+.vd-camp-hd-s{font-size:.68rem;color:var(--ink3);margin-top:2px}
+.vd-camp-clock{font-size:.7rem;font-weight:900;color:var(--red);background:var(--red-bg);border:1px solid var(--red-brd);border-radius:99px;padding:4px 10px;font-variant-numeric:tabular-nums;letter-spacing:.02em;white-space:nowrap;flex-shrink:0}
+.vd-camp-bd{padding:14px 15px}
+.vd-camp-nums{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--brd);border:1px solid var(--brd);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.vd-camp-num{background:var(--surf);padding:11px 10px;text-align:center}
+.vd-camp-num-l{font-size:.5rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.vd-camp-num-v{font-size:1rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1}
+.vd-camp-num-v.green{color:var(--green)} .vd-camp-num-v.red{color:var(--red)} .vd-camp-num-v.amber{color:var(--amber)}
+
+/* barra de disponibilidad */
+.vd-camp-bar{height:8px;background:var(--surf3);border-radius:99px;overflow:hidden;margin:2px 0 6px}
+.vd-camp-bar-fill{height:100%;background:linear-gradient(90deg,var(--amber),#c56603);border-radius:99px;transition:width .7s var(--ease)}
+.vd-camp-active.vol .vd-camp-bar-fill{background:linear-gradient(90deg,var(--blue),#1e40af)}
+
+.vd-camp-clis{background:var(--surf2);border-radius:10px;padding:10px 12px}
+.vd-camp-clis-t{font-size:.54rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.vd-camp-cli{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:.76rem}
+.vd-camp-cli-n{font-weight:700;color:var(--ink)}
+.vd-camp-cli-v{font-weight:900;color:var(--green);font-variant-numeric:tabular-nums}
+.vd-camp-clis-empty{font-size:.7rem;color:var(--ink4);font-style:italic;padding:2px 0}
+
+/* escalones de campaña de volumen */
+.vd-tier{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surf2);border-radius:9px;margin-bottom:5px;gap:8px}
+.vd-tier:last-child{margin-bottom:0}
+.vd-tier-m{font-size:.72rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums}
+.vd-tier-r{font-size:.9rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+
+/* ═══ CLIENTES · GRUPOS DE URGENCIA ═══ */
+.vd-grp{display:flex;align-items:center;gap:8px;margin:14px 2px 8px}
+.vd-grp:first-child{margin-top:4px}
+.vd-grp-b{width:3px;height:14px;border-radius:2px;flex-shrink:0}
+.vd-grp.urg .vd-grp-b{background:var(--red)}
+.vd-grp.act .vd-grp-b{background:var(--green)}
+.vd-grp.new .vd-grp-b{background:var(--ink4)}
+.vd-grp-t{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+.vd-grp-c{font-size:.56rem;font-weight:800;color:var(--ink3);background:var(--surf3);border-radius:99px;padding:2px 8px;letter-spacing:.06em}
+
+/* borde de urgencia (variantes) */
+.vd-cli.urg{box-shadow:inset 3px 0 0 var(--red)}
+.vd-cli.med{box-shadow:inset 3px 0 0 var(--amber)}
+
+/* comisión + potencial en cada cliente (extiende la tarjeta) */
+.vd-cli-com{display:flex;gap:14px;align-items:baseline;margin-top:6px}
+.vd-cli-com-b{display:flex;flex-direction:column;line-height:1.15}
+.vd-cli-com-l{font-size:.5rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.vd-cli-com-v{font-size:.86rem;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.vd-cli-com-v.green{color:var(--green)}
+.vd-cli-com-v.amber{color:var(--amber)}
+.vd-cli-com-v.gray{color:var(--ink3)}
+
+/* rápidos con chip "SU TOP" para el mayor monto (incentivo a pedir alto) */
+.q-fast{flex-wrap:wrap;gap:6px !important;margin-top:8px !important}
+.q-fast-btn{position:relative;padding:9px 6px !important;font-size:.76rem !important;min-width:0;flex:1 1 22%}
+.q-fast-btn.top{border-color:var(--amber-brd);background:var(--amber-bg);color:var(--amber)}
+.q-fast-btn.top.on{background:var(--red);color:#fff;border-color:var(--red)}
+.q-fast-chip{position:absolute;top:-7px;right:-4px;font-size:.44rem;font-weight:900;letter-spacing:.06em;background:var(--red);color:#fff;padding:2px 5px;border-radius:99px;text-transform:uppercase;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.q-fast-lbl{font-size:.55rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin:12px 2px 6px;text-align:center}
+
+/* fila de dos steppers (monto + precio en campaña) — usa .q-amt del cliente para monto y .stp de admin para precio */
+.vd-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:430px){.vd-two{grid-template-columns:1fr}}
+
+/* ═══ TC VIGENTE (hero Resumen) — herramienta comercial permanente ═══ */
+.vd-tc{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--brd2);border:1.5px solid var(--brd2);border-radius:14px;overflow:hidden;margin-bottom:14px}
+.vd-tc-c{background:var(--surf);padding:14px 15px}
+.vd-tc-l{font-size:.5rem;font-weight:800;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.vd-tc-v{font-size:1.6rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1}
+.vd-tc-v.green{color:var(--green)} .vd-tc-v.red{color:var(--red)}
+.vd-tc-sub{font-size:.58rem;color:var(--ink3);margin-top:5px;letter-spacing:.02em}
+.vd-tc-tag{display:flex;align-items:center;justify-content:space-between;background:var(--surf2);padding:8px 15px;grid-column:1/-1;border-top:1px solid var(--brd)}
+.vd-tc-tag-l{font-size:.5rem;font-weight:800;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.vd-tc-tag-l::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:mdo-pulse 2s ease-in-out infinite}
+.vd-tc-tag-v{font-size:.56rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums}
+
+/* ═══ BANDERA "cliente inactivo" en tarjeta de cliente ═══ */
+.vd-cli.fuga{position:relative;box-shadow:inset 3px 0 0 var(--red)}
+.vd-fuga-flag{position:absolute;top:-8px;right:12px;display:flex;align-items:center;gap:4px;font-size:.52rem;font-weight:900;letter-spacing:.06em;background:var(--red);color:#fff;padding:3px 8px;border-radius:99px;text-transform:uppercase;line-height:1;box-shadow:0 2px 6px rgba(208,2,27,.35);z-index:1}
+.vd-fuga-flag::before{content:'⚑';font-size:.72rem}
+
+/* confirmación post-envío emergencia (bandera verde de éxito) */
+.vd-emer-ok{background:var(--green-bg);border:1.5px solid var(--green-brd);border-radius:14px;padding:16px 16px;margin-bottom:14px;text-align:center}
+.vd-emer-ok-ic{width:44px;height:44px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 10px;font-weight:900}
+.vd-emer-ok-t{font-size:.98rem;font-weight:900;color:var(--green);letter-spacing:-.01em;margin-bottom:6px}
+.vd-emer-ok-s{font-size:.76rem;color:var(--ink2);line-height:1.5}
+.vd-emer-ok-s strong{color:var(--ink);font-weight:800}
+

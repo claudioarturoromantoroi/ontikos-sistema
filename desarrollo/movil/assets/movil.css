@@ -1,0 +1,77 @@
+/* ═══════════ Ontikos móvil · capa de página (Paso 3 · marco y grilla) ═══════════
+   CM destilado (network-design-system.css) gobierna y se carga AL FINAL, así sus
+   tokens y sus versiones de los componentes duplicados ganan (gramática §5·G:
+   «resuelto a la versión de CM»). Aquí sólo van las PIEZAS NUEVAS declaradas
+   (gauge móvil, EN VIVO·CIERRE con sus tres estados) y la regla color=significado
+   aplicada sobre las formas heredadas. Nada rediseña una forma. */
+
+/* El marco, como dibujo estático: el teléfono se deja a lo alto del contenido
+   (appbar fija arriba, bnav abajo, superficie entre ambas) para verla entera. */
+.app{height:auto;min-height:100%}
+.sa{overflow:visible}
+.appbar,.bnav{position:static}
+
+/* EN VIVO · CIERRE — pieza nueva, tres estados sobre .clock/.cdot:
+   vivo (verde que late) · por cerrar (ámbar) · cerrado (neutro, NUNCA rojo). */
+.clock.porcerrar{color:var(--amber)}
+.clock.porcerrar .cdot{background:var(--amber);animation:none}
+.clock.cerrado{color:var(--ink3)}
+.clock.cerrado .cdot{background:var(--ink4);animation:none;box-shadow:none}
+
+/* color = significado: el dinero va en TINTA salvo que lleve un estado. */
+.vd-cli-vol,.ord-util{color:var(--ink)!important}
+
+/* rótulo de superficie */
+.surf-h{display:flex;align-items:flex-end;justify-content:space-between;margin:2px 0 14px}
+.surf-t{font-size:1.28rem;font-weight:900;letter-spacing:-.03em;line-height:1}
+.surf-sub{font-size:.58rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em}
+.sec-ey{font-size:.58rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.09em;margin:18px 2px 9px}
+
+/* ── GAUGE de arco · pieza de Ontikos heredada del escritorio, escalada a móvil ── */
+.gz{display:flex;align-items:center;gap:14px}
+.gz-arc{width:96px;height:56px;position:relative;flex:none}
+.gz-arc svg{width:96px;height:56px;display:block;overflow:visible}
+.gz-track{fill:none;stroke:var(--surf3);stroke-width:9;stroke-linecap:round}
+.gz-val{fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset .6s var(--ease)}
+.gz.r .gz-val{stroke:var(--red)} .gz.a .gz-val{stroke:var(--amber)} .gz.g .gz-val{stroke:var(--green)}
+.gz-num{position:absolute;left:0;right:0;bottom:-1px;text-align:center;font-size:1.18rem;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.gz-body{min-width:0;flex:1}
+.gz-cap{font-size:.6rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em}
+.gz-pace{font-size:.74rem;font-weight:800;margin-top:4px;line-height:1.25}
+.gz-pace.r{color:var(--red)} .gz-pace.a{color:var(--amber)} .gz-pace.g{color:var(--green)} .gz-pace.n{color:var(--ink2)}
+
+/* la línea estratégica: .pcard (recinto) con su header (título + salud en memb-chip) */
+.linea{margin-bottom:10px}
+.linea .pcard-h{margin-bottom:13px}
+
+/* la fila de quiebre .vd-cli · el filo lleva la situación; falta el neutro */
+.vd-cli.neu{box-shadow:inset 3px 0 0 var(--ink4)}
+.vd-cli-body .chip{margin-top:6px}
+.vd-cli-plz{font-size:.66rem;font-weight:800;margin-top:2px}
+.vd-cli-plz.r{color:var(--red-tx,var(--red))} .vd-cli-plz.a{color:var(--amber)} .vd-cli-plz.n{color:var(--ink3)}
+
+/* la barra de decisión / aviso con peso usa .camp; su acto a la derecha */
+.camp-act{margin-top:10px}
+
+/* ── La grilla de 4 columnas como DIBUJO · Carbon 2x Grid, breakpoint Small
+   (320px/20rem): 4 columnas, margen 0, relleno 16px. Fuente verificada en el MCP:
+   carbondesignsystem.com/building-blocks/foundations/2x-grid/overview/#breakpoints
+   Canalón ausente (gutterless) por ser contenido estrechamente relacionado.
+   Se superpone sólo cuando la superficie trae ?grid. ── */
+.sa.grid-on{position:relative}
+.grid-ovl{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:none;display:flex;z-index:80}
+.grid-ovl i{flex:1;background:rgba(208,2,27,.05);border-right:1px dashed rgba(208,2,27,.4)}
+.grid-ovl i:first-child{border-left:1px dashed rgba(208,2,27,.4)}
+/* las dos guías de relleno (16px): el filo donde el tipo se detiene */
+.grid-ovl::before,.grid-ovl::after{content:"";position:absolute;top:0;bottom:0;width:16px;background:repeating-linear-gradient(135deg,rgba(208,2,27,.1) 0 3px,transparent 3px 6px)}
+.grid-ovl::before{left:0}.grid-ovl::after{right:0}
+
+/* la cabecera móvil: la marca de Ontikos en vez de RETICASH */
+.brand.ont{letter-spacing:-.04em}
+
+/* navegación .bnav de CM · gramática: el activo va en TINTA, no en rojo.
+   CM pinta .ni.on en rojo; aquí se re-mapea a tinta (color=significado:
+   el rojo queda reservado al quiebre, no a «dónde estoy»). */
+.bnav .ni.on{color:var(--ink)}
+.bnav .ni.on svg{stroke:var(--ink)}
+.bnav .ni.on .ni-lbl{color:var(--ink)}
