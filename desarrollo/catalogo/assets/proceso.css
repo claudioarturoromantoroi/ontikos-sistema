@@ -1,0 +1,128 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ONTIKOS · PROCESO — el avance de un compromiso a través de sus hitos.
+
+   QUÉ ES. Un compromiso que atraviesa hitos: colocar una póliza, entregar un
+   producto, tramitar un expediente, registrar una operación. La forma es la
+   misma; lo que cambia son los hitos y sus palabras.
+
+   POR QUÉ ES DE SISTEMA Y NO DE PRODUCTO. Los dos sistemas de referencia
+   reservan un lugar para esta pieza, por separado: Carbon la tiene como
+   «Progress Indicator» y «Ratio» de IB tiene «Progress Steps» entre los tres
+   únicos componentes de su sección de portal. Cuando dos sistemas que no se
+   hablan guardan sitio para la misma pieza, la pieza no es de un negocio.
+
+   QUÉ TRAE ONTIKOS
+     · La forma: N hitos, uno actual, conector entre ellos.
+     · Los cuatro estados: cumplido · actual · pendiente · fallido.
+     · El plazo del hito. Una cotización vence, una reserva vence, un precio
+       congelado vence. El plazo no es de cambio de divisa: es de compromiso.
+     · Dos orientaciones: horizontal en varias regiones, vertical en una sola.
+       No es preferencia, es la regla 20 — la disposición no cruza la frontera.
+     · El rótulo cambia según quién mira. El mismo hito se llama distinto para
+       quien entrega y para quien recibe.
+
+   QUÉ PONE EL PRODUCTO
+     · Cuáles son los hitos y cómo se llaman para cada rol.
+     · Qué mensaje acompaña a cada estado, terminado en verbo.
+     · Nada más. Si necesita un color propio, es que el hito no es un hito.
+
+   DIFERENCIA CON LA VERSIÓN QUE OPERÓ. La de RetiCash pulsa, usa conector de
+   3 px redondeado y tiñe el hito activo según compra o venta. Las tres cosas
+   son decoración de producto y no viajan: el pulso pide atención que el hito
+   no necesita, y el color por lado es vocabulario del cambio de divisa.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── fichas de la pieza · derivan de la casa, no inventan color ── */
+:root{
+  --proc-fondo:        var(--surf,  #fff);
+  --proc-marca-vacia:  var(--surf3, #eeeef3);
+  --proc-borde:        var(--brd2,  rgba(0,0,0,.12));
+  --proc-sobre:        #fff;
+  --proc-tinta:        var(--ink,   #09090f);
+  --proc-tinta2:       var(--ink2,  #2e2e42);
+  --proc-tinta3:       var(--ink3,  #6b6b82);
+  --proc-cumplido:     var(--green, #16a34a);
+  --proc-actual:       var(--blue,  #2563eb);
+  --proc-fallido:      var(--danger,#c01c1c);
+  --proc-plazo:        var(--amber, #d97706);
+  --proc-plazo-fondo:  rgba(217,119,6,.08);
+  --proc-plazo-borde:  rgba(217,119,6,.3);
+}
+
+/* ══ la pieza ══════════════════════════════════════════════════════════════ */
+.proc{ display:flex; align-items:flex-start; gap:0; inline-size:100% }
+.proc-paso{ flex:1 1 0; min-inline-size:0; display:flex; flex-direction:column; align-items:center;
+            gap:7px; position:relative; text-align:center; padding-inline:6px }
+
+/* el conector · 1 px, recto, como en Carbon. Nace del centro de la marca. */
+.proc-paso:not(:last-child)::after{
+  content:""; position:absolute; block-size:1px; background:var(--proc-borde);
+  inset-block-start:9px; inset-inline-start:calc(50% + 15px); inset-inline-end:calc(-50% + 15px);
+}
+.proc-paso.cumplido:not(:last-child)::after{ background:var(--proc-cumplido) }
+
+/* la marca · círculo de 18 px, sin sombra ni pulso */
+.proc-marca{
+  inline-size:18px; block-size:18px; border-radius:50%; flex:0 0 auto;
+  background:transparent; border:1px solid var(--proc-borde);
+  display:flex; align-items:center; justify-content:center; position:relative; z-index:1;
+}
+.proc-paso.cumplido .proc-marca{ background:var(--proc-cumplido); border-color:var(--proc-cumplido) }
+.proc-paso.cumplido .proc-marca::after{            /* palomita dibujada, sin librería */
+  content:""; inline-size:6px; block-size:3px; margin-block-start:-2px;
+  border-inline-start:1.5px solid var(--proc-sobre); border-block-end:1.5px solid var(--proc-sobre);
+  transform:rotate(-45deg);
+}
+.proc-paso.actual .proc-marca{ border-color:var(--proc-actual); border-width:1.5px }
+.proc-paso.actual .proc-marca::after{
+  content:""; inline-size:8px; block-size:8px; border-radius:50%; background:var(--proc-actual);
+}
+.proc-paso.fallido .proc-marca{ background:var(--proc-fallido); border-color:var(--proc-fallido) }
+.proc-paso.fallido .proc-marca::after{             /* aspa dibujada */
+  content:"×"; color:var(--proc-sobre); font-size:.72rem; line-height:1; font-weight:600;
+}
+
+/* el rótulo */
+.proc-rot{ font-size:.72rem; font-weight:600; color:var(--proc-tinta3); line-height:1.25; letter-spacing:-.005em }
+.proc-paso.cumplido .proc-rot{ color:var(--proc-tinta) }
+.proc-paso.actual   .proc-rot{ color:var(--proc-tinta); font-weight:700 }
+.proc-paso.fallido  .proc-rot{ color:var(--proc-fallido); font-weight:700 }
+.proc-sub{ font-size:.62rem; color:var(--proc-tinta3); line-height:1.35;
+           font-variant-numeric:tabular-nums; margin-block-start:-3px }
+
+/* el plazo · sólo lo lleva el hito que lo tiene, y sólo mientras corre */
+.proc-plazo{
+  display:inline-flex; align-items:center; gap:4px; margin-block-start:1px;
+  font-size:.6rem; font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:.02em;
+  color:var(--proc-plazo); background:var(--proc-plazo-fondo);
+  border:1px solid var(--proc-plazo-borde); padding:1px 6px; border-radius:2px;
+}
+.proc-plazo.vencido{ color:var(--proc-fallido); background:transparent; border-color:var(--proc-fallido) }
+
+/* ══ el mensaje · una frase que termina en verbo ═══════════════════════════ */
+.proc-msg{ margin-block-start:14px; padding:12px 14px;
+           background:var(--proc-fondo); border:1px solid var(--proc-borde);
+           border-inline-start:2px solid var(--proc-borde) }
+.proc-msg-t{ font-size:.86rem; font-weight:600; color:var(--proc-tinta); line-height:1.35 }
+.proc-msg-s{ font-size:.78rem; color:var(--proc-tinta2); line-height:1.5; margin-block-start:4px }
+.proc-msg.actual  { border-inline-start-color:var(--proc-actual) }
+.proc-msg.cumplido{ border-inline-start-color:var(--proc-cumplido) }
+.proc-msg.plazo   { border-inline-start-color:var(--proc-plazo) }
+.proc-msg.fallido { border-inline-start-color:var(--proc-fallido) }
+
+/* ══ una sola región · el proceso se pone vertical ═════════════════════════
+   Regla 20: la disposición no cruza la frontera. Es la misma pieza, con los
+   mismos estados y las mismas palabras, dispuesta como manda el lado angosto. */
+@media (max-width: 65.98rem){
+  .proc{ flex-direction:column; align-items:stretch; gap:0 }
+  .proc-paso{ flex:0 0 auto; flex-direction:row; align-items:flex-start; gap:11px;
+              text-align:start; padding:9px 0 9px 0; min-block-size:0 }
+  .proc-paso:not(:last-child)::after{
+    inset-block-start:20px; inset-block-end:-9px; inset-inline-start:9px; inset-inline-end:auto;
+    inline-size:1px; block-size:auto;
+  }
+  .proc-paso > .proc-marca{ margin-block-start:1px }
+  .proc-cuerpo{ display:flex; flex-direction:column; gap:2px; align-items:flex-start; min-inline-size:0 }
+  .proc-rot{ font-size:.8rem }
+  .proc-sub{ margin-block-start:0 }
+}

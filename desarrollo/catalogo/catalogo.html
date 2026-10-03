@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ontikos móvil · Catálogo de la casa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..900;1,9..40,400..900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page:#0e0e13; --panel:#17171f; --panel2:#1e1e28; --line:rgba(255,255,255,.1);
+    --tx:#f4f4f7; --tx2:#b9b9c2; --tx3:#8a8a95; --acc:#D0021B; --acc2:#DE4E5F; --warn:#fcd34d;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:'DM Sans',system-ui,sans-serif;background:var(--page);color:var(--tx);-webkit-font-smoothing:antialiased;line-height:1.5}
+  .wrap{max-width:1200px;margin:0 auto;padding:40px 24px 140px}
+  header.top{border-bottom:1px solid var(--line);padding-bottom:24px}
+  .kick{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--acc2)}
+  h1{font-size:2.1rem;font-weight:900;letter-spacing:-.03em;margin:.3em 0 .25em}
+  .lead{color:var(--tx2);font-size:.95rem;font-weight:500;max-width:76ch}
+  .lead b{color:var(--tx)} .lead code{font-family:ui-monospace,Menlo,monospace;font-size:.85em;background:var(--panel2);padding:1px 5px;border-radius:4px}
+  .tagx{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;font-size:.58rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+  .tagx.hueco{background:rgba(252,211,77,.14);color:var(--warn);border:1px solid rgba(252,211,77,.3)}
+  .tagx.redun{background:rgba(222,78,95,.14);color:var(--acc2);border:1px solid rgba(222,78,95,.3)}
+
+  /* índice */
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .toc a{font-size:.72rem;font-weight:700;color:var(--tx2);text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+  .toc a:hover{color:var(--tx);border-color:var(--tx3)}
+
+  /* lámina */
+  .lam{margin-top:40px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel);scroll-margin-top:16px}
+  .lam-h{padding:18px 22px;border-bottom:1px solid var(--line);background:var(--panel2)}
+  .lam-n{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3)}
+  .lam-t{font-size:1.3rem;font-weight:900;letter-spacing:-.02em;margin-top:3px}
+  .lam-d{color:var(--tx2);font-size:.83rem;font-weight:500;margin-top:6px;max-width:92ch}
+  .lam-d b{color:var(--tx)}
+  .lam-b{padding:6px 22px 24px}
+
+  /* forma */
+  .form{border-top:1px solid var(--line);padding:22px 0}
+  .form:first-child{border-top:0}
+  .form-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .form-num{width:22px;height:22px;flex:none;border-radius:6px;background:var(--acc);color:#fff;font-weight:900;font-size:.7rem;display:inline-flex;align-items:center;justify-content:center}
+  .form-name{font-size:.98rem;font-weight:800;letter-spacing:-.01em}
+  .form-src{font-family:ui-monospace,Menlo,monospace;font-size:.62rem;color:var(--tx3);background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:2px 7px}
+  .renders{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .rc{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .rc.dk{background:#09090F}
+  .rc-lbl{font-size:.52rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;border-bottom:1px solid rgba(128,128,128,.18);color:#71717A}
+  .rc.dk .rc-lbl{color:#A1A1AA}
+  .rc iframe{width:100%;border:0;display:block}
+  .ficha{margin-top:14px;display:grid;grid-template-columns:auto 1fr;gap:5px 16px;font-size:.78rem}
+  .ficha dt{color:var(--tx3);font-weight:700;white-space:nowrap}
+  .ficha dd{margin:0;color:var(--tx2);font-weight:500}
+  .ficha dd b{color:var(--tx);font-weight:800}
+  .flags{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+  @media (max-width:760px){ .renders{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="kick">Ontikos móvil · Paso 1</div>
+    <h1>El catálogo de la casa, por función</h1>
+    <p class="lead">Todas las formas que existen en RetiCash —<b>CM destilado</b> (<code>network-design-system.css</code>), <b>MM</b> (<code>app.css</code>), la línea de tiempo (<code>linea.css</code> / <code>proceso.css</code>) y los <code>&lt;style&gt;</code> propios de cada página— agrupadas por función, lado a lado en claro y oscuro, con su procedencia y el tipo de contenido de Ontikos que le toca. <b>No se descarta nada</b>: cada forma se asigna al contenido para el que funciona mejor. Cada muestra se renderiza con su <b>CSS real</b>, enlazando sólo el sistema de su procedencia (para que las colisiones de la casa se vean, no se tapen). Las marcas <span class="tagx hueco">hueco</span> y <span class="tagx redun">redundancia</span> son <b>para tu decisión</b>, no están resueltas.</p>
+    <nav class="toc" id="toc"></nav>
+  </header>
+  <div id="laminas"></div>
+</div>
+
+<script>
+/* ═══════════ El catálogo, como datos. Cada muestra: markup real + el CSS de su sistema. ═══════════ */
+const CSS_NDS=['network-design-system.css'], CSS_MM=['app.css'];
+const CSS_CLI=['network-design-system.css','cliente-extra.css'];
+const CSS_VEND=['app.css','vendedor-extra.css'], CSS_CAJA=['app.css','caja-extra.css'];
+const CSS_LINEA=['network-design-system.css','linea.css'], CSS_PROC=['network-design-system.css','proceso.css'];
+
+// avatar svg person
+const AV='<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+const CHEV='<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2"><polyline points="9 18 15 12 9 6"/></svg>';
+const BELL='<svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>';
+
+const LAMINAS=[
+/* 1 ───────────── CABECERA ───────────── */
+{n:'Función 01',t:'Cabecera (appbar)',d:'La barra fija superior. Dos appbars completos (CM destilado y MM) con las mismas piezas: marca, rol, nivel, reloj vivo, campana, avatar, salir. <b>El criterio de cabecera de Carbon no se adopta</b> (igual que en escritorio): la cabecera es de la casa. El estado «EN VIVO · CIERRE» <b>no existe como pieza</b> — hoy sólo hay el reloj de sesión con su punto que late.',forms:[
+  {name:'Appbar · CM destilado',src:'network-design-system.css · .appbar',css:CSS_NDS,
+   markup:`<header class="appbar" style="position:static"><span class="brand">RETI<em>CASH</em></span><span class="role">Network</span><span class="sp"></span><span class="clock"><span class="cdot"></span>EN VIVO</span><button class="rc-bell">${BELL}<span class="rc-bell-badge">3</span></button><span class="who-avatar">EV</span><button class="appbar-exit"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button></header>`,
+   mejor:'barra global de marca + utilidades a la derecha. Carbon UI Shell header (no su criterio literal). Incluye <b>salida explícita</b> en ícono de puerta y <code>.who-avatar</code> con popover.',
+   ontikos:'la cabecera de las 4 superficies del CEO.',
+   flags:[{k:'redun',t:'appbar duplicado (CM vs MM), dos modelos de salida'},{k:'hueco',t:'estado de mercado EN VIVO·CIERRE'}]},
+  {name:'Appbar · MM',src:'app.css · .appbar (lo arma core.js)',css:CSS_MM,
+   markup:`<header class="appbar" style="position:static"><span class="brand">RETI<em>CASH</em></span><span class="role">Middle Market</span><span class="sp"></span><span class="clock"><span class="cdot"></span>Sesión 4:58</span><button class="rc-bell">${BELL}<span class="rc-bell-badge">2</span></button><span class="who-avatar">CR</span></header>`,
+   mejor:'misma función; el reloj con <code>.cdot</code> late pero hoy cuenta la <b>sesión</b>, no el mercado. La salida es un botón de texto «Salir» + mini-popover (no el ícono puerta).',
+   ontikos:'cabecera de roles operativos.',flags:[]},
+  {name:'EN VIVO · reloj vivo (materia prima)',src:'network-design-system.css · .clock + .cdot',css:CSS_NDS,
+   markup:`<div style="display:flex;gap:16px;align-items:center;padding:4px 0"><span class="clock"><span class="cdot"></span>EN VIVO · CIERRE OCT · 21 DÍAS</span><span class="clock warn" style="color:var(--amber)"><span class="cdot" style="background:var(--amber)"></span>POR CERRAR</span></div>`,
+   mejor:'el punto verde que late = vivo; <code>.warn</code> ámbar = por cerrar. Falta el estado cerrado (rojo).',
+   ontikos:'<b>el estado (situación/urgencia)</b> global, en la cabecera.',flags:[{k:'hueco',t:'el literal «EN VIVO · CIERRE» y el estado cerrado no existen'}]},
+]},
+
+/* 2 ───────────── NAVEGACIÓN ───────────── */
+{n:'Función 02',t:'Navegación',d:'La columna vertebral de la app. La barra inferior <code>.bnav</code> ya existe en los dos sistemas y <b>soporta 3 y 5 superficies</b> (las 4 del CEO son triviales). En escritorio, la versión MM la sube arriba como barra de pestañas. <b>Ojo:</b> hoy el activo es rojo — y el rojo está reservado al quiebre.',forms:[
+  {name:'Barra inferior · CM destilado',src:'network-design-system.css · .bnav/.ni',css:CSS_NDS,
+   markup:`<nav class="bnav" style="position:static">${['El Futuro','Quiebres','Compromisos','Lo clave'].map((l,i)=>`<button class="ni ${i==1?'on':''}"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg><span class="ni-lbl">${l}</span></button>`).join('')}</nav>`,
+   mejor:'bottom-nav iOS (no existe en Carbon; es la traducción móvil del shell). En el flujo flex, no fixed: sobrevive al teclado iOS. Target 44px.',
+   ontikos:'<b>las 4 superficies</b> del CEO.',flags:[{k:'redun',t:'.bnav duplicado (CM vs MM)'},{k:'hueco',t:'el activo usa rojo (reservado al quiebre) — falta acento no-rojo'}]},
+  {name:'Filtros en píldora (sub-nav)',src:'app.css · .ord-filtros/.ord-filtro',css:CSS_MM,
+   markup:`<div class="ord-filtros">${['Todos','Incumplido','Por incumplirse','Sin movimiento'].map((l,i)=>`<button class="ord-filtro ${i==0?'on':''}">${l}</button>`).join('')}</div>`,
+   mejor:'fila de píldoras scroll-x para filtrar dentro de una superficie. Carbon filter pills.',
+   ontikos:'filtrar listas de <b>pedidos</b> / <b>siniestros</b> por estado.',flags:[{k:'redun',t:'3 formas de filtro-píldora (.ord-filtro / .filt / .seg responsivo)'}]},
+  {name:'FAB · acción flotante',src:'cliente.html · .sim-fab',css:CSS_CLI,
+   markup:`<div style="position:relative;height:60px"><span class="sim-fab" style="position:static;display:inline-flex;align-items:center;gap:7px">+ Nuevo compromiso</span></div>`,
+   mejor:'píldora flotante sobre la bnav (afordancia de app, no de Carbon). Hoy sólo es un switcher de demo.',
+   ontikos:'crear <b>compromiso</b>/<b>pedido</b>.',flags:[{k:'hueco',t:'sin acción de crear real'}]},
+]},
+
+/* 3 ───────────── CHIPS ───────────── */
+{n:'Función 03',t:'Chips / tags (estado)',d:'La casa declara «tres formas» de chip — pero eso es cierto sólo para los <b>tres radios</b> del único <code>.chip</code>. En el arsenal real coexisten <b>~12 componentes tipo tag</b> para el mismo rol de Carbon Tag. Aquí los principales, lado a lado: el mismo estado se ve distinto en cada página.',forms:[
+  {name:'.chip · las tres formas + colores',src:'network-design-system.css · .chip',css:CSS_NDS,
+   markup:`<div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center"><span class="chip pill r">Incumplido</span><span class="chip pill a">Por incumplirse</span><span class="chip pill g">Cumplido</span><span class="chip pill">Sin movimiento</span></div><div style="display:flex;gap:7px;margin-top:8px;align-items:center"><span class="chip r">cuadrada</span><span class="chip pill r">pill</span><span class="chip rounded r">rounded</span></div>`,
+   mejor:'estado discreto con color semántico, read-only. Carbon Tag (estado). «Tres formas» = cuadrada · pill · rounded.',
+   ontikos:'<b>la situación del quiebre</b>, <b>el estado del pedido</b>, la etapa.',flags:[{k:'redun',t:'≥12 componentes tag para el mismo rol'}]},
+  {name:'.bdg · el chip de MM',src:'app.css · .bdg',css:CSS_MM,
+   markup:`<div style="display:flex;gap:7px;flex-wrap:wrap"><span class="bdg blue">tesorería</span><span class="bdg amber">bajo frontera</span><span class="bdg green">al día</span><span class="bdg red">vencido</span></div>`,
+   mejor:'idéntico rol a <code>.chip</code> pero cuadrado y otro nombre. Carbon Tag read-only.',
+   ontikos:'clasificación / <b>estado del pedido</b>.',flags:[{k:'redun',t:'.chip (CM) y .bdg (MM) son el mismo componente, dos nombres'}]},
+  {name:'.memb-chip · estado con punto',src:'network-design-system.css · .memb-chip',css:CSS_NDS,
+   markup:`<div style="display:flex;gap:7px;flex-wrap:wrap"><span class="memb-chip">vigente</span><span class="memb-chip grace">en gracia</span><span class="memb-chip expired">vencida</span><span class="memb-chip pending">por activar</span></div>`,
+   mejor:'tag con dot de estado (máquina de estados). Carbon Tag + status dot.',
+   ontikos:'<b>la póliza</b> (vigente/en gracia/vencida = su ciclo).',flags:[]},
+  {name:'Pills de estado de proceso (páginas)',src:'vendedor.html · .vd-camp-est · cliente.html · .inv-est · .hi-pill',css:CSS_VEND,
+   markup:`<div style="display:flex;gap:7px;flex-wrap:wrap"><span class="vd-camp-est pending">pendiente</span><span class="vd-camp-est approved">aprobado</span><span class="vd-camp-est rejected">rechazado</span><span class="vd-camp-est used gray">usado</span></div>`,
+   mejor:'tag de estado de workflow. Calza el ciclo de <b>el siniestro</b> (pendiente/aprobado/rechazado).',
+   ontikos:'<b>el pedido (con estado)</b>, <b>el siniestro</b>.',flags:[{k:'redun',t:'.vd-camp-est / .inv-est / .hi-pill / .turno-hd-bdg / .of-cap repiten el patrón'}]},
+]},
+
+/* 4 ───────────── SEGMENTED / FILTROS ───────────── */
+{n:'Función 04',t:'Pills de filtro / segmentado',d:'Elección exclusiva (content-switcher) y filtros en píldora. Cuatro formas de segmentado y tres de filtro-píldora, casi todas con el activo en negro. <code>.q-seg</code> está definido <b>dos veces distinto</b> (MM negro vs CM coloreado por sentido).',forms:[
+  {name:'.seg · segmentado (activo negro)',src:'app.css · .seg',css:CSS_MM,
+   markup:`<div class="seg">${['Día','Semana','Mes'].map((l,i)=>`<button class="${i==2?'on':''}">${l}</button>`).join('')}</div>`,
+   mejor:'una elección exclusiva en la misma fila. Carbon content-switcher.',
+   ontikos:'cambiar vista de <b>la cifra de meta y su avance</b>.',flags:[{k:'redun',t:'.seg / .q-seg / .vd-subseg / .vd-typetgl = 4 content-switchers'}]},
+  {name:'.q-seg · coloreado por sentido',src:'network-design-system.css · .q-seg',css:CSS_NDS,
+   markup:`<div class="q-seg"><button class="on" data-dir="sell">Incumplido</button><button data-dir="buy">Cumplido</button></div>`,
+   mejor:'segmentado que colorea el activo por sentido (rojo/verde). Content-switcher binario.',
+   ontikos:'toggle direccional de <b>estado</b>.',flags:[{k:'redun',t:'.q-seg definido dos veces: MM negro vs CM coloreado'}]},
+  {name:'.vd-typetgl · con subtítulo',src:'vendedor.html · .vd-typetgl',css:CSS_VEND,
+   markup:`<div class="vd-typetgl"><button class="on"><span class="vd-typetgl-t">Me piden</span><span class="vd-typetgl-s">7 compromisos</span></button><button><span class="vd-typetgl-t">Yo pedí</span><span class="vd-typetgl-s">4 compromisos</span></button></div>`,
+   mejor:'content-switcher rico (título + subtítulo por celda).',
+   ontikos:'elegir dirección al filtrar <b>compromisos</b>.',flags:[]},
+]},
+
+/* 5 ───────────── ENCABEZADOS ───────────── */
+{n:'Función 05',t:'Encabezados de sección',d:'El rótulo de un bloque. <code>.eyebrow</code> está definido <b>tres veces</b> (tres tamaños) y hay ~10 clases page-specific que repiten la misma receta de versalita. Dos formas de encabezado de bloque: <code>.panel-h</code> (MM, cuadrado, institucional) y <code>.pcard-h</code> (CM, con h2 + acción).',forms:[
+  {name:'.eyebrow + .h1/.h2',src:'network-design-system.css · .eyebrow/.h1/.h2',css:CSS_NDS,
+   markup:`<div class="eyebrow">Colocación · estratégico</div><div class="h1" style="margin-top:4px">El Futuro</div><div class="h2" style="margin-top:8px">Quiebres en riesgo</div>`,
+   mejor:'rótulo versalita + títulos de la escala tipográfica. Carbon section label + headings.',
+   ontikos:'rótulo de cualquier sección.',flags:[{k:'redun',t:'.eyebrow ×3 (app.css/NDS/ontikos) + ~10 clases ad-hoc'}]},
+  {name:'.panel-h · encabezado institucional',src:'app.css · .panel-h',css:CSS_MM,
+   markup:`<div class="panel" style="border-radius:0"><div class="panel-h">Quiebres por dimensión <span class="bdg blue">7 abiertos</span></div><div class="panel-b" style="font-size:.78rem;color:var(--ink2)">cuerpo del panel</div></div>`,
+   mejor:'encabezado de recinto operativo, con slot a la derecha para un tag. «Todo panel lleva barra de título».',
+   ontikos:'cabecera de la bandeja de <b>quiebres</b>/<b>siniestros</b>.',flags:[{k:'redun',t:'.panel-h (MM) vs .pcard-h (CM): dos encabezados de bloque'}]},
+  {name:'.pcard-h · header cálido con h2',src:'network-design-system.css · .pcard-h',css:CSS_NDS,
+   markup:`<div class="pcard"><div class="pcard-h"><h2 class="h2">Tu compromiso</h2><span class="chip pill a">por responder</span></div><div class="pcard-r"><span class="k">Para</span><span class="v">26-sep</span></div></div>`,
+   mejor:'header de tarjeta con título + acción/estado a la derecha. Carbon tile header.',
+   ontikos:'encabezado de <b>la póliza</b> / <b>el compromiso</b>.',flags:[]},
+]},
+
+/* 6 ───────────── FILAS CLAVE-VALOR ───────────── */
+{n:'Función 06',t:'Filas clave-valor (la cifra)',d:'Pares etiqueta→valor dentro de una tarjeta. <b>Siete formas</b> resuelven exactamente lo mismo (dato→valor con hairline inferior, valor en tabular-nums). El caso más claro de redundancia del arsenal.',forms:[
+  {name:'.pcard-r',src:'network-design-system.css · .pcard-r',css:CSS_NDS,
+   markup:`<div class="pcard"><div class="pcard-r"><span class="k">Prima anual</span><span class="v">$124,500</span></div><div class="pcard-r"><span class="k">Vigencia</span><span class="v">12-mar → 12-mar</span></div><div class="pcard-r"><span class="k">Interés asegurable</span><span class="v g">$5.4M</span></div></div>`,
+   mejor:'ficha de pares dato/valor, lectura, sin orden ni selección. Carbon structured list (read-only), no data table.',
+   ontikos:'<b>la póliza</b> (prima, vigencia, cobertura), el plazo del compromiso.',flags:[{k:'redun',t:'7 formas: .pcard-r / .kv / .od-row / .pf-data / .tc-sum-r / .act-benef-r / .vd-camp-cli'}]},
+  {name:'.kv',src:'app.css · .kv',css:CSS_MM,
+   markup:`<div class="pcard"><div class="kv"><span class="kv-k">Prima anual</span><span class="kv-v">$124,500</span></div><div class="kv"><span class="kv-k">Vigencia</span><span class="kv-v">12-mar → 12-mar</span></div><div class="kv"><span class="kv-k">Interés asegurable</span><span class="kv-v">$5.4M</span></div></div>`,
+   mejor:'idéntico rol a <code>.pcard-r</code>. Carbon structured list.',
+   ontikos:'<b>la póliza</b>, datos de cualquier entidad.',flags:[{k:'redun',t:'resuelve exactamente lo mismo que .pcard-r'}]},
+  {name:'.tc-sum-r · con fila total',src:'app.css · .tc-sum-r',css:CSS_MM,
+   markup:`<div class="tc-sum"><div class="tc-sum-r"><span>Subtotal</span><b>$8.0M</b></div><div class="tc-sum-r tot"><span>Total en juego</span><b>$10.0M</b></div><div class="tc-sum-r util"><span>En riesgo</span><b>$4.38M</b></div></div>`,
+   mejor:'variante clave-valor con fila de total y fila destacada.',
+   ontikos:'resumen de <b>la cifra</b> con total.',flags:[]},
+]},
+
+/* 7 ───────────── FILAS DE REGISTRO / PEDIDO ───────────── */
+{n:'Función 07',t:'Filas de registro (el pedido · el compromiso)',d:'Ítem de lista apilado: título + subtítulo + valor + estado. <b>Cinco formas</b> de «pedido con estado» que difieren sólo en <b>cómo</b> pintan el estado (texto de color vs píldora vs grid). <code>.turno-op</code> está duplicada (app.css y caja.html).',forms:[
+  {name:'.lrow · la fila genérica',src:'app.css · .lrow',css:CSS_MM,
+   markup:`<div class="pcard" style="padding:0"><div class="lrow tap"><div class="lrow-main"><div class="lrow-t">Extender 30 días · Logística Sierra</div><div class="lrow-s">Rosa Ibarra · Coordinadora de Cobranza</div></div><span class="chev">${CHEV}</span></div><div class="lrow tap"><div class="lrow-main"><div class="lrow-t">Autorizar $85K fuera de norma</div><div class="lrow-s">Andrés Berlanga · Siniestros</div></div><span class="chev">${CHEV}</span></div></div>`,
+   mejor:'ítem tocable título+subtítulo+chevron, la fila más neutra. Carbon structured list / data table row.',
+   ontikos:'comodín: <b>el compromiso</b>, <b>la persona</b>, <b>el pedido</b>.',flags:[]},
+  {name:'.ord-row · pedido con estado (texto)',src:'app.css · .ord-row',css:CSS_MM,
+   markup:`<div class="ord-list-card"><div class="ord-row tap"><div class="ord-row-main"><div class="ord-row-t">Recibo vencido · $180K</div><div class="ord-row-s"><span class="ord-est amber">por incumplirse</span></div></div><div class="ord-row-r"><div class="ord-util amber">$2.4M</div><div class="ord-util-sub">en juego</div></div><span class="ord-row-chev">${CHEV}</span></div></div>`,
+   mejor:'fila de datos con estado por color de texto + valor. Carbon data table row con status + inline value.',
+   ontikos:'<b>el pedido (con estado)</b>, <b>el siniestro</b>.',flags:[{k:'redun',t:'.ord-row / .vd-oprow / .hi-row / .turno-op: 4 filas de pedido-con-estado'}]},
+  {name:'.hi-row · estado como píldora',src:'cliente.html · .hi-row + .hi-pill',css:CSS_CLI,
+   markup:`<div class="hist"><div class="hi-row"><div class="hi-mo">Dictamen · GNP</div><div class="hi-meta"><span class="hi-pill red">incumplido</span></div><div class="hi-benef per">$1.18M</div><span class="hi-chev">${CHEV}</span></div></div>`,
+   mejor:'mismo pedido-con-estado, pero el estado va como píldora (tag) en vez de texto.',
+   ontikos:'<b>el pedido (con estado)</b>.',flags:[{k:'redun',t:'difiere de .ord-row sólo en cómo pinta el estado'}]},
+]},
+
+/* 8 ───────────── FILAS CON AVATAR ───────────── */
+{n:'Función 08',t:'Filas con avatar (la persona · el quiebre)',d:'La fila que lleva una persona, con su estado. <code>.vd-cli</code> codifica la urgencia en el <b>filo lateral</b> (idéntico a lo que hace el CEO de escritorio con el quiebre); <code>.inv-row</code> la lleva como píldora.',forms:[
+  {name:'.vd-cli · persona + urgencia en el filo',src:'vendedor.html · .vd-cli',css:CSS_VEND,
+   markup:`<div class="vd-cli urg"><div class="vd-cli-av">OL</div><div class="vd-cli-body"><div class="vd-cli-n">Óscar Lévano</div><div class="vd-cli-s">Enlace con aseguradoras</div></div><div class="vd-cli-r"><div class="vd-cli-vol">$3.2M</div><div class="vd-cli-vol-l">en juego</div></div></div>`,
+   mejor:'fila con avatar + estado por borde lateral (urg/med/fuga). Carbon contained list row con avatar.',
+   ontikos:'<b>la persona/avatar</b> + <b>el quiebre</b> (el filo = situación/peso).',flags:[]},
+  {name:'.inv-row · persona + estado en píldora',src:'cliente.html · .inv-row + .inv-est',css:CSS_CLI,
+   markup:`<div class="inv-list"><div class="inv-row"><div class="inv-av">RI</div><div class="inv-info"><div class="inv-n">Rosa Ibarra</div><div class="inv-meta">Cobranza · hace 2 días</div></div><span class="inv-est aceptada">respondió</span></div></div>`,
+   mejor:'fila con avatar + status tag. Carbon lista con avatar.',
+   ontikos:'<b>la persona</b> + <b>el pedido con su estado</b>.',flags:[{k:'redun',t:'.vd-cli y .inv-row solapan en «persona + estado»'}]},
+]},
+
+/* 9 ───────────── NOTIFICACIÓN ───────────── */
+{n:'Función 09',t:'Filas de notificación (urgencia)',d:'Fila de bandeja con barra de prioridad a la izquierda, en cuatro niveles por color. Dos implementaciones idénticas en esquema (<code>.notif-item</code> CM vs <code>.rc-notif-item</code> MM); la de MM añade pie con acción y descarte.',forms:[
+  {name:'.notif-item',src:'network-design-system.css · .notif-item',css:CSS_NDS,
+   markup:`<div class="notif-panel" style="position:static;max-height:none;display:block"><div class="notif-body"><div class="notif-item p-critical"><div class="notif-t">Emisión aceptada sin expedir</div><div class="notif-body-t">30 pólizas · Aseguradora del Norte</div><div class="notif-meta">hace 6 días · $3.2M</div></div><div class="notif-item p-action read"><div class="notif-t">Recibo vencido</div><div class="notif-body-t">6 recibos · Logística Sierra</div><div class="notif-meta">vence en 4 días</div></div></div></div>`,
+   mejor:'bandeja con barra de severidad (crítico/acción/info/pasivo). Carbon Notification.',
+   ontikos:'<b>la notificación por urgencia</b> — ajuste directo (rojo = quiebre).',flags:[{k:'redun',t:'.notif-item (CM) vs .rc-notif-item (MM): mismo componente, dos prefijos'}]},
+]},
+
+/* 10 ───────────── TABLA ───────────── */
+{n:'Función 10',t:'Tabla de datos',d:'La única forma verdaderamente tabular del arsenal: <code>.tbl</code> con zebra, hover, cabecera versalita y columnas numéricas a la derecha. Es la que el CEO de escritorio ya viste de Carbon DataTable.',forms:[
+  {name:'.tbl · tabla de la casa',src:'app.css · .tbl',css:CSS_MM,
+   markup:`<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Quiebre</th><th>Responde</th><th class="num">Peso</th></tr></thead><tbody><tr><td class="strong">Emisión sin expedir</td><td>Óscar Lévano</td><td class="num">$3.2M</td></tr><tr><td class="strong">Recibo vencido</td><td>Rosa Ibarra</td><td class="num">$2.4M</td></tr><tr><td class="strong">Dictamen sin respuesta</td><td>Andrés Berlanga</td><td class="num">$1.18M</td></tr></tbody></table></div>`,
+   mejor:'datos que se ordenan/comparan. Carbon Data table (zebra = alternating rows, hover, num a la derecha). No structured list.',
+   ontikos:'<b>pedidos</b>/<b>cifras</b> cuando hay que listar y comparar muchos; la rejilla base de <b>póliza</b>/<b>siniestro</b>.',flags:[]},
+]},
+
+/* 11 ───────────── CARDS ───────────── */
+{n:'Función 11',t:'Cards (contenedores)',d:'El recinto. <code>.pcard</code> está definida <b>dos veces distinto</b> (MM radio 14 / CM radio 12 con sub-estructura). <code>.panel</code> es el chasis cuadrado dominante de admin; <code>.camp</code> y <code>.mgate</code> son tarjetas de aviso/compuerta con estados.',forms:[
+  {name:'.pcard (CM) vs .panel (MM)',src:'network-design-system.css · .pcard · app.css · .panel',css:CSS_NDS,
+   markup:`<div class="pcard"><div class="pcard-h"><h2 class="h2">Póliza POL-3320</h2><span class="chip pill a">atrasada</span></div><div class="pcard-r"><span class="k">Ramo</span><span class="v">Daños</span></div><div class="pcard-r"><span class="k">Interés</span><span class="v g">$5.4M</span></div></div>`,
+   mejor:'tarjeta-registro cálida con radio, header y filas. Carbon Tile informational + structured list.',
+   ontikos:'<b>la póliza</b>, <b>el compromiso</b>.',flags:[{k:'redun',t:'.pcard definida 2 veces (CM radio12 vs MM radio14) — colisión por orden de carga'}]},
+  {name:'.camp · tarjeta de aviso (4 estados)',src:'app.css · .camp',css:CSS_MM,
+   markup:`<div class="camp amber"><div class="camp-body"><div class="camp-t">Renovación en riesgo</div><div class="camp-s">26 cuentas se pierden al cierre · $4.1M</div></div></div>`,
+   mejor:'tarjeta de aviso con 4 estados de color + ícono. Carbon notification inline / callout card.',
+   ontikos:'<b>el quiebre</b> (situación con peso) y <b>el siniestro</b>.',flags:[]},
+  {name:'.vd-money · dinero-héroe',src:'vendedor.html · .vd-money',css:CSS_VEND,
+   markup:`<div class="vd-money"><div class="vd-money-l">Meta del periodo</div><div class="vd-money-v">$12.0M</div><div class="vd-money-grid"><div class="vd-money-cell"><div class="vd-money-cell-v">55%</div><div class="vd-money-cell-l">avance</div></div><div class="vd-money-cell"><div class="vd-money-cell-v">21</div><div class="vd-money-cell-l">días</div></div></div></div>`,
+   mejor:'tarjeta de cifra protagonista con gradiente + rejilla interna. Carbon big-number KPI tile.',
+   ontikos:'<b>la cifra de meta y su avance</b>.',flags:[]},
+]},
+
+/* 12 ───────────── KPI TILES ───────────── */
+{n:'Función 12',t:'KPI tiles (indicadores en rejilla)',d:'La celda de indicador. <code>.kpis/.kpi</code> es el canónico (rejilla con hairlines por gap teñido, cifra 1.5rem/900 tabular). <code>.dash-hero</code> ya combina tile + barra de cumplimiento + variación. Hay <b>~13 formas</b> para lo mismo.',forms:[
+  {name:'.kpis / .kpi · rejilla canónica',src:'app.css · .kpis/.kpi',css:CSS_MM,
+   markup:`<div class="kpis"><div class="kpi"><div class="kpi-l">En riesgo</div><div class="kpi-v red">$10.0M</div><div class="kpi-sub">7 quiebres</div></div><div class="kpi"><div class="kpi-l">Incumplido</div><div class="kpi-v red">2</div><div class="kpi-sub">$4.38M</div></div><div class="kpi"><div class="kpi-l">Por incumplirse</div><div class="kpi-v amber">3</div><div class="kpi-sub">$3.26M</div></div></div>`,
+   mejor:'rejilla de indicadores con hairlines. Carbon big-number KPI / data tile en grid.',
+   ontikos:'<b>la cifra de meta y su avance</b>, cualquier panel de indicadores.',flags:[{k:'redun',t:'~13 formas de tile en rejilla (.kpis/.kv-grid/.vd-hero/.pf-stats/.ord-sum/.vd-kg/…)'}]},
+  {name:'.kpis.dash-hero · tile + barra + variación',src:'app.css · .kpis.dash-hero',css:CSS_MM,
+   markup:`<div class="kpis dash-hero"><div class="kpi"><div class="kpi-l">Cumplimiento de meta</div><div class="kpi-v">55%</div><div class="bar-track" style="margin-top:8px"><div class="bar-fill" style="width:55%"></div></div></div><div class="kpi"><div class="kpi-l">vs. mes pasado</div><div class="kpi-v green">$3.2M</div><div class="dash-var up">↑ 12%</div></div></div>`,
+   mejor:'la combinación tile + barra de avance + chip de variación, ya resuelta.',
+   ontikos:'<b>la cifra de meta y su avance</b>.',flags:[]},
+]},
+
+/* 13 ───────────── CIFRAS HÉROE ───────────── */
+{n:'Función 13',t:'Cifras héroe (número grande)',d:'El número protagonista, siempre peso 900 + tabular-nums en DM Sans. La escala va de 1.5rem (<code>.kpi-v</code>) a 3.2rem (<code>.quote-inp</code>, la única editable). Al menos 5 formas de «dinero verde» idénticas salvo el tamaño.',forms:[
+  {name:'Escala de cifra héroe',src:'app.css · .kpi-v / .q-tc · vendedor.html · .vd-money-v',css:CSS_MM,
+   markup:`<div style="display:flex;gap:28px;align-items:baseline;flex-wrap:wrap"><div><div class="kpi-l">kpi-v</div><div class="kpi-v">$10.0M</div></div><div><div class="kpi-l">q-tc (2.6rem)</div><div class="q-tc" style="color:var(--green)">$5.4M</div></div></div>`,
+   mejor:'número-héroe con rótulo arriba. Carbon big-number KPI (label above value).',
+   ontikos:'<b>la cifra de meta y su avance</b>, el peso del <b>quiebre</b>, el monto del <b>pedido</b>.',flags:[{k:'redun',t:'≥5 cifras «dinero verde» iguales salvo tamaño'}]},
+]},
+
+/* 14 ───────────── METERS / GAUGE ───────────── */
+{n:'Función 14',t:'Medidores · barras · gauge',d:'Lo que mide avance. El <b>único gauge móvil</b> es un anillo de progreso (<code>.beh-gauge</code>, 64px) — <b>no hay dial/velocímetro</b>: el gauge del CEO de escritorio es pieza nueva, en móvil sólo se hereda el anillo. La barra horizontal y las barras verticales tienen ~6 y 4 variantes.',forms:[
+  {name:'.beh-gauge · anillo de progreso',src:'cliente.html · .beh-gauge',css:CSS_CLI,
+   markup:`<div style="display:flex;gap:18px;align-items:center"><svg class="beh-gauge" viewBox="0 0 64 64" style="transform:rotate(-90deg)"><defs><linearGradient id="behgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d97706"/><stop offset="1" stop-color="#D0021B"/></linearGradient></defs><circle class="beh-gauge-bg" cx="32" cy="32" r="26" fill="none" stroke="var(--surf3)" stroke-width="5"/><circle class="beh-gauge-fg" cx="32" cy="32" r="26" fill="none" stroke="url(#behgrad)" stroke-width="5" stroke-linecap="round" stroke-dasharray="163" stroke-dashoffset="73"/></svg><div><div class="kpi-l">Avance de meta</div><div class="kpi-v">55%</div></div></div>`,
+   mejor:'anillo de progreso circular (donut), no dial con aguja. Carbon radial progress.',
+   ontikos:'<b>la cifra de meta y su avance</b> en circular.',flags:[{k:'hueco',t:'el gauge dial/velocímetro del CEO no existe en móvil — pieza nueva'}]},
+  {name:'.bar-track · barra de avance + .pace',src:'app.css · .bar-track/.bar-fill · .pace-lbl',css:CSS_MM,
+   markup:`<div style="max-width:320px"><div class="pace-lbl red" style="margin-bottom:6px">Va a 55% de la meta · atrasado</div><div class="bar-track"><div class="bar-fill" style="width:55%"></div></div></div>`,
+   mejor:'barra lineal de avance con etiqueta de ritmo. Carbon ProgressBar / meter.',
+   ontikos:'<b>la cifra de meta y su avance</b> lineal.',flags:[{k:'redun',t:'≥6 barras horizontales (.bar-fill/.beh-bar/.pf-bar/.vd-meta-bar/…)'}]},
+  {name:'.chart · barras verticales con meta',src:'app.css · .chart/.bar',css:CSS_MM,
+   markup:`<div class="chart" style="max-width:320px"><div class="objline" style="bottom:70%"></div>${[40,65,52,80,55].map(h=>`<div class="bar-col"><div class="bar ${h>=70?'g':h>=50?'a':'lo'}" style="height:${h}%"></div></div>`).join('')}</div>`,
+   mejor:'tendencia temporal con línea de objetivo. Carbon simple bar chart.',
+   ontikos:'avance de meta en el tiempo.',flags:[{k:'redun',t:'4 bar-charts verticales (.chart/.vd-bars/.esp-bars/.trend)'}]},
+]},
+
+/* 15 ───────────── HOJAS / PANELES ───────────── */
+{n:'Función 15',t:'Hojas / paneles',d:'La superficie que sube. El bottom-sheet <code>.modal</code> está definido <b>dos veces</b>: CM (sube desde abajo, con grabber iOS, 20px arriba) vs MM (cuadrado, sin grabber). El detalle de entidad vive en estas hojas — <b>no hay slide-over lateral</b> de Carbon.',forms:[
+  {name:'.modal · bottom-sheet CM (grabber)',src:'network-design-system.css · .ovl/.modal',css:CSS_NDS,
+   markup:`<div class="modal" style="position:static;max-width:100%;animation:none;box-shadow:none;border:1px solid var(--brd)"><div class="modal-t">Pedir en específico</div><div class="modal-s">Destrabar: Hotelera Costa · POL-4410.</div><div class="form-r"><label class="form-l">Responsable</label><input class="form-i" value="Paola Cantú"></div><div class="modal-btns"><button>Cancelar</button><button class="primary">Pedir acción</button></div></div>`,
+   mejor:'interrupción enfocada que sube desde abajo, con grabber iOS y CTA sticky. Carbon modal (transaccional), idioma móvil.',
+   ontikos:'crear/confirmar <b>compromiso</b>, abrir <b>siniestro</b>, confirmar <b>pedido</b>.',flags:[{k:'redun',t:'.modal CM (grabber, redondeado) vs .modal MM (cuadrado)'},{k:'hueco',t:'slide-over lateral (.cds--side-panel) no existe'}]},
+]},
+
+/* 16 ───────────── BOTONES ───────────── */
+{n:'Función 16',t:'Botones de acto',d:'El acto. <code>.cli-exec</code> es el CTA héroe (ancho completo); en CM trae <code>.side-sell/.side-buy/.side-neutro</code> (vocabulario compra/venta de RetiCash — a re-mapear, no copiar literal). <code>.btn</code> tiene primario/secundario/danger. El rojo queda reservado al quiebre/alerta.',forms:[
+  {name:'.cli-exec · CTA héroe + lados',src:'network-design-system.css · .cli-exec',css:CSS_NDS,
+   markup:`<div style="display:flex;flex-direction:column;gap:10px;max-width:360px"><button class="cli-exec side-neutro">Pedir acción (neutro)</button><button class="cli-exec side-sell">Reclamar (quiebre · rojo)</button></div>`,
+   mejor:'el único acto grande por pantalla. Carbon primario único por vista. El lado es gancho de color=significado.',
+   ontikos:'registrar <b>compromiso</b>, confirmar <b>pedido</b>, reclamar sobre <b>el quiebre</b>.',flags:[{k:'redun',t:'.cli-exec definido 2 veces (MM rojo sólido vs CM ink+lados)'},{k:'hueco',t:'el tinte compra/venta es vocabulario RetiCash a re-mapear'}]},
+  {name:'.btn · jerarquía',src:'network-design-system.css · .btn',css:CSS_NDS,
+   markup:`<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn">Ver</button><button class="btn primary">Responder</button><button class="btn danger">Cancelar</button></div>`,
+   mejor:'jerarquía de botón (secundario/primario/danger). Carbon button hierarchy.',
+   ontikos:'actos de fila y de pie de hoja.',flags:[{k:'redun',t:'.btn.primary (CM: ink→rojo) vs .btn-primary (MM: rojo sólido) — convenciones opuestas'}]},
+]},
+
+/* 17 ───────────── ESTADOS VACÍOS ───────────── */
+{n:'Función 17',t:'Estados vacíos',d:'Qué se ve cuando no hay nada. Sólo <b>un</b> estado vacío trae pictograma + acto (<code>.ord-empty</code>); el resto son texto plano. La regla de Ontikos (ningún estado termina sin acto) pide generalizar el primero.',forms:[
+  {name:'.ord-empty · pictograma + acto',src:'app.css · .ord-empty',css:CSS_MM,
+   markup:`<div class="ord-empty"><div class="ord-empty-ic"><svg viewBox="0 0 24 24" style="width:24px;height:24px;stroke:var(--ink3);fill:none;stroke-width:1.6"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 21V9"/></svg></div><div class="ord-empty-t">Sin quiebres abiertos</div><div class="ord-empty-s">Cuando algo se rompa, aparece aquí.</div><button class="cli-exec" style="margin-top:14px">Ver El Futuro</button></div>`,
+   mejor:'pictograma + mensaje + acto primario. Carbon empty-state pattern. El mejor del arsenal (único con picto + CTA).',
+   ontikos:'vacío de <b>pedidos</b>/<b>compromisos</b>/<b>siniestros</b>.',flags:[{k:'redun',t:'.empty / .ord-vacio / .notif-empty: texto plano, solapan'},{k:'hueco',t:'sólo existe un vacío ilustrado — generalizar'}]},
+]},
+
+/* 18 ───────────── LÍNEA DE TIEMPO ───────────── */
+{n:'Función 18',t:'Línea de tiempo (la etapa · la cadena)',d:'La pieza que el CEO ya usa en las 4 pestañas. Existen <b>dos implementaciones</b>: <code>linea.css</code> (la de RetiCash, con pulso y tinte compra/venta, 3 hitos) y <code>proceso.css</code> — <b>la versión ya generalizada para Ontikos</b> (1px recto tipo Carbon, «actual» azul, estado fallido, chip de plazo, se pone vertical en móvil). El propio <code>ontikos.html</code> registra que linea.css es deuda a retirar. Esta es la decisión mayor (R10).',forms:[
+  {name:'proceso.css · .proc — la pieza de Ontikos',src:'sistema/proceso.css · .proc',css:CSS_PROC,
+   markup:`<div class="proc"><div class="proc-paso cumplido"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Cotizada</span><span class="proc-sub">12-mar · 09:41</span></div></div><div class="proc-paso actual"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Emitida</span><span class="proc-sub">falta firma del tomador</span><span class="proc-plazo">vence en 3 d</span></div></div><div class="proc-paso"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Pagada</span></div></div><div class="proc-paso"><span class="proc-marca"></span><div class="proc-cuerpo"><span class="proc-rot">Vigente</span></div></div></div><div class="proc-msg actual"><div class="proc-msg-t">Falta la firma del tomador</div><div class="proc-msg-s">Pídela a Paola Cantú antes del 15-mar.</div></div>`,
+   mejor:'pasos ordenados, N no fijo, recto 1px, «actual» azul, fallido, chip de plazo, horizontal→vertical en móvil. Carbon Progress Indicator. <b>Declarada la pieza que entra a Ontikos.</b>',
+   ontikos:'<b>la etapa/cadena</b> de <b>póliza</b>, <b>siniestro</b>, <b>compromiso</b>, <b>pedido</b>; el plazo = responsable+plazo; fallido = quiebre.',flags:[{k:'redun',t:'R10: proceso.css (generalizada) vs linea.css (RetiCash, a retirar)'}]},
+  {name:'linea.css · .orden-hitos — la de RetiCash (pulso)',src:'carbon/linea.css · .orden-hitos',css:CSS_LINEA,
+   markup:`<div class="orden-hitos"><div class="orden-hitos-track"><div class="orden-hitos-dot done"><div class="orden-hitos-dot-i"></div><div class="orden-hitos-dot-l">Solicitada</div></div><div class="orden-hitos-line done"></div><div class="orden-hitos-dot active"><div class="orden-hitos-dot-i"></div><div class="orden-hitos-dot-l">Precio congelado</div></div><div class="orden-hitos-line"></div><div class="orden-hitos-dot"><div class="orden-hitos-dot-i"></div><div class="orden-hitos-dot-l">Cobrada</div></div></div></div><div class="orden-hitos-msg tone-warn"><div class="orden-hitos-msg-t">Precio congelado</div><div class="orden-hitos-msg-s">Cóbrala en caja antes de que venza.</div></div>`,
+   mejor:'3 hitos con conector 3px redondeado, pulso en el actual, palomita CSS en lo hecho, tinte compra/venta. Copiada verbatim de Cash Market.',
+   ontikos:'misma función que proceso.css pero con estética RetiCash.',flags:[{k:'redun',t:'predecesora de proceso.css — ontikos.html la marca como deuda a retirar'}]},
+]},
+];
+
+/* ═══════════ Render ═══════════ */
+const CSSMAP = (arr)=>arr.map(h=>`<link rel="stylesheet" href="assets/${h}">`).join('');
+const KILL = `<style>html,body{font-family:'DM Sans',system-ui,sans-serif}body::before,body::after{content:none!important;display:none!important}@media(min-width:768px){body{background:var(--bg)!important}}</style>`;
+// proceso.css computa sus tokens en :root (no en body), donde el override body.dk no llega.
+// En oscuro le damos los valores oscuros reales de la casa a :root para que resuelva bien.
+const PROC_DK = `<style>:root{--surf:#111118;--surf2:#16161f;--surf3:#1c1c27;--brd:rgba(255,255,255,.10);--brd2:rgba(255,255,255,.16);--ink:#FAFAF7;--ink2:#D4D4D8;--ink3:#A1A1AA;--ink4:#71717A}</style>`;
+function iframeSrcdoc(css, markup, dk){
+  const extra = (dk && css.includes('proceso.css')) ? PROC_DK : '';
+  return `<!doctype html><html><head><meta charset="utf-8"><base href="${location.href}">${CSSMAP(css)}${KILL}${extra}</head><body class="${dk?'dk':''}" style="margin:0;padding:16px"><div style="max-width:100%">${markup}</div></body></html>`;
+}
+const laminas = document.getElementById('laminas');
+const toc = document.getElementById('toc');
+let frames=[];
+LAMINAS.forEach((L,li)=>{
+  const id='f'+(li+1);
+  const a=document.createElement('a'); a.href='#'+id; a.textContent=(li+1)+' · '+L.t; toc.appendChild(a);
+  const sec=document.createElement('section'); sec.className='lam'; sec.id=id;
+  let html=`<div class="lam-h"><div class="lam-n">${L.n}</div><div class="lam-t">${L.t}</div><div class="lam-d">${L.d}</div></div><div class="lam-b">`;
+  L.forms.forEach((f,fi)=>{
+    const flagsHtml=(f.flags||[]).map(fl=>`<span class="tagx ${fl.k}">${fl.k==='hueco'?'hueco':'redundancia'} · ${fl.t}</span>`).join('');
+    html+=`<div class="form">
+      <div class="form-h"><span class="form-num">${fi+1}</span><span class="form-name">${f.name}</span><span class="form-src">${f.src}</span></div>
+      <div class="renders">
+        <div class="rc"><div class="rc-lbl">Claro</div><iframe data-i="${li}-${fi}-0"></iframe></div>
+        <div class="rc dk"><div class="rc-lbl">Oscuro</div><iframe data-i="${li}-${fi}-1"></iframe></div>
+      </div>
+      <dl class="ficha"><dt>Mejor para</dt><dd>${f.mejor}</dd><dt>Contenido Ontikos</dt><dd>${f.ontikos}</dd></dl>
+      ${flagsHtml?`<div class="flags">${flagsHtml}</div>`:''}
+    </div>`;
+    frames.push({key:`${li}-${fi}-0`,css:f.css,markup:f.markup,dk:false});
+    frames.push({key:`${li}-${fi}-1`,css:f.css,markup:f.markup,dk:true});
+  });
+  html+='</div>'; sec.innerHTML=html; laminas.appendChild(sec);
+});
+function resize(fr){try{const d=fr.contentDocument;if(d&&d.body)fr.style.height=(d.body.scrollHeight)+'px';}catch(e){}}
+frames.forEach(fd=>{
+  const fr=document.querySelector(`iframe[data-i="${fd.key}"]`); if(!fr)return;
+  fr.addEventListener('load',()=>setTimeout(()=>resize(fr),70));
+  fr.srcdoc=iframeSrcdoc(fd.css,fd.markup,fd.dk);
+});
+window.addEventListener('load',()=>setTimeout(()=>document.querySelectorAll('iframe[data-i]').forEach(resize),600));
+</script>
+</body>
+</html>

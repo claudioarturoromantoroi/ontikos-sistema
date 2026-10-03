@@ -1,0 +1,240 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   LÍNEA · la línea de tiempo de una orden.
+
+   PROCEDENCIA: esta pieza no es de Carbon ni la inventé. Está copiada tal cual
+   de Cash Market —`public/assets/css/mercado.css`, clases .orden-hitos* y
+   .orden-step*—, que es la misma casa y los mismos fichas: --surf, --brd2,
+   --green, --red, --ink3. Por eso entra en Middle Market sin traducir un solo
+   color.
+
+   Son DOS piezas que trabajan juntas:
+     · .orden-hitos   — tres puntos y dos líneas, horizontal, con un mensaje
+                        debajo. Dice DÓNDE va la orden y QUÉ falta.
+     · .orden-stepper — la versión vertical y detallada, con sello de hora en
+                        cada paso. Dice CUÁNDO pasó cada cosa.
+
+   La palomita del punto cumplido está dibujada en CSS (dos bordes girados),
+   no es un icono: así no depende de ninguna librería.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Los fichas de esta pieza ────────────────────────────────────────────────
+   El sistema prohíbe escribir un color directamente en una regla. Los valores
+   que la pieza necesita y que la casa no declara —los halos de pulso, el blanco
+   sobre color, el ámbar de aviso— se declaran UNA vez aquí y se usan por
+   nombre. Derivan de --red, --green y --amber; si la marca cambia, cambian
+   estos con ella.
+   ────────────────────────────────────────────────────────────────────────── */
+:root{
+  --hito-sobre-color:#fff;                    /* la palomita, sobre disco lleno */
+  --hito-halo-rojo:rgba(208,2,27,.12);        /* --red al 12 %  · halo del punto activo */
+  --hito-halo-rojo-tenue:rgba(208,2,27,.04);
+  --hito-borde-rojo:rgba(208,2,27,.35);
+  --hito-fondo-rojo:rgba(208,2,27,.05);
+  --hito-halo-verde:rgba(22,163,74,.12);      /* --green al 12 % · lado vendedor */
+  --hito-halo-verde-tenue:rgba(22,163,74,.04);
+  --hito-borde-verde:rgba(22,163,74,.35);
+  --hito-fondo-verde:rgba(22,163,74,.06);
+  --hito-halo-ambar:rgba(217,119,6,.14);      /* --amber · aviso dentro del hito */
+  --hito-borde-ambar:rgba(217,119,6,.35);
+  --hito-fondo-ambar:rgba(217,119,6,.06);
+  --hito-tinta-ambar:#8a5a06;
+}
+
+
+/* ══ Los 3 hitos (v7 · registro formal) ══
+   Barra discreta de 3 puntos que dan ubicación + tarjeta de mensaje
+   contextual que da acción. Reemplaza el stepper vertical de 7 estados
+   internos. El cliente no piensa en "estados" — piensa en "¿qué pasa
+   y qué hago?". Móvil primero. */
+.orden-hitos{margin-bottom:18px}
+
+.orden-hitos-track{
+  display:grid;grid-template-columns:auto 1fr auto 1fr auto;
+  align-items:center;gap:0;padding:4px 6px 10px;
+}
+
+.orden-hitos-dot{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  min-width:70px;
+}
+
+.orden-hitos-dot-i{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--surf3);border:2px solid var(--brd2);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .25s var(--ease), border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+
+.orden-hitos-dot-l{
+  font-size:.62rem;font-weight:800;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--ink3);
+  text-align:center;line-height:1.2;max-width:96px;
+}
+
+.orden-hitos-line{
+  height:3px;background:var(--brd2);border-radius:9999px;
+  align-self:center;margin-top:-14px; /* alinear con el centro del dot */
+  transition:background .4s var(--ease);
+}
+
+/* Hito completado — dot lleno con palomita */
+.orden-hitos-dot.done .orden-hitos-dot-i{
+  background:var(--green);border-color:var(--green);
+}
+
+.orden-hitos-dot.done .orden-hitos-dot-i::after{
+  content:"";width:7px;height:4px;
+  border-left:2px solid var(--hito-sobre-color);border-bottom:2px solid var(--hito-sobre-color);
+  transform:rotate(-45deg);margin-top:-2px;
+}
+
+.orden-hitos-dot.done .orden-hitos-dot-l{color:var(--ink)}
+
+.orden-hitos-line.done{background:var(--green)}
+
+/* Hito activo — dot pulsante con el color del rol */
+.orden-hitos-dot.active .orden-hitos-dot-i{
+  background:var(--surf);border-color:var(--red);
+  box-shadow:0 0 0 4px var(--hito-halo-rojo);
+  animation:ordenHitoPulse 1.4s ease-in-out infinite;
+}
+
+.orden-hitos-dot.active .orden-hitos-dot-l{
+  color:var(--red);font-weight:800;
+}
+
+.orden-hitos.venta .orden-hitos-dot.active .orden-hitos-dot-i{
+  border-color:var(--green);box-shadow:0 0 0 4px var(--hito-halo-verde);
+  animation:ordenHitoPulseVerde 1.4s ease-in-out infinite;
+}
+
+.orden-hitos.venta .orden-hitos-dot.active .orden-hitos-dot-l{color:var(--green)}
+
+/* Tonos alternos del hito activo · avisos de excepción */
+.orden-hitos-dot.active.tone-warn .orden-hitos-dot-i{
+  border-color:var(--amber);box-shadow:0 0 0 4px var(--hito-halo-ambar);animation:none;
+}
+
+.orden-hitos-dot.active.tone-warn .orden-hitos-dot-l{color:var(--amber)}
+
+.orden-hitos-dot.active.tone-danger .orden-hitos-dot-i{
+  border-color:var(--red);background:var(--red);animation:none;
+}
+
+.orden-hitos-dot.active.tone-danger .orden-hitos-dot-l{color:var(--red)}
+
+@keyframes ordenHitoPulse{
+  0%,100%{box-shadow:0 0 0 4px var(--hito-halo-rojo)}
+  50%    {box-shadow:0 0 0 8px var(--hito-halo-rojo-tenue)}
+}
+
+@keyframes ordenHitoPulseVerde{
+  0%,100%{box-shadow:0 0 0 4px var(--hito-halo-verde)}
+  50%    {box-shadow:0 0 0 8px var(--hito-halo-verde-tenue)}
+}
+
+/* Tarjeta de mensaje debajo de los 3 puntos */
+.orden-hitos-msg{
+  background:var(--surf);border:1.5px solid var(--brd2);
+  border-radius:12px;padding:14px 16px;
+}
+
+.orden-hitos-msg-t{
+  font-size:.92rem;font-weight:800;color:var(--ink);
+  letter-spacing:-.005em;line-height:1.3;
+}
+
+.orden-hitos-msg-s{
+  font-size:.8rem;color:var(--ink2);line-height:1.5;margin-top:6px;
+}
+
+.orden-hitos-msg.tone-warn{
+  border-color:var(--hito-borde-ambar);background:var(--hito-fondo-ambar);
+}
+
+.orden-hitos-msg.tone-warn .orden-hitos-msg-t{color:var(--hito-tinta-ambar)}
+
+.orden-hitos-msg.tone-danger{
+  border-color:var(--hito-borde-rojo);background:var(--hito-fondo-rojo);
+}
+
+.orden-hitos-msg.tone-danger .orden-hitos-msg-t{color:var(--red)}
+
+.orden-hitos-msg.tone-ok{
+  border-color:var(--hito-borde-verde);background:var(--hito-fondo-verde);
+}
+
+.orden-hitos-msg.tone-ok .orden-hitos-msg-t{color:var(--green)}
+
+/* Stepper vertical · 7 estados */
+.orden-stepper{
+  background:var(--surf);border:1.5px solid var(--brd2);border-radius:12px;
+  padding:6px 14px;margin-bottom:14px;
+}
+
+.orden-step{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:11px 0;position:relative;
+}
+
+.orden-step:not(:last-child)::before{
+  content:"";position:absolute;left:9px;top:28px;bottom:-3px;
+  width:2px;background:var(--brd2);
+}
+
+.orden-step.done:not(:last-child)::before{background:var(--green)}
+
+.orden-step-dot{
+  flex-shrink:0;width:20px;height:20px;border-radius:50%;
+  background:var(--surf3);border:2px solid var(--brd2);
+  display:flex;align-items:center;justify-content:center;
+  margin-top:2px;z-index:1;
+  transition:background .2s, border-color .2s;
+}
+
+.orden-step.done .orden-step-dot{background:var(--green);border-color:var(--green)}
+
+.orden-step.done .orden-step-dot::after{
+  content:"";width:8px;height:4px;border-left:2px solid var(--hito-sobre-color);border-bottom:2px solid var(--hito-sobre-color);
+  transform:rotate(-45deg);margin-top:-3px;
+}
+
+.orden-step.active .orden-step-dot{
+  background:var(--surf);border-color:var(--red);
+  box-shadow:0 0 0 4px var(--hito-halo-rojo);
+  animation:ordenPulse 1.4s ease-in-out infinite;
+}
+
+.orden-step.venta.active .orden-step-dot{
+  border-color:var(--green);box-shadow:0 0 0 4px var(--hito-halo-verde);
+  animation:ordenPulseVerde 1.4s ease-in-out infinite;
+}
+
+@keyframes ordenPulse{
+  0%,100%{box-shadow:0 0 0 4px var(--hito-halo-rojo)}
+  50%{box-shadow:0 0 0 7px var(--hito-halo-rojo-tenue)}
+}
+
+@keyframes ordenPulseVerde{
+  0%,100%{box-shadow:0 0 0 4px var(--hito-halo-verde)}
+  50%{box-shadow:0 0 0 7px var(--hito-halo-verde-tenue)}
+}
+
+.orden-step-b{flex:1;line-height:1.3;min-width:0}
+
+.orden-step-t{
+  font-size:.78rem;font-weight:800;color:var(--ink2);letter-spacing:-.01em;
+}
+
+.orden-step.done .orden-step-t{color:var(--ink)}
+
+.orden-step.active .orden-step-t{color:var(--ink)}
+
+.orden-step-s{
+  font-size:.64rem;color:var(--ink3);margin-top:2px;line-height:1.4;
+}
+
+.orden-step-ts{
+  font-size:.56rem;font-weight:700;color:var(--ink3);
+  font-variant-numeric:tabular-nums;margin-top:2px;letter-spacing:.02em;
+}
