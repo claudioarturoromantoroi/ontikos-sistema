@@ -143,6 +143,23 @@
   .lt-t{font-size:1.05rem}
   .lt-pct{font-size:1.75rem}
 }
+/* iOS CORTO · las 4 tarjetas se CIÑEN para caber SIN scroll (el 2×2 completo
+   queda sobre la barra inferior). El disparo NO va por @media de alto —en iOS
+   Safari el alto de media no sigue a la barra dinámica—, sino por la clase
+   body.vh-short que pone setVH() midiendo el alto VISIBLE real (visualViewport).
+   Se aprieta el ritmo (ícono, cifra, relleno, botón), nunca se estira. */
+body.vh-short .page-ey{margin:1px 2px 5px}
+body.vh-short .ef-sep{margin-top:14px}
+body.vh-short .lgrid{gap:10px}
+body.vh-short .ltile{padding:12px}
+body.vh-short .lt-ico{width:22px;height:22px;margin-bottom:5px}
+body.vh-short .lt-t{font-size:.9rem;margin-bottom:2px}
+body.vh-short .lt-pct{font-size:1.3rem}
+body.vh-short .lt-cap{font-size:.72rem}
+body.vh-short .lt-ctx{font-size:.72rem;margin-top:2px}
+body.vh-short .lt-foot{margin-top:8px}
+body.vh-short .lt-bar{margin-bottom:8px}
+body.vh-short .lt-act{min-height:38px;padding:9px 12px;font-size:.8rem}
 
 /* ══ 5 · color = significado y ajustes sobre las formas heredadas ════════════ */
 /* (La barra de decisión de la página 1 se retiró: cada tile ya remata en su
