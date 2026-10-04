@@ -71,22 +71,13 @@
 .mod.on svg{stroke:var(--ink)}
 .mod .mod-b{margin-left:auto;font-size:.62rem;font-weight:800;color:#fff;background:var(--red);border-radius:20px;padding:2px 7px;min-width:18px;text-align:center;letter-spacing:0}
 
-/* ══ 3 · LA ENTRADA PAGINADA · El Futuro (pieza nueva) ═══════════════════════
-   NO existe paginador scroll-snap en la casa. Se declara nuevo. Cuando El Futuro
-   está activo, la .sa deja de desplazarse en vertical y aloja el paginador: se
-   recorre de lado, página completa, snap que se detiene en cada una, nunca a
-   medio camino. Los puntos van en una banda sobre la bnav. */
-.sa.pager-host{padding:0;overflow:hidden;display:flex;flex-direction:column}
-.pager-host .sc.on{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
-.pager{flex:1 1 auto;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.pager::-webkit-scrollbar{display:none}
-.page{flex:0 0 100%;width:100%;height:100%;scroll-snap-align:center;scroll-snap-stop:always;overflow:hidden;padding:8px var(--gut) 6px;display:flex;flex-direction:column;gap:6px}
-.dots{flex:none;height:26px;display:flex;align-items:center;justify-content:center;gap:7px}
-.dot{width:7px;height:7px;border-radius:50%;border:none;padding:0;background:var(--ink4);opacity:.5;transition:all .2s var(--ease,ease);cursor:pointer;position:relative}
-.dot.on{opacity:1;background:var(--ink);width:20px;border-radius:4px}
-.dot::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px}
-.dot:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
-.page-ey{font-size:.55rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin:0 2px 1px}
+/* ══ 3 · EL FUTURO · una sola página que corre en vertical (como «Mi Semana») ══
+   Se retiró el paginador horizontal: El Futuro es ahora una superficie que corre
+   en vertical dentro de la .sa (el único scroller de la casa), con el 2×2
+   estratégico arriba y el táctico debajo. Así las 4 tarjetas van a su alto
+   natural (sin estirarse a llenar) y asoma lo de abajo al correr. */
+.page-ey{font-size:.58rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin:2px 2px 8px}
+.ef-sep{margin-top:20px}
 
 /* ══ 4 · GAUGE de arco · pieza de Ontikos heredada del escritorio ════════════ */
 .gz{display:flex;align-items:center;gap:11px}
@@ -107,20 +98,15 @@
    que el dueño señaló como bien hecha): tarjeta con radio 16, sombra sutil,
    BORDE en el color del estado; dentro, ÍCONO grande (estado) · título (600) ·
    dos líneas · barra delgada 6px (999) · BOTÓN-PÍLDORA a lo ancho, relleno en el
-   estado. Aquí el contenido se reparte en dos bloques —lt-top arriba, lt-foot
-   abajo (barra+botón)— con space-between, para que el alto sobrante sea AIRE
-   repartido, no un hueco: en el teléfono alto las tarjetas respiran como la
-   referencia. Color = estado en borde + ícono + barra + botón (nunca sólo
-   matiz: lo acompañan la forma del ícono y la palabra del contexto).
+   estado. Las tarjetas van a su ALTO NATURAL y COMPACTO (como «Mi Semana»): NO
+   se estiran a llenar la pantalla —eso dejaba un hueco feo dentro de la tarjeta—.
+   El contenido fluye tirante (lt-top, y debajo lt-foot con la barra y el botón),
+   y la superficie corre en vertical para que quepan las 4 y asome lo de abajo.
+   Color = estado en borde + ícono + barra + botón (nunca sólo matiz: lo
+   acompañan la forma del ícono y la palabra del contexto).
    Procedencia: ontikos/mi-semana.html (.card/.icon/.label/.desc/.btn-logro). */
-/* La grilla se ADAPTA sola, sin umbrales frágiles: cada fila llena el alto
-   (1fr) cuando hay sitio, pero nunca baja de su contenido (min-content). Si las
-   dos filas airosas no caben (teléfono corto o líneas de contexto que envuelven),
-   toman su alto natural y la ENTRADA se desplaza —como la propia «Mi Semana»—,
-   sin recortar nunca el botón. En el teléfono alto llena la pantalla sin scroll. */
-.lgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(2,minmax(min-content,1fr));gap:16px;flex:1 1 auto;min-height:0}
-.pager-host .sc.on .page{overflow-y:auto;overflow-x:hidden}
-.ltile{background:var(--surf);border:1px solid var(--brd);border-radius:16px;padding:18px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;min-width:0;min-height:0;overflow:hidden;cursor:pointer;text-align:left;box-shadow:0 2px 10px rgba(9,9,15,.04)}
+.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ltile{background:var(--surf);border:1px solid var(--brd);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:0;min-width:0;overflow:hidden;cursor:pointer;text-align:left;box-shadow:0 2px 10px rgba(9,9,15,.04)}
 .ltile>*{min-width:0;width:100%}
 /* semáforo: el BORDE lleva el estado (como la referencia: .state-risk, etc.) */
 .ltile.alert{border-color:var(--red)}
@@ -140,8 +126,8 @@
 .lt-cap{font-size:.78rem;font-weight:600;color:var(--ink3);white-space:nowrap}
 .lt-ctx{font-size:.8rem;font-weight:500;color:var(--ink2);line-height:1.35;margin-top:5px}
 .lt-ctx.r{color:var(--red-tx,var(--red));font-weight:600} .lt-ctx.a{color:var(--amber);font-weight:600} .lt-ctx.g{color:var(--green);font-weight:600}
-/* lt-foot: barra + botón (bloque inferior, pegado al pie) */
-.lt-foot{display:flex;flex-direction:column}
+/* lt-foot: barra + botón (debajo del texto, tirante · ritmo de «Mi Semana») */
+.lt-foot{display:flex;flex-direction:column;margin-top:14px}
 .lt-bar{position:relative;height:6px;background:var(--surf3);border-radius:999px;margin-bottom:12px}
 .lt-bar-fill{position:absolute;left:0;top:0;height:100%;border-radius:999px}
 .lt-bar-fill.r{background:var(--red)} .lt-bar-fill.a{background:var(--amber-fill,var(--amber))} .lt-bar-fill.g{background:var(--green)}
@@ -151,21 +137,11 @@
 .lt-act{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;border:none;border-radius:999px;padding:13px 14px;min-height:46px;font-size:.88rem;font-weight:700;letter-spacing:-.01em;color:#fff;background:var(--ink);cursor:pointer;font-family:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lt-act.r{background:var(--red)} .lt-act.a{background:var(--amber-fill,var(--amber))} .lt-act.g{background:var(--green)}
 .lt-act:active{transform:scale(.97)}
-/* teléfono alto: la tarjeta respira más (ícono, cifra y relleno mayores) */
-@media (min-height:760px){
-  .ltile{padding:22px}
-  .lt-ico{width:34px;height:34px;margin-bottom:12px}
-  .lt-t{font-size:1.1rem}
-  .lt-pct{font-size:1.9rem}
-  .lt-cap{font-size:.85rem}
-  .lt-ctx{font-size:.88rem}
-  .lt-act{font-size:.95rem;min-height:50px;padding:14px 18px}
-}
-/* teléfono corto: cuando la grilla se desplaza (minmax arriba), las tarjetas
-   conservan un alto mínimo airoso para no quedar chatas. */
-@media (max-height:639px){
-  .lgrid{grid-template-rows:none;grid-auto-rows:minmax(190px,auto);flex:0 0 auto}
-  .page{padding-top:8px;padding-bottom:8px}
+/* pantalla ancha (≥420): un punto más de cuerpo, sin cambiar el alto compacto */
+@media (min-width:420px){
+  .lt-ico{width:32px;height:32px}
+  .lt-t{font-size:1.05rem}
+  .lt-pct{font-size:1.75rem}
 }
 
 /* ══ 5 · color = significado y ajustes sobre las formas heredadas ════════════ */
