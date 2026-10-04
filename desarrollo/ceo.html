@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Ontikos · Dirección General (desarrollo)</title>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <!-- Mismo punto de entrada, distingue el dispositivo: el teléfono recibe la
+         app móvil (que debe ser el documento de nivel superior para que dvh y
+         env(safe-area-inset-*) funcionen); el escritorio sigue con el tablero.
+         Corre antes del bundle (el script de módulo va diferido). -->
+    <script>
+      (function () {
+        try {
+          var ua = navigator.userAgent || '';
+          var phoneUA = /iPhone|iPod|Android.*Mobile|Windows Phone|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+          var mm = window.matchMedia;
+          var narrow = mm && mm('(max-width: 768px)').matches;
+          var coarse = mm && mm('(pointer: coarse)').matches;
+          if (phoneUA || (narrow && coarse)) {
+            window.location.replace('./movil/index.html');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <script type="module" crossorigin src="./assets/ceo-dev-DvgJLCdZ.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/ceo-dev-Dv1S5JKC.css">
   </head>
