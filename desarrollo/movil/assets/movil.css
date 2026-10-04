@@ -71,13 +71,25 @@
 .mod.on svg{stroke:var(--ink)}
 .mod .mod-b{margin-left:auto;font-size:.62rem;font-weight:800;color:#fff;background:var(--red);border-radius:20px;padding:2px 7px;min-width:18px;text-align:center;letter-spacing:0}
 
-/* ══ 3 · EL FUTURO · una sola página que corre en vertical (como «Mi Semana») ══
-   Se retiró el paginador horizontal: El Futuro es ahora una superficie que corre
-   en vertical dentro de la .sa (el único scroller de la casa), con el 2×2
-   estratégico arriba y el táctico debajo. Así las 4 tarjetas van a su alto
-   natural (sin estirarse a llenar) y asoma lo de abajo al correr. */
-.page-ey{font-size:.58rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin:2px 2px 8px}
-.ef-sep{margin-top:20px}
+/* ══ 3 · LA ENTRADA PAGINADA · El Futuro (swipe horizontal + puntos) ══════════
+   Cuando El Futuro está activo, la .sa deja de desplazarse en vertical y aloja el
+   paginador: se recorre de LADO, página completa, snap que se detiene en cada una.
+   La página NO hace scroll vertical. Los puntos van en una banda sobre la bnav. */
+.sa.pager-host{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.pager-host .sc.on{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
+.pager{flex:1 1 auto;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.pager::-webkit-scrollbar{display:none}
+.page{flex:0 0 100%;width:100%;height:100%;scroll-snap-align:center;scroll-snap-stop:always;overflow:hidden;padding:10px var(--gut) 6px;display:flex;flex-direction:column;gap:6px}
+.dots{flex:none;height:26px;display:flex;align-items:center;justify-content:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;border:none;padding:0;background:var(--ink4);opacity:.5;transition:all .2s var(--ease,ease);cursor:pointer;position:relative}
+.dot.on{opacity:1;background:var(--ink);width:20px;border-radius:4px}
+.dot::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px}
+.dot:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.page-ey{font-size:.58rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin:0 2px 2px;flex:none}
+/* páginas 2 y 3 · las tarjetas del táctico reparten el alto para llenar la página */
+#futuro .page .card,#futuro .page .tac{flex:1 1 auto;min-height:0}
+#futuro .page .card{display:flex;flex-direction:column;justify-content:space-between}
+#futuro .page .tac{justify-content:space-between}
 
 /* ══ 4 · GAUGE de arco · pieza de Ontikos heredada del escritorio ════════════ */
 .gz{display:flex;align-items:center;gap:11px}
@@ -99,13 +111,14 @@
    BORDE en el color del estado; dentro, ÍCONO grande (estado) · título (600) ·
    dos líneas · barra delgada 6px (999) · BOTÓN-PÍLDORA a lo ancho, relleno en el
    estado. Las tarjetas van a su ALTO NATURAL y COMPACTO (como «Mi Semana»): NO
-   se estiran a llenar la pantalla —eso dejaba un hueco feo dentro de la tarjeta—.
-   El contenido fluye tirante (lt-top, y debajo lt-foot con la barra y el botón),
-   y la superficie corre en vertical para que quepan las 4 y asome lo de abajo.
-   Color = estado en borde + ícono + barra + botón (nunca sólo matiz: lo
-   acompañan la forma del ícono y la palabra del contexto).
+   se estiran a llenar la celda —eso dejaba un hueco feo dentro de la tarjeta—.
+   El contenido fluye tirante (lt-top, y debajo lt-foot con la barra y el botón).
+   En la página paginada, el 2×2 compacto se CENTRA verticalmente (align-content),
+   así llena la pantalla con aire PAREJO arriba y abajo, nunca con un hueco dentro
+   de la tarjeta. Color = estado en borde + ícono + barra + botón (nunca sólo
+   matiz: lo acompañan la forma del ícono y la palabra del contexto).
    Procedencia: ontikos/mi-semana.html (.card/.icon/.label/.desc/.btn-logro). */
-.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1 1 auto;min-height:0;grid-auto-rows:min-content;align-content:center}
 .ltile{background:var(--surf);border:1px solid var(--brd);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:0;min-width:0;overflow:hidden;cursor:pointer;text-align:left;box-shadow:0 2px 10px rgba(9,9,15,.04)}
 .ltile>*{min-width:0;width:100%}
 /* semáforo: el BORDE lleva el estado (como la referencia: .state-risk, etc.) */
