@@ -10,12 +10,12 @@
      VERSIONADO DE ASSETS (?v=…): cada cambio sube el número y el navegador trae
      el archivo nuevo al instante, sin que nadie tenga que limpiar la caché —el
      HTML se sirve fresco y pide la versión nueva del CSS. Subir en cada deploy. -->
-<link rel="stylesheet" href="assets/app.css?v=20261004e">
-<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261004e">
-<link rel="stylesheet" href="assets/cliente-extra.css?v=20261004e">
-<link rel="stylesheet" href="assets/proceso.css?v=20261004e">
-<link rel="stylesheet" href="assets/network-design-system.css?v=20261004e">
-<link rel="stylesheet" href="assets/movil.css?v=20261004e">
+<link rel="stylesheet" href="assets/app.css?v=20261004f">
+<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261004f">
+<link rel="stylesheet" href="assets/cliente-extra.css?v=20261004f">
+<link rel="stylesheet" href="assets/proceso.css?v=20261004f">
+<link rel="stylesheet" href="assets/network-design-system.css?v=20261004f">
+<link rel="stylesheet" href="assets/movil.css?v=20261004f">
 <style>html,body{font-family:'DM Sans',system-ui,sans-serif}
 .qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
@@ -206,12 +206,32 @@
     <!-- ───────── QUIEBRES · lista (marco fijo, sólo la lista corre) ───────── -->
     <section class="sc" id="quiebres">
 
-      <!-- indicadores en rejilla 2×2 compacto · héroe en tinta, conteos en su estado -->
-      <div class="kpis g2">
-        <div class="kpi"><div class="kpi-l">En riesgo ahora</div><div class="kpi-v">$10.0M</div><div class="kpi-sub">7 quiebres</div></div>
-        <div class="kpi"><div class="kpi-l">Incumplido</div><div class="kpi-v red">2</div><div class="kpi-sub">$4.38M</div></div>
-        <div class="kpi"><div class="kpi-l">Por incumplirse</div><div class="kpi-v amber">3</div><div class="kpi-sub">$3.26M</div></div>
-        <div class="kpi"><div class="kpi-l">Sin movimiento</div><div class="kpi-v">2</div><div class="kpi-sub">$2.39M</div></div>
+      <!-- indicadores con JERARQUÍA · el total en riesgo (héroe) y los tres
+           estados que lo componen (2+3+2 = 7 · $4.38M+$3.26M+$2.39M ≈ $10M).
+           Tarjetas redondeadas con sombra y color de estado, al nivel de El Futuro. -->
+      <div class="qkpi">
+        <div class="kpi hero">
+          <div class="kpi-l"><span class="kpi-dot r"></span>En riesgo ahora</div>
+          <div class="kpi-v">$10.0M</div>
+          <div class="kpi-sub">7 quiebres activos</div>
+        </div>
+        <div class="qkpi-row">
+          <div class="kpi s-red">
+            <div class="kpi-l">Incumplido</div>
+            <div class="kpi-v red">2</div>
+            <div class="kpi-sub">$4.38M</div>
+          </div>
+          <div class="kpi s-amber">
+            <div class="kpi-l">Por incumplir</div>
+            <div class="kpi-v amber">3</div>
+            <div class="kpi-sub">$3.26M</div>
+          </div>
+          <div class="kpi s-mute">
+            <div class="kpi-l">Sin mover</div>
+            <div class="kpi-v">2</div>
+            <div class="kpi-sub">$2.39M</div>
+          </div>
+        </div>
       </div>
 
       <!-- filtros en píldora, se deslizan de lado -->

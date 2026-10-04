@@ -191,6 +191,30 @@ body.vh-short .alert-slim .as-txt{font-size:.74rem}
 .card-go.r{color:var(--red-tx,var(--red))} .card-go.a{color:var(--amber)}
 .k-amber{color:var(--amber);font-weight:800}
 
+/* ── QUIEBRES · indicadores con jerarquía ────────────────────────────────────
+   Se reemplaza la rejilla 2×2 con junta gris (parecía hoja de cálculo, sin
+   color y con aire muerto) por: un HÉROE con el total en riesgo y una fila de
+   los TRES estados que lo componen. Tarjetas redondeadas, sombra suave y color
+   de estado (punto + valor + borde teñido), al nivel gráfico de El Futuro. */
+.qkpi{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.qkpi .kpi{background:var(--surf);border:1px solid var(--brd);border-radius:16px;padding:14px 15px;box-shadow:0 2px 10px rgba(9,9,15,.04)}
+.qkpi .kpi.hero{padding:16px 17px}
+.qkpi .kpi.hero .kpi-v{font-size:2rem}
+.qkpi-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.qkpi-row .kpi{padding:13px 12px}
+.qkpi .kpi.s-red{border-color:var(--red-brd,var(--red))}
+.qkpi .kpi.s-amber{border-color:var(--amber-brd,var(--amber))}
+.qkpi .kpi-l{display:flex;align-items:center;gap:6px;margin-bottom:7px;line-height:1.15}
+/* en las 3 tarjetas de estado la etiqueta va sin punto (el borde teñido y el
+   valor de color ya marcan el estado); se reserva alto de 2 líneas para que los
+   números queden alineados, y se achica el micro-rótulo para que "INCUMPLIDO"
+   (palabra larga, no parte) quepa en una línea aun en pantallas de 320. */
+.qkpi-row .kpi-l{align-items:flex-start;min-height:2.1em;font-size:.47rem;letter-spacing:.06em;overflow-wrap:anywhere}
+.qkpi .kpi-sub{margin-top:7px}
+.kpi-dot{width:8px;height:8px;border-radius:50%;flex:none}
+.kpi-dot.r{background:var(--red)} .kpi-dot.a{background:var(--amber-fill,var(--amber))}
+.kpi-dot.m{background:var(--ink4)} .kpi-dot.k{background:var(--ink)}
+
 /* pantalla ancha (≥420): un punto más de cuerpo, sin cambiar el alto compacto */
 @media (min-width:420px){
   .lt-ico{width:42px;height:42px}
