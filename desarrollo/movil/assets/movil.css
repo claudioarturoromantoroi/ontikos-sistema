@@ -86,6 +86,14 @@
 .dot::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px}
 .dot:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .page-ey{font-size:.58rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin:0 2px 2px;flex:none}
+/* header real de El Futuro (llena el tope, como «Mi Semana»): nombre de la vista
+   + contexto por página. Fijo sobre el swipe. */
+.ef-head{flex:none;padding:12px var(--gut) 11px}
+.ef-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;line-height:1.05;color:var(--ink)}
+.ef-sub{font-size:.88rem;font-weight:500;color:var(--ink3);letter-spacing:-.01em;margin-top:4px}
+body.vh-short .ef-head{padding:8px var(--gut) 7px}
+body.vh-short .ef-title{font-size:1.15rem}
+body.vh-short .ef-sub{font-size:.78rem;margin-top:2px}
 /* páginas 2 y 3 · las tarjetas del táctico reparten el alto para llenar la página */
 #futuro .page .card,#futuro .page .tac{flex:1 1 auto;min-height:0}
 #futuro .page .card{display:flex;flex-direction:column;justify-content:space-between}
@@ -127,32 +135,36 @@
 .ltile.warn{border-color:var(--amber)}
 /* lt-top: ícono · título · cifra · contexto (bloque superior, alto natural) */
 .lt-top{display:flex;flex-direction:column}
-/* ícono grande en el estado (la referencia lo lleva a 26-32px, sólido) */
-.lt-ico{width:30px;height:30px;flex:none;display:block;margin-bottom:10px}
-.lt-ico svg{width:100%;height:100%;fill:none;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;stroke:var(--ink3)}
-.lt-ico.r svg{stroke:var(--red)} .lt-ico.a svg{stroke:var(--amber)} .lt-ico.g svg{stroke:var(--green)}
+/* ícono en FICHA teñida del estado (acabado, sólido): cuadro redondeado con el
+   fondo tenue del estado y el ícono en su color. Más «terminado» que el trazo suelto. */
+.lt-ico{width:38px;height:38px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;margin-bottom:11px;background:var(--surf3)}
+.lt-ico svg{width:21px;height:21px;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke:var(--ink3)}
+.ltile.alert .lt-ico{background:var(--red-bg)} .lt-ico.r svg{stroke:var(--red)}
+.ltile.warn .lt-ico{background:var(--amber-bg)} .lt-ico.a svg{stroke:var(--amber)}
+.ltile.good .lt-ico{background:var(--green-bg)} .lt-ico.g svg{stroke:var(--green)}
 .lt-t{font-size:1rem;font-weight:700;letter-spacing:-.02em;line-height:1.25;color:var(--ink);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* dos líneas, como «Meta/Logro»: la cifra héroe con su pie debajo, y el contexto.
    El pie va DEBAJO del número (no al lado) para no romperse en la celda angosta. */
 .lt-fig{display:flex;align-items:baseline;gap:7px;line-height:1;flex-wrap:wrap}
-.lt-pct{font-size:1.6rem;font-weight:900;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.lt-pct{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
 .lt-cap{font-size:.78rem;font-weight:600;color:var(--ink3);white-space:nowrap}
 .lt-ctx{font-size:.8rem;font-weight:500;color:var(--ink2);line-height:1.35;margin-top:5px}
 .lt-ctx.r{color:var(--red-tx,var(--red));font-weight:600} .lt-ctx.a{color:var(--amber);font-weight:600} .lt-ctx.g{color:var(--green);font-weight:600}
 /* lt-foot: barra + botón (debajo del texto, tirante · ritmo de «Mi Semana») */
-.lt-foot{display:flex;flex-direction:column;margin-top:14px}
-.lt-bar{position:relative;height:6px;background:var(--surf3);border-radius:999px;margin-bottom:12px}
+.lt-foot{display:flex;flex-direction:column;margin-top:12px}
+.lt-bar{position:relative;height:6px;background:var(--surf3);border-radius:999px;margin-bottom:11px}
 .lt-bar-fill{position:absolute;left:0;top:0;height:100%;border-radius:999px}
 .lt-bar-fill.r{background:var(--red)} .lt-bar-fill.a{background:var(--amber-fill,var(--amber))} .lt-bar-fill.g{background:var(--green)}
 .lt-bar-notch{position:absolute;top:-3px;width:2px;height:12px;background:var(--ink);opacity:.55;border-radius:1px;margin-left:-1px}
 /* el acto · BOTÓN-PÍLDORA a lo ancho, relleno en el estado, ≥46px (instrumento,
    no juguete): radio 999, centrado, con la flecha de «hazlo» */
-.lt-act{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;border:none;border-radius:999px;padding:13px 14px;min-height:46px;font-size:.88rem;font-weight:700;letter-spacing:-.01em;color:#fff;background:var(--ink);cursor:pointer;font-family:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lt-act{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;border:none;border-radius:999px;padding:12px 14px;min-height:44px;font-size:.88rem;font-weight:700;letter-spacing:-.01em;color:#fff;background:var(--ink);cursor:pointer;font-family:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lt-act.r{background:var(--red)} .lt-act.a{background:var(--amber-fill,var(--amber))} .lt-act.g{background:var(--green)}
 .lt-act:active{transform:scale(.97)}
 /* pantalla ancha (≥420): un punto más de cuerpo, sin cambiar el alto compacto */
 @media (min-width:420px){
-  .lt-ico{width:32px;height:32px}
+  .lt-ico{width:42px;height:42px}
+  .lt-ico svg{width:23px;height:23px}
   .lt-t{font-size:1.05rem}
   .lt-pct{font-size:1.75rem}
 }
@@ -161,18 +173,21 @@
    Safari el alto de media no sigue a la barra dinámica—, sino por la clase
    body.vh-short que pone setVH() midiendo el alto VISIBLE real (visualViewport).
    Se aprieta el ritmo (ícono, cifra, relleno, botón), nunca se estira. */
-body.vh-short .page-ey{margin:1px 2px 5px}
-body.vh-short .ef-sep{margin-top:14px}
-body.vh-short .lgrid{gap:10px}
-body.vh-short .ltile{padding:12px}
-body.vh-short .lt-ico{width:22px;height:22px;margin-bottom:5px}
-body.vh-short .lt-t{font-size:.9rem;margin-bottom:2px}
-body.vh-short .lt-pct{font-size:1.3rem}
-body.vh-short .lt-cap{font-size:.72rem}
-body.vh-short .lt-ctx{font-size:.72rem;margin-top:2px}
-body.vh-short .lt-foot{margin-top:8px}
-body.vh-short .lt-bar{margin-bottom:8px}
-body.vh-short .lt-act{min-height:38px;padding:9px 12px;font-size:.8rem}
+body.vh-short .ef-head{padding:7px var(--gut) 6px}
+body.vh-short .ef-title{font-size:1.05rem}
+body.vh-short .ef-sub{font-size:.74rem;margin-top:1px}
+body.vh-short .page{padding-top:6px;padding-bottom:4px}
+body.vh-short .lgrid{gap:6px}
+body.vh-short .ltile{padding:11px}
+body.vh-short .lt-ico{width:29px;height:29px;border-radius:9px;margin-bottom:6px}
+body.vh-short .lt-ico svg{width:17px;height:17px}
+body.vh-short .lt-t{font-size:.88rem;margin-bottom:2px}
+body.vh-short .lt-pct{font-size:1.2rem}
+body.vh-short .lt-cap{font-size:.7rem}
+body.vh-short .lt-ctx{font-size:.7rem;margin-top:1px}
+body.vh-short .lt-foot{margin-top:6px}
+body.vh-short .lt-bar{margin-bottom:6px}
+body.vh-short .lt-act{min-height:34px;padding:7px 12px;font-size:.78rem}
 
 /* ══ 5 · color = significado y ajustes sobre las formas heredadas ════════════ */
 /* (La barra de decisión de la página 1 se retiró: cada tile ya remata en su
