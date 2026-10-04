@@ -47,6 +47,13 @@
 .card-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
 .card-ey{font-size:.56rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em}
 .card-meta{font-size:.62rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums}
+/* páginas 2 y 3: las tarjetas crecen y reparten su contenido para llenar el
+   alto (sin vacío al fondo); el gráfico de renovación crece con la tarjeta */
+#futuro .page .card,#futuro .page .tac{flex:1 1 auto;min-height:0}
+#futuro .page .card{display:flex;flex-direction:column;justify-content:space-between}
+#futuro .page .tac{justify-content:space-between}
+#futuro .page .card:first-of-type{margin-bottom:9px}
+#futuro .page .tlchart{flex:1 1 auto;min-height:76px;height:auto}
 </style>
 </head>
 <body>
@@ -77,30 +84,34 @@
             <div class="ltile" onclick="openLine('Colocación','En quiebre · 55% de la meta','Ritmo 5/sem · se necesitan 12 · 30 atascadas · Aseg. del Norte · $3.2M')">
               <div class="ltile-h"><span class="ltile-t">Colocación</span><span class="memb-chip expired">en quiebre</span></div>
               <div class="gz r"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="45"/></svg><div class="gz-num">55%</div></div><div class="gz-body"><div class="gz-cap">de la meta</div><div class="gz-pace r">5/sem · faltan 12</div></div></div>
+              <div class="ltile-foot">30 atascadas · Aseg. del Norte · <b>$3.2M</b></div>
               <button class="ltile-act">Pedir acción<span class="arr">→</span></button>
             </div>
             <!-- Cobranza -->
             <div class="ltile" onclick="openLine('Cobranza','Sano · 96% en plazo','Vencido 3.8% · estable · $180K en 2 clientes')">
               <div class="ltile-h"><span class="ltile-t">Cobranza</span><span class="memb-chip">sano</span></div>
               <div class="gz g"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="4"/></svg><div class="gz-num">96%</div></div><div class="gz-body"><div class="gz-cap">en plazo</div><div class="gz-pace g">vencido 3.8%</div></div></div>
+              <div class="ltile-foot"><b>$180K</b> en 2 clientes</div>
               <button class="ltile-act">Revisar los 16<span class="arr">→</span></button>
             </div>
             <!-- Renovación -->
             <div class="ltile" onclick="openLine('Renovación','Bajo industria · 78% retención','Ind. 84% · 3 meses a la baja · 26 se perderán · $4.1M')">
               <div class="ltile-h"><span class="ltile-t">Renovación</span><span class="memb-chip grace">bajo industria</span></div>
               <div class="gz a"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="22"/><line class="gz-tick" x1="50.4" y1="23.9" x2="59.2" y2="19.1"/></svg><div class="gz-num">78%</div></div><div class="gz-body"><div class="gz-cap">ret. · ind. 84%</div><div class="gz-pace a">3 meses ↓</div></div></div>
+              <div class="ltile-foot">26 se perderán · <b>$4.1M</b></div>
               <button class="ltile-act">Pedir acción<span class="arr">→</span></button>
             </div>
             <!-- Siniestralidad -->
             <div class="ltile" onclick="openLine('Siniestralidad','Sobre umbral · 71% · umbral 65%','Sube · 3 meses · 3 cuentas · $6.8M')">
               <div class="ltile-h"><span class="ltile-t">Siniestralidad</span><span class="memb-chip grace">sobre umbral</span></div>
               <div class="gz a"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="29"/><line class="gz-tick" x1="41.5" y1="15.3" x2="46.1" y2="6.4"/></svg><div class="gz-num">71%</div></div><div class="gz-body"><div class="gz-cap">umbral 65%</div><div class="gz-pace a">sube · 3 meses</div></div></div>
+              <div class="ltile-foot">3 cuentas · <b>$6.8M</b></div>
               <button class="ltile-act">Pedir acción<span class="arr">→</span></button>
             </div>
           </div>
 
           <!-- barra de decisión · hereda el estado más grave (Colocación en quiebre → rojo) -->
-          <div class="camp grave" style="margin-top:auto">
+          <div class="camp grave">
             <div class="camp-body">
               <div class="camp-t"><b>$9.5M</b> de prima no entra y <b>$6.8M</b> renuevan encarecidas</div>
               <div class="camp-s">Si nadie actúa al cierre · 38 colocaciones + 26 renovaciones.</div>
