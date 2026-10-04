@@ -10,12 +10,12 @@
      VERSIONADO DE ASSETS (?v=…): cada cambio sube el número y el navegador trae
      el archivo nuevo al instante, sin que nadie tenga que limpiar la caché —el
      HTML se sirve fresco y pide la versión nueva del CSS. Subir en cada deploy. -->
-<link rel="stylesheet" href="assets/app.css?v=20261004b">
-<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261004b">
-<link rel="stylesheet" href="assets/cliente-extra.css?v=20261004b">
-<link rel="stylesheet" href="assets/proceso.css?v=20261004b">
-<link rel="stylesheet" href="assets/network-design-system.css?v=20261004b">
-<link rel="stylesheet" href="assets/movil.css?v=20261004b">
+<link rel="stylesheet" href="assets/app.css?v=20261004c">
+<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261004c">
+<link rel="stylesheet" href="assets/cliente-extra.css?v=20261004c">
+<link rel="stylesheet" href="assets/proceso.css?v=20261004c">
+<link rel="stylesheet" href="assets/network-design-system.css?v=20261004c">
+<link rel="stylesheet" href="assets/movil.css?v=20261004c">
 <style>html,body{font-family:'DM Sans',system-ui,sans-serif}
 .qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
@@ -80,11 +80,16 @@
          COMPACTAS (como «Mi Semana»: sin el estiramiento que dejaba hueco dentro);
          la página NO hace scroll vertical —las 4 caben—, se recorre de LADO. -->
     <section class="sc on" id="futuro">
+      <!-- header real de la superficie (llena el tope, como «Mi Semana»): nombre
+           de la vista + contexto que cambia por página. Queda fijo sobre el swipe. -->
+      <div class="ef-head">
+        <div class="ef-title">El Futuro</div>
+        <div class="ef-sub" id="ef-sub">Si nadie actúa, al cierre</div>
+      </div>
       <div class="pager" id="pager">
 
         <!-- Página 1 · las cuatro líneas 2×2 (compactas, caben sin scroll) -->
         <div class="page">
-          <div class="page-ey">Si nadie actúa, al cierre</div>
           <div class="lgrid">
             <!-- Colocación · en quiebre (rojo) -->
             <div class="ltile alert" onclick="openLine('colocacion')">
@@ -143,7 +148,6 @@
 
         <!-- Página 2 · el embudo de colocación + el timeline de renovación -->
         <div class="page">
-          <div class="page-ey">El Futuro · táctico al cierre</div>
           <div class="card">
             <div class="card-h"><span class="card-ey">Colocación · embudo al cierre</span><span class="card-meta">quedan 21 días</span></div>
             <div class="fn-row"><span class="fn-lbl">Meta del periodo</span><span class="fn-val">84 · $12M</span></div>
@@ -167,7 +171,6 @@
 
         <!-- Página 3 · los dos bloques tácticos -->
         <div class="page">
-          <div class="page-ey">El Futuro · táctico · lo que se vigila</div>
           <div class="tac">
             <div class="tac-h"><span class="tac-t">Importantes</span><span class="chip pill a">9/38</span></div>
             <div class="segbar"><i style="flex:29;background:var(--surf3)"></i><i style="flex:6;background:var(--amber-fill,var(--amber))"></i><i style="flex:3;background:var(--red)"></i></div>
@@ -340,17 +343,26 @@ function setVH(){
   document.documentElement.style.setProperty('--vh', Math.round(h) + 'px');
 }
 // ── si el alto VISIBLE es corto, se ciñe el 2×2 para que las 4 tarjetas quepan
-//    SIN scroll (clase body.vh-short). Se decide una vez al cargar y al girar,
-//    NO en cada movimiento de la barra de Safari: así las tarjetas no cambian de
-//    tamaño al correr (sin saltos). Robusto ante la barra dinámica de iOS. */
+//    SIN recortarse (clase body.vh-short, por alto visible real — no @media, que
+//    en iOS Safari no sigue a la barra dinámica). El Futuro NO scrollea en
+//    vertical, así que re-evaluar en cada cambio de viewport es seguro (la barra
+//    sólo cambia al scrollear, cosa que no ocurre en El Futuro): se evita el
+//    recorte sin provocar saltos. Se llama varias veces al cargar por si el
+//    visualViewport aún no está asentado (carrera). */
 function setShort(){
   var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
-  document.body.classList.toggle('vh-short', h < 700);
+  // umbral 735: debajo, se ciñe el 2×2 (cabe sin recorte); a partir de ahí las
+  // tarjetas de tamaño pleno ya caben con margen. El Futuro no scrollea en
+  // vertical, así que la barra de Safari no cruza el umbral en uso normal.
+  document.body.classList.toggle('vh-short', h < 735);
 }
-setVH(); setShort();
-if(window.visualViewport){ visualViewport.addEventListener('resize', setVH); visualViewport.addEventListener('scroll', setVH); }
-window.addEventListener('resize', setVH);
-window.addEventListener('orientationchange', function(){ setTimeout(function(){ setVH(); setShort(); }, 250); });
+function measure(){ setVH(); setShort(); }
+measure();
+requestAnimationFrame(measure);
+setTimeout(measure, 120); setTimeout(measure, 400);
+if(window.visualViewport){ visualViewport.addEventListener('resize', measure); visualViewport.addEventListener('scroll', setVH); }
+window.addEventListener('resize', measure);
+window.addEventListener('orientationchange', function(){ setTimeout(measure, 250); });
 
 // ── tema claro/oscuro (persistente; respeta ?dk y el sistema) ──
 (function(){
@@ -398,14 +410,18 @@ function go(id){
   if(id!=='futuro') sa.scrollTop=0;
 }
 
-// ── paginador de la entrada (swipe horizontal + puntos) ──
-function goPage(i){ if(pager) pager.scrollTo({left:i*pager.clientWidth, behavior:'smooth'}); }
+// ── paginador de la entrada (swipe horizontal + puntos) · el subtítulo del
+//    header cambia por página (contexto de cada una) ──
+var EF_SUBS=['Si nadie actúa, al cierre','Táctico al cierre','Lo que se vigila'];
+function setEfSub(i){ var s=document.getElementById('ef-sub'); if(s&&EF_SUBS[i]) s.textContent=EF_SUBS[i]; }
+function goPage(i){ if(pager) pager.scrollTo({left:i*pager.clientWidth, behavior:'smooth'}); setEfSub(i); }
 if(pager){
   pager.addEventListener('scroll', function(){
     var i=Math.round(pager.scrollLeft/pager.clientWidth);
     document.querySelectorAll('.dots .dot').forEach(function(d,k){
       d.classList.toggle('on',k===i); d.setAttribute('aria-selected',k===i?'true':'false');
     });
+    setEfSub(i);
   }, {passive:true});
 }
 
