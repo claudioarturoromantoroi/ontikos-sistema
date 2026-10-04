@@ -81,17 +81,17 @@
           <div class="page-ey">Si nadie actúa, al cierre</div>
           <div class="lgrid">
             <!-- Colocación -->
-            <div class="ltile" onclick="openLine('Colocación','En quiebre · 55% de la meta','Ritmo 5/sem, se necesitan 12 · 30 atascadas en Aseguradora del Norte · $3.2M en riesgo')">
+            <div class="ltile" onclick="openLine('colocacion')">
               <div class="lt-head"><span class="lt-t">Colocación</span><span class="memb-chip expired">en quiebre</span></div>
               <div class="lt-hero r"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="45"/></svg><div class="gz-num">55%</div></div><div class="lt-cap">de la meta</div></div>
               <div class="lt-stats">
                 <div class="lt-stat"><div class="lt-k">Ritmo</div><div class="lt-v r">5/sem</div><div class="lt-s">faltan 12</div></div>
-                <div class="lt-stat"><div class="lt-k">En riesgo</div><div class="lt-v">$3.2M</div><div class="lt-s">30 atascadas</div></div>
+                <div class="lt-stat"><div class="lt-k">En riesgo</div><div class="lt-v">$3.2M</div><div class="lt-s">30 pólizas</div></div>
               </div>
               <button class="ltile-act">Pedir acción<span class="arr">→</span></button>
             </div>
             <!-- Cobranza -->
-            <div class="ltile" onclick="openLine('Cobranza','Sano · 96% en plazo','Vencido 3.8%, estable · $180K en 2 clientes')">
+            <div class="ltile" onclick="openLine('cobranza')">
               <div class="lt-head"><span class="lt-t">Cobranza</span><span class="memb-chip">sano</span></div>
               <div class="lt-hero g"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="4"/></svg><div class="gz-num">96%</div></div><div class="lt-cap">en plazo</div></div>
               <div class="lt-stats">
@@ -101,7 +101,7 @@
               <button class="ltile-act">Revisar los 16<span class="arr">→</span></button>
             </div>
             <!-- Renovación -->
-            <div class="ltile" onclick="openLine('Renovación','Bajo industria · 78% retención','Industria 84% · 3 meses a la baja · 26 se perderán · $4.1M')">
+            <div class="ltile" onclick="openLine('renovacion')">
               <div class="lt-head"><span class="lt-t">Renovación</span><span class="memb-chip grace">bajo industria</span></div>
               <div class="lt-hero a"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="22"/><line class="gz-tick" x1="50.4" y1="23.9" x2="59.2" y2="19.1"/></svg><div class="gz-num">78%</div></div><div class="lt-cap">retención</div></div>
               <div class="lt-stats">
@@ -111,7 +111,7 @@
               <button class="ltile-act">Pedir acción<span class="arr">→</span></button>
             </div>
             <!-- Siniestralidad -->
-            <div class="ltile" onclick="openLine('Siniestralidad','Sobre umbral · 71% · umbral 65%','Sube 3 meses · umbral 65% · 3 cuentas · $6.8M expuesto')">
+            <div class="ltile" onclick="openLine('siniestralidad')">
               <div class="lt-head"><span class="lt-t">Siniestralidad</span><span class="memb-chip grace">sobre umbral</span></div>
               <div class="lt-hero a"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="29"/><line class="gz-tick" x1="41.5" y1="15.3" x2="46.1" y2="6.4"/></svg><div class="gz-num">71%</div></div><div class="lt-cap">umbral 65%</div></div>
               <div class="lt-stats">
@@ -127,7 +127,7 @@
             <div class="camp-body">
               <div class="camp-t"><b>$9.5M</b> de prima no entra y <b>$6.8M</b> renuevan encarecidas</div>
               <div class="camp-s">Si nadie actúa al cierre · 38 colocaciones + 26 renovaciones.</div>
-              <button class="btn primary camp-act" onclick="openLine('Atender el más grave','Colocación · en quiebre · 55%','Es la línea más grave: 30 colocaciones atascadas en Aseguradora del Norte · $3.2M')">Atender el más grave →</button>
+              <button class="btn primary camp-act" onclick="openLine('atender')">Atender el más grave →</button>
             </div>
           </div>
         </div>
@@ -308,6 +308,7 @@
   <button class="mod"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1.5"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>Reportes</button>
   <button class="mod"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Intake</button>
   <div class="drawer-sec">Sesión</div>
+  <button class="mod" onclick="toggleTema()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="5" y1="5" x2="6.5" y2="6.5"/><line x1="17.5" y1="17.5" x2="19" y2="19"/><line x1="5" y1="19" x2="6.5" y2="17.5"/><line x1="17.5" y1="6.5" x2="19" y2="5"/></svg><span id="tema-lbl">Tema claro</span><span class="mod-tgl"></span></button>
   <button class="mod"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Salir</button>
 </aside>
 
@@ -317,13 +318,34 @@
     <button class="modal-x" aria-label="Cerrar" onclick="closeSheet()">×</button>
     <div class="modal-t" id="sh-t">—</div>
     <div class="modal-s" id="sh-s">—</div>
-    <div class="modal-btns"><button onclick="closeSheet()">Cancelar</button><button class="primary" id="sh-act" onclick="closeSheet()">Pedir acción</button></div>
+    <div id="sh-body"></div>
+    <div class="modal-btns"><button onclick="closeSheet()">Cancelar</button><button class="primary" id="sh-act" onclick="confirmSheet()">Pedir acción</button></div>
   </div>
 </div>
 
 <script>
-// tema oscuro por querystring
-if(location.search.indexOf('dk')>-1)document.body.classList.add('dk');
+// ── medida concreta del viewport: la grilla llena de verdad en iOS/Android ──
+function setVH(){
+  var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+  document.documentElement.style.setProperty('--vh', Math.round(h) + 'px');
+}
+setVH();
+if(window.visualViewport){ visualViewport.addEventListener('resize', setVH); visualViewport.addEventListener('scroll', setVH); }
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', function(){ setTimeout(setVH, 250); });
+
+// ── tema claro/oscuro (persistente; respeta ?dk y el sistema) ──
+(function(){
+  var saved; try{ saved = localStorage.getItem('ontikos-tema'); }catch(e){}
+  var dk = saved ? saved==='dk' : (location.search.indexOf('dk')>-1 || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches));
+  document.body.classList.toggle('dk', dk);
+})();
+function syncTemaLbl(){ var l=document.getElementById('tema-lbl'); if(l) l.textContent = document.body.classList.contains('dk')?'Tema oscuro':'Tema claro'; }
+function toggleTema(){
+  var dk = document.body.classList.toggle('dk');
+  try{ localStorage.setItem('ontikos-tema', dk?'dk':'lt'); }catch(e){}
+  syncTemaLbl();
+}
 
 var sa=document.getElementById('sa'), pager=document.getElementById('pager');
 
@@ -353,18 +375,64 @@ var drawer=document.getElementById('drawer'), scrim=document.getElementById('scr
 function openDrawer(){ drawer.classList.add('open'); scrim.classList.add('open'); drawer.setAttribute('aria-hidden','false'); drawer.querySelector('.drawer-x').focus(); }
 function closeDrawer(){ drawer.classList.remove('open'); scrim.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); }
 
-// ── la hoja que sube ──
+// ── la hoja que sube: hoja más grande con «qué se pedirá» y sus componentes ──
 var ovl=document.getElementById('ovl');
-function openSheet(t,s,act){ document.getElementById('sh-t').textContent=t; document.getElementById('sh-s').textContent=s; if(act)document.getElementById('sh-act').textContent=act; ovl.classList.add('on'); }
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function buildSheet(t, ctx, note, rows, ask, act){
+  document.getElementById('sh-t').textContent = t;
+  document.getElementById('sh-s').textContent = ctx;
+  var h='';
+  if(note) h += '<div class="sh-h">Qué pasa</div><div class="sh-note">'+esc(note)+'</div>';
+  if(rows && rows.length){
+    h += '<div class="sh-h">Componentes</div><div class="sh-rows">';
+    rows.forEach(function(r){ if(r[1]) h += '<div class="sh-row"><span class="sh-k">'+esc(r[0])+'</span><span class="sh-v'+(r[2]?' '+r[2]:'')+'">'+esc(r[1])+'</span></div>'; });
+    h += '</div>';
+  }
+  if(ask) h += '<div class="sh-ask"><div class="sh-ask-k">Qué se pedirá</div><div class="sh-ask-v">'+esc(ask)+'</div></div>';
+  document.getElementById('sh-body').innerHTML = h;
+  document.getElementById('sh-act').textContent = act || 'Pedir acción';
+  ovl.classList.add('on');
+}
 function closeSheet(){ ovl.classList.remove('on'); }
-function openLine(t,s,detail){ openSheet(t, s+' — '+detail, 'Pedir acción'); }
+function confirmSheet(){ closeSheet(); }
+
+// datos de la hoja por línea de El Futuro (del escritorio)
+var SHEETS = {
+  colocacion:{t:'Pedir acción',ctx:'Colocación · en quiebre · 55% de la meta',
+    note:'Van 46 de 84 colocaciones; al ritmo actual no se alcanza. 30 aceptadas siguen sin expedir en Aseguradora del Norte.',
+    rows:[['Objeto','30 pólizas aceptadas'],['Aseguradora','Aseguradora del Norte'],['Responsable','Óscar Lévano'],['Plazo','al cierre · 21 días'],['En riesgo','$3.2M','r']],
+    ask:'Expedir las 30 pólizas aceptadas antes del cierre.',act:'Pedir acción'},
+  cobranza:{t:'Revisar los 16',ctx:'Cobranza · sano · 96% en plazo',
+    note:'El 3.8% vencido está estable, pero hay $180K vencido en 2 clientes que conviene revisar.',
+    rows:[['Objeto','16 recibos por revisar'],['Vencido','$180K'],['Clientes','2'],['Estado','estable','g']],
+    ask:'Revisar los 16 recibos y gestionar el cobro de los 2 clientes con saldo vencido.',act:'Revisar los 16'},
+  renovacion:{t:'Pedir acción',ctx:'Renovación · bajo industria · 78% retención',
+    note:'3 meses a la baja y por debajo de la industria (84%). Al ritmo actual 26 pólizas se pierden.',
+    rows:[['En riesgo','26 pólizas'],['Prima','$4.1M','r'],['Retención','78% · ind. 84%'],['Tendencia','3 meses a la baja','a']],
+    ask:'Lanzar la campaña de retención sobre las 26 pólizas en riesgo este mes.',act:'Pedir acción'},
+  siniestralidad:{t:'Pedir acción',ctx:'Siniestralidad · sobre umbral · 71%',
+    note:'El índice sube hace 3 meses y cruzó el umbral del 65%. 3 cuentas concentran el deterioro.',
+    rows:[['Umbral','65% · actual 71%','a'],['Cuentas','3'],['Expuesto','$6.8M'],['Tendencia','sube · 3 meses','a']],
+    ask:'Revisar las 3 cuentas sobre umbral y proponer ajuste técnico o de cobertura.',act:'Pedir acción'},
+  atender:{t:'Atender el más grave',ctx:'Colocación · en quiebre · 55% — la línea más grave',
+    note:'De las cuatro líneas, Colocación es la única en quiebre: es donde más prima se pierde al cierre.',
+    rows:[['Objeto','30 pólizas aceptadas sin expedir'],['Aseguradora','Aseguradora del Norte'],['Responsable','Óscar Lévano'],['En riesgo','$3.2M','r']],
+    ask:'Expedir las 30 pólizas aceptadas antes del cierre.',act:'Pedir acción'}
+};
+function openLine(key){ var d=SHEETS[key]; if(d) buildSheet(d.t,d.ctx,d.note,d.rows,d.ask,d.act); }
+
 function openQ(row){
-  var act=row.querySelector('.qr-act').textContent;
-  var resp=row.querySelector('.qr-resp'); var plz=row.querySelector('.vd-cli-plz');
-  var who=(resp?resp.textContent:'')+(plz?' · '+plz.textContent:'');
-  openSheet(row.dataset.t, row.dataset.s+(who?' — '+who:''), act);
+  var g=function(s){var e=row.querySelector(s);return e?e.textContent.trim():'';};
+  var sc = row.classList.contains('urg')?'r':row.classList.contains('med')?'a':'';
+  var sit=g('.chip'), act=g('.qr-act');
+  var rows=[['Objeto',row.dataset.s],['Responsable',g('.qr-resp')],['Situación',sit,sc],['Plazo',g('.vd-cli-plz'),sc],['En juego',g('.qr-peso')]];
+  var ask={'Reclamar':'Presentar la reclamación formal a la aseguradora por este caso.',
+           'Ver pedido':'Dar seguimiento al pedido ya abierto y empujar su cierre.',
+           'Pedir acción':'Pedir al responsable que resuelva este quiebre antes del plazo.'}[act]||'';
+  buildSheet(row.dataset.t, 'Quiebre · '+sit, '', rows, ask, act);
 }
 
+syncTemaLbl();
 document.addEventListener('keydown',function(e){ if(e.key==='Escape'){closeDrawer();closeSheet();} });
 </script>
 </body>

@@ -9,6 +9,13 @@
 
 :root{ --gut:16px; }
 
+/* ══ 0 · MEDIDA CONCRETA DEL VIEWPORT · la grilla llena de verdad ═══════════
+   dvh y los flex anidados fallan de forma intermitente en iOS/Android reales
+   (quedaba un vacío al fondo). Se mide el viewport visible de verdad con JS
+   (visualViewport.height → --vh) y la .app toma ESA altura en píxeles, concreta.
+   Con una altura definida, toda la cadena flex llena sin huecos. */
+.app{height:100dvh;height:var(--vh,100dvh)}
+
 /* ══ 1 · CABECERA · la marca es el ÍCONO de Ontikos (del kit, verbatim) ══════
    No el wordmark. Orden: hamburguesa · ícono · EN VIVO·CIERRE · campana · avatar. */
 .hamb{width:30px;height:30px;border:none;background:none;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;flex:none;margin-left:-4px;position:relative}
@@ -99,10 +106,10 @@
 .lt-t{font-size:.8rem;font-weight:800;letter-spacing:-.02em;line-height:1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ltile .memb-chip{font-size:.45rem;padding:2px 6px;white-space:nowrap;flex:none}
 /* héroe: el gauge (arco + %) centrado, crece con el tile */
-.lt-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:3px 8px 7px;border-top:1px solid var(--line2,rgba(0,0,0,.07));min-height:0}
-.lt-hero .gz-arc{width:64px;height:38px;position:relative;flex:none}
-.lt-hero .gz-arc svg{width:64px;height:38px;display:block;overflow:visible}
-.lt-hero .gz-num{font-size:.9rem}
+.lt-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px 8px 8px;border-top:1px solid var(--line2,rgba(0,0,0,.07));min-height:0}
+.lt-hero .gz-arc{width:78px;height:47px;position:relative;flex:none}
+.lt-hero .gz-arc svg{width:78px;height:47px;display:block;overflow:visible}
+.lt-hero .gz-num{font-size:1.08rem}
 .lt-hero.r .gz-val{stroke:var(--red)} .lt-hero.a .gz-val{stroke:var(--amber-fill,var(--amber))} .lt-hero.g .gz-val{stroke:var(--green)}
 .lt-cap{font-size:.5rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;text-align:center}
 /* cifras: 2 columnas, línea clave arriba y entre ellas */
@@ -122,16 +129,17 @@
 }
 /* en pantallas altas el gauge y las cifras crecen */
 @media (min-height:740px){
-  .lt-head{padding:11px 11px 9px}
-  .lt-hero .gz-arc{width:86px;height:50px}
-  .lt-hero .gz-arc svg{width:86px;height:50px}
-  .lt-hero .gz-num{font-size:1.18rem}
-  .lt-cap{font-size:.54rem}
-  .lt-stat{padding:9px 11px}
-  .lt-v{font-size:1rem}
-  .lt-k{font-size:.5rem}
-  .lt-s{font-size:.52rem}
-  .ltile-act{padding:9px 11px;font-size:.7rem}
+  .lt-head{padding:11px 12px 9px}
+  .lt-t{font-size:.86rem}
+  .lt-hero .gz-arc{width:110px;height:66px}
+  .lt-hero .gz-arc svg{width:110px;height:66px}
+  .lt-hero .gz-num{font-size:1.55rem}
+  .lt-cap{font-size:.56rem}
+  .lt-stat{padding:10px 12px}
+  .lt-v{font-size:1.05rem}
+  .lt-k{font-size:.52rem}
+  .lt-s{font-size:.54rem}
+  .ltile-act{padding:10px 12px;font-size:.72rem}
 }
 
 /* ══ 5 · color = significado y ajustes sobre las formas heredadas ════════════ */
@@ -191,6 +199,26 @@
 
 /* la hoja de detalle hereda proceso.css para el riel de cadena (si se usa) */
 .sh-rail{margin-top:6px}
+
+/* ── contenido de la hoja: «qué se pedirá» con sus componentes, para entender
+   qué se solicita de verdad antes de confirmar (la .ovl+.modal son de CM) ── */
+.sh-note{font-size:.8rem;color:var(--ink2);line-height:1.5;margin:0 0 2px}
+.sh-h{font-size:.56rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin:16px 0 2px}
+.sh-rows{border-top:1px solid var(--brd);margin-top:8px}
+.sh-row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--brd)}
+.sh-k{font-size:.74rem;color:var(--ink3);font-weight:600;flex:none}
+.sh-v{font-size:.82rem;color:var(--ink);font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.sh-v.r{color:var(--red-tx,var(--red))} .sh-v.a{color:var(--amber)} .sh-v.g{color:var(--green)}
+.sh-ask{background:var(--surf2);border:1px solid var(--brd);border-radius:12px;padding:12px 13px;margin-top:14px}
+.sh-ask-k{font-size:.56rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.sh-ask-v{font-size:.92rem;font-weight:700;color:var(--ink);line-height:1.45}
+.modal-btns button{min-height:48px}
+.modal-btns button.primary{font-size:.84rem}
+/* interruptor de tema en el panel de la hamburguesa */
+.mod-tgl{margin-left:auto;width:38px;height:22px;border-radius:12px;background:var(--surf3);position:relative;flex:none;transition:background .2s}
+.mod-tgl::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s}
+body.dk .mod-tgl{background:var(--red)}
+body.dk .mod-tgl::after{left:18px}
 
 /* La grilla como dibujo (overlay con ?grid) · Carbon 2x Grid Small */
 .grid-ovl{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:none;display:flex;z-index:80}

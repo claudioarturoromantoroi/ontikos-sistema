@@ -166,7 +166,7 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
     <div class="pair">
       <div class="unit"><div class="phone"><img src="img/mf-q.png" alt="Quiebres claro"></div><div class="lbl">Claro</div></div>
       <div class="unit"><div class="phone"><img src="img/mf-q-dk.png" alt="Quiebres oscuro"></div><div class="lbl">Oscuro</div></div>
-      <div class="unit"><div class="phone"><img src="img/mf-sheet.png" alt="La hoja de detalle que sube"></div><div class="lbl">La hoja sube (.ovl + .modal de CM)</div></div>
+      <div class="unit"><div class="phone"><img src="img/mf-sheet.png" alt="La hoja de detalle con qué se pedirá"></div><div class="lbl">La hoja: qué pasa · componentes · qué se pedirá</div></div>
     </div>
   </div>
 
@@ -190,6 +190,7 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
       </tbody>
     </table>
     <div class="note">
+      <p><b>La medida es concreta, no estimada.</b> dvh y los flex anidados dejaban un vacío al fondo de forma intermitente en equipos reales. Ahora se mide el viewport visible de verdad por JS (<code>visualViewport.height → --vh</code>) y la <code>.app</code> toma esa altura en píxeles; con una altura definida la cadena flex llena sin huecos, y se recalcula al rotar o al mostrarse/ocultarse las barras. Con eso resuelto, se ajustaron los tamaños internos (gauge más grande) y la rejilla de la tarjeta.</p>
       <p><b>Presupuesto del marco</b> (medido en el render, sin área segura): cabecera 61&nbsp;px, barra inferior 62&nbsp;px, puntos 26&nbsp;px. En el dispositivo se suma el área segura a cabecera y barra. Quiebres no lleva puntos, así que tiene 26&nbsp;px más de útil que la entrada (holgura +0…+3 en el peor caso, medida: fila&nbsp;1 termina a 488&nbsp;px de un útil de 491).</p>
       <p><b>El peor caso es el iPhone SE con las barras de Safari visibles</b> (útil ≈ 404&nbsp;px para la entrada, 430 para Quiebres). Las tres páginas de la entrada caben con 0 de desbordamiento; la primera lectura de Quiebres cabe con +3&nbsp;px. Cualquier otro dispositivo o modo tiene más útil, así que también cabe. Rendidos aquí abajo como prueba.</p>
       <p><b>* El límite, declarado:</b> la emulación de WebKit headless no reproduce las barras dinámicas de Safari; rinde a viewport completo (como app instalada). El cálculo con el viewport chico (svh) cubre el peor caso y se rindió el SE a 553&nbsp;px (≈ SE con barras) como prueba. La confirmación final se hace en un iPhone real. Los valores de «navegador con barras» para los demás dispositivos están modelados (viewport − chrome del navegador), no medidos en equipo.</p>
