@@ -1,77 +1,169 @@
-/* ═══════════ Ontikos móvil · capa de página (Paso 3 · marco y grilla) ═══════════
-   CM destilado (network-design-system.css) gobierna y se carga AL FINAL, así sus
-   tokens y sus versiones de los componentes duplicados ganan (gramática §5·G:
-   «resuelto a la versión de CM»). Aquí sólo van las PIEZAS NUEVAS declaradas
-   (gauge móvil, EN VIVO·CIERRE con sus tres estados) y la regla color=significado
-   aplicada sobre las formas heredadas. Nada rediseña una forma. */
+/* ═══════════ Ontikos móvil · capa de página (Paso 3 · el marco, rehecho) ═══════════
+   El MARCO ya lo da la casa: network-design-system.css trae el app-shell
+   iOS-correcto —.app a altura dvh (no 100vh), .appbar y .bnav fijas por el flujo
+   del flex column, .sa como ÚNICO scroller, y .sc/.sc.on para alternar secciones—.
+   Aquí NO se redefine el marco: se HEREDA verbatim. Este archivo sólo añade las
+   PIEZAS NUEVAS declaradas (panel de hamburguesa, paginador con puntos, gauge
+   móvil, EN VIVO·CIERRE) y aplica color=significado sobre las formas de la
+   gramática §5·G. La hoja que sube es la .ovl + .modal de la casa, verbatim. */
 
-/* El marco, como dibujo estático: el teléfono se deja a lo alto del contenido
-   (appbar fija arriba, bnav abajo, superficie entre ambas) para verla entera. */
-.app{height:auto;min-height:100%}
-.sa{overflow:visible}
-.appbar,.bnav{position:static}
+:root{ --gut:16px; }
 
-/* EN VIVO · CIERRE — pieza nueva, tres estados sobre .clock/.cdot:
-   vivo (verde que late) · por cerrar (ámbar) · cerrado (neutro, NUNCA rojo). */
+/* ══ 1 · CABECERA · la marca es el ÍCONO de Ontikos (del kit, verbatim) ══════
+   No el wordmark. Orden: hamburguesa · ícono · EN VIVO·CIERRE · campana · avatar. */
+.hamb{width:30px;height:30px;border:none;background:none;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;flex:none;margin-left:-4px;position:relative}
+.hamb svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.hamb::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:var(--tap,44px);height:var(--tap,44px)}
+.ont-ico{width:26px;height:26px;flex:none;display:block}
+.ont-ico svg{width:100%;height:100%;display:block}
+/* el ícono es la marca: va en su rojo #D80404 verbatim, igual que la casa deja
+   su wordmark en rojo también en oscuro. No se recolorea (no es texto). */
+.appbar .clock{font-size:.6rem}
 .clock.porcerrar{color:var(--amber)}
 .clock.porcerrar .cdot{background:var(--amber);animation:none}
 .clock.cerrado{color:var(--ink3)}
 .clock.cerrado .cdot{background:var(--ink4);animation:none;box-shadow:none}
 
-/* color = significado: el dinero va en TINTA salvo que lleve un estado. */
+/* ══ 2 · PANEL DE LA HAMBURGUESA (pieza nueva · navegación global) ═══════════
+   NO existe en la casa (sólo hay bottom-sheet y bottom-nav). Se declara nueva:
+   entra desde el costado, con fondo de bloqueo, foco atrapado, cierre por botón
+   y por toque en el fondo. Lleva los 7 módulos del riel del escritorio (RIEL). */
+.scrim{position:fixed;inset:0;z-index:140;background:rgba(9,9,15,.5);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .22s var(--ease,ease)}
+.scrim.open{opacity:1;visibility:visible}
+.drawer{
+  position:fixed;top:0;bottom:0;left:0;z-index:141;
+  width:min(84vw,320px);max-width:var(--app-max);
+  background:var(--surf);color:var(--ink);
+  transform:translateX(-100%);transition:transform .24s var(--ease-sheet,ease);
+  display:flex;flex-direction:column;overflow-y:auto;
+  box-shadow:2px 0 30px -8px rgba(9,9,15,.4);
+}
+.drawer.open{transform:translateX(0)}
+.drawer-h{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 14px) var(--gut) 13px;border-bottom:1px solid var(--brd)}
+.drawer-h .ont-ico{width:24px;height:24px}
+.drawer-h .brand-txt{font-weight:900;font-size:1.02rem;letter-spacing:-.03em}
+.drawer-x{margin-left:auto;width:38px;height:38px;border:none;background:none;cursor:pointer;color:var(--ink3);display:flex;align-items:center;justify-content:center;border-radius:8px}
+.drawer-x:hover{background:var(--surf2);color:var(--ink)}
+.drawer-x svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.drawer-sec{font-size:.54rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.09em;padding:15px var(--gut) 6px}
+.mod{display:flex;align-items:center;gap:13px;width:100%;border:none;background:none;text-align:left;padding:12px var(--gut);min-height:48px;cursor:pointer;font-size:.92rem;font-weight:600;color:var(--ink);font-family:inherit}
+.mod:hover{background:var(--surf2)}
+.mod.on{color:var(--ink);font-weight:800}
+.mod.on::before{content:"";position:absolute;left:0;width:3px;height:26px;background:var(--red);border-radius:0 2px 2px 0}
+.mod{position:relative}
+.mod svg{width:20px;height:20px;flex:none;fill:none;stroke:var(--ink3);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mod.on svg{stroke:var(--ink)}
+.mod .mod-b{margin-left:auto;font-size:.62rem;font-weight:800;color:#fff;background:var(--red);border-radius:20px;padding:2px 7px;min-width:18px;text-align:center;letter-spacing:0}
+
+/* ══ 3 · LA ENTRADA PAGINADA · El Futuro (pieza nueva) ═══════════════════════
+   NO existe paginador scroll-snap en la casa. Se declara nuevo. Cuando El Futuro
+   está activo, la .sa deja de desplazarse en vertical y aloja el paginador: se
+   recorre de lado, página completa, snap que se detiene en cada una, nunca a
+   medio camino. Los puntos van en una banda sobre la bnav. */
+.sa.pager-host{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.pager-host .sc.on{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
+.pager{flex:1 1 auto;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.pager::-webkit-scrollbar{display:none}
+.page{flex:0 0 100%;width:100%;height:100%;scroll-snap-align:center;scroll-snap-stop:always;overflow:hidden;padding:8px var(--gut) 6px;display:flex;flex-direction:column;gap:6px}
+.dots{flex:none;height:26px;display:flex;align-items:center;justify-content:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;border:none;padding:0;background:var(--ink4);opacity:.5;transition:all .2s var(--ease,ease);cursor:pointer;position:relative}
+.dot.on{opacity:1;background:var(--ink);width:20px;border-radius:4px}
+.dot::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px}
+.dot:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.page-ey{font-size:.55rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin:0 2px 1px}
+
+/* ══ 4 · GAUGE de arco · pieza de Ontikos heredada del escritorio ════════════ */
+.gz{display:flex;align-items:center;gap:11px}
+.gz-arc{width:78px;height:46px;position:relative;flex:none}
+.gz-arc svg{width:78px;height:46px;display:block;overflow:visible}
+.gz-track{fill:none;stroke:var(--surf3);stroke-width:9;stroke-linecap:round}
+.gz-val{fill:none;stroke-width:9;stroke-linecap:round}
+.gz.r .gz-val{stroke:var(--red)} .gz.a .gz-val{stroke:var(--amber-fill,var(--amber))} .gz.g .gz-val{stroke:var(--green)}
+.gz-tick{stroke:var(--ink);stroke-width:2.5;opacity:.5}
+.gz-num{position:absolute;left:0;right:0;bottom:-1px;text-align:center;font-size:1rem;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.gz-body{min-width:0;flex:1}
+.gz-cap{font-size:.54rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;line-height:1.25}
+.gz-pace{font-size:.66rem;font-weight:800;margin-top:3px;line-height:1.2}
+.gz-pace.r{color:var(--red-tx,var(--red))} .gz-pace.a{color:var(--amber)} .gz-pace.g{color:var(--green)} .gz-pace.n{color:var(--ink2)}
+
+/* el tile de línea estratégica (página 1 · rejilla 2×2) */
+.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:none}
+.ltile{background:var(--surf);border:1px solid var(--brd);border-radius:12px;padding:7px 9px;display:flex;flex-direction:column;gap:3px;min-width:0}
+/* título en su línea; el chip de estado DEBAJO (así caben "sobre umbral",
+   "bajo industria" sin salirse del tile estrecho) */
+.ltile-h{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.ltile-t{font-size:.82rem;font-weight:800;letter-spacing:-.01em;line-height:1}
+.ltile .memb-chip{font-size:.5rem;padding:2px 7px;white-space:nowrap}
+.ltile .gz{gap:7px}
+.ltile .gz-arc{width:56px;height:32px}
+.ltile .gz-arc svg{width:56px;height:32px}
+.ltile .gz-num{font-size:.76rem}
+.ltile .gz-cap{font-size:.46rem}
+.ltile .gz-pace{font-size:.6rem;margin-top:1px}
+/* el acto de la línea: texto en tinta, abajo del tile (CM primario neutro).
+   El objetivo táctil de 44px lo cubre el tile entero, que también abre la hoja. */
+.ltile-act{margin-top:auto;border:none;background:none;padding:3px 0 0;text-align:left;font-size:.67rem;font-weight:800;color:var(--ink);cursor:pointer;letter-spacing:-.01em;min-height:24px;display:flex;align-items:center;font-family:inherit}
+.ltile-act .arr{margin-left:4px}
+
+/* ══ 5 · color = significado y ajustes sobre las formas heredadas ════════════ */
+/* la barra de decisión usa .camp; hereda el estado más grave (hoy rojo).
+   Compacta dentro de la página para que todo quepa en el peor caso (SE con barras). */
+.camp.grave{border-color:var(--red)}
+.camp.grave .camp-act,.camp.grave .btn.primary{background:var(--red);border-color:var(--red)}
+.page .camp{padding:10px 12px}
+.page .camp-t{font-size:.72rem;line-height:1.22}
+.page .camp-s{font-size:.6rem;margin-top:2px;line-height:1.25}
+.page .camp-act{margin-top:7px;padding:10px 13px;font-size:.76rem;min-height:44px}
+
+/* Quiebres · la fila .vd-cli con su acto visible; chip en la línea de responsable.
+   Se ajusta el relleno y los gaps de la fila para dar ancho al cuerpo en móvil
+   estrecho, y que quepan chip + plazo + (algo del) nombre + acto sin encimarse. */
+.vd-cli{padding:12px 13px;gap:9px}
+.vd-cli.neu{box-shadow:inset 3px 0 0 var(--ink4)}
+/* el chip de situación comparte la línea con responsable y plazo (baja la altura);
+   el chip y el plazo quedan siempre visibles, el nombre se recorta si no cabe.
+   El cuerpo debe poder encoger (min-width:0) para no invadir la columna derecha. */
+.vd-cli-body{min-width:0;overflow:hidden}
+/* El responsable lo lleva el avatar (iniciales) y la hoja de detalle; en 375px
+   no cabe su nombre junto al chip+plazo+acto+peso, así que la línea muestra chip
+   y plazo, limpios. El nombre queda en el DOM para lectores de pantalla. */
+.qr-meta{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;margin-top:5px;min-width:0}
+.qr-meta .chip{margin:0;flex:none;order:-1;font-size:.52rem;padding:3px 7px;gap:2px}
+.qr-meta .chip .qi{width:9px;height:9px}
+.qr-resp{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.vd-cli-plz{font-size:.64rem;font-weight:800;flex:none}
+.vd-cli-plz.r{color:var(--red-tx,var(--red))} .vd-cli-plz.a{color:var(--amber)} .vd-cli-plz.n{color:var(--ink3)}
+.vd-cli{align-items:stretch}
+.qr-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:5px;flex:none;min-width:0}
+.qr-peso{font-size:.88rem;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink)!important}
+.qr-peso-l{font-size:.48rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.03em;margin-top:-2px}
+.qr-act{border:1.5px solid var(--ink);background:none;border-radius:7px;padding:4px 7px;font-size:.58rem;font-weight:800;color:var(--ink);cursor:pointer;white-space:nowrap;font-family:inherit;line-height:1.1}
+.qr-act.r{border-color:var(--red);color:var(--red-tx,var(--red))}
+.qr-act.a{border-color:var(--amber);color:var(--amber)}
+
+/* indicadores en rejilla 2×2 compacto; dinero en tinta salvo estado */
+.kpis.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .vd-cli-vol,.ord-util{color:var(--ink)!important}
 
-/* rótulo de superficie */
-.surf-h{display:flex;align-items:flex-end;justify-content:space-between;margin:2px 0 14px}
-.surf-t{font-size:1.28rem;font-weight:900;letter-spacing:-.03em;line-height:1}
-.surf-sub{font-size:.58rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em}
-.sec-ey{font-size:.58rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.09em;margin:18px 2px 9px}
+/* filtros en píldora, se deslizan de lado en su fila */
+.ord-filtros{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:2px 0;margin:0 0 7px}
+.ord-filtros::-webkit-scrollbar{display:none}
+.ord-filtro{white-space:nowrap;flex:none}
 
-/* ── GAUGE de arco · pieza de Ontikos heredada del escritorio, escalada a móvil ── */
-.gz{display:flex;align-items:center;gap:14px}
-.gz-arc{width:96px;height:56px;position:relative;flex:none}
-.gz-arc svg{width:96px;height:56px;display:block;overflow:visible}
-.gz-track{fill:none;stroke:var(--surf3);stroke-width:9;stroke-linecap:round}
-.gz-val{fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset .6s var(--ease)}
-.gz.r .gz-val{stroke:var(--red)} .gz.a .gz-val{stroke:var(--amber)} .gz.g .gz-val{stroke:var(--green)}
-.gz-num{position:absolute;left:0;right:0;bottom:-1px;text-align:center;font-size:1.18rem;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.gz-body{min-width:0;flex:1}
-.gz-cap{font-size:.6rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em}
-.gz-pace{font-size:.74rem;font-weight:800;margin-top:4px;line-height:1.25}
-.gz-pace.r{color:var(--red)} .gz-pace.a{color:var(--amber)} .gz-pace.g{color:var(--green)} .gz-pace.n{color:var(--ink2)}
-
-/* la línea estratégica: .pcard (recinto) con su header (título + salud en memb-chip) */
-.linea{margin-bottom:10px}
-.linea .pcard-h{margin-bottom:13px}
-
-/* la fila de quiebre .vd-cli · el filo lleva la situación; falta el neutro */
-.vd-cli.neu{box-shadow:inset 3px 0 0 var(--ink4)}
-.vd-cli-body .chip{margin-top:6px}
-.vd-cli-plz{font-size:.66rem;font-weight:800;margin-top:2px}
-.vd-cli-plz.r{color:var(--red-tx,var(--red))} .vd-cli-plz.a{color:var(--amber)} .vd-cli-plz.n{color:var(--ink3)}
-
-/* la barra de decisión / aviso con peso usa .camp; su acto a la derecha */
-.camp-act{margin-top:10px}
-
-/* ── La grilla de 4 columnas como DIBUJO · Carbon 2x Grid, breakpoint Small
-   (320px/20rem): 4 columnas, margen 0, relleno 16px. Fuente verificada en el MCP:
-   carbondesignsystem.com/building-blocks/foundations/2x-grid/overview/#breakpoints
-   Canalón ausente (gutterless) por ser contenido estrechamente relacionado.
-   Se superpone sólo cuando la superficie trae ?grid. ── */
-.sa.grid-on{position:relative}
-.grid-ovl{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:none;display:flex;z-index:80}
-.grid-ovl i{flex:1;background:rgba(208,2,27,.05);border-right:1px dashed rgba(208,2,27,.4)}
-.grid-ovl i:first-child{border-left:1px dashed rgba(208,2,27,.4)}
-/* las dos guías de relleno (16px): el filo donde el tipo se detiene */
-.grid-ovl::before,.grid-ovl::after{content:"";position:absolute;top:0;bottom:0;width:16px;background:repeating-linear-gradient(135deg,rgba(208,2,27,.1) 0 3px,transparent 3px 6px)}
-.grid-ovl::before{left:0}.grid-ovl::after{right:0}
-
-/* la cabecera móvil: la marca de Ontikos en vez de RETICASH */
-.brand.ont{letter-spacing:-.04em}
-
-/* navegación .bnav de CM · gramática: el activo va en TINTA, no en rojo.
-   CM pinta .ni.on en rojo; aquí se re-mapea a tinta (color=significado:
-   el rojo queda reservado al quiebre, no a «dónde estoy»). */
+/* navegación .bnav · el activo en TINTA (el rojo es del quiebre) */
 .bnav .ni.on{color:var(--ink)}
 .bnav .ni.on svg{stroke:var(--ink)}
 .bnav .ni.on .ni-lbl{color:var(--ink)}
+
+/* rótulo de sección en las listas */
+.surf-h{display:flex;align-items:flex-end;justify-content:space-between;margin:0 0 8px}
+.surf-t{font-size:1.2rem;font-weight:900;letter-spacing:-.03em;line-height:1}
+.surf-sub{font-size:.58rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em}
+
+/* la hoja de detalle hereda proceso.css para el riel de cadena (si se usa) */
+.sh-rail{margin-top:6px}
+
+/* La grilla como dibujo (overlay con ?grid) · Carbon 2x Grid Small */
+.grid-ovl{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:none;display:flex;z-index:80}
+.grid-ovl i{flex:1;background:rgba(208,2,27,.05);border-right:1px dashed rgba(208,2,27,.4)}
+.grid-ovl i:first-child{border-left:1px dashed rgba(208,2,27,.4)}

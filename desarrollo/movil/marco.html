@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ontikos móvil · Paso 3 · El marco y la grilla</title>
+<title>Ontikos móvil · Paso 3 · El marco de aplicación</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -15,107 +15,64 @@
 *{box-sizing:border-box}
 html,body{margin:0}
 body{font-family:'DM Sans',system-ui,sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5}
-.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
-
-/* ── cabecera del documento ── */
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
 .top{border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:50}
-.top .wrap{display:flex;align-items:center;gap:16px;padding:18px 24px}
-.brand{font-weight:900;font-size:1.15rem;letter-spacing:-.04em}
+.top .wrap{display:flex;align-items:center;gap:16px;padding:16px 24px}
+.brand{font-weight:900;font-size:1.12rem;letter-spacing:-.04em}
 .brand .dot{color:var(--red)}
 .top .seg{font-size:.7rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.09em}
 .top .sp{flex:1}
-.top .pin{font-family:var(--mono);font-size:.68rem;color:var(--ink3)}
-
-/* ── portada ── */
-.hero{padding:52px 0 36px}
-.hero h1{font-size:2.5rem;font-weight:900;letter-spacing:-.035em;line-height:1.02;margin:0 0 14px;max-width:16ch}
-.hero p{font-size:1.02rem;color:var(--ink2);max-width:62ch;margin:0 0 8px}
+.top .pin{font-family:var(--mono);font-size:.66rem;color:var(--ink3)}
+.hero{padding:48px 0 30px}
+.hero h1{font-size:2.4rem;font-weight:900;letter-spacing:-.035em;line-height:1.03;margin:0 0 14px;max-width:18ch}
+.hero p{font-size:1rem;color:var(--ink2);max-width:66ch;margin:0 0 10px}
 .hero .lede{font-weight:600;color:var(--ink)}
-
-/* ── secciones ── */
-.sec{padding:30px 0 10px;border-top:1px solid var(--line);margin-top:34px}
-.sec-n{font-family:var(--mono);font-size:.72rem;color:var(--red);font-weight:500;letter-spacing:.04em}
-.sec h2{font-size:1.5rem;font-weight:900;letter-spacing:-.025em;margin:5px 0 8px}
-.sec .intro{font-size:.96rem;color:var(--ink2);max-width:64ch;margin:0 0 26px}
-
-/* ── maqueta del marco (dibujo) ── */
-.marco{display:grid;grid-template-columns:322px 1fr;gap:40px;align-items:start}
-@media(max-width:820px){.marco{grid-template-columns:1fr}}
-.phone{width:300px;border-radius:38px;background:#15110e;padding:9px;box-shadow:0 24px 60px -18px rgba(26,23,20,.5);position:relative}
-.marco .phone{margin-left:22px}
-.phone .glass{border-radius:30px;overflow:hidden;background:var(--card);position:relative}
-.phone.draw .zone{padding:14px 16px;position:relative}
-.phone.draw .zA{background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:7px;height:66px;padding-top:22px}
-.phone.draw .safe-t{position:absolute;top:0;left:0;right:0;height:18px;background:repeating-linear-gradient(135deg,rgba(26,23,20,.05) 0 4px,transparent 4px 8px);display:flex;align-items:center;justify-content:center}
-.phone.draw .safe-t span,.phone.draw .safe-b span{font-size:.5rem;font-family:var(--mono);color:var(--ink4);letter-spacing:.03em}
-.phone.draw .mk{font-weight:900;font-size:.82rem;letter-spacing:-.04em}
-.phone.draw .live{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:.52rem;font-weight:800;color:var(--green);letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
-.phone.draw .live b{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block}
-.phone.draw .ic{width:16px;height:16px;border-radius:5px;background:var(--line);flex:none}
-.phone.draw .av{width:20px;height:20px;border-radius:50%;background:var(--ink);flex:none}
-.phone.draw .zB{height:300px;background:linear-gradient(180deg,#fcfbf9,#f4f1ec);display:flex;flex-direction:column;gap:10px;justify-content:flex-start}
-.phone.draw .zB .ph{height:46px;border-radius:12px;background:#fff;border:1px solid var(--line2)}
-.phone.draw .zB .ph.tall{height:70px}
-.phone.draw .zB .scrollhint{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:3px;height:70px;border-radius:2px;background:var(--line)}
-.phone.draw .zC{height:64px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-around;padding-bottom:12px}
-.phone.draw .zC i{width:22px;height:22px;border-radius:6px;background:var(--line);display:block}
-.phone.draw .zC i.on{background:var(--ink)}
-.phone.draw .safe-b{position:absolute;bottom:0;left:0;right:0;height:12px;display:flex;align-items:center;justify-content:center}
-.phone.draw .hind{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:90px;height:4px;border-radius:3px;background:var(--ink4);z-index:3}
-/* la hoja que sube */
-.phone.draw .sheet{position:absolute;left:10px;right:10px;bottom:0;height:150px;background:#fff;border-radius:18px 18px 0 0;box-shadow:0 -14px 34px -10px rgba(26,23,20,.3);border:1px solid var(--line);border-bottom:none;padding:8px 14px}
-.phone.draw .sheet .grab{width:34px;height:4px;border-radius:3px;background:var(--ink4);margin:2px auto 12px}
-.phone.draw .sheet .ph{height:38px;border-radius:10px;background:var(--line2);margin-bottom:8px}
-.phone.draw .arrow-up{position:absolute;right:-26px;bottom:60px;color:var(--ink3);font-size:1.1rem}
-
-/* pins */
-.pin-b{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--red);color:#fff;font-size:.7rem;font-weight:800;flex:none;font-family:var(--mono)}
-.phone.draw .pn{position:absolute;z-index:4}
-
-/* leyenda de decisiones */
-.legend{display:flex;flex-direction:column;gap:2px}
-.dec{display:grid;grid-template-columns:26px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line2)}
+.verdict{display:inline-flex;align-items:center;gap:8px;background:#e7f4e8;color:#1f6e28;border:1px solid #bfe3c3;border-radius:20px;padding:5px 13px;font-size:.78rem;font-weight:800;margin-top:6px}
+.sec{padding:28px 0 8px;border-top:1px solid var(--line);margin-top:32px}
+.sec-n{font-family:var(--mono);font-size:.72rem;color:var(--red);font-weight:500}
+.sec h2{font-size:1.46rem;font-weight:900;letter-spacing:-.025em;margin:5px 0 8px}
+.sec .intro{font-size:.95rem;color:var(--ink2);max-width:66ch;margin:0 0 22px}
+.two{display:grid;grid-template-columns:300px 1fr;gap:38px;align-items:start}
+@media(max-width:820px){.two{grid-template-columns:1fr}}
+.phone{width:300px;border-radius:38px;background:#15110e;padding:9px;box-shadow:0 22px 56px -18px rgba(26,23,20,.5)}
+.phone img{width:100%;display:block;border-radius:30px}
+.phone.sm{width:234px;border-radius:32px;padding:7px}
+.phone.sm img{border-radius:26px}
+.dec{display:grid;grid-template-columns:26px 1fr;gap:12px;padding:13px 0;border-bottom:1px solid var(--line2)}
 .dec:last-child{border-bottom:none}
-.dec h3{font-size:.98rem;font-weight:800;margin:0 0 3px;letter-spacing:-.01em}
+.dec h3{font-size:.98rem;font-weight:800;margin:0 0 3px}
 .dec p{font-size:.86rem;color:var(--ink2);margin:0}
+.b{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:6px;background:var(--ink);color:#fff;font-size:.68rem;font-weight:800;flex:none;font-family:var(--mono)}
+.b.red{background:var(--red)}
 .tags{margin-top:7px;display:flex;flex-wrap:wrap;gap:6px}
-.tg{font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.tg{font-size:.63rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:3px 8px;border-radius:20px;white-space:nowrap}
 .tg.casa{background:#edeae3;color:var(--ink2)}
 .tg.nueva{background:#fbe7d3;color:var(--amber)}
 .tg.carbon{background:#e7eefb;color:#2448a8}
-.tg.excl{background:#f7e0e2;color:var(--red-tx)}
-.cite{display:block;margin-top:7px;font-family:var(--mono);font-size:.66rem;color:var(--ink3);line-height:1.5;word-break:break-word}
+.cite{display:block;margin-top:6px;font-family:var(--mono);font-size:.64rem;color:var(--ink3);line-height:1.5}
 .cite a{color:#2448a8;text-decoration:none}
-.cite b{color:var(--ink2);font-weight:500}
-
-/* ── grilla ── */
-.grid-blk{display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:start}
-@media(max-width:820px){.grid-blk{grid-template-columns:1fr}}
-.phone.shot{padding:9px}
-.phone.shot img{width:100%;display:block;border-radius:30px}
-.specs{display:flex;flex-direction:column;gap:0}
-.spec{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line2);font-size:.9rem}
-.spec .k{color:var(--ink2)}
-.spec .v{font-family:var(--mono);font-weight:500;color:var(--ink)}
-.note{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:20px}
-.note p{margin:0 0 8px;font-size:.88rem;color:var(--ink2)}
-.note p:last-child{margin-bottom:0}
-.note b{color:var(--ink)}
-
-/* ── superficies compuestas ── */
-.surf-blk{margin-bottom:14px}
-.surf-blk h3{font-size:1.2rem;font-weight:900;letter-spacing:-.02em;margin:26px 0 4px}
-.surf-blk .cap{font-size:.9rem;color:var(--ink2);max-width:70ch;margin:0 0 20px}
-.pair{display:flex;gap:30px;flex-wrap:wrap}
-.unit{display:flex;flex-direction:column;align-items:center;gap:10px}
-.unit .lbl{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3)}
-.formlist{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 24px}
+.pair{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
+.unit{display:flex;flex-direction:column;align-items:center;gap:9px}
+.unit .lbl{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3)}
+.cap{font-size:.9rem;color:var(--ink2);max-width:70ch;margin:0 0 18px}
+.formlist{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 20px}
 .fm{font-size:.7rem;border:1px solid var(--line);background:#fff;border-radius:7px;padding:5px 9px;color:var(--ink2)}
 .fm b{color:var(--ink);font-weight:700}
 .fm .src{color:var(--ink4);font-weight:700;font-size:.62rem}
-
-footer{border-top:1px solid var(--line);margin-top:48px;padding:28px 0 60px}
-footer p{font-size:.84rem;color:var(--ink3);max-width:70ch}
+table.audit{border-collapse:collapse;width:100%;font-size:.82rem;margin-top:6px}
+table.audit th,table.audit td{border:1px solid var(--line);padding:8px 10px;text-align:right;font-variant-numeric:tabular-nums}
+table.audit th{background:#efeae2;font-weight:800;font-size:.68rem;text-transform:uppercase;letter-spacing:.03em;color:var(--ink2);text-align:right}
+table.audit td:first-child,table.audit th:first-child{text-align:left}
+table.audit td.dev{font-weight:700;color:var(--ink)}
+table.audit tr.worst td{background:#fdf0f1}
+table.audit .ok{color:#1f6e28;font-weight:800}
+table.audit .tight{color:var(--amber);font-weight:800}
+.note{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:18px}
+.note p{margin:0 0 8px;font-size:.86rem;color:var(--ink2)}
+.note p:last-child{margin-bottom:0}
+.note b{color:var(--ink)}
+footer{border-top:1px solid var(--line);margin-top:44px;padding:26px 0 60px}
+footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
 .k-red{color:var(--red-tx);font-weight:700}
 </style>
 </head>
@@ -125,201 +82,144 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:70ch}
   <span class="brand">Ontikos<span class="dot">.</span></span>
   <span class="seg">Móvil · Dirección General</span>
   <span class="sp"></span>
-  <span class="pin">paso 3 · marco y grilla</span>
+  <span class="pin">paso 3 · el marco de aplicación</span>
 </div></div>
 
 <div class="wrap">
 
   <div class="hero">
-    <h1>El marco y la grilla, como dibujo</h1>
-    <p class="lede">Paso 3. El acto, el contenido y la semántica del color no se tocan: aquí sólo se dibuja cómo se compone la casa en el teléfono.</p>
-    <p>El móvil usa el arsenal de la casa probado en Cash Market y Middle Market. La grilla sigue la de Carbon para pantalla chica, citada con su fuente verificada en el MCP. Toda decisión de composición que se apoya en Carbon lleva su cita; lo que es de la casa o pieza nueva, se marca. El criterio de cabecera de Carbon no se adopta: la cabecera es la de la casa.</p>
+    <h1>El marco de aplicación</h1>
+    <p class="lede">Paso 3, rehecho. Ya no son piezas sobre una página que se desplaza entera: es una app. El marco no se mueve, la entrada se pagina, y el contenido es el del escritorio, de la misma fuente.</p>
+    <p>La cabecera y la barra inferior quedan fijas; sólo la superficie corre. El Futuro se recorre de lado, página completa, sin desplazamiento vertical. Las otras secciones son listas que corren dentro de su zona. Dos niveles de navegación: la hamburguesa para los módulos, la barra inferior para las superficies del CEO. La gramática §5·G no se tocó.</p>
+    <span class="verdict">✓ La auditoría de alturas pasa en el peor caso (iPhone SE · Safari con barras)</span>
   </div>
 
-  <!-- ══════════ §1 · EL MARCO ══════════ -->
+  <!-- §1 ARQUITECTURA -->
   <div class="sec">
     <div class="sec-n">§1</div>
-    <h2>El marco</h2>
-    <p class="intro">Tres zonas. La cabecera arriba y la navegación abajo quedan fijas; sólo la superficie se desplaza. Las hojas suben desde el borde inferior. Cada número abajo es una decisión del marco.</p>
-
-    <div class="marco">
-      <!-- dibujo del teléfono -->
-      <div class="phone draw">
-        <div class="glass">
-          <!-- zona A: cabecera -->
-          <div class="zone zA">
-            <div class="safe-t"><span>safe-area · isla / notch</span></div>
-            <span class="mk">Ontikos</span>
-            <span class="live"><b></b>En vivo · cierre</span>
-            <span class="ic"></span><span class="av"></span>
-          </div>
-          <!-- zona B: superficie -->
-          <div class="zone zB">
-            <div class="ph tall"></div>
-            <div class="ph"></div>
-            <div class="ph"></div>
-            <div class="scrollhint"></div>
-            <!-- hoja que sube -->
-            <div class="sheet">
-              <div class="grab"></div>
-              <span class="pin-b pn" style="top:6px;right:-9px">5</span>
-              <div class="ph"></div>
-              <div class="ph" style="width:60%"></div>
-            </div>
-          </div>
-          <!-- zona C: navegación -->
-          <div class="zone zC">
-            <i class="on"></i><i></i><i></i><i></i>
-          </div>
-          <div class="safe-b"></div>
-          <div class="hind"></div>
-        </div>
-        <!-- pines en el canalón del teléfono (fuera del recorte de la pantalla) -->
-        <span class="pin-b pn" style="top:32px;left:-14px">1</span>
-        <span class="pin-b pn" style="top:54px;left:-14px">2</span>
-        <span class="pin-b pn" style="top:94px;left:-14px">3</span>
-        <span class="pin-b pn" style="top:214px;left:-14px">6</span>
-        <span class="pin-b pn" style="top:322px;left:-14px">7</span>
-        <span class="pin-b pn" style="top:392px;left:-14px">4</span>
-      </div>
-
-      <!-- leyenda -->
-      <div class="legend">
-
-        <div class="dec"><span class="pin-b">1</span><div>
-          <h3>Cabecera fija</h3>
-          <p>La <code>.appbar</code> de Cash Market se fija arriba y respeta el safe-area de la isla o el notch. Lleva la marca, EN&nbsp;VIVO·CIERRE, la campana, el avatar y la puerta de salida.</p>
-          <div class="tags"><span class="tg casa">de la casa · CM</span><span class="tg excl">criterio de cabecera de Carbon: no se adopta</span></div>
+    <h2>La arquitectura del marco</h2>
+    <p class="intro">Dos niveles de navegación, cada uno en su lugar. El marco nunca se desplaza: se calcula con unidades dinámicas (dvh) y áreas seguras, no con 100vh. El app-shell es el de la casa (Cash Market), heredado verbatim; la hamburguesa y su panel son pieza nueva.</p>
+    <div class="two">
+      <div class="phone"><img src="img/mf-drawer.png" alt="El panel de la hamburguesa con los 7 módulos"></div>
+      <div>
+        <div class="dec"><span class="b">1</span><div>
+          <h3>La hamburguesa → los módulos (navegación global)</h3>
+          <p>Lleva lo que en el escritorio es el riel lateral: los 7 módulos reales —Tablero, Clientes, Pólizas, Siniestros, Analítico, Reportes, Intake— tomados de <code>navegacion.js</code>. Entra desde el costado con fondo de bloqueo, foco al cerrar, y cierre por botón y por toque en el fondo.</p>
+          <div class="tags"><span class="tg nueva">pieza nueva · no existe en la casa</span></div>
+          <span class="cite">módulos: RIEL · ERP-CRM/producto/app/src/marco/navegacion.js:115-123</span>
         </div></div>
-
-        <div class="dec"><span class="pin-b">2</span><div>
-          <h3>EN VIVO · CIERRE vive en la cabecera</h3>
-          <p>A la derecha de la marca, sobre <code>.clock/.cdot</code>, con sus tres estados: <b>vivo</b> (verde que late) · <b>por cerrar</b> (ámbar) · <b>cerrado</b> (neutro, nunca rojo). Es el pulso del periodo, siempre a la vista.</p>
-          <div class="tags"><span class="tg nueva">pieza nueva · 3 estados</span></div>
+        <div class="dec"><span class="b">2</span><div>
+          <h3>La barra inferior → las superficies (navegación interna)</h3>
+          <p>La <code>.bnav</code> de Cash Market con las cuatro superficies del CEO —El Futuro · Quiebres · Compromisos · Lo clave— y el activo en <b>tinta</b>, no en rojo.</p>
+          <div class="tags"><span class="tg casa">de la casa · CM, verbatim</span></div>
         </div></div>
-
-        <div class="dec"><span class="pin-b">3</span><div>
-          <h3>La superficie es lo único que se desplaza</h3>
-          <p>Entre cabecera y navegación. El contenido entra con relleno 16 (ver §2). Cada superficie es un compromiso: lee del modelo y termina en un acto.</p>
-          <div class="tags"><span class="tg casa">de la casa · CM</span></div>
+        <div class="dec"><span class="b">3</span><div>
+          <h3>La cabecera fija y mínima</h3>
+          <p>Hamburguesa · <b>el ícono de Ontikos</b> (del kit, copiado no redibujado) · EN&nbsp;VIVO·CIERRE · campana · avatar. Respeta el área segura superior (isla / notch). Ya no es el wordmark.</p>
+          <div class="tags"><span class="tg casa">appbar de CM</span><span class="tg nueva">EN VIVO·CIERRE: pieza nueva</span></div>
+          <span class="cite">ícono: desarrollo/favicon.svg (Kit de Marca v1.1 §Símbolo)</span>
         </div></div>
-
-        <div class="dec"><span class="pin-b">4</span><div>
-          <h3>Navegación inferior fija</h3>
-          <p>La <code>.bnav</code> de Cash Market, con las cuatro superficies —El Futuro · Quiebres · Compromisos · Lo clave— y el activo en <b>TINTA</b>, no en rojo: el rojo queda reservado al quiebre. Respeta el safe-area de abajo.</p>
-          <div class="tags"><span class="tg casa">de la casa · CM</span></div>
+        <div class="dec"><span class="b">4</span><div>
+          <h3>El marco no se desplaza</h3>
+          <p>La <code>.app</code> se fija a la altura del viewport con <code>dvh</code> (no 100vh, que miente en iOS); cabecera y barra quedan fijas por el flujo del flex, y la superficie <code>.sa</code> es el <b>único</b> scroller. Es el app-shell iOS-correcto de la casa, heredado tal cual.</p>
+          <div class="tags"><span class="tg casa">app-shell de CM, verbatim</span></div>
+          <span class="cite">network-design-system.css:146-168 (.app · dvh · único scroller .sa)</span>
         </div></div>
-
-        <div class="dec"><span class="pin-b">5</span><div>
-          <h3>Las hojas suben desde el borde inferior</h3>
-          <p>El detalle o el acto de una entidad se abre en la hoja <code>.modal</code> de CM con grabber, pegada al borde inferior —no un slide-over lateral—. Toma la altura de su contenido.</p>
-          <div class="tags"><span class="tg casa">de la casa · CM</span><span class="tg carbon">Carbon</span></div>
-          <span class="cite"><b>Carbon · Modal · Mobile:</b> «the height may either be 100% of the screen or maintain the height defined by the content while sticking to the bottom of the mobile screen … modal widths … still align to columns on the 2x grid». <a href="https://carbondesignsystem.com/building-blocks/core/components/modal/specifications/#mobile">/components/modal/specifications/#mobile</a> · verificado en MCP</span>
-        </div></div>
-
-        <div class="dec"><span class="pin-b">6</span><div>
-          <h3>Objetivos de toque grandes</h3>
-          <p>La fila de quiebre <code>.vd-cli</code>, el tile <code>.kpi</code>, las pills de filtro y el ícono de la nav son cómodos al pulgar. La fila entera es el objetivo, no un enlace diminuto.</p>
-          <div class="tags"><span class="tg casa">de la casa · CM</span></div>
-        </div></div>
-
-        <div class="dec"><span class="pin-b">7</span><div>
-          <h3>Gestos donde la casa ya los resolvió</h3>
-          <p>La hoja baja con el grabber o arrastrándola; los filtros y las pills se deslizan en horizontal cuando no caben. Nada de gestos inventados: sólo los que CM ya trae.</p>
-          <div class="tags"><span class="tg casa">de la casa · CM</span></div>
-        </div></div>
-
       </div>
     </div>
   </div>
 
-  <!-- ══════════ §2 · LA GRILLA ══════════ -->
+  <!-- §2 ENTRADA PAGINADA -->
   <div class="sec">
     <div class="sec-n">§2</div>
-    <h2>La grilla</h2>
-    <p class="intro">Cuatro columnas, relleno 16, margen 0, sin canalón. Es la grilla de Carbon para pantalla chica, y coincide con la regla de la casa: relleno siempre 16 en todo punto de quiebre, el tipo contra el relleno, nunca sobre él. El dibujo muestra las columnas sobre El Futuro, con las líneas clave visibles.</p>
-
-    <div class="grid-blk">
-      <div class="phone shot">
-        <img src="img/mv-futuro-grid.png" alt="El Futuro con la grilla de 4 columnas superpuesta">
-      </div>
-
-      <div>
-        <div class="specs">
-          <div class="spec"><span class="k">Punto de quiebre</span><span class="v">Small · 320 px / 20 rem</span></div>
-          <div class="spec"><span class="k">Columnas</span><span class="v">4</span></div>
-          <div class="spec"><span class="k">Ancho de columna</span><span class="v">25 %</span></div>
-          <div class="spec"><span class="k">Relleno</span><span class="v">16 px</span></div>
-          <div class="spec"><span class="k">Margen</span><span class="v">0</span></div>
-          <div class="spec"><span class="k">Canalón</span><span class="v">ausente · contenido ligado</span></div>
-        </div>
-
-        <div class="note">
-          <p><b>Fuente · Carbon 2x Grid · Breakpoints</b> (verificada en el MCP): tabla Small = 4 columnas, relleno 16&nbsp;px, margen 0.<br>
-          <span class="cite"><a href="https://carbondesignsystem.com/building-blocks/foundations/2x-grid/overview/#breakpoints">/foundations/2x-grid/overview/#breakpoints</a></span></p>
-          <p><b>Por qué cuatro.</b> «The four column layout is the backbone of most IBM experiences … product UIs rely heavily on the four column structure to ease users into denser content.»<br>
-          <span class="cite"><a href="https://carbondesignsystem.com/building-blocks/foundations/2x-grid/guidelines/#four-columns">/foundations/2x-grid/guidelines/#four-columns</a></span></p>
-          <p><b>Casa · vara §3.</b> «Relleno siempre 16&nbsp;px en todos los puntos de quiebre. El tipo va contra el relleno, nunca sobre el relleno.» La grilla de Carbon Small y la regla de la casa coinciden; no hay que elegir.</p>
-          <p><b>Líneas clave visibles.</b> El filo de cada tarjeta cae en el relleno; las cuatro columnas alinean el arco, el título y la pastilla de salud. Las bandas rayadas de los bordes son los 16&nbsp;px de relleno donde el tipo se detiene.</p>
-        </div>
-      </div>
+    <h2>La entrada se pagina, no se desplaza</h2>
+    <p class="intro">El Futuro es una rejilla de 2×2 que se recorre de lado con el dedo, con puntos sobre la barra inferior (tocables y con aria). Cada página se dimensiona para caber entera en el peor caso, sin desplazamiento vertical. El paginador con scroll-snap es pieza nueva (no existe en la casa).</p>
+    <div class="formlist">
+      <span class="fm"><b>Página 1</b> · las 4 líneas en 2×2 (gauge + estado + acto) + la barra de decisión</span>
+      <span class="fm"><b>Página 2</b> · embudo de colocación (con «Quedarán fuera») + timeline de renovación</span>
+      <span class="fm"><b>Página 3</b> · los dos tácticos: Importantes y Siniestros clave</span>
+      <span class="fm">la barra de decisión hereda el estado más grave → <b class="k-red">rojo</b> (Colocación en quiebre)</span>
+      <span class="fm">arco del <b>gauge</b> <span class="src">Ontikos · heredado del escritorio</span></span>
+      <span class="fm">paginador + puntos <span class="src">pieza nueva</span></span>
+    </div>
+    <div class="pair">
+      <div class="unit"><div class="phone sm"><img src="img/mf-f1.png" alt="El Futuro página 1 claro"></div><div class="lbl">P1 · claro</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-f2.png" alt="El Futuro página 2 claro"></div><div class="lbl">P2 · claro</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-f3.png" alt="El Futuro página 3 claro"></div><div class="lbl">P3 · claro</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-f1-dk.png" alt="El Futuro página 1 oscuro"></div><div class="lbl">P1 · oscuro</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-f2-dk.png" alt="El Futuro página 2 oscuro"></div><div class="lbl">P2 · oscuro</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-f3-dk.png" alt="El Futuro página 3 oscuro"></div><div class="lbl">P3 · oscuro</div></div>
     </div>
   </div>
 
-  <!-- ══════════ §3 · LAS SUPERFICIES ══════════ -->
+  <!-- §3 QUIEBRES -->
   <div class="sec">
     <div class="sec-n">§3</div>
-    <h2>Las dos superficies, compuestas</h2>
-    <p class="intro">El Futuro y Quiebres armadas con las formas del catálogo, según la gramática. Mismo contenido que el escritorio; sólo cambia la composición. Cada forma trae su procedencia. En claro y en oscuro.</p>
-
-    <!-- El Futuro -->
-    <div class="surf-blk">
-      <h3>El Futuro</h3>
-      <p class="cap">Las cuatro líneas estratégicas como recintos, cada una con su arco y su salud. La barra de decisión remata en el acto. El embudo y la renovación, en barra y en tendencia.</p>
-      <div class="formlist">
-        <span class="fm"><b>.appbar</b> <span class="src">CM</span> + EN VIVO·CIERRE <span class="src">pieza nueva</span></span>
-        <span class="fm"><b>.pcard + .pcard-h</b> <span class="src">CM</span> · la línea como recinto</span>
-        <span class="fm">arco del <b>gauge</b> <span class="src">Ontikos · heredado del escritorio</span></span>
-        <span class="fm"><b>.memb-chip</b> <span class="src">CM</span> · salud de la línea</span>
-        <span class="fm"><b>.camp + .btn primary</b> <span class="src">CM</span> · barra de decisión</span>
-        <span class="fm"><b>.bar-track + .pace-lbl</b> <span class="src">CM</span> · embudo</span>
-        <span class="fm"><b>.chart</b> <span class="src">MM</span> · tendencia 90 días</span>
-        <span class="fm"><b>.bnav</b> <span class="src">CM</span> · activo en tinta</span>
-      </div>
-      <div class="pair">
-        <div class="unit"><div class="phone shot"><img src="img/mv-futuro.png" alt="El Futuro · claro"></div><div class="lbl">Claro</div></div>
-        <div class="unit"><div class="phone shot"><img src="img/mv-futuro-dk.png" alt="El Futuro · oscuro"></div><div class="lbl">Oscuro</div></div>
-      </div>
+    <h2>Quiebres · la primera lectura</h2>
+    <p class="cap">El marco queda fijo y sólo la lista corre. La primera lectura —indicadores 2×2, filtros que se deslizan, y el primer quiebre completo— cabe en el iPhone SE sin tocar nada. Cada fila lleva su acto visible, con el color que sigue al estado; el chip de situación sube a la línea del plazo. Las siete filas, los datos del escritorio.</p>
+    <div class="formlist">
+      <span class="fm"><b>.kpis</b> 2×2 <span class="src">CM</span> · héroe en tinta, conteos en su estado</span>
+      <span class="fm"><b>.vd-cli</b> <span class="src">CM</span> · filo = situación · acto por estado</span>
+      <span class="fm"><b>.ord-filtro</b> <span class="src">CM</span> · se desliza</span>
+      <span class="fm">acto: Ver pedido / Pedir acción / Reclamar <span class="src">del escritorio</span></span>
     </div>
-
-    <!-- Quiebres -->
-    <div class="surf-blk">
-      <h3>Quiebres</h3>
-      <p class="cap">Los indicadores en rejilla arriba —el héroe en tinta, los conteos en su estado—. Los filtros deslizan. Cada quiebre es una fila <code>.vd-cli</code>: el filo lleva la situación, el peso va a la derecha en tinta, la pastilla con ícono dice en qué estado está.</p>
-      <div class="formlist">
-        <span class="fm"><b>.appbar</b> <span class="src">CM</span> + EN VIVO·CIERRE <span class="src">pieza nueva</span></span>
-        <span class="fm"><b>.kpis / .kpi</b> <span class="src">CM</span> · indicadores en rejilla</span>
-        <span class="fm"><b>.ord-filtro</b> <span class="src">CM</span> · activo en tinta</span>
-        <span class="fm"><b>.vd-cli</b> <span class="src">CM</span> · la fila de quiebre</span>
-        <span class="fm"><b>.chip</b> pill con ícono <span class="src">CM</span> · situación</span>
-        <span class="fm"><b>.bnav</b> <span class="src">CM</span> · activo en tinta</span>
-      </div>
-      <div class="pair">
-        <div class="unit"><div class="phone shot"><img src="img/mv-quiebres.png" alt="Quiebres · claro"></div><div class="lbl">Claro</div></div>
-        <div class="unit"><div class="phone shot"><img src="img/mv-quiebres-dk.png" alt="Quiebres · oscuro"></div><div class="lbl">Oscuro</div></div>
-      </div>
+    <div class="pair">
+      <div class="unit"><div class="phone"><img src="img/mf-q.png" alt="Quiebres claro"></div><div class="lbl">Claro</div></div>
+      <div class="unit"><div class="phone"><img src="img/mf-q-dk.png" alt="Quiebres oscuro"></div><div class="lbl">Oscuro</div></div>
+      <div class="unit"><div class="phone"><img src="img/mf-sheet.png" alt="La hoja de detalle que sube"></div><div class="lbl">La hoja sube (.ovl + .modal de CM)</div></div>
     </div>
   </div>
 
-  <!-- color = significado -->
+  <!-- §4 AUDITORÍA -->
   <div class="sec">
-    <div class="sec-n">§</div>
-    <h2>El color, un recordatorio</h2>
-    <p class="intro">Ninguna forma trae color propio. El dinero va en <b>tinta</b> salvo que lleve un estado: por eso el peso del quiebre y el héroe <span class="k-red">$10.0M</span> van en tinta, y el <span class="k-red">rojo</span> queda para el incumplido, el ámbar para lo por incumplirse, el neutro para lo sin movimiento. Cada estado se distingue por forma —la pastilla, el filo, el ícono— además del matiz. El activo de la navegación va en tinta, no en rojo. En oscuro, el rojo de texto usa su variante AA.</p>
+    <div class="sec-n">§4</div>
+    <h2>La auditoría de alturas</h2>
+    <p class="intro">Medida, no a ojo. El alto útil = viewport − (cabecera + área segura ↑) − (barra + área segura ↓) − (puntos, sólo en la entrada). Requerido: la entrada 404&nbsp;px por página; la primera lectura de Quiebres 430&nbsp;px (hasta el pie de la primera fila). Pasa si el peor caso cabe entero.</p>
+    <table class="audit">
+      <thead><tr>
+        <th>Dispositivo</th><th>Viewport</th><th>Área segura ↑/↓</th>
+        <th>Útil · app instalada</th><th>Útil · navegador con barras*</th><th>Entrada (req 404)</th><th>Veredicto</th>
+      </tr></thead>
+      <tbody>
+        <tr class="worst"><td class="dev">iPhone SE</td><td>375 × 667</td><td>20 / 0</td><td>498</td><td>404</td><td>+0 … +94</td><td class="tight">Cabe (peor caso)</td></tr>
+        <tr><td class="dev">iPhone 13 mini</td><td>375 × 812</td><td>44 / 34</td><td>585</td><td>563</td><td>+159</td><td class="ok">Cabe</td></tr>
+        <tr><td class="dev">iPhone 15 / 16</td><td>393 × 852</td><td>59 / 34</td><td>610</td><td>603</td><td>+199</td><td class="ok">Cabe</td></tr>
+        <tr><td class="dev">iPhone 16 Pro Max</td><td>440 × 956</td><td>62 / 34</td><td>711</td><td>707</td><td>+303</td><td class="ok">Cabe</td></tr>
+        <tr><td class="dev">Pixel 8 (Android)</td><td>412 × 915</td><td>24 / 24</td><td>718</td><td>710</td><td>+306</td><td class="ok">Cabe</td></tr>
+        <tr><td class="dev">Galaxy S8 (Android)</td><td>360 × 740</td><td>24 / 24</td><td>543</td><td>535</td><td>+131</td><td class="ok">Cabe</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <p><b>Presupuesto del marco</b> (medido en el render, sin área segura): cabecera 61&nbsp;px, barra inferior 62&nbsp;px, puntos 26&nbsp;px. En el dispositivo se suma el área segura a cabecera y barra. Quiebres no lleva puntos, así que tiene 26&nbsp;px más de útil que la entrada (holgura +0…+3 en el peor caso, medida: fila&nbsp;1 termina a 488&nbsp;px de un útil de 491).</p>
+      <p><b>El peor caso es el iPhone SE con las barras de Safari visibles</b> (útil ≈ 404&nbsp;px para la entrada, 430 para Quiebres). Las tres páginas de la entrada caben con 0 de desbordamiento; la primera lectura de Quiebres cabe con +3&nbsp;px. Cualquier otro dispositivo o modo tiene más útil, así que también cabe. Rendidos aquí abajo como prueba.</p>
+      <p><b>* El límite, declarado:</b> la emulación de WebKit headless no reproduce las barras dinámicas de Safari; rinde a viewport completo (como app instalada). El cálculo con el viewport chico (svh) cubre el peor caso y se rindió el SE a 553&nbsp;px (≈ SE con barras) como prueba. La confirmación final se hace en un iPhone real. Los valores de «navegador con barras» para los demás dispositivos están modelados (viewport − chrome del navegador), no medidos en equipo.</p>
+    </div>
+    <div class="pair" style="margin-top:20px">
+      <div class="unit"><div class="phone" style="width:250px"><img src="img/mf-553-f1.png" alt="El Futuro peor caso SE 553"></div><div class="lbl">Entrada · SE con barras (375×553)</div></div>
+      <div class="unit"><div class="phone" style="width:250px"><img src="img/mf-553-q.png" alt="Quiebres peor caso SE 553"></div><div class="lbl">Quiebres · SE con barras (375×553)</div></div>
+    </div>
+  </div>
+
+  <!-- §5 PROCEDENCIA -->
+  <div class="sec">
+    <div class="sec-n">§5</div>
+    <h2>Procedencia y reglas</h2>
+    <p class="intro">Lo que existe, traído verbatim; lo nuevo, declarado.</p>
+    <div class="formlist">
+      <span class="fm"><b>De la casa, verbatim:</b> el app-shell <code>.app/.sa/.appbar/.bnav</code>, la hoja <code>.ovl + .modal</code>, las formas <code>.kpi · .vd-cli · .chip · .memb-chip · .ord-filtro · .camp</code></span>
+    </div>
+    <div class="formlist">
+      <span class="fm"><b>Piezas nuevas (declaradas):</b> el panel de la hamburguesa, el paginador con puntos, EN VIVO·CIERRE (3 estados), el gauge móvil (heredado del escritorio)</span>
+    </div>
+    <div class="note">
+      <p><b>Color = significado.</b> El dinero en tinta; el rojo sólo para el quiebre y la barra de decisión (estado más grave); el activo de la nav en tinta; en oscuro el rojo de texto usa su variante AA. El ícono de marca va en su rojo de kit verbatim (es marca, no texto).</p>
+      <p><b>El responsable.</b> En 375&nbsp;px no caben nombre + chip + plazo + acto + peso en la fila; el responsable lo lleva el avatar (iniciales) y la hoja de detalle muestra el nombre completo. Chip y plazo quedan siempre visibles.</p>
+      <p><b>Carbon.</b> La grilla sigue siendo la de pantalla chica (4 columnas, relleno 16, breakpoint Small, verificada en el MCP). La hoja pegada al borde inferior sigue a Carbon · Modal · Mobile (verificada en el MCP) y además es la <code>.modal</code> de la casa.</p>
+    </div>
   </div>
 
   <footer>
-    <p>Hasta aquí el paso 3: el marco y la grilla, con El Futuro y Quiebres compuestos con las formas del catálogo. A la espera de tu juicio antes de componer las cuatro superficies con contenido real (paso 4).</p>
+    <p>Hasta aquí el paso 3 rehecho: el marco de aplicación, la entrada paginada y la primera lectura de Quiebres, con claro y oscuro y la auditoría de alturas. La arquitectura del marco va a la vara. A la espera de tu juicio antes del paso 4 (las cuatro superficies con contenido real).</p>
   </footer>
 
 </div>

@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ontikos móvil · Dirección General</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..900&display=swap" rel="stylesheet">
+<!-- orden: MM + páginas primero; CM destilado AL FINAL (gobierna el app-shell y
+     los duplicados); la capa móvil al último (sólo piezas nuevas + significado) -->
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/vendedor-extra.css">
+<link rel="stylesheet" href="assets/cliente-extra.css">
+<link rel="stylesheet" href="assets/proceso.css">
+<link rel="stylesheet" href="assets/network-design-system.css">
+<link rel="stylesheet" href="assets/movil.css">
+<style>html,body{font-family:'DM Sans',system-ui,sans-serif}
+.qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
+.chip .qi{margin-right:2px}
+.tac{background:var(--surf);border:1px solid var(--brd);border-radius:12px;padding:11px 12px;display:flex;flex-direction:column;gap:9px}
+.tac-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tac-t{font-size:.82rem;font-weight:800;letter-spacing:-.01em}
+.segbar{display:flex;height:9px;border-radius:5px;overflow:hidden;gap:2px}
+.segbar i{display:block;border-radius:3px}
+.seglg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.62rem;font-weight:700;color:var(--ink2)}
+.seglg b{font-weight:800;color:var(--ink)}
+.sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.lrow{display:flex;align-items:center;gap:9px;padding:6px 0;border-top:1px solid var(--brd)}
+.lrow:first-of-type{border-top:none}
+.lrow-d{width:7px;height:7px;border-radius:50%;flex:none}
+.lrow-t{font-size:.74rem;font-weight:600;color:var(--ink);flex:1;min-width:0}
+.lrow-n{font-size:.8rem;font-weight:900;font-variant-numeric:tabular-nums}
+.tac-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--brd);padding-top:8px}
+.tac-foot-l{font-size:.64rem;font-weight:700;color:var(--ink2)}
+.tac-act{border:none;background:none;font-family:inherit;font-size:.68rem;font-weight:800;color:var(--ink);cursor:pointer;white-space:nowrap}
+.fn-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
+.fn-lbl{font-size:.74rem;font-weight:700;color:var(--ink2)}
+.fn-val{font-size:.78rem;font-weight:800;font-variant-numeric:tabular-nums}
+.fn-bar{height:7px;border-radius:4px;background:var(--surf3);overflow:hidden;margin-bottom:9px}
+.fn-bar i{display:block;height:100%;border-radius:4px}
+.fn-note{font-size:.64rem;font-weight:700;color:var(--ink3);margin-top:3px}
+.tlchart{display:flex;align-items:flex-end;gap:10px;height:76px;padding-top:6px}
+.tlcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.tlcol i{width:100%;border-radius:4px 4px 0 0;background:var(--amber-fill,var(--amber))}
+.tlcol span{font-size:.56rem;font-weight:700;color:var(--ink3)}
+.card{background:var(--surf);border:1px solid var(--brd);border-radius:12px;padding:12px}
+.card-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
+.card-ey{font-size:.56rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em}
+.card-meta{font-size:.62rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ══ CABECERA fija · hamburguesa · ÍCONO Ontikos · EN VIVO·CIERRE · campana · avatar ══ -->
+  <header class="appbar">
+    <button class="hamb" aria-label="Abrir módulos" onclick="openDrawer()"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <span class="ont-ico" aria-label="Ontikos"><svg viewBox="27 29 144 144"><g fill="#D80404"><path d="M166 101A67 67 0 1 1 99 34L99 59A42 42 0 1 0 141 101Z"/><rect x="114" y="72" width="28" height="28"/><rect x="142" y="52" width="20" height="20"/><rect x="124" y="33" width="18" height="18"/></g></svg></span>
+    <span class="clock"><span class="cdot"></span>EN VIVO · CIERRE 21D</span>
+    <span class="sp"></span>
+    <button class="rc-bell" aria-label="Alertas"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="rc-bell-badge">3</span></button>
+    <span class="who-avatar">EV</span>
+  </header>
+
+  <!-- ══ SUPERFICIE · único scroller (clase pager-host cuando El Futuro está activo) ══ -->
+  <div class="sa pager-host" id="sa">
+
+    <!-- ───────── EL FUTURO · entrada paginada (3 páginas, snap horizontal) ───────── -->
+    <section class="sc on" id="futuro">
+      <div class="pager" id="pager">
+
+        <!-- Página 1 · las cuatro líneas 2×2 + la barra de decisión -->
+        <div class="page">
+          <div class="page-ey">Si nadie actúa, al cierre</div>
+          <div class="lgrid">
+            <!-- Colocación -->
+            <div class="ltile" onclick="openLine('Colocación','En quiebre · 55% de la meta','Ritmo 5/sem · se necesitan 12 · 30 atascadas · Aseg. del Norte · $3.2M')">
+              <div class="ltile-h"><span class="ltile-t">Colocación</span><span class="memb-chip expired">en quiebre</span></div>
+              <div class="gz r"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="45"/></svg><div class="gz-num">55%</div></div><div class="gz-body"><div class="gz-cap">de la meta</div><div class="gz-pace r">5/sem · faltan 12</div></div></div>
+              <button class="ltile-act">Pedir acción<span class="arr">→</span></button>
+            </div>
+            <!-- Cobranza -->
+            <div class="ltile" onclick="openLine('Cobranza','Sano · 96% en plazo','Vencido 3.8% · estable · $180K en 2 clientes')">
+              <div class="ltile-h"><span class="ltile-t">Cobranza</span><span class="memb-chip">sano</span></div>
+              <div class="gz g"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="4"/></svg><div class="gz-num">96%</div></div><div class="gz-body"><div class="gz-cap">en plazo</div><div class="gz-pace g">vencido 3.8%</div></div></div>
+              <button class="ltile-act">Revisar los 16<span class="arr">→</span></button>
+            </div>
+            <!-- Renovación -->
+            <div class="ltile" onclick="openLine('Renovación','Bajo industria · 78% retención','Ind. 84% · 3 meses a la baja · 26 se perderán · $4.1M')">
+              <div class="ltile-h"><span class="ltile-t">Renovación</span><span class="memb-chip grace">bajo industria</span></div>
+              <div class="gz a"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="22"/><line class="gz-tick" x1="50.4" y1="23.9" x2="59.2" y2="19.1"/></svg><div class="gz-num">78%</div></div><div class="gz-body"><div class="gz-cap">ret. · ind. 84%</div><div class="gz-pace a">3 meses ↓</div></div></div>
+              <button class="ltile-act">Pedir acción<span class="arr">→</span></button>
+            </div>
+            <!-- Siniestralidad -->
+            <div class="ltile" onclick="openLine('Siniestralidad','Sobre umbral · 71% · umbral 65%','Sube · 3 meses · 3 cuentas · $6.8M')">
+              <div class="ltile-h"><span class="ltile-t">Siniestralidad</span><span class="memb-chip grace">sobre umbral</span></div>
+              <div class="gz a"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="29"/><line class="gz-tick" x1="41.5" y1="15.3" x2="46.1" y2="6.4"/></svg><div class="gz-num">71%</div></div><div class="gz-body"><div class="gz-cap">umbral 65%</div><div class="gz-pace a">sube · 3 meses</div></div></div>
+              <button class="ltile-act">Pedir acción<span class="arr">→</span></button>
+            </div>
+          </div>
+
+          <!-- barra de decisión · hereda el estado más grave (Colocación en quiebre → rojo) -->
+          <div class="camp grave" style="margin-top:auto">
+            <div class="camp-body">
+              <div class="camp-t"><b>$9.5M</b> de prima no entra y <b>$6.8M</b> renuevan encarecidas</div>
+              <div class="camp-s">Si nadie actúa al cierre · 38 colocaciones + 26 renovaciones.</div>
+              <button class="btn primary camp-act" onclick="openLine('Atender el más grave','Colocación · en quiebre · 55%','Es la línea más grave: 30 colocaciones atascadas en Aseguradora del Norte · $3.2M')">Atender el más grave →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Página 2 · el embudo de colocación + el timeline de renovación -->
+        <div class="page">
+          <div class="page-ey">El Futuro · táctico al cierre</div>
+          <div class="card">
+            <div class="card-h"><span class="card-ey">Colocación · embudo al cierre</span><span class="card-meta">quedan 21 días</span></div>
+            <div class="fn-row"><span class="fn-lbl">Meta del periodo</span><span class="fn-val">84 · $12M</span></div>
+            <div class="fn-bar"><i style="width:100%;background:var(--ink4)"></i></div>
+            <div class="fn-row"><span class="fn-lbl">Llegarán al cierre</span><span class="fn-val">46 · $6.6M</span></div>
+            <div class="fn-bar"><i style="width:55%;background:var(--ink4)"></i></div>
+            <div class="fn-row"><span class="fn-lbl" style="color:var(--red-tx,var(--red))">Quedarán fuera</span><span class="fn-val" style="color:var(--red-tx,var(--red))">38 · $5.4M</span></div>
+            <div class="fn-bar"><i style="width:45%;background:var(--red)"></i></div>
+            <div class="fn-note">a 5/sem no alcanza · se necesitan 12/sem</div>
+          </div>
+          <div class="card" style="margin-top:9px">
+            <div class="card-h"><span class="card-ey">Renovación · timeline 90 días</span><span class="card-meta">120 vencen · $18.5M</span></div>
+            <div class="tlchart">
+              <div class="tlcol"><i style="height:100%"></i><span>Mes 1 · 6</span></div>
+              <div class="tlcol"><i style="height:100%"></i><span>Mes 2 · 6</span></div>
+              <div class="tlcol"><i style="height:33%"></i><span>Mes 3 · 2</span></div>
+            </div>
+            <div class="fn-note" style="margin-top:8px">14 de primer año en riesgo · 94 se retendrán · 26 se perderán · $4.1M</div>
+          </div>
+        </div>
+
+        <!-- Página 3 · los dos bloques tácticos -->
+        <div class="page">
+          <div class="page-ey">El Futuro · táctico · lo que se vigila</div>
+          <div class="tac">
+            <div class="tac-h"><span class="tac-t">Importantes</span><span class="chip pill a">9/38</span></div>
+            <div class="segbar"><i style="flex:29;background:var(--surf3)"></i><i style="flex:6;background:var(--amber-fill,var(--amber))"></i><i style="flex:3;background:var(--red)"></i></div>
+            <div class="seglg"><span><span class="sw" style="background:var(--surf3)"></span>A tiempo <b>29</b></span><span><span class="sw" style="background:var(--amber-fill,var(--amber))"></span>Atrasadas <b>6</b></span><span><span class="sw" style="background:var(--red)"></span>Paralizadas <b>3</b></span></div>
+            <div class="tac-foot"><span class="tac-foot-l">3 paralizadas · $410K</span><button class="tac-act" onclick="go('quiebres')">Ver los 9 en Quiebres →</button></div>
+          </div>
+          <div class="tac" style="margin-top:9px">
+            <div class="tac-h"><span class="tac-t">Siniestros clave</span><span class="chip pill r">5/14</span></div>
+            <div class="lrow"><span class="lrow-d" style="background:var(--red)"></span><span class="lrow-t">Directo · detenidos 15+ días</span><span class="lrow-n">2</span></div>
+            <div class="lrow"><span class="lrow-d" style="background:var(--amber-fill,var(--amber))"></span><span class="lrow-t">Reembolso · en riesgo</span><span class="lrow-n">3</span></div>
+            <div class="lrow"><span class="lrow-d" style="background:var(--red)"></span><span class="lrow-t">Renovaciones que afectan</span><span class="lrow-n">2</span></div>
+            <div class="tac-foot"><span class="tac-foot-l">5 detenidos +15 días</span><button class="tac-act" onclick="go('quiebres')">Ver los 5 en Quiebres →</button></div>
+          </div>
+        </div>
+
+      </div>
+      <!-- los puntos del paginador, sobre la bnav · tocables y con aria -->
+      <div class="dots" role="tablist" aria-label="Páginas de El Futuro">
+        <button class="dot on" role="tab" aria-label="Página 1 · líneas" aria-selected="true" onclick="goPage(0)"></button>
+        <button class="dot" role="tab" aria-label="Página 2 · embudo y renovación" aria-selected="false" onclick="goPage(1)"></button>
+        <button class="dot" role="tab" aria-label="Página 3 · tácticos" aria-selected="false" onclick="goPage(2)"></button>
+      </div>
+    </section>
+
+    <!-- ───────── QUIEBRES · lista (marco fijo, sólo la lista corre) ───────── -->
+    <section class="sc" id="quiebres">
+      <div class="surf-h"><div class="surf-t">Quiebres</div><div class="surf-sub">7 · $10.0M en juego</div></div>
+
+      <!-- indicadores en rejilla 2×2 compacto · héroe en tinta, conteos en su estado -->
+      <div class="kpis g2">
+        <div class="kpi"><div class="kpi-l">En riesgo ahora</div><div class="kpi-v">$10.0M</div><div class="kpi-sub">7 quiebres</div></div>
+        <div class="kpi"><div class="kpi-l">Incumplido</div><div class="kpi-v red">2</div><div class="kpi-sub">$4.38M</div></div>
+        <div class="kpi"><div class="kpi-l">Por incumplirse</div><div class="kpi-v amber">3</div><div class="kpi-sub">$3.26M</div></div>
+        <div class="kpi"><div class="kpi-l">Sin movimiento</div><div class="kpi-v">2</div><div class="kpi-sub">$2.39M</div></div>
+      </div>
+
+      <!-- filtros en píldora, se deslizan de lado -->
+      <div class="ord-filtros">
+        <button class="ord-filtro on">Todos · 7</button>
+        <button class="ord-filtro">Aseguradora · 3</button>
+        <button class="ord-filtro">Cliente · 2</button>
+        <button class="ord-filtro">Internos · 2</button>
+      </div>
+
+      <!-- las 7 filas · filo=situación, chip en línea de responsable, acto a la derecha -->
+      <div class="vd-cli urg" onclick="openQ(this)" data-t="Emisión aceptada sin expedir" data-s="30 pólizas de colocación · Aseguradora del Norte">
+        <div class="vd-cli-av">ÓL</div>
+        <div class="vd-cli-body">
+          <div class="vd-cli-n">Emisión aceptada sin expedir</div>
+          <div class="vd-cli-s">30 pólizas de colocación · Aseguradora del Norte</div>
+          <div class="qr-meta"><span class="qr-resp">Óscar Lévano</span><span class="vd-cli-plz r">hace 6 días</span><span class="chip pill r"><svg class="qi r" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>Incumplido</span></div>
+        </div>
+        <div class="qr-right"><div><div class="qr-peso">$3.2M</div><div class="qr-peso-l">en juego</div></div><button class="qr-act r">Ver pedido</button></div>
+      </div>
+
+      <div class="vd-cli med" onclick="openQ(this)" data-t="Recibo vencido · $180K" data-s="6 recibos · Logística Sierra y Hotelera Costa">
+        <div class="vd-cli-av">RI</div>
+        <div class="vd-cli-body">
+          <div class="vd-cli-n">Recibo vencido · $180K</div>
+          <div class="vd-cli-s">6 recibos · Logística Sierra y Hotelera Costa</div>
+          <div class="qr-meta"><span class="qr-resp">Rosa Ibarra</span><span class="vd-cli-plz a">vence en 4 días</span><span class="chip pill a"><svg class="qi a" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Por incumplirse</span></div>
+        </div>
+        <div class="qr-right"><div><div class="qr-peso">$2.4M</div><div class="qr-peso-l">en juego</div></div><button class="qr-act a">Pedir acción</button></div>
+      </div>
+
+      <div class="vd-cli neu" onclick="openQ(this)" data-t="Documentación del siniestro sin entregar" data-s="5 siniestros clave · Elizondo y Sonora">
+        <div class="vd-cli-av">AB</div>
+        <div class="vd-cli-body">
+          <div class="vd-cli-n">Documentación del siniestro sin entregar</div>
+          <div class="vd-cli-s">5 siniestros clave · Elizondo y Sonora</div>
+          <div class="qr-meta"><span class="qr-resp">Andrés Berlanga</span><span class="vd-cli-plz n">hace 15 días</span><span class="chip pill"><svg class="qi n" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Sin movimiento</span></div>
+        </div>
+        <div class="qr-right"><div><div class="qr-peso">$1.4M</div><div class="qr-peso-l">en juego</div></div><button class="qr-act">Pedir acción</button></div>
+      </div>
+
+      <div class="vd-cli urg" onclick="openQ(this)" data-t="Dictamen sin respuesta" data-s="SIN-1188 · Transportes Elizondo · GNP">
+        <div class="vd-cli-av">AB</div>
+        <div class="vd-cli-body">
+          <div class="vd-cli-n">Dictamen sin respuesta</div>
+          <div class="vd-cli-s">SIN-1188 · Transportes Elizondo · GNP</div>
+          <div class="qr-meta"><span class="qr-resp">Andrés Berlanga</span><span class="vd-cli-plz r">hace 9 días</span><span class="chip pill r"><svg class="qi r" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>Incumplido</span></div>
+        </div>
+        <div class="qr-right"><div><div class="qr-peso">$1.18M</div><div class="qr-peso-l">en juego</div></div><button class="qr-act r">Reclamar</button></div>
+      </div>
+
+      <div class="vd-cli neu" onclick="openQ(this)" data-t="Renovación paralizada" data-s="POL-5540 · Grupo Ferrer">
+        <div class="vd-cli-av">EV</div>
+        <div class="vd-cli-body">
+          <div class="vd-cli-n">Renovación paralizada</div>
+          <div class="vd-cli-s">POL-5540 · Grupo Ferrer</div>
+          <div class="qr-meta"><span class="qr-resp">Ernesto Vidal</span><span class="vd-cli-plz n">hace 19 días</span><span class="chip pill"><svg class="qi n" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Sin movimiento</span></div>
+        </div>
+        <div class="qr-right"><div><div class="qr-peso">$990K</div><div class="qr-peso-l">en juego</div></div><button class="qr-act">Pedir acción</button></div>
+      </div>
+
+      <div class="vd-cli med" onclick="openQ(this)" data-t="Carátula sin entregar" data-s="POL-3320 · Grupo Textil del Norte">
+        <div class="vd-cli-av">MR</div>
+        <div class="vd-cli-body">
+          <div class="vd-cli-n">Carátula sin entregar</div>
+          <div class="vd-cli-s">POL-3320 · Grupo Textil del Norte</div>
+          <div class="qr-meta"><span class="qr-resp">Marcela Ríos</span><span class="vd-cli-plz a">vence en 2 días</span><span class="chip pill a"><svg class="qi a" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Por incumplirse</span></div>
+        </div>
+        <div class="qr-right"><div><div class="qr-peso">$540K</div><div class="qr-peso-l">en juego</div></div><button class="qr-act a">Ver pedido</button></div>
+      </div>
+
+      <div class="vd-cli med" onclick="openQ(this)" data-t="Reembolso en trámite" data-s="SIN-0942 · Grupo Sonora · MetLife">
+        <div class="vd-cli-av">AB</div>
+        <div class="vd-cli-body">
+          <div class="vd-cli-n">Reembolso en trámite</div>
+          <div class="vd-cli-s">SIN-0942 · Grupo Sonora · MetLife</div>
+          <div class="qr-meta"><span class="qr-resp">Andrés Berlanga</span><span class="vd-cli-plz a">vence en 5 días</span><span class="chip pill a"><svg class="qi a" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Por incumplirse</span></div>
+        </div>
+        <div class="qr-right"><div><div class="qr-peso">$320K</div><div class="qr-peso-l">en juego</div></div><button class="qr-act a">Reclamar</button></div>
+      </div>
+      <div style="height:6px"></div>
+    </section>
+
+    <!-- Compromisos y Lo clave existen en el marco; su contenido llega en el paso 4 -->
+    <section class="sc" id="compromisos"><div class="surf-h"><div class="surf-t">Mis compromisos</div><div class="surf-sub">paso 4</div></div><div class="ord-empty" style="padding:40px 10px;text-align:center;color:var(--ink3)">Se compone con contenido real en el paso 4.</div></section>
+    <section class="sc" id="clave"><div class="surf-h"><div class="surf-t">Lo clave</div><div class="surf-sub">paso 4</div></div><div class="ord-empty" style="padding:40px 10px;text-align:center;color:var(--ink3)">Se compone con contenido real en el paso 4.</div></section>
+
+  </div>
+
+  <!-- ══ NAVEGACIÓN inferior fija · 4 superficies · activo en TINTA ══ -->
+  <nav class="bnav">
+    <button class="ni on" onclick="go('futuro')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg><span class="ni-lbl">El Futuro</span></button>
+    <button class="ni" onclick="go('quiebres')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg><span class="ni-lbl">Quiebres</span></button>
+    <button class="ni" onclick="go('compromisos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span class="ni-lbl">Compromisos</span></button>
+    <button class="ni" onclick="go('clave')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 9 22 9 16 14 18 21 12 17 6 21 8 14 2 9 9 9"/></svg><span class="ni-lbl">Lo clave</span></button>
+  </nav>
+</div>
+
+<!-- ══ PANEL DE LA HAMBURGUESA (pieza nueva) · los 7 módulos del riel del escritorio ══ -->
+<div class="scrim" id="scrim" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" aria-label="Módulos" aria-hidden="true">
+  <div class="drawer-h">
+    <span class="ont-ico"><svg viewBox="27 29 144 144"><g fill="#D80404"><path d="M166 101A67 67 0 1 1 99 34L99 59A42 42 0 1 0 141 101Z"/><rect x="114" y="72" width="28" height="28"/><rect x="142" y="52" width="20" height="20"/><rect x="124" y="33" width="18" height="18"/></g></svg></span>
+    <span class="brand-txt">Ontikos</span>
+    <button class="drawer-x" aria-label="Cerrar" onclick="closeDrawer()"><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+  </div>
+  <div class="drawer-sec">Módulos</div>
+  <button class="mod on"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12l6-4"/></svg>Tablero</button>
+  <button class="mod"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 21v-1a5 5 0 0 1 5-5h2"/><circle cx="17" cy="10" r="2.5"/><path d="M14 21v-1a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4v1"/></svg>Clientes</button>
+  <button class="mod"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>Pólizas</button>
+  <button class="mod"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r=".5"/></svg>Siniestros</button>
+  <button class="mod"><svg viewBox="0 0 24 24"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>Analítico</button>
+  <button class="mod"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1.5"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>Reportes</button>
+  <button class="mod"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Intake</button>
+  <div class="drawer-sec">Sesión</div>
+  <button class="mod"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Salir</button>
+</aside>
+
+<!-- ══ LA HOJA que sube · .ovl + .modal de la casa, verbatim ══ -->
+<div class="ovl" id="ovl" onclick="if(event.target===this)closeSheet()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="sh-t">
+    <button class="modal-x" aria-label="Cerrar" onclick="closeSheet()">×</button>
+    <div class="modal-t" id="sh-t">—</div>
+    <div class="modal-s" id="sh-s">—</div>
+    <div class="modal-btns"><button onclick="closeSheet()">Cancelar</button><button class="primary" id="sh-act" onclick="closeSheet()">Pedir acción</button></div>
+  </div>
+</div>
+
+<script>
+// tema oscuro por querystring
+if(location.search.indexOf('dk')>-1)document.body.classList.add('dk');
+
+var sa=document.getElementById('sa'), pager=document.getElementById('pager');
+
+// ── navegación de secciones (bnav) ──
+function go(id){
+  document.querySelectorAll('.sc').forEach(function(s){s.classList.toggle('on',s.id===id)});
+  var order=['futuro','quiebres','compromisos','clave'];
+  document.querySelectorAll('.bnav .ni').forEach(function(n,i){n.classList.toggle('on',order[i]===id)});
+  // la .sa aloja el paginador sólo en El Futuro; en las listas se desplaza normal
+  sa.classList.toggle('pager-host', id==='futuro');
+  if(id!=='futuro') sa.scrollTop=0;
+}
+
+// ── paginador de la entrada ──
+function goPage(i){ pager.scrollTo({left:i*pager.clientWidth, behavior:'smooth'}); }
+if(pager){
+  pager.addEventListener('scroll', function(){
+    var i=Math.round(pager.scrollLeft/pager.clientWidth);
+    document.querySelectorAll('.dots .dot').forEach(function(d,k){
+      d.classList.toggle('on',k===i); d.setAttribute('aria-selected',k===i?'true':'false');
+    });
+  }, {passive:true});
+}
+
+// ── panel de la hamburguesa (foco atrapado simple + Escape) ──
+var drawer=document.getElementById('drawer'), scrim=document.getElementById('scrim');
+function openDrawer(){ drawer.classList.add('open'); scrim.classList.add('open'); drawer.setAttribute('aria-hidden','false'); drawer.querySelector('.drawer-x').focus(); }
+function closeDrawer(){ drawer.classList.remove('open'); scrim.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); }
+
+// ── la hoja que sube ──
+var ovl=document.getElementById('ovl');
+function openSheet(t,s,act){ document.getElementById('sh-t').textContent=t; document.getElementById('sh-s').textContent=s; if(act)document.getElementById('sh-act').textContent=act; ovl.classList.add('on'); }
+function closeSheet(){ ovl.classList.remove('on'); }
+function openLine(t,s,detail){ openSheet(t, s+' — '+detail, 'Pedir acción'); }
+function openQ(row){
+  var act=row.querySelector('.qr-act').textContent;
+  var resp=row.querySelector('.qr-resp'); var plz=row.querySelector('.vd-cli-plz');
+  var who=(resp?resp.textContent:'')+(plz?' · '+plz.textContent:'');
+  openSheet(row.dataset.t, row.dataset.s+(who?' — '+who:''), act);
+}
+
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){closeDrawer();closeSheet();} });
+</script>
+</body>
+</html>
