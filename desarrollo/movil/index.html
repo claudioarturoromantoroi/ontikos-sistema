@@ -6,13 +6,16 @@
 <title>Ontikos móvil · Dirección General</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..900&display=swap" rel="stylesheet">
 <!-- orden: MM + páginas primero; CM destilado AL FINAL (gobierna el app-shell y
-     los duplicados); la capa móvil al último (sólo piezas nuevas + significado) -->
-<link rel="stylesheet" href="assets/app.css">
-<link rel="stylesheet" href="assets/vendedor-extra.css">
-<link rel="stylesheet" href="assets/cliente-extra.css">
-<link rel="stylesheet" href="assets/proceso.css">
-<link rel="stylesheet" href="assets/network-design-system.css">
-<link rel="stylesheet" href="assets/movil.css">
+     los duplicados); la capa móvil al último (sólo piezas nuevas + significado).
+     VERSIONADO DE ASSETS (?v=…): cada cambio sube el número y el navegador trae
+     el archivo nuevo al instante, sin que nadie tenga que limpiar la caché —el
+     HTML se sirve fresco y pide la versión nueva del CSS. Subir en cada deploy. -->
+<link rel="stylesheet" href="assets/app.css?v=20261004a">
+<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261004a">
+<link rel="stylesheet" href="assets/cliente-extra.css?v=20261004a">
+<link rel="stylesheet" href="assets/proceso.css?v=20261004a">
+<link rel="stylesheet" href="assets/network-design-system.css?v=20261004a">
+<link rel="stylesheet" href="assets/movil.css?v=20261004a">
 <style>html,body{font-family:'DM Sans',system-ui,sans-serif}
 .qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
@@ -313,15 +316,25 @@
 </div>
 
 <script>
-// ── medida concreta del viewport: la grilla llena de verdad en iOS/Android ──
+// ── medida concreta del viewport: el marco llena de verdad en iOS/Android. --vh
+//    sigue a la barra dinámica de Safari para que el marco siempre llene lo
+//    visible; se actualiza en cada cambio (no causa reflujo de tarjetas).
 function setVH(){
   var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
   document.documentElement.style.setProperty('--vh', Math.round(h) + 'px');
 }
-setVH();
+// ── si el alto VISIBLE es corto, se ciñe el 2×2 para que las 4 tarjetas quepan
+//    SIN scroll (clase body.vh-short). Se decide una vez al cargar y al girar,
+//    NO en cada movimiento de la barra de Safari: así las tarjetas no cambian de
+//    tamaño al correr (sin saltos). Robusto ante la barra dinámica de iOS. */
+function setShort(){
+  var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+  document.body.classList.toggle('vh-short', h < 700);
+}
+setVH(); setShort();
 if(window.visualViewport){ visualViewport.addEventListener('resize', setVH); visualViewport.addEventListener('scroll', setVH); }
 window.addEventListener('resize', setVH);
-window.addEventListener('orientationchange', function(){ setTimeout(setVH, 250); });
+window.addEventListener('orientationchange', function(){ setTimeout(function(){ setVH(); setShort(); }, 250); });
 
 // ── tema claro/oscuro (persistente; respeta ?dk y el sistema) ──
 (function(){
