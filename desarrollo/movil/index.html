@@ -17,41 +17,46 @@
 .qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
 .chip .qi{margin-right:2px}
-.tac{background:var(--surf);border:1px solid var(--brd);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:11px}
+/* páginas 2 y 3 · MISMA anatomía que «Mi Semana»: tarjeta radio 16, sombra
+   sutil, aire, tipo con jerarquía, y el acto como BOTÓN-PÍLDORA (no de contorno) */
+.tac{background:var(--surf);border:1px solid var(--brd);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:13px;box-shadow:0 2px 10px rgba(9,9,15,.04)}
 .tac-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.tac-t{font-size:.9rem;font-weight:700;letter-spacing:-.02em}
-.segbar{display:flex;height:9px;border-radius:5px;overflow:hidden;gap:2px}
+.tac-t{font-size:1rem;font-weight:700;letter-spacing:-.02em}
+.segbar{display:flex;height:10px;border-radius:6px;overflow:hidden;gap:2px}
 .segbar i{display:block;border-radius:3px}
-.seglg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.62rem;font-weight:700;color:var(--ink2)}
+.seglg{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:.68rem;font-weight:700;color:var(--ink2)}
 .seglg b{font-weight:800;color:var(--ink)}
-.sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
-.lrow{display:flex;align-items:center;gap:10px;padding:7px 0}
-.lrow-d{width:7px;height:7px;border-radius:50%;flex:none}
-.lrow-t{font-size:.78rem;font-weight:500;color:var(--ink);flex:1;min-width:0}
-.lrow-n{font-size:.86rem;font-weight:700;font-variant-numeric:tabular-nums}
-.tac-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px}
-.tac-foot-l{font-size:.64rem;font-weight:700;color:var(--ink2)}
-.tac-act{border:1.5px solid var(--ink);background:none;border-radius:10px;padding:9px 13px;min-height:40px;font-family:inherit;font-size:.72rem;font-weight:700;color:var(--ink);cursor:pointer;white-space:nowrap}
-.fn-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
-.fn-lbl{font-size:.78rem;font-weight:500;color:var(--ink2)}
-.fn-val{font-size:.82rem;font-weight:700;font-variant-numeric:tabular-nums}
-.fn-bar{height:7px;border-radius:4px;background:var(--surf3);overflow:hidden;margin-bottom:9px}
-.fn-bar i{display:block;height:100%;border-radius:4px}
-.fn-note{font-size:.64rem;font-weight:700;color:var(--ink3);margin-top:3px}
-.tlchart{display:flex;align-items:flex-end;gap:10px;height:76px;padding-top:6px}
-.tlcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
-.tlcol i{width:100%;border-radius:4px 4px 0 0;background:var(--amber-fill,var(--amber))}
-.tlcol span{font-size:.56rem;font-weight:700;color:var(--ink3)}
-.card{background:var(--surf);border:1px solid var(--brd);border-radius:14px;padding:14px}
-.card-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
-.card-ey{font-size:.56rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em}
-.card-meta{font-size:.62rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums}
+.sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.lrow{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--brd)}
+.lrow:last-of-type{border-bottom:none}
+.lrow-d{width:8px;height:8px;border-radius:50%;flex:none}
+.lrow-t{font-size:.84rem;font-weight:500;color:var(--ink);flex:1;min-width:0}
+.lrow-n{font-size:.95rem;font-weight:800;font-variant-numeric:tabular-nums}
+.tac-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px}
+.tac-foot-l{font-size:.7rem;font-weight:700;color:var(--ink2)}
+/* el acto · botón-píldora en tinta (navegación), a juego con los de página 1 */
+.tac-act{border:none;background:var(--ink);border-radius:999px;padding:12px 18px;min-height:46px;font-family:inherit;font-size:.82rem;font-weight:700;color:var(--surf);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.tac-act:active{transform:scale(.97)}
+.fn-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.fn-lbl{font-size:.84rem;font-weight:500;color:var(--ink2)}
+.fn-val{font-size:.9rem;font-weight:800;font-variant-numeric:tabular-nums}
+.fn-bar{height:8px;border-radius:5px;background:var(--surf3);overflow:hidden;margin-bottom:12px}
+.fn-bar i{display:block;height:100%;border-radius:5px}
+.fn-note{font-size:.72rem;font-weight:700;color:var(--ink3);margin-top:4px}
+.tlchart{display:flex;align-items:flex-end;gap:12px;height:76px;padding-top:6px}
+.tlcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end}
+.tlcol i{width:100%;border-radius:6px 6px 0 0;background:var(--amber-fill,var(--amber))}
+.tlcol span{font-size:.62rem;font-weight:700;color:var(--ink3)}
+.card{background:var(--surf);border:1px solid var(--brd);border-radius:16px;padding:18px;box-shadow:0 2px 10px rgba(9,9,15,.04)}
+.card-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:14px}
+.card-ey{font-size:.62rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em}
+.card-meta{font-size:.68rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums}
 /* páginas 2 y 3: las tarjetas crecen y reparten su contenido para llenar el
    alto (sin vacío al fondo); el gráfico de renovación crece con la tarjeta */
 #futuro .page .card,#futuro .page .tac{flex:1 1 auto;min-height:0}
 #futuro .page .card{display:flex;flex-direction:column;justify-content:space-between}
 #futuro .page .tac{justify-content:space-between}
-#futuro .page .card:first-of-type{margin-bottom:9px}
+#futuro .page .card:first-of-type{margin-bottom:14px}
 #futuro .page .tlchart{flex:1 1 auto;min-height:76px;height:auto}
 </style>
 </head>
@@ -150,7 +155,7 @@
             <div class="fn-bar"><i style="width:45%;background:var(--red)"></i></div>
             <div class="fn-note">a 5/sem no alcanza · se necesitan 12/sem</div>
           </div>
-          <div class="card" style="margin-top:9px">
+          <div class="card" style="margin-top:14px">
             <div class="card-h"><span class="card-ey">Renovación · timeline 90 días</span><span class="card-meta">120 vencen · $18.5M</span></div>
             <div class="tlchart">
               <div class="tlcol"><i style="height:100%"></i><span>Mes 1 · 6</span></div>
@@ -170,7 +175,7 @@
             <div class="seglg"><span><span class="sw" style="background:var(--surf3)"></span>A tiempo <b>29</b></span><span><span class="sw" style="background:var(--amber-fill,var(--amber))"></span>Atrasadas <b>6</b></span><span><span class="sw" style="background:var(--red)"></span>Paralizadas <b>3</b></span></div>
             <div class="tac-foot"><span class="tac-foot-l">3 paralizadas · $410K</span><button class="tac-act" onclick="go('quiebres')">Ver los 9 en Quiebres →</button></div>
           </div>
-          <div class="tac" style="margin-top:9px">
+          <div class="tac" style="margin-top:14px">
             <div class="tac-h"><span class="tac-t">Siniestros clave</span><span class="chip pill r">5/14</span></div>
             <div class="lrow"><span class="lrow-d" style="background:var(--red)"></span><span class="lrow-t">Directo · detenidos 15+ días</span><span class="lrow-n">2</span></div>
             <div class="lrow"><span class="lrow-d" style="background:var(--amber-fill,var(--amber))"></span><span class="lrow-t">Reembolso · en riesgo</span><span class="lrow-n">3</span></div>
