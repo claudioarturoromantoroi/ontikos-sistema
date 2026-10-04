@@ -75,66 +75,64 @@
     <section class="sc on" id="futuro">
       <div class="pager" id="pager">
 
-        <!-- Página 1 · las cuatro líneas 2×2 · color = estado de cumplimiento
-             (semáforo como «Mi Semana»: filo + ícono + botón en el estado) -->
+        <!-- Página 1 · las cuatro líneas 2×2 · anatomía de «Mi Semana»:
+             ícono grande (estado) · título · dos líneas · barra · botón-píldora.
+             Color = estado en borde + ícono + barra + botón. Aire repartido
+             (lt-top arriba, lt-foot abajo) para que la tarjeta respire. -->
         <div class="page">
           <div class="page-ey">Si nadie actúa, al cierre</div>
           <div class="lgrid">
             <!-- Colocación · en quiebre (rojo) -->
             <div class="ltile alert" onclick="openLine('colocacion')">
-              <div class="lt-head">
+              <div class="lt-top">
                 <span class="lt-ico r"><svg viewBox="0 0 24 24"><path d="M23 18l-9.5-9.5-5 5L1 6"/><polyline points="17 18 23 18 23 12"/></svg></span>
-                <span class="lt-t">Colocación</span>
+                <div class="lt-t">Colocación</div>
+                <div class="lt-fig"><span class="lt-pct">55%</span><span class="lt-cap">de la meta</span></div>
+                <div class="lt-ctx r">5/sem · faltan 12</div>
               </div>
-              <span class="memb-chip expired">en quiebre</span>
-              <div class="lt-metric">
-                <div class="lt-figrow"><span class="lt-pct">55%</span><span class="lt-pct-cap">de la meta</span></div>
+              <div class="lt-foot">
                 <div class="lt-bar"><div class="lt-bar-fill r" style="width:55%"></div></div>
+                <button class="lt-act r">Pedir acción</button>
               </div>
-              <div class="lt-ctx r">5/sem · faltan 12</div>
-              <button class="ltile-act r">Pedir acción</button>
             </div>
             <!-- Cobranza · sano (verde) -->
             <div class="ltile good" onclick="openLine('cobranza')">
-              <div class="lt-head">
+              <div class="lt-top">
                 <span class="lt-ico g"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
-                <span class="lt-t">Cobranza</span>
+                <div class="lt-t">Cobranza</div>
+                <div class="lt-fig"><span class="lt-pct">96%</span><span class="lt-cap">en plazo</span></div>
+                <div class="lt-ctx g">vencido 3.8%, estable</div>
               </div>
-              <span class="memb-chip">sano</span>
-              <div class="lt-metric">
-                <div class="lt-figrow"><span class="lt-pct">96%</span><span class="lt-pct-cap">en plazo</span></div>
+              <div class="lt-foot">
                 <div class="lt-bar"><div class="lt-bar-fill g" style="width:96%"></div></div>
+                <button class="lt-act g">Revisar los 16</button>
               </div>
-              <div class="lt-ctx g">vencido 3.8%, estable</div>
-              <button class="ltile-act g">Revisar los 16</button>
             </div>
             <!-- Renovación · bajo industria (ámbar · muesca ind. 84%) -->
             <div class="ltile warn" onclick="openLine('renovacion')">
-              <div class="lt-head">
+              <div class="lt-top">
                 <span class="lt-ico a"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span>
-                <span class="lt-t">Renovación</span>
+                <div class="lt-t">Renovación</div>
+                <div class="lt-fig"><span class="lt-pct">78%</span><span class="lt-cap">retención</span></div>
+                <div class="lt-ctx a">3 meses a la baja</div>
               </div>
-              <span class="memb-chip grace">bajo industria</span>
-              <div class="lt-metric">
-                <div class="lt-figrow"><span class="lt-pct">78%</span><span class="lt-pct-cap">retención</span></div>
+              <div class="lt-foot">
                 <div class="lt-bar"><div class="lt-bar-fill a" style="width:78%"></div><span class="lt-bar-notch" style="left:84%" title="industria 84%"></span></div>
+                <button class="lt-act a">Pedir acción</button>
               </div>
-              <div class="lt-ctx a">3 meses a la baja</div>
-              <button class="ltile-act a">Pedir acción</button>
             </div>
             <!-- Siniestralidad · sobre umbral (ámbar · muesca umbral 65%) -->
             <div class="ltile warn" onclick="openLine('siniestralidad')">
-              <div class="lt-head">
+              <div class="lt-top">
                 <span class="lt-ico a"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
-                <span class="lt-t">Siniestralidad</span>
+                <div class="lt-t">Siniestralidad</div>
+                <div class="lt-fig"><span class="lt-pct">71%</span><span class="lt-cap">índice</span></div>
+                <div class="lt-ctx a">sube · 3 meses</div>
               </div>
-              <span class="memb-chip grace">sobre umbral</span>
-              <div class="lt-metric">
-                <div class="lt-figrow"><span class="lt-pct">71%</span><span class="lt-pct-cap">índice</span></div>
+              <div class="lt-foot">
                 <div class="lt-bar"><div class="lt-bar-fill a" style="width:71%"></div><span class="lt-bar-notch" style="left:65%" title="umbral 65%"></span></div>
+                <button class="lt-act a">Pedir acción</button>
               </div>
-              <div class="lt-ctx a">sube · 3 meses</div>
-              <button class="ltile-act a">Pedir acción</button>
             </div>
           </div>
         </div>

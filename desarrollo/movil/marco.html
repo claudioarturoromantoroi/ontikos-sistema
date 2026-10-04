@@ -91,7 +91,7 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
     <h1>El marco de aplicación</h1>
     <p class="lede">Paso 3, rehecho. Ya no son piezas sobre una página que se desplaza entera: es una app. El marco no se mueve, la entrada se pagina, y el contenido es el del escritorio, de la misma fuente.</p>
     <p>La cabecera y la barra inferior quedan fijas; sólo la superficie corre. El Futuro se recorre de lado, página completa, sin desplazamiento vertical. Las otras secciones son listas que corren dentro de su zona. Dos niveles de navegación: la hamburguesa para los módulos, la barra inferior para las superficies del CEO. La gramática §5·G no se tocó.</p>
-    <span class="verdict">✓ La entrada cabe SIN scroll en el peor caso (iPhone SE · Safari con barras · 375×553)</span>
+    <span class="verdict">✓ Tile con la anatomía de «Mi Semana»: llena sin scroll en la gama moderna; airoso y sin recortes en los equipos cortos</span>
   </div>
 
   <!-- §1 ARQUITECTURA -->
@@ -132,22 +132,23 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
   <!-- §2 ENTRADA PAGINADA -->
   <div class="sec">
     <div class="sec-n">§2</div>
-    <h2>La entrada se pagina · el tile, recompuesto con semáforo</h2>
-    <p class="intro"><b>Composición de «Mi Semana»</b> (EstructuraMovil, vendedor móvil) <b>con su semáforo</b>: una idea por tile, aire y ritmo vertical constante, <b>y el color = estado de cumplimiento</b>, igual que el escritorio (<code>casa.css .card.alert/.good/.warn</code>). Cada tile lo lleva en tres canales a la vez —nunca sólo color—: el <b>filo lateral</b> de 3&nbsp;px, el <b>ícono</b> del frente (los mismos del escritorio: tendencia, maletín, renovar, triángulo) y el <b>botón relleno</b> en el estado (<b class="k-red">rojo</b> quiebre · ámbar advertencia · verde sano). La anatomía, igual en los cuatro: ícono + título (700) · estado en palabra (su propia línea, sin truncar) · la cifra con su barra y <b>muesca de referencia</b> (industria 84%, umbral 65%) · una línea de contexto · el acto como <b>botón real</b> ≥44&nbsp;px. El arco de escritorio no entra en el tile: vive en la hoja de detalle. <b>Se retiró la barra de decisión del pie:</b> cada tile ya remata en su propio acto, así que era redundante y su alto obligaba a desplazar y rompía la grilla; con ella fuera la 2×2 llena el alto y <b>cabe en el iPhone SE sin scroll</b>. La marca de la cabecera es ahora el <b>botón de inicio</b> (toca → El Futuro) con el <b>gesto del escritorio</b> (el anillo gira, los módulos entran).</p>
+    <h2>La entrada se pagina · el tile, con la anatomía de «Mi Semana»</h2>
+    <p class="intro"><b>Anatomía leída del código de la referencia viva</b> (<code>ontikos/mi-semana.html</code>, la tarjeta que el dueño señaló como bien hecha), no de un resumen: tarjeta de radio 16 con sombra sutil y <b>borde en el color del estado</b>; dentro, <b>ícono grande</b> en el estado · <b>título</b> (700) · la cifra con su pie · una línea de contexto · <b>barra delgada</b> (6&nbsp;px, 999) con <b>muesca de referencia</b> (industria 84%, umbral 65%) · un <b>botón-píldora a lo ancho</b>, relleno en el estado, ≥46&nbsp;px (instrumento, no juguete). El contenido se reparte en dos bloques —arriba el texto, abajo barra+botón— con <code>space-between</code>, de modo que el alto sobrante es <b>aire repartido</b>, no un hueco: la tarjeta respira como la referencia. Color = estado en <b>borde + ícono + barra + botón</b> (nunca sólo matiz: lo acompañan la forma del ícono y la palabra del contexto). El arco de escritorio no entra en el tile: vive en la hoja. <b>La grilla se adapta sola</b> (<code>minmax(min-content, 1fr)</code>): en el teléfono alto el 2×2 <b>llena la pantalla sin scroll</b>; en el corto las tarjetas guardan su alto airoso y la entrada <b>se desplaza —como la propia «Mi Semana»—</b>, sin recortar nunca el botón. La marca de la cabecera es el <b>botón de inicio</b> con el <b>gesto del escritorio</b>.</p>
     <div class="pair" style="margin-bottom:8px">
       <div class="unit"><div class="phone sm"><img src="img/mf-before.png" alt="Tile antes · arco y celdas"></div><div class="lbl">Antes · arco (velocímetro)</div></div>
-      <div class="unit"><div class="phone sm"><img src="img/mf-f1.png" alt="Tile ahora · semáforo + ícono"></div><div class="lbl">Ahora · semáforo + ícono</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-f1.png" alt="Tile ahora · anatomía de Mi Semana"></div><div class="lbl">Ahora · como Mi Semana</div></div>
       <div class="unit"><div class="phone sm"><img src="img/mf-before-dk.png" alt="Antes oscuro"></div><div class="lbl">Antes · oscuro</div></div>
       <div class="unit"><div class="phone sm"><img src="img/mf-f1-dk.png" alt="Ahora oscuro"></div><div class="lbl">Ahora · oscuro</div></div>
     </div>
     <div class="formlist">
-      <span class="fm">composición <span class="src">Mi Semana · EstructuraMovil (vendedor móvil)</span></span>
-      <span class="fm">color = estado: filo + ícono + botón <span class="src">casa · .card.alert/.good/.warn</span></span>
+      <span class="fm">anatomía (tarjeta, ícono, barra, botón) <span class="src">ontikos/mi-semana.html · .card/.icon/.btn-logro</span></span>
+      <span class="fm">color = estado: borde + ícono + barra + botón <span class="src">mi-semana · .state-risk/-progress/-done</span></span>
       <span class="fm">ícono por frente <span class="src">TableroCeo.jsx · ICON.coloc/cobr/reno/sini</span></span>
-      <span class="fm">barra delgada + muesca <span class="src">casa · .vd-meta-bar</span></span>
+      <span class="fm">barra 6px (999) + muesca <span class="src">mi-semana · .card-progress</span></span>
+      <span class="fm">botón-píldora a lo ancho ≥46px <span class="src">mi-semana · .btn-logro</span></span>
+      <span class="fm">aire repartido (space-between) + grilla que se adapta <span class="src">minmax(min-content,1fr)</span></span>
       <span class="fm">el arco vive en la hoja <span class="src">§5·G: arco en escritorio, barra en móvil</span></span>
       <span class="fm">marca = inicio, con gesto <span class="src">Marca.jsx · anillo + módulos</span></span>
-      <span class="fm">paginador + puntos <span class="src">pieza nueva</span></span>
     </div>
     <div class="pair">
       <div class="unit"><div class="phone sm"><img src="img/mf-f1.png" alt="El Futuro página 1 claro"></div><div class="lbl">P1 · claro</div></div>
@@ -181,25 +182,25 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
   <div class="sec">
     <div class="sec-n">§4</div>
     <h2>La auditoría de alturas</h2>
-    <p class="intro">Medida con el viewport visible real (<code>visualViewport</code>). Entrada = las dos filas de tiles (2×2) que <b>llenan</b> el alto, con los puntos del paginador y la barra inferior siempre visibles; Quiebres = indicadores + filtros + primera fila completa. Al retirar la barra de decisión, la grilla toma el alto que antes forzaba el scroll: <b>la entrada cabe sin desplazarse en toda la gama, incluido el peor caso</b> (SE con barras). «grilla→puntos» es el aire entre el fondo de la 2×2 y la banda de puntos.</p>
+    <p class="intro">Medida con el viewport visible real (<code>visualViewport</code>). El tile airoso de «Mi Semana» no cabe comprimido en una celda de 2×2 corta sin recortar el botón —y comprimir el aire es justo lo que se veía de juguete—. Por eso la grilla se <b>adapta</b> (<code>minmax(min-content,&nbsp;1fr)</code>): <b>en el teléfono alto llena la pantalla sin scroll</b>; en el corto guarda el alto airoso y la <b>entrada se desplaza —como la propia «Mi Semana»—, sin recortar nunca el botón</b> (<code>recortes = 0</code> en toda la gama). «Scroll» es cuánto se desplaza la entrada en vertical.</p>
     <table class="audit">
       <thead><tr>
         <th>Dispositivo</th><th>Viewport</th><th>Área segura ↑/↓</th>
-        <th>El Futuro · scroll</th><th>grilla→puntos</th><th>Quiebres · margen fila 1</th><th>Veredicto</th>
+        <th>El Futuro · scroll</th><th>Botón recortado</th><th>Quiebres · margen fila 1</th><th>Veredicto</th>
       </tr></thead>
       <tbody>
-        <tr><td class="dev">iPhone 13 mini</td><td>375 × 812</td><td>44 / 34</td><td class="ok">0 px</td><td>+6 px</td><td>+294 px</td><td class="ok">Cabe sin scroll</td></tr>
-        <tr><td class="dev">iPhone 15 / 16</td><td>393 × 852</td><td>59 / 34</td><td class="ok">0 px</td><td>+6 px</td><td>+334 px</td><td class="ok">Cabe sin scroll</td></tr>
-        <tr><td class="dev">iPhone 16 Pro Max</td><td>440 × 956</td><td>62 / 34</td><td class="ok">0 px</td><td>+6 px</td><td>+459 px</td><td class="ok">Cabe sin scroll</td></tr>
-        <tr><td class="dev">Pixel 8 (Android)</td><td>412 × 915</td><td>24 / 24</td><td class="ok">0 px</td><td>+6 px</td><td>+397 px</td><td class="ok">Cabe sin scroll</td></tr>
-        <tr><td class="dev">Pixel · con barras*</td><td>412 × 780</td><td>— / —</td><td class="ok">0 px</td><td>+6 px</td><td>+262 px</td><td class="ok">Cabe sin scroll</td></tr>
-        <tr><td class="dev">iPhone SE</td><td>375 × 667</td><td>20 / 0</td><td class="ok">0 px</td><td>+4 px</td><td>+149 px</td><td class="ok">Cabe sin scroll</td></tr>
-        <tr class="worst"><td class="dev">iPhone SE · barras*</td><td>375 × 553</td><td>0 / 0</td><td class="ok">0 px</td><td>+4 px</td><td>+35 px</td><td class="ok">Cabe sin scroll</td></tr>
-        <tr><td class="dev">Galaxy S8 (Android)</td><td>360 × 740</td><td>24 / 24</td><td class="ok">0 px</td><td>+4 px</td><td>+202 px</td><td class="ok">Cabe sin scroll</td></tr>
+        <tr><td class="dev">iPhone 13 mini</td><td>375 × 812</td><td>44 / 34</td><td class="ok">0 px</td><td class="ok">no</td><td>+294 px</td><td class="ok">Llena · sin scroll</td></tr>
+        <tr><td class="dev">iPhone 15 / 16</td><td>393 × 852</td><td>59 / 34</td><td class="ok">0 px</td><td class="ok">no</td><td>+334 px</td><td class="ok">Llena · sin scroll</td></tr>
+        <tr><td class="dev">iPhone 16 Pro Max</td><td>440 × 956</td><td>62 / 34</td><td class="ok">0 px</td><td class="ok">no</td><td>+459 px</td><td class="ok">Llena · sin scroll</td></tr>
+        <tr><td class="dev">Pixel 8 (Android)</td><td>412 × 915</td><td>24 / 24</td><td class="ok">0 px</td><td class="ok">no</td><td>+397 px</td><td class="ok">Llena · sin scroll</td></tr>
+        <tr><td class="dev">Pixel · con barras*</td><td>412 × 780</td><td>— / —</td><td class="ok">1 px</td><td class="ok">no</td><td>+262 px</td><td class="ok">Llena · sin scroll</td></tr>
+        <tr><td class="dev">Galaxy S8 (Android)</td><td>360 × 740</td><td>24 / 24</td><td class="ok">0 px</td><td class="ok">no</td><td>+202 px</td><td class="ok">Llena · sin scroll</td></tr>
+        <tr><td class="dev">iPhone SE</td><td>375 × 667</td><td>20 / 0</td><td class="tight">+30 px</td><td class="ok">no</td><td>+149 px</td><td class="ok">Airosa · se desplaza</td></tr>
+        <tr class="worst"><td class="dev">iPhone SE · barras*</td><td>375 × 553</td><td>0 / 0</td><td class="tight">+152 px</td><td class="ok">no</td><td>+35 px</td><td class="ok">Airosa · se desplaza</td></tr>
       </tbody>
     </table>
     <div class="note">
-      <p><b>Resuelto sin comprimir el aire.</b> La barra de decisión del pie era la que no dejaba caber la entrada en los equipos cortos. Como cada tile ya remata en su propio acto, se retiró: la 2×2 ocupa el alto liberado y <b>la página 1 cabe sin scroll en todos los viewports medidos</b> —incluido el peor caso, iPhone SE con barras (375×553), con la banda de puntos y la barra inferior visibles—. En los equipos cortos el ritmo interno se afina (relleno, cifra, gap) sin bajar el acto de 44&nbsp;px ni truncar nada. No queda una decisión de scroll pendiente.</p>
+      <p><b>El aire, intacto; nada se recorta.</b> Toda la gama moderna —incluido el teléfono del dueño (Pixel, 780–915) y hasta el Galaxy&nbsp;S8 (740)— <b>llena la pantalla sin scroll</b>, con las tarjetas airosas. Sólo los dos equipos realmente cortos (iPhone SE 667 y con barras 553) <b>se desplazan</b> (+30 y +152&nbsp;px), conservando el mismo tile airoso —<b>como la propia «Mi Semana», que también se desplaza</b>—, en vez de comprimirlo a tamaño de juguete. El botón-píldora no se recorta en ningún caso.</p>
       <p><b>Quiebres</b> cabe con margen en todos (el peor, SE con barras: +35&nbsp;px), porque la lista se desplaza dentro de su zona por diseño.</p>
       <p><b>* El límite, declarado:</b> la emulación de WebKit headless no reproduce las barras dinámicas de Safari/Chrome; rinde a viewport completo. Las filas «con barras» se rindieron a una altura reducida (≈ el viewport con barras) como prueba. La confirmación final se hace en equipo real.</p>
     </div>
@@ -221,7 +222,7 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
       <span class="fm"><b>Piezas nuevas (declaradas):</b> el panel de la hamburguesa, el paginador con puntos, la marca como inicio con su gesto, EN VIVO·CIERRE (3 estados), el gauge móvil de la hoja (heredado del escritorio)</span>
     </div>
     <div class="note">
-      <p><b>Color = significado (semáforo de cumplimiento).</b> Cada tile revela su estado en tres canales a la vez —filo lateral, ícono y botón relleno—, no sólo en matiz: <b class="k-red">rojo</b> quiebre, ámbar advertencia, verde sano; el dinero y el activo de la nav en tinta; en oscuro el rojo de texto usa su variante AA. El ícono de marca va en su rojo de kit verbatim (es marca, no texto). Se retiró la barra de decisión del pie (redundante con el acto de cada tile, y rompía la grilla).</p>
+      <p><b>Color = significado (semáforo de cumplimiento).</b> Cada tile revela su estado en varios canales a la vez —borde, ícono, barra y botón relleno—, no sólo en matiz: <b class="k-red">rojo</b> quiebre, ámbar advertencia, verde sano; el dinero y el activo de la nav en tinta; en oscuro el rojo de texto usa su variante AA. El ícono de marca va en su rojo de kit verbatim (es marca, no texto). La barra de decisión del pie se retiró (redundante con el acto de cada tile).</p>
       <p><b>El responsable.</b> En 375&nbsp;px no caben nombre + chip + plazo + acto + peso en la fila; el responsable lo lleva el avatar (iniciales) y la hoja de detalle muestra el nombre completo. Chip y plazo quedan siempre visibles.</p>
       <p><b>Carbon.</b> La grilla sigue siendo la de pantalla chica (4 columnas, relleno 16, breakpoint Small, verificada en el MCP). La hoja pegada al borde inferior sigue a Carbon · Modal · Mobile (verificada en el MCP) y además es la <code>.modal</code> de la casa.</p>
     </div>
