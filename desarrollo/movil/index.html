@@ -51,12 +51,8 @@
 .card-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:14px}
 .card-ey{font-size:.62rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em}
 .card-meta{font-size:.68rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums}
-/* páginas 2 y 3: las tarjetas crecen y reparten su contenido para llenar el
-   alto (sin vacío al fondo); el gráfico de renovación crece con la tarjeta */
-#futuro .page .card,#futuro .page .tac{flex:1 1 auto;min-height:0}
-#futuro .page .card{display:flex;flex-direction:column;justify-content:space-between}
-#futuro .page .tac{justify-content:space-between}
-#futuro .page .card:first-of-type{margin-bottom:14px}
+/* El Futuro corre en vertical: las tarjetas del táctico van a su alto natural
+   (la separación la dan los eyebrows .ef-sep y los margin-top inline) */
 #futuro .page .tlchart{flex:1 1 auto;min-height:76px;height:auto}
 </style>
 </head>
@@ -73,124 +69,108 @@
     <span class="who-avatar">EV</span>
   </header>
 
-  <!-- ══ SUPERFICIE · único scroller (clase pager-host cuando El Futuro está activo) ══ -->
-  <div class="sa pager-host" id="sa">
+  <!-- ══ SUPERFICIE · único scroller (la casa: .sa es el único que corre) ══ -->
+  <div class="sa" id="sa">
 
-    <!-- ───────── EL FUTURO · entrada paginada (3 páginas, snap horizontal) ───────── -->
+    <!-- ───────── EL FUTURO · una sola página que corre en vertical (como «Mi
+         Semana»): el 2×2 estratégico compacto arriba, el táctico debajo. Las
+         tarjetas van a su ALTO NATURAL (no se estiran a llenar), así caben las 4
+         y asoma lo de abajo al correr. ───────── -->
     <section class="sc on" id="futuro">
-      <div class="pager" id="pager">
-
-        <!-- Página 1 · las cuatro líneas 2×2 · anatomía de «Mi Semana»:
-             ícono grande (estado) · título · dos líneas · barra · botón-píldora.
-             Color = estado en borde + ícono + barra + botón. Aire repartido
-             (lt-top arriba, lt-foot abajo) para que la tarjeta respire. -->
-        <div class="page">
-          <div class="page-ey">Si nadie actúa, al cierre</div>
-          <div class="lgrid">
-            <!-- Colocación · en quiebre (rojo) -->
-            <div class="ltile alert" onclick="openLine('colocacion')">
-              <div class="lt-top">
-                <span class="lt-ico r"><svg viewBox="0 0 24 24"><path d="M23 18l-9.5-9.5-5 5L1 6"/><polyline points="17 18 23 18 23 12"/></svg></span>
-                <div class="lt-t">Colocación</div>
-                <div class="lt-fig"><span class="lt-pct">55%</span><span class="lt-cap">de la meta</span></div>
-                <div class="lt-ctx r">5/sem · faltan 12</div>
-              </div>
-              <div class="lt-foot">
-                <div class="lt-bar"><div class="lt-bar-fill r" style="width:55%"></div></div>
-                <button class="lt-act r">Pedir acción</button>
-              </div>
-            </div>
-            <!-- Cobranza · sano (verde) -->
-            <div class="ltile good" onclick="openLine('cobranza')">
-              <div class="lt-top">
-                <span class="lt-ico g"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
-                <div class="lt-t">Cobranza</div>
-                <div class="lt-fig"><span class="lt-pct">96%</span><span class="lt-cap">en plazo</span></div>
-                <div class="lt-ctx g">vencido 3.8%, estable</div>
-              </div>
-              <div class="lt-foot">
-                <div class="lt-bar"><div class="lt-bar-fill g" style="width:96%"></div></div>
-                <button class="lt-act g">Revisar los 16</button>
-              </div>
-            </div>
-            <!-- Renovación · bajo industria (ámbar · muesca ind. 84%) -->
-            <div class="ltile warn" onclick="openLine('renovacion')">
-              <div class="lt-top">
-                <span class="lt-ico a"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span>
-                <div class="lt-t">Renovación</div>
-                <div class="lt-fig"><span class="lt-pct">78%</span><span class="lt-cap">retención</span></div>
-                <div class="lt-ctx a">3 meses a la baja</div>
-              </div>
-              <div class="lt-foot">
-                <div class="lt-bar"><div class="lt-bar-fill a" style="width:78%"></div><span class="lt-bar-notch" style="left:84%" title="industria 84%"></span></div>
-                <button class="lt-act a">Pedir acción</button>
-              </div>
-            </div>
-            <!-- Siniestralidad · sobre umbral (ámbar · muesca umbral 65%) -->
-            <div class="ltile warn" onclick="openLine('siniestralidad')">
-              <div class="lt-top">
-                <span class="lt-ico a"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
-                <div class="lt-t">Siniestralidad</div>
-                <div class="lt-fig"><span class="lt-pct">71%</span><span class="lt-cap">índice</span></div>
-                <div class="lt-ctx a">sube · 3 meses</div>
-              </div>
-              <div class="lt-foot">
-                <div class="lt-bar"><div class="lt-bar-fill a" style="width:71%"></div><span class="lt-bar-notch" style="left:65%" title="umbral 65%"></span></div>
-                <button class="lt-act a">Pedir acción</button>
-              </div>
-            </div>
+      <div class="page-ey">Si nadie actúa, al cierre</div>
+      <div class="lgrid">
+        <!-- Colocación · en quiebre (rojo) -->
+        <div class="ltile alert" onclick="openLine('colocacion')">
+          <div class="lt-top">
+            <span class="lt-ico r"><svg viewBox="0 0 24 24"><path d="M23 18l-9.5-9.5-5 5L1 6"/><polyline points="17 18 23 18 23 12"/></svg></span>
+            <div class="lt-t">Colocación</div>
+            <div class="lt-fig"><span class="lt-pct">55%</span><span class="lt-cap">de la meta</span></div>
+            <div class="lt-ctx r">5/sem · faltan 12</div>
+          </div>
+          <div class="lt-foot">
+            <div class="lt-bar"><div class="lt-bar-fill r" style="width:55%"></div></div>
+            <button class="lt-act r">Pedir acción</button>
           </div>
         </div>
-
-        <!-- Página 2 · el embudo de colocación + el timeline de renovación -->
-        <div class="page">
-          <div class="page-ey">El Futuro · táctico al cierre</div>
-          <div class="card">
-            <div class="card-h"><span class="card-ey">Colocación · embudo al cierre</span><span class="card-meta">quedan 21 días</span></div>
-            <div class="fn-row"><span class="fn-lbl">Meta del periodo</span><span class="fn-val">84 · $12M</span></div>
-            <div class="fn-bar"><i style="width:100%;background:var(--ink4)"></i></div>
-            <div class="fn-row"><span class="fn-lbl">Llegarán al cierre</span><span class="fn-val">46 · $6.6M</span></div>
-            <div class="fn-bar"><i style="width:55%;background:var(--ink4)"></i></div>
-            <div class="fn-row"><span class="fn-lbl" style="color:var(--red-tx,var(--red))">Quedarán fuera</span><span class="fn-val" style="color:var(--red-tx,var(--red))">38 · $5.4M</span></div>
-            <div class="fn-bar"><i style="width:45%;background:var(--red)"></i></div>
-            <div class="fn-note">a 5/sem no alcanza · se necesitan 12/sem</div>
+        <!-- Cobranza · sano (verde) -->
+        <div class="ltile good" onclick="openLine('cobranza')">
+          <div class="lt-top">
+            <span class="lt-ico g"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+            <div class="lt-t">Cobranza</div>
+            <div class="lt-fig"><span class="lt-pct">96%</span><span class="lt-cap">en plazo</span></div>
+            <div class="lt-ctx g">vencido 3.8%, estable</div>
           </div>
-          <div class="card" style="margin-top:14px">
-            <div class="card-h"><span class="card-ey">Renovación · timeline 90 días</span><span class="card-meta">120 vencen · $18.5M</span></div>
-            <div class="tlchart">
-              <div class="tlcol"><i style="height:100%"></i><span>Mes 1 · 6</span></div>
-              <div class="tlcol"><i style="height:100%"></i><span>Mes 2 · 6</span></div>
-              <div class="tlcol"><i style="height:33%"></i><span>Mes 3 · 2</span></div>
-            </div>
-            <div class="fn-note" style="margin-top:8px">14 de primer año en riesgo · 94 se retendrán · 26 se perderán · $4.1M</div>
+          <div class="lt-foot">
+            <div class="lt-bar"><div class="lt-bar-fill g" style="width:96%"></div></div>
+            <button class="lt-act g">Revisar los 16</button>
           </div>
         </div>
-
-        <!-- Página 3 · los dos bloques tácticos -->
-        <div class="page">
-          <div class="page-ey">El Futuro · táctico · lo que se vigila</div>
-          <div class="tac">
-            <div class="tac-h"><span class="tac-t">Importantes</span><span class="chip pill a">9/38</span></div>
-            <div class="segbar"><i style="flex:29;background:var(--surf3)"></i><i style="flex:6;background:var(--amber-fill,var(--amber))"></i><i style="flex:3;background:var(--red)"></i></div>
-            <div class="seglg"><span><span class="sw" style="background:var(--surf3)"></span>A tiempo <b>29</b></span><span><span class="sw" style="background:var(--amber-fill,var(--amber))"></span>Atrasadas <b>6</b></span><span><span class="sw" style="background:var(--red)"></span>Paralizadas <b>3</b></span></div>
-            <div class="tac-foot"><span class="tac-foot-l">3 paralizadas · $410K</span><button class="tac-act" onclick="go('quiebres')">Ver los 9 en Quiebres →</button></div>
+        <!-- Renovación · bajo industria (ámbar · muesca ind. 84%) -->
+        <div class="ltile warn" onclick="openLine('renovacion')">
+          <div class="lt-top">
+            <span class="lt-ico a"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span>
+            <div class="lt-t">Renovación</div>
+            <div class="lt-fig"><span class="lt-pct">78%</span><span class="lt-cap">retención</span></div>
+            <div class="lt-ctx a">3 meses a la baja</div>
           </div>
-          <div class="tac" style="margin-top:14px">
-            <div class="tac-h"><span class="tac-t">Siniestros clave</span><span class="chip pill r">5/14</span></div>
-            <div class="lrow"><span class="lrow-d" style="background:var(--red)"></span><span class="lrow-t">Directo · detenidos 15+ días</span><span class="lrow-n">2</span></div>
-            <div class="lrow"><span class="lrow-d" style="background:var(--amber-fill,var(--amber))"></span><span class="lrow-t">Reembolso · en riesgo</span><span class="lrow-n">3</span></div>
-            <div class="lrow"><span class="lrow-d" style="background:var(--red)"></span><span class="lrow-t">Renovaciones que afectan</span><span class="lrow-n">2</span></div>
-            <div class="tac-foot"><span class="tac-foot-l">5 detenidos +15 días</span><button class="tac-act" onclick="go('quiebres')">Ver los 5 en Quiebres →</button></div>
+          <div class="lt-foot">
+            <div class="lt-bar"><div class="lt-bar-fill a" style="width:78%"></div><span class="lt-bar-notch" style="left:84%" title="industria 84%"></span></div>
+            <button class="lt-act a">Pedir acción</button>
           </div>
         </div>
-
+        <!-- Siniestralidad · sobre umbral (ámbar · muesca umbral 65%) -->
+        <div class="ltile warn" onclick="openLine('siniestralidad')">
+          <div class="lt-top">
+            <span class="lt-ico a"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+            <div class="lt-t">Siniestralidad</div>
+            <div class="lt-fig"><span class="lt-pct">71%</span><span class="lt-cap">índice</span></div>
+            <div class="lt-ctx a">sube · 3 meses</div>
+          </div>
+          <div class="lt-foot">
+            <div class="lt-bar"><div class="lt-bar-fill a" style="width:71%"></div><span class="lt-bar-notch" style="left:65%" title="umbral 65%"></span></div>
+            <button class="lt-act a">Pedir acción</button>
+          </div>
+        </div>
       </div>
-      <!-- los puntos del paginador, sobre la bnav · tocables y con aria -->
-      <div class="dots" role="tablist" aria-label="Páginas de El Futuro">
-        <button class="dot on" role="tab" aria-label="Página 1 · líneas" aria-selected="true" onclick="goPage(0)"></button>
-        <button class="dot" role="tab" aria-label="Página 2 · embudo y renovación" aria-selected="false" onclick="goPage(1)"></button>
-        <button class="dot" role="tab" aria-label="Página 3 · tácticos" aria-selected="false" onclick="goPage(2)"></button>
+
+      <!-- Táctico · el embudo de colocación + el timeline de renovación -->
+      <div class="page-ey ef-sep">Táctico al cierre</div>
+      <div class="card">
+        <div class="card-h"><span class="card-ey">Colocación · embudo al cierre</span><span class="card-meta">quedan 21 días</span></div>
+        <div class="fn-row"><span class="fn-lbl">Meta del periodo</span><span class="fn-val">84 · $12M</span></div>
+        <div class="fn-bar"><i style="width:100%;background:var(--ink4)"></i></div>
+        <div class="fn-row"><span class="fn-lbl">Llegarán al cierre</span><span class="fn-val">46 · $6.6M</span></div>
+        <div class="fn-bar"><i style="width:55%;background:var(--ink4)"></i></div>
+        <div class="fn-row"><span class="fn-lbl" style="color:var(--red-tx,var(--red))">Quedarán fuera</span><span class="fn-val" style="color:var(--red-tx,var(--red))">38 · $5.4M</span></div>
+        <div class="fn-bar"><i style="width:45%;background:var(--red)"></i></div>
+        <div class="fn-note">a 5/sem no alcanza · se necesitan 12/sem</div>
       </div>
+      <div class="card" style="margin-top:14px">
+        <div class="card-h"><span class="card-ey">Renovación · timeline 90 días</span><span class="card-meta">120 vencen · $18.5M</span></div>
+        <div class="tlchart">
+          <div class="tlcol"><i style="height:100%"></i><span>Mes 1 · 6</span></div>
+          <div class="tlcol"><i style="height:100%"></i><span>Mes 2 · 6</span></div>
+          <div class="tlcol"><i style="height:33%"></i><span>Mes 3 · 2</span></div>
+        </div>
+        <div class="fn-note" style="margin-top:8px">14 de primer año en riesgo · 94 se retendrán · 26 se perderán · $4.1M</div>
+      </div>
+
+      <!-- Táctico · lo que se vigila -->
+      <div class="page-ey ef-sep">Lo que se vigila</div>
+      <div class="tac">
+        <div class="tac-h"><span class="tac-t">Importantes</span><span class="chip pill a">9/38</span></div>
+        <div class="segbar"><i style="flex:29;background:var(--surf3)"></i><i style="flex:6;background:var(--amber-fill,var(--amber))"></i><i style="flex:3;background:var(--red)"></i></div>
+        <div class="seglg"><span><span class="sw" style="background:var(--surf3)"></span>A tiempo <b>29</b></span><span><span class="sw" style="background:var(--amber-fill,var(--amber))"></span>Atrasadas <b>6</b></span><span><span class="sw" style="background:var(--red)"></span>Paralizadas <b>3</b></span></div>
+        <div class="tac-foot"><span class="tac-foot-l">3 paralizadas · $410K</span><button class="tac-act" onclick="go('quiebres')">Ver los 9 en Quiebres →</button></div>
+      </div>
+      <div class="tac" style="margin-top:14px">
+        <div class="tac-h"><span class="tac-t">Siniestros clave</span><span class="chip pill r">5/14</span></div>
+        <div class="lrow"><span class="lrow-d" style="background:var(--red)"></span><span class="lrow-t">Directo · detenidos 15+ días</span><span class="lrow-n">2</span></div>
+        <div class="lrow"><span class="lrow-d" style="background:var(--amber-fill,var(--amber))"></span><span class="lrow-t">Reembolso · en riesgo</span><span class="lrow-n">3</span></div>
+        <div class="lrow"><span class="lrow-d" style="background:var(--red)"></span><span class="lrow-t">Renovaciones que afectan</span><span class="lrow-n">2</span></div>
+        <div class="tac-foot"><span class="tac-foot-l">5 detenidos +15 días</span><button class="tac-act" onclick="go('quiebres')">Ver los 5 en Quiebres →</button></div>
+      </div>
+      <div style="height:8px"></div>
     </section>
 
     <!-- ───────── QUIEBRES · lista (marco fijo, sólo la lista corre) ───────── -->
@@ -356,7 +336,7 @@ function toggleTema(){
   syncTemaLbl();
 }
 
-var sa=document.getElementById('sa'), pager=document.getElementById('pager');
+var sa=document.getElementById('sa');
 
 // ── la marca como INICIO, con el gesto del escritorio (VERBATIM de Marca.jsx) ──
 // el anillo abierto gira 360° una vez; los 3 módulos entran escalonados (fade +
@@ -376,28 +356,15 @@ function brandSVG(play){
 }
 function playBrand(){ var h=document.getElementById('ont-home'); if(h) h.innerHTML = brandSVG(true); }
 
-// ── inicio: va a El Futuro (página 1) y re-dispara el gesto de marca ──
-function goHome(){ go('futuro'); goPage(0); playBrand(); }
+// ── inicio: va a El Futuro (arriba del todo) y re-dispara el gesto de marca ──
+function goHome(){ go('futuro'); playBrand(); }
 
-// ── navegación de secciones (bnav) ──
+// ── navegación de secciones (bnav) · cada superficie corre en vertical en la .sa ──
 function go(id){
   document.querySelectorAll('.sc').forEach(function(s){s.classList.toggle('on',s.id===id)});
   var order=['futuro','quiebres','compromisos','clave'];
   document.querySelectorAll('.bnav .ni').forEach(function(n,i){n.classList.toggle('on',order[i]===id)});
-  // la .sa aloja el paginador sólo en El Futuro; en las listas se desplaza normal
-  sa.classList.toggle('pager-host', id==='futuro');
-  if(id!=='futuro') sa.scrollTop=0;
-}
-
-// ── paginador de la entrada ──
-function goPage(i){ pager.scrollTo({left:i*pager.clientWidth, behavior:'smooth'}); }
-if(pager){
-  pager.addEventListener('scroll', function(){
-    var i=Math.round(pager.scrollLeft/pager.clientWidth);
-    document.querySelectorAll('.dots .dot').forEach(function(d,k){
-      d.classList.toggle('on',k===i); d.setAttribute('aria-selected',k===i?'true':'false');
-    });
-  }, {passive:true});
+  sa.scrollTop=0;
 }
 
 // ── panel de la hamburguesa (foco atrapado simple + Escape) ──
