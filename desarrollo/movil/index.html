@@ -10,12 +10,12 @@
      VERSIONADO DE ASSETS (?v=…): cada cambio sube el número y el navegador trae
      el archivo nuevo al instante, sin que nadie tenga que limpiar la caché —el
      HTML se sirve fresco y pide la versión nueva del CSS. Subir en cada deploy. -->
-<link rel="stylesheet" href="assets/app.css?v=20261004c">
-<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261004c">
-<link rel="stylesheet" href="assets/cliente-extra.css?v=20261004c">
-<link rel="stylesheet" href="assets/proceso.css?v=20261004c">
-<link rel="stylesheet" href="assets/network-design-system.css?v=20261004c">
-<link rel="stylesheet" href="assets/movil.css?v=20261004c">
+<link rel="stylesheet" href="assets/app.css?v=20261004e">
+<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261004e">
+<link rel="stylesheet" href="assets/cliente-extra.css?v=20261004e">
+<link rel="stylesheet" href="assets/proceso.css?v=20261004e">
+<link rel="stylesheet" href="assets/network-design-system.css?v=20261004e">
+<link rel="stylesheet" href="assets/movil.css?v=20261004e">
 <style>html,body{font-family:'DM Sans',system-ui,sans-serif}
 .qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
@@ -40,10 +40,12 @@
 /* el acto · botón-píldora en tinta (navegación), a juego con los de página 1 */
 .tac-act{border:none;background:var(--ink);border-radius:999px;padding:12px 18px;min-height:46px;font-family:inherit;font-size:.82rem;font-weight:700;color:var(--surf);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
 .tac-act:active{transform:scale(.97)}
-.fn-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.fn{display:flex;flex-direction:column;gap:15px}
+.fn-step{display:flex;flex-direction:column;gap:7px}
+.fn-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .fn-lbl{font-size:.84rem;font-weight:500;color:var(--ink2)}
 .fn-val{font-size:.9rem;font-weight:800;font-variant-numeric:tabular-nums}
-.fn-bar{height:8px;border-radius:5px;background:var(--surf3);overflow:hidden;margin-bottom:12px}
+.fn-bar{height:8px;border-radius:5px;background:var(--surf3);overflow:hidden}
 .fn-bar i{display:block;height:100%;border-radius:5px}
 .fn-note{font-size:.72rem;font-weight:700;color:var(--ink3);margin-top:4px}
 .tlchart{display:flex;align-items:flex-end;gap:12px;height:76px;padding-top:6px}
@@ -110,7 +112,7 @@
                 <span class="lt-ico g"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
                 <div class="lt-t">Cobranza</div>
                 <div class="lt-fig"><span class="lt-pct">96%</span><span class="lt-cap">en plazo</span></div>
-                <div class="lt-ctx g">vencido 3.8%, estable</div>
+                <div class="lt-ctx g">3.8% · estable</div>
               </div>
               <div class="lt-foot">
                 <div class="lt-bar"><div class="lt-bar-fill g" style="width:96%"></div></div>
@@ -144,28 +146,34 @@
               </div>
             </div>
           </div>
+          <!-- alerta DELGADA al pie (una sola línea, sin scroll): la consecuencia
+               agregada y el acto al más grave. Hereda el estado más grave (rojo). -->
+          <button class="alert-slim" onclick="openLine('atender')">
+            <span class="as-dot"></span>
+            <span class="as-txt"><b>$9.5M</b> fuera · <b>$6.8M</b> encarece</span>
+            <span class="as-go">Atender →</span>
+          </button>
         </div>
 
         <!-- Página 2 · el embudo de colocación + el timeline de renovación -->
         <div class="page">
-          <div class="card">
+          <div class="card tapc alert" onclick="openLine('colocacion')">
             <div class="card-h"><span class="card-ey">Colocación · embudo al cierre</span><span class="card-meta">quedan 21 días</span></div>
-            <div class="fn-row"><span class="fn-lbl">Meta del periodo</span><span class="fn-val">84 · $12M</span></div>
-            <div class="fn-bar"><i style="width:100%;background:var(--ink4)"></i></div>
-            <div class="fn-row"><span class="fn-lbl">Llegarán al cierre</span><span class="fn-val">46 · $6.6M</span></div>
-            <div class="fn-bar"><i style="width:55%;background:var(--ink4)"></i></div>
-            <div class="fn-row"><span class="fn-lbl" style="color:var(--red-tx,var(--red))">Quedarán fuera</span><span class="fn-val" style="color:var(--red-tx,var(--red))">38 · $5.4M</span></div>
-            <div class="fn-bar"><i style="width:45%;background:var(--red)"></i></div>
-            <div class="fn-note">a 5/sem no alcanza · se necesitan 12/sem</div>
+            <div class="fn">
+              <div class="fn-step"><div class="fn-row"><span class="fn-lbl">Meta del periodo</span><span class="fn-val">84 · $12M</span></div><div class="fn-bar"><i style="width:100%;background:var(--ink4)"></i></div></div>
+              <div class="fn-step"><div class="fn-row"><span class="fn-lbl g">Llegarán al cierre</span><span class="fn-val g">46 · $6.6M</span></div><div class="fn-bar"><i style="width:55%;background:var(--green)"></i></div></div>
+              <div class="fn-step"><div class="fn-row"><span class="fn-lbl r">Quedarán fuera</span><span class="fn-val r">38 · $5.4M</span></div><div class="fn-bar"><i style="width:45%;background:var(--red)"></i></div></div>
+            </div>
+            <div class="card-foot"><span class="fn-note">a 5/sem no alcanza · se necesitan 12/sem</span><span class="card-go r">Pedir acción →</span></div>
           </div>
-          <div class="card" style="margin-top:14px">
+          <div class="card tapc warn" style="margin-top:14px" onclick="openLine('renovacion')">
             <div class="card-h"><span class="card-ey">Renovación · timeline 90 días</span><span class="card-meta">120 vencen · $18.5M</span></div>
             <div class="tlchart">
-              <div class="tlcol"><i style="height:100%"></i><span>Mes 1 · 6</span></div>
-              <div class="tlcol"><i style="height:100%"></i><span>Mes 2 · 6</span></div>
-              <div class="tlcol"><i style="height:33%"></i><span>Mes 3 · 2</span></div>
+              <div class="tlcol"><i class="g" style="height:70%"></i><span>Mes 1 · 6</span></div>
+              <div class="tlcol"><i class="a" style="height:70%"></i><span>Mes 2 · 6</span></div>
+              <div class="tlcol"><i class="r" style="height:33%"></i><span>Mes 3 · 2</span></div>
             </div>
-            <div class="fn-note" style="margin-top:8px">14 de primer año en riesgo · 94 se retendrán · 26 se perderán · $4.1M</div>
+            <div class="card-foot"><span class="fn-note"><b class="k-amber">14</b> de primer año en riesgo · 26 se perderán · $4.1M</span><span class="card-go a">Pedir acción →</span></div>
           </div>
         </div>
 
@@ -354,9 +362,19 @@ function setShort(){
   // umbral 735: debajo, se ciñe el 2×2 (cabe sin recorte); a partir de ahí las
   // tarjetas de tamaño pleno ya caben con margen. El Futuro no scrollea en
   // vertical, así que la barra de Safari no cruza el umbral en uso normal.
-  document.body.classList.toggle('vh-short', h < 735);
+  document.body.classList.toggle('vh-short', h < 750);
 }
-function measure(){ setVH(); setShort(); }
+// ── alerta delgada · muestra el detalle (dos cifras) cuando cabe en UNA línea;
+//    en pantallas muy estrechas (iPhone SE) cae al agregado para no recortar ni
+//    scrollear. Se re-evalúa en cada medición, así que es auto-correctivo. */
+var AS_FULL = '<b>$9.5M</b> fuera · <b>$6.8M</b> encarece';
+var AS_AGG  = '<b>$16.3M</b> en riesgo';
+function fitAlert(){
+  var el = document.querySelector('.as-txt'); if(!el) return;
+  el.innerHTML = AS_FULL;
+  if(el.scrollWidth > el.clientWidth + 1){ el.innerHTML = AS_AGG; }
+}
+function measure(){ setVH(); setShort(); fitAlert(); }
 measure();
 requestAnimationFrame(measure);
 setTimeout(measure, 120); setTimeout(measure, 400);
