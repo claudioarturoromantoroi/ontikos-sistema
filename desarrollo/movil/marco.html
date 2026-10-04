@@ -132,14 +132,19 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
   <!-- §2 ENTRADA PAGINADA -->
   <div class="sec">
     <div class="sec-n">§2</div>
-    <h2>La entrada se pagina, no se desplaza</h2>
-    <p class="intro">El Futuro es una rejilla de 2×2 que se recorre de lado con el dedo, con puntos sobre la barra inferior (tocables y con aria). Cada página se dimensiona para caber entera en el peor caso, sin desplazamiento vertical. El paginador con scroll-snap es pieza nueva (no existe en la casa). <b>El contenido interno se rediseña sobre una grilla, no se estira:</b> cada línea es una celda KPI compuesta —cabecera (título + estado), el gauge como héroe, una rejilla de 2 cifras (tendencia y dinero del escritorio, en su color: el dinero en tinta, la tendencia en su estado) separadas por líneas clave, y el acto—. Así la celda llena por composición. En el iPhone SE con barras las cifras se ocultan y queda la celda compacta (gauge + acto). Las imágenes de abajo son un teléfono moderno (393×852).</p>
+    <h2>La entrada se pagina · el tile, recompuesto</h2>
+    <p class="intro"><b>Antes:</b> el arco comprimido parecía un velocímetro de juguete, todo pesaba lo mismo (cifras a 900, filetes, cuatro cajas) y el acto se leía como enlace. <b>Después</b> (composición tomada de «Mi Semana» — EstructuraMovil, vendedor móvil — sin tomar su uso del color): <b>una sola idea por tile</b>, con aire y ritmo vertical constante. El arco sale del móvil: el avance va en una <b>barra delgada</b> en el color del estado, con <b>muesca de referencia</b> (industria 84%, umbral 65%); el arco completo se muestra en la hoja de detalle. La anatomía, igual en los cuatro: título (700) · estado · la cifra con su barra (única cifra a 900) · una línea de contexto · el acto como <b>botón real</b> (contorno rojo para el quiebre, tinta para los demás). Las dos celdas de métricas suben a la hoja. La separación la da el espacio, no las líneas.</p>
+    <div class="pair" style="margin-bottom:8px">
+      <div class="unit"><div class="phone sm"><img src="img/mf-before.png" alt="Tile antes · arco y celdas"></div><div class="lbl">Antes · arco + celdas</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-f1.png" alt="Tile después · barra y una idea"></div><div class="lbl">Después · barra + una idea</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-before-dk.png" alt="Antes oscuro"></div><div class="lbl">Antes · oscuro</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-f1-dk.png" alt="Después oscuro"></div><div class="lbl">Después · oscuro</div></div>
+    </div>
     <div class="formlist">
-      <span class="fm"><b>Página 1</b> · las 4 líneas en 2×2 (gauge + estado + acto) + la barra de decisión</span>
-      <span class="fm"><b>Página 2</b> · embudo de colocación (con «Quedarán fuera») + timeline de renovación</span>
-      <span class="fm"><b>Página 3</b> · los dos tácticos: Importantes y Siniestros clave</span>
-      <span class="fm">la barra de decisión hereda el estado más grave → <b class="k-red">rojo</b> (Colocación en quiebre)</span>
-      <span class="fm">arco del <b>gauge</b> <span class="src">Ontikos · heredado del escritorio</span></span>
+      <span class="fm">composición <span class="src">Mi Semana · EstructuraMovil (vendedor móvil)</span></span>
+      <span class="fm">barra delgada + muesca <span class="src">casa · .vd-meta-bar</span></span>
+      <span class="fm">el arco vive en la hoja <span class="src">§5·G: arco en escritorio, barra en móvil</span></span>
+      <span class="fm">la barra de decisión = 2.º nivel, <b class="k-red">rojo</b> (estado más grave)</span>
       <span class="fm">paginador + puntos <span class="src">pieza nueva</span></span>
     </div>
     <div class="pair">
@@ -174,26 +179,27 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
   <div class="sec">
     <div class="sec-n">§4</div>
     <h2>La auditoría de alturas</h2>
-    <p class="intro">Medida, no a ojo. El alto útil = viewport − (cabecera + área segura ↑) − (barra + área segura ↓) − (puntos, sólo en la entrada). Requerido: la entrada 404&nbsp;px por página; la primera lectura de Quiebres 430&nbsp;px (hasta el pie de la primera fila). Pasa si el peor caso cabe entero.</p>
+    <p class="intro">Medida con el viewport visible real (<code>visualViewport</code>), con la nueva anatomía airosa. Entrada = las dos filas de tiles + la barra de decisión; Quiebres = indicadores + filtros + primera fila completa. El margen es el aire que sobra al pie antes de la barra inferior.</p>
     <table class="audit">
       <thead><tr>
         <th>Dispositivo</th><th>Viewport</th><th>Área segura ↑/↓</th>
-        <th>Útil · app instalada</th><th>Útil · navegador con barras*</th><th>Entrada (req 404)</th><th>Veredicto</th>
+        <th>El Futuro (entrada)</th><th>Quiebres · margen fila 1</th><th>Veredicto</th>
       </tr></thead>
       <tbody>
-        <tr class="worst"><td class="dev">iPhone SE</td><td>375 × 667</td><td>20 / 0</td><td>498</td><td>404</td><td>+0 … +94</td><td class="tight">Cabe (peor caso)</td></tr>
-        <tr><td class="dev">iPhone 13 mini</td><td>375 × 812</td><td>44 / 34</td><td>585</td><td>563</td><td>+159</td><td class="ok">Cabe</td></tr>
-        <tr><td class="dev">iPhone 15 / 16</td><td>393 × 852</td><td>59 / 34</td><td>610</td><td>603</td><td>+199</td><td class="ok">Cabe</td></tr>
-        <tr><td class="dev">iPhone 16 Pro Max</td><td>440 × 956</td><td>62 / 34</td><td>711</td><td>707</td><td>+303</td><td class="ok">Cabe</td></tr>
-        <tr><td class="dev">Pixel 8 (Android)</td><td>412 × 915</td><td>24 / 24</td><td>718</td><td>710</td><td>+306</td><td class="ok">Cabe</td></tr>
-        <tr><td class="dev">Galaxy S8 (Android)</td><td>360 × 740</td><td>24 / 24</td><td>543</td><td>535</td><td>+131</td><td class="ok">Cabe</td></tr>
+        <tr><td class="dev">iPhone 13 mini</td><td>375 × 812</td><td>44 / 34</td><td>margen +22 px</td><td>+294 px</td><td class="ok">Cabe con aire</td></tr>
+        <tr><td class="dev">iPhone 15 / 16</td><td>393 × 852</td><td>59 / 34</td><td>margen +22 px</td><td>+334 px</td><td class="ok">Cabe con aire</td></tr>
+        <tr><td class="dev">iPhone 16 Pro Max</td><td>440 × 956</td><td>62 / 34</td><td>margen +22 px</td><td>+459 px</td><td class="ok">Cabe con aire</td></tr>
+        <tr><td class="dev">Pixel 8 (Android)</td><td>412 × 915</td><td>24 / 24</td><td>margen +22 px</td><td>+397 px</td><td class="ok">Cabe con aire</td></tr>
+        <tr><td class="dev">Pixel · con barras*</td><td>412 × 780</td><td>— / —</td><td>margen +22 px</td><td>+262 px</td><td class="ok">Cabe con aire</td></tr>
+        <tr class="worst"><td class="dev">iPhone SE</td><td>375 × 667</td><td>20 / 0</td><td>se desplaza</td><td>+149 px</td><td class="tight">Entrada: ver nota</td></tr>
+        <tr class="worst"><td class="dev">iPhone SE · barras*</td><td>375 × 553</td><td>0 / 0</td><td>se desplaza</td><td>+35 px</td><td class="tight">Entrada: ver nota</td></tr>
+        <tr class="worst"><td class="dev">Galaxy S8 (Android)</td><td>360 × 740</td><td>24 / 24</td><td>se desplaza</td><td>+202 px</td><td class="tight">Entrada: ver nota</td></tr>
       </tbody>
     </table>
     <div class="note">
-      <p><b>La medida es concreta, no estimada.</b> dvh y los flex anidados dejaban un vacío al fondo de forma intermitente en equipos reales. Ahora se mide el viewport visible de verdad por JS (<code>visualViewport.height → --vh</code>) y la <code>.app</code> toma esa altura en píxeles; con una altura definida la cadena flex llena sin huecos, y se recalcula al rotar o al mostrarse/ocultarse las barras. Con eso resuelto, se ajustaron los tamaños internos (gauge más grande) y la rejilla de la tarjeta.</p>
-      <p><b>Presupuesto del marco</b> (medido en el render, sin área segura): cabecera 61&nbsp;px, barra inferior 62&nbsp;px, puntos 26&nbsp;px. En el dispositivo se suma el área segura a cabecera y barra. Quiebres no lleva puntos, así que tiene 26&nbsp;px más de útil que la entrada (holgura +0…+3 en el peor caso, medida: fila&nbsp;1 termina a 488&nbsp;px de un útil de 491).</p>
-      <p><b>El peor caso es el iPhone SE con las barras de Safari visibles</b> (útil ≈ 404&nbsp;px para la entrada, 430 para Quiebres). Las tres páginas de la entrada caben con 0 de desbordamiento; la primera lectura de Quiebres cabe con +3&nbsp;px. Cualquier otro dispositivo o modo tiene más útil, así que también cabe. Rendidos aquí abajo como prueba.</p>
-      <p><b>* El límite, declarado:</b> la emulación de WebKit headless no reproduce las barras dinámicas de Safari; rinde a viewport completo (como app instalada). El cálculo con el viewport chico (svh) cubre el peor caso y se rindió el SE a 553&nbsp;px (≈ SE con barras) como prueba. La confirmación final se hace en un iPhone real. Los valores de «navegador con barras» para los demás dispositivos están modelados (viewport − chrome del navegador), no medidos en equipo.</p>
+      <p><b>El aire tiene un costo en los equipos cortos, y lo saco a la superficie antes de comprimir.</b> El tile airoso (una idea, botón de 44&nbsp;px) cabe con margen en todo viewport de ~760&nbsp;px o más —toda la gama moderna, incluido el Pixel del dueño, con +22&nbsp;px de aire al pie—. En los equipos cortos (iPhone SE 667 y con barras 553, Galaxy&nbsp;S8 740) la página 1 <b>no cabe sin sacrificar aire</b>. Como el aire es parte de la corrección, en esos equipos la entrada <b>se desplaza en vertical</b> (nada se recorta) en vez de comprimirse. <b>Pendiente de tu decisión:</b> ¿lo dejo así (scroll en equipos cortos, aire intacto) o hago una variante compacta para el SE?</p>
+      <p><b>Quiebres</b> sí cabe con margen en todos (el peor, SE con barras: +35&nbsp;px), porque la lista se desplaza dentro de su zona por diseño.</p>
+      <p><b>* El límite, declarado:</b> la emulación de WebKit headless no reproduce las barras dinámicas de Safari/Chrome; rinde a viewport completo. Las filas «con barras» se rindieron a una altura reducida (≈ el viewport con barras) como prueba. La confirmación final se hace en equipo real.</p>
     </div>
     <div class="pair" style="margin-top:20px">
       <div class="unit"><div class="phone" style="width:250px"><img src="img/mf-553-f1.png" alt="El Futuro peor caso SE 553"></div><div class="lbl">Entrada · SE con barras (375×553)</div></div>

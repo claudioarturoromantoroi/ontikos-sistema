@@ -41,11 +41,13 @@
   position:fixed;top:0;bottom:0;left:0;z-index:141;
   width:min(84vw,320px);max-width:var(--app-max);
   background:var(--surf);color:var(--ink);
-  transform:translateX(-100%);transition:transform .24s var(--ease-sheet,ease);
+  transform:translateX(-100%);
+  transition:transform .24s var(--ease-sheet,ease),visibility .24s;
   display:flex;flex-direction:column;overflow-y:auto;
-  box-shadow:2px 0 30px -8px rgba(9,9,15,.4);
+  box-shadow:none;              /* cerrado: sin sombra ni área táctil (no deja franja) */
+  visibility:hidden;
 }
-.drawer.open{transform:translateX(0)}
+.drawer.open{transform:translateX(0);visibility:visible;box-shadow:2px 0 30px -8px rgba(9,9,15,.4)}
 .drawer-h{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 14px) var(--gut) 13px;border-bottom:1px solid var(--brd)}
 .drawer-h .ont-ico{width:24px;height:24px}
 .drawer-h .brand-txt{font-weight:900;font-size:1.02rem;letter-spacing:-.03em}
@@ -93,53 +95,52 @@
 .gz-pace{font-size:.66rem;font-weight:800;margin-top:3px;line-height:1.2}
 .gz-pace.r{color:var(--red-tx,var(--red))} .gz-pace.a{color:var(--amber)} .gz-pace.g{color:var(--green)} .gz-pace.n{color:var(--ink2)}
 
-/* ── El tile de línea estratégica · celda KPI COMPUESTA EN GRILLA ──────────
-   No es una caja estirada: el contenido interno se rediseña y se alinea a
-   líneas clave. Zonas: cabecera (título + estado) · el gauge como héroe · una
-   rejilla de 2 cifras (tendencia y dinero, del escritorio) separadas por una
-   línea clave · el acto. Llena por composición, no estirando. */
-.lgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:7px;flex:1 1 auto;min-height:0}
-.ltile{background:var(--surf);border:1px solid var(--brd);border-radius:12px;display:grid;grid-template-rows:auto 1fr auto;min-width:0;min-height:0;overflow:hidden;cursor:pointer}
-/* título arriba, estado DEBAJO: así caben "bajo industria"/"sobre umbral" sin
-   recortarse en el tile estrecho */
-.lt-head{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px 6px}
-.lt-t{font-size:.8rem;font-weight:800;letter-spacing:-.02em;line-height:1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ltile .memb-chip{font-size:.45rem;padding:2px 6px;white-space:nowrap;flex:none}
-/* héroe: el gauge (arco + %) centrado, crece con el tile */
-.lt-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px 8px 8px;border-top:1px solid var(--line2,rgba(0,0,0,.07));min-height:0}
-.lt-hero .gz-arc{width:78px;height:47px;position:relative;flex:none}
-.lt-hero .gz-arc svg{width:78px;height:47px;display:block;overflow:visible}
-.lt-hero .gz-num{font-size:1.08rem}
-.lt-hero.r .gz-val{stroke:var(--red)} .lt-hero.a .gz-val{stroke:var(--amber-fill,var(--amber))} .lt-hero.g .gz-val{stroke:var(--green)}
-.lt-cap{font-size:.5rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;text-align:center}
-/* cifras: 2 columnas, línea clave arriba y entre ellas */
-.lt-stats{display:none;grid-template-columns:1fr 1fr;border-top:1px solid var(--brd)}
-.lt-stat{padding:6px 10px;min-width:0}
-.lt-stat + .lt-stat{border-left:1px solid var(--brd)}
-.lt-k{font-size:.46rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lt-v{font-size:.86rem;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.05;margin-top:2px;color:var(--ink)}
-.lt-v.r{color:var(--red-tx,var(--red))} .lt-v.a{color:var(--amber)} .lt-v.g{color:var(--green)}
-.lt-s{font-size:.48rem;font-weight:700;color:var(--ink3);line-height:1.2;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ltile-act{border:none;border-top:1px solid var(--brd);background:none;padding:7px 10px;text-align:left;font-size:.66rem;font-weight:800;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:inherit;min-height:24px}
-.ltile-act .arr{color:var(--ink3)}
-/* la rejilla de cifras aparece cuando hay alto; en el SE con barras se oculta */
-@media (min-height:600px){
-  .ltile{grid-template-rows:auto 1fr auto auto}
-  .lt-stats{display:grid}
+/* ── El tile de línea estratégica · UNA SOLA IDEA (recomposición) ───────────
+   Composición tomada de «Mi Semana» (EstructuraMovil · Ontikos vendedor móvil):
+   una idea por tarjeta, aire, ritmo vertical constante, peso contenido, acto
+   como botón. De ahí el relleno 16 y la barra delgada redondeada. NO se toma su
+   uso del color. La separación la da el ESPACIO, no líneas internas.
+   El arco de escritorio no entra: el avance va en BARRA con muesca de
+   referencia; el arco se muestra en la hoja (instrumento a escala de escritorio).
+   Procedencia: ERP-CRM/producto/app/src/vistas/movil/estructura-movil.css */
+.lgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;flex:1 1 auto;min-height:0}
+.ltile{background:var(--surf);border:1px solid var(--brd);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0;min-height:0;overflow:hidden;cursor:pointer;text-align:left}
+/* 1 · título (peso 700) · 2 · estado (chip con punto) */
+.lt-t{font-size:.92rem;font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink)}
+.ltile .memb-chip{font-size:.46rem;padding:2px 7px;white-space:nowrap;align-self:flex-start}
+/* 3 · la cifra con su barra (única cifra a 900 del tile, moderada) */
+.lt-metric{display:flex;flex-direction:column;gap:7px}
+.lt-figrow{display:flex;align-items:baseline;gap:7px}
+.lt-pct{font-size:1.35rem;font-weight:900;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.lt-pct-cap{font-size:.66rem;font-weight:600;color:var(--ink3)}
+.lt-bar{position:relative;height:8px;background:var(--surf3);border-radius:99px}
+.lt-bar-fill{position:absolute;left:0;top:0;height:100%;border-radius:99px}
+.lt-bar-fill.r{background:var(--red)} .lt-bar-fill.a{background:var(--amber-fill,var(--amber))} .lt-bar-fill.g{background:var(--green)}
+.lt-bar-notch{position:absolute;top:-2px;width:2px;height:12px;background:var(--ink);opacity:.5;border-radius:1px;margin-left:-1px}
+/* 4 · una sola línea de contexto (regular; color del estado sólo si lo carga) */
+.lt-ctx{font-size:.76rem;font-weight:500;color:var(--ink2);line-height:1.3}
+.lt-ctx.r{color:var(--red-tx,var(--red));font-weight:600} .lt-ctx.a{color:var(--amber);font-weight:600} .lt-ctx.g{color:var(--green);font-weight:600}
+/* 5 · el acto como BOTÓN real: ancho completo, contorno, ≥44px, SIN relleno */
+.ltile-act{margin-top:auto;display:block;width:100%;border:1.5px solid var(--ink);background:none;border-radius:11px;padding:11px 10px;min-height:44px;font-size:.78rem;font-weight:700;color:var(--ink);cursor:pointer;text-align:center;font-family:inherit;letter-spacing:-.01em}
+.ltile-act.q{border-color:var(--red);color:var(--red-tx,var(--red))}
+/* en pantallas altas: más aire y cifra un poco mayor */
+@media (min-height:760px){
+  .lgrid{gap:14px}
+  .ltile{padding:16px;gap:13px}
+  .lt-t{font-size:1rem}
+  .lt-pct{font-size:1.6rem}
+  .lt-pct-cap{font-size:.74rem}
+  .lt-bar{height:9px}
+  .lt-ctx{font-size:.82rem}
+  .ltile-act{font-size:.82rem;padding:12px}
 }
-/* en pantallas altas el gauge y las cifras crecen */
-@media (min-height:740px){
-  .lt-head{padding:11px 12px 9px}
-  .lt-t{font-size:.86rem}
-  .lt-hero .gz-arc{width:110px;height:66px}
-  .lt-hero .gz-arc svg{width:110px;height:66px}
-  .lt-hero .gz-num{font-size:1.55rem}
-  .lt-cap{font-size:.56rem}
-  .lt-stat{padding:10px 12px}
-  .lt-v{font-size:1.05rem}
-  .lt-k{font-size:.52rem}
-  .lt-s{font-size:.54rem}
-  .ltile-act{padding:10px 12px;font-size:.72rem}
+/* En viewports muy cortos (iPhone SE con barras de Safari) el tile airoso no
+   cabe sin sacrificar aire. Antes que comprimir —el aire es parte de la
+   corrección— la entrada se desplaza en vertical y la grilla toma su alto
+   natural, para que nada se recorte. (Pendiente de decisión del dueño.) */
+@media (max-height:759px){
+  .pager-host .sc.on .page{overflow-y:auto;overflow-x:hidden}
+  .pager-host .lgrid{flex:0 0 auto;grid-template-rows:none;grid-auto-rows:auto}
 }
 
 /* ══ 5 · color = significado y ajustes sobre las formas heredadas ════════════ */
@@ -164,11 +165,12 @@
 /* El responsable lo lleva el avatar (iniciales) y la hoja de detalle; en 375px
    no cabe su nombre junto al chip+plazo+acto+peso, así que la línea muestra chip
    y plazo, limpios. El nombre queda en el DOM para lectores de pantalla. */
-.qr-meta{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;margin-top:5px;min-width:0}
-.qr-meta .chip{margin:0;flex:none;order:-1;font-size:.52rem;padding:3px 7px;gap:2px}
-.qr-meta .chip .qi{width:9px;height:9px}
-.qr-resp{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.vd-cli-plz{font-size:.64rem;font-weight:800;flex:none}
+/* el responsable y el plazo, VISIBLES; la situación la cargan el filo lateral
+   y el color del plazo (el chip de situación se mueve a la hoja de detalle) */
+.qr-meta{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px;margin-top:4px;min-width:0}
+.qr-resp{font-size:.72rem;font-weight:600;color:var(--ink2)}
+.qr-sep{color:var(--ink4);font-size:.72rem;font-weight:600}
+.vd-cli-plz{font-size:.72rem;font-weight:700}
 .vd-cli-plz.r{color:var(--red-tx,var(--red))} .vd-cli-plz.a{color:var(--amber)} .vd-cli-plz.n{color:var(--ink3)}
 .vd-cli{align-items:stretch}
 .qr-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:5px;flex:none;min-width:0}
@@ -209,6 +211,14 @@
 .sh-k{font-size:.74rem;color:var(--ink3);font-weight:600;flex:none}
 .sh-v{font-size:.82rem;color:var(--ink);font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
 .sh-v.r{color:var(--red-tx,var(--red))} .sh-v.a{color:var(--amber)} .sh-v.g{color:var(--green)}
+.sh-chip{margin:2px 0 4px}
+/* el arco completo vive en la hoja (instrumento a escala de escritorio) */
+.sh-arc{display:flex;flex-direction:column;align-items:center;gap:3px;margin:12px 0 6px}
+.sh-arc .gz-arc{width:124px;height:74px;position:relative}
+.sh-arc .gz-arc svg{width:124px;height:74px;display:block;overflow:visible}
+.sh-arc .gz-num{font-size:1.55rem}
+.sh-arc.r .gz-val{stroke:var(--red)} .sh-arc.a .gz-val{stroke:var(--amber-fill,var(--amber))} .sh-arc.g .gz-val{stroke:var(--green)}
+.sh-arc-cap{font-size:.6rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em}
 .sh-ask{background:var(--surf2);border:1px solid var(--brd);border-radius:12px;padding:12px 13px;margin-top:14px}
 .sh-ask-k{font-size:.56rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
 .sh-ask-v{font-size:.92rem;font-weight:700;color:var(--ink);line-height:1.45}

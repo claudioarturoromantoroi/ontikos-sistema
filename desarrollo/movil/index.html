@@ -17,25 +17,24 @@
 .qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
 .chip .qi{margin-right:2px}
-.tac{background:var(--surf);border:1px solid var(--brd);border-radius:12px;padding:11px 12px;display:flex;flex-direction:column;gap:9px}
+.tac{background:var(--surf);border:1px solid var(--brd);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:11px}
 .tac-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.tac-t{font-size:.82rem;font-weight:800;letter-spacing:-.01em}
+.tac-t{font-size:.9rem;font-weight:700;letter-spacing:-.02em}
 .segbar{display:flex;height:9px;border-radius:5px;overflow:hidden;gap:2px}
 .segbar i{display:block;border-radius:3px}
 .seglg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.62rem;font-weight:700;color:var(--ink2)}
 .seglg b{font-weight:800;color:var(--ink)}
 .sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
-.lrow{display:flex;align-items:center;gap:9px;padding:6px 0;border-top:1px solid var(--brd)}
-.lrow:first-of-type{border-top:none}
+.lrow{display:flex;align-items:center;gap:10px;padding:7px 0}
 .lrow-d{width:7px;height:7px;border-radius:50%;flex:none}
-.lrow-t{font-size:.74rem;font-weight:600;color:var(--ink);flex:1;min-width:0}
-.lrow-n{font-size:.8rem;font-weight:900;font-variant-numeric:tabular-nums}
-.tac-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--brd);padding-top:8px}
+.lrow-t{font-size:.78rem;font-weight:500;color:var(--ink);flex:1;min-width:0}
+.lrow-n{font-size:.86rem;font-weight:700;font-variant-numeric:tabular-nums}
+.tac-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px}
 .tac-foot-l{font-size:.64rem;font-weight:700;color:var(--ink2)}
-.tac-act{border:none;background:none;font-family:inherit;font-size:.68rem;font-weight:800;color:var(--ink);cursor:pointer;white-space:nowrap}
+.tac-act{border:1.5px solid var(--ink);background:none;border-radius:10px;padding:9px 13px;min-height:40px;font-family:inherit;font-size:.72rem;font-weight:700;color:var(--ink);cursor:pointer;white-space:nowrap}
 .fn-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
-.fn-lbl{font-size:.74rem;font-weight:700;color:var(--ink2)}
-.fn-val{font-size:.78rem;font-weight:800;font-variant-numeric:tabular-nums}
+.fn-lbl{font-size:.78rem;font-weight:500;color:var(--ink2)}
+.fn-val{font-size:.82rem;font-weight:700;font-variant-numeric:tabular-nums}
 .fn-bar{height:7px;border-radius:4px;background:var(--surf3);overflow:hidden;margin-bottom:9px}
 .fn-bar i{display:block;height:100%;border-radius:4px}
 .fn-note{font-size:.64rem;font-weight:700;color:var(--ink3);margin-top:3px}
@@ -43,7 +42,7 @@
 .tlcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
 .tlcol i{width:100%;border-radius:4px 4px 0 0;background:var(--amber-fill,var(--amber))}
 .tlcol span{font-size:.56rem;font-weight:700;color:var(--ink3)}
-.card{background:var(--surf);border:1px solid var(--brd);border-radius:12px;padding:12px}
+.card{background:var(--surf);border:1px solid var(--brd);border-radius:14px;padding:14px}
 .card-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
 .card-ey{font-size:.56rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em}
 .card-meta{font-size:.62rem;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums}
@@ -80,45 +79,49 @@
         <div class="page">
           <div class="page-ey">Si nadie actúa, al cierre</div>
           <div class="lgrid">
-            <!-- Colocación -->
+            <!-- Colocación · una idea: 55% de la meta -->
             <div class="ltile" onclick="openLine('colocacion')">
-              <div class="lt-head"><span class="lt-t">Colocación</span><span class="memb-chip expired">en quiebre</span></div>
-              <div class="lt-hero r"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="45"/></svg><div class="gz-num">55%</div></div><div class="lt-cap">de la meta</div></div>
-              <div class="lt-stats">
-                <div class="lt-stat"><div class="lt-k">Ritmo</div><div class="lt-v r">5/sem</div><div class="lt-s">faltan 12</div></div>
-                <div class="lt-stat"><div class="lt-k">En riesgo</div><div class="lt-v">$3.2M</div><div class="lt-s">30 pólizas</div></div>
+              <div class="lt-t">Colocación</div>
+              <span class="memb-chip expired">en quiebre</span>
+              <div class="lt-metric">
+                <div class="lt-figrow"><span class="lt-pct">55%</span><span class="lt-pct-cap">de la meta</span></div>
+                <div class="lt-bar"><div class="lt-bar-fill r" style="width:55%"></div></div>
               </div>
-              <button class="ltile-act">Pedir acción<span class="arr">→</span></button>
+              <div class="lt-ctx r">5/sem · faltan 12</div>
+              <button class="ltile-act q">Pedir acción</button>
             </div>
-            <!-- Cobranza -->
+            <!-- Cobranza · 96% en plazo -->
             <div class="ltile" onclick="openLine('cobranza')">
-              <div class="lt-head"><span class="lt-t">Cobranza</span><span class="memb-chip">sano</span></div>
-              <div class="lt-hero g"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="4"/></svg><div class="gz-num">96%</div></div><div class="lt-cap">en plazo</div></div>
-              <div class="lt-stats">
-                <div class="lt-stat"><div class="lt-k">Vencido</div><div class="lt-v g">3.8%</div><div class="lt-s">estable</div></div>
-                <div class="lt-stat"><div class="lt-k">Monto</div><div class="lt-v">$180K</div><div class="lt-s">2 clientes</div></div>
+              <div class="lt-t">Cobranza</div>
+              <span class="memb-chip">sano</span>
+              <div class="lt-metric">
+                <div class="lt-figrow"><span class="lt-pct">96%</span><span class="lt-pct-cap">en plazo</span></div>
+                <div class="lt-bar"><div class="lt-bar-fill g" style="width:96%"></div></div>
               </div>
-              <button class="ltile-act">Revisar los 16<span class="arr">→</span></button>
+              <div class="lt-ctx g">vencido 3.8%, estable</div>
+              <button class="ltile-act">Revisar los 16</button>
             </div>
-            <!-- Renovación -->
+            <!-- Renovación · 78% retención (muesca ind. 84%) -->
             <div class="ltile" onclick="openLine('renovacion')">
-              <div class="lt-head"><span class="lt-t">Renovación</span><span class="memb-chip grace">bajo industria</span></div>
-              <div class="lt-hero a"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="22"/><line class="gz-tick" x1="50.4" y1="23.9" x2="59.2" y2="19.1"/></svg><div class="gz-num">78%</div></div><div class="lt-cap">retención</div></div>
-              <div class="lt-stats">
-                <div class="lt-stat"><div class="lt-k">Tendencia</div><div class="lt-v a">3m ↓</div><div class="lt-s">ind. 84%</div></div>
-                <div class="lt-stat"><div class="lt-k">En riesgo</div><div class="lt-v">$4.1M</div><div class="lt-s">26 pólizas</div></div>
+              <div class="lt-t">Renovación</div>
+              <span class="memb-chip grace">bajo industria</span>
+              <div class="lt-metric">
+                <div class="lt-figrow"><span class="lt-pct">78%</span><span class="lt-pct-cap">retención</span></div>
+                <div class="lt-bar"><div class="lt-bar-fill a" style="width:78%"></div><span class="lt-bar-notch" style="left:84%" title="industria 84%"></span></div>
               </div>
-              <button class="ltile-act">Pedir acción<span class="arr">→</span></button>
+              <div class="lt-ctx a">3 meses a la baja</div>
+              <button class="ltile-act">Pedir acción</button>
             </div>
-            <!-- Siniestralidad -->
+            <!-- Siniestralidad · 71% (muesca umbral 65%) -->
             <div class="ltile" onclick="openLine('siniestralidad')">
-              <div class="lt-head"><span class="lt-t">Siniestralidad</span><span class="memb-chip grace">sobre umbral</span></div>
-              <div class="lt-hero a"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="29"/><line class="gz-tick" x1="41.5" y1="15.3" x2="46.1" y2="6.4"/></svg><div class="gz-num">71%</div></div><div class="lt-cap">umbral 65%</div></div>
-              <div class="lt-stats">
-                <div class="lt-stat"><div class="lt-k">Tendencia</div><div class="lt-v a">sube</div><div class="lt-s">3 meses</div></div>
-                <div class="lt-stat"><div class="lt-k">Expuesto</div><div class="lt-v">$6.8M</div><div class="lt-s">3 cuentas</div></div>
+              <div class="lt-t">Siniestralidad</div>
+              <span class="memb-chip grace">sobre umbral</span>
+              <div class="lt-metric">
+                <div class="lt-figrow"><span class="lt-pct">71%</span><span class="lt-pct-cap">índice</span></div>
+                <div class="lt-bar"><div class="lt-bar-fill a" style="width:71%"></div><span class="lt-bar-notch" style="left:65%" title="umbral 65%"></span></div>
               </div>
-              <button class="ltile-act">Pedir acción<span class="arr">→</span></button>
+              <div class="lt-ctx a">sube · 3 meses</div>
+              <button class="ltile-act">Pedir acción</button>
             </div>
           </div>
 
@@ -185,7 +188,6 @@
 
     <!-- ───────── QUIEBRES · lista (marco fijo, sólo la lista corre) ───────── -->
     <section class="sc" id="quiebres">
-      <div class="surf-h"><div class="surf-t">Quiebres</div><div class="surf-sub">7 · $10.0M en juego</div></div>
 
       <!-- indicadores en rejilla 2×2 compacto · héroe en tinta, conteos en su estado -->
       <div class="kpis g2">
@@ -204,72 +206,72 @@
       </div>
 
       <!-- las 7 filas · filo=situación, chip en línea de responsable, acto a la derecha -->
-      <div class="vd-cli urg" onclick="openQ(this)" data-t="Emisión aceptada sin expedir" data-s="30 pólizas de colocación · Aseguradora del Norte">
+      <div class="vd-cli urg" onclick="openQ(this)" data-sit="Incumplido" data-sc="r" data-t="Emisión aceptada sin expedir" data-s="30 pólizas de colocación · Aseguradora del Norte">
         <div class="vd-cli-av">ÓL</div>
         <div class="vd-cli-body">
           <div class="vd-cli-n">Emisión aceptada sin expedir</div>
           <div class="vd-cli-s">30 pólizas de colocación · Aseguradora del Norte</div>
-          <div class="qr-meta"><span class="qr-resp">Óscar Lévano</span><span class="vd-cli-plz r">hace 6 días</span><span class="chip pill r"><svg class="qi r" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>Incumplido</span></div>
+          <div class="qr-meta"><span class="qr-resp">Óscar Lévano</span><span class="qr-sep"> · </span><span class="vd-cli-plz r">hace 6 días</span></div>
         </div>
         <div class="qr-right"><div><div class="qr-peso">$3.2M</div><div class="qr-peso-l">en juego</div></div><button class="qr-act r">Ver pedido</button></div>
       </div>
 
-      <div class="vd-cli med" onclick="openQ(this)" data-t="Recibo vencido · $180K" data-s="6 recibos · Logística Sierra y Hotelera Costa">
+      <div class="vd-cli med" onclick="openQ(this)" data-sit="Por incumplirse" data-sc="a" data-t="Recibo vencido · $180K" data-s="6 recibos · Logística Sierra y Hotelera Costa">
         <div class="vd-cli-av">RI</div>
         <div class="vd-cli-body">
           <div class="vd-cli-n">Recibo vencido · $180K</div>
           <div class="vd-cli-s">6 recibos · Logística Sierra y Hotelera Costa</div>
-          <div class="qr-meta"><span class="qr-resp">Rosa Ibarra</span><span class="vd-cli-plz a">vence en 4 días</span><span class="chip pill a"><svg class="qi a" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Por incumplirse</span></div>
+          <div class="qr-meta"><span class="qr-resp">Rosa Ibarra</span><span class="qr-sep"> · </span><span class="vd-cli-plz a">vence en 4 días</span></div>
         </div>
         <div class="qr-right"><div><div class="qr-peso">$2.4M</div><div class="qr-peso-l">en juego</div></div><button class="qr-act a">Pedir acción</button></div>
       </div>
 
-      <div class="vd-cli neu" onclick="openQ(this)" data-t="Documentación del siniestro sin entregar" data-s="5 siniestros clave · Elizondo y Sonora">
+      <div class="vd-cli neu" onclick="openQ(this)" data-sit="Sin movimiento" data-sc="n" data-t="Documentación del siniestro sin entregar" data-s="5 siniestros clave · Elizondo y Sonora">
         <div class="vd-cli-av">AB</div>
         <div class="vd-cli-body">
           <div class="vd-cli-n">Documentación del siniestro sin entregar</div>
           <div class="vd-cli-s">5 siniestros clave · Elizondo y Sonora</div>
-          <div class="qr-meta"><span class="qr-resp">Andrés Berlanga</span><span class="vd-cli-plz n">hace 15 días</span><span class="chip pill"><svg class="qi n" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Sin movimiento</span></div>
+          <div class="qr-meta"><span class="qr-resp">Andrés Berlanga</span><span class="qr-sep"> · </span><span class="vd-cli-plz n">hace 15 días</span></div>
         </div>
         <div class="qr-right"><div><div class="qr-peso">$1.4M</div><div class="qr-peso-l">en juego</div></div><button class="qr-act">Pedir acción</button></div>
       </div>
 
-      <div class="vd-cli urg" onclick="openQ(this)" data-t="Dictamen sin respuesta" data-s="SIN-1188 · Transportes Elizondo · GNP">
+      <div class="vd-cli urg" onclick="openQ(this)" data-sit="Incumplido" data-sc="r" data-t="Dictamen sin respuesta" data-s="SIN-1188 · Transportes Elizondo · GNP">
         <div class="vd-cli-av">AB</div>
         <div class="vd-cli-body">
           <div class="vd-cli-n">Dictamen sin respuesta</div>
           <div class="vd-cli-s">SIN-1188 · Transportes Elizondo · GNP</div>
-          <div class="qr-meta"><span class="qr-resp">Andrés Berlanga</span><span class="vd-cli-plz r">hace 9 días</span><span class="chip pill r"><svg class="qi r" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>Incumplido</span></div>
+          <div class="qr-meta"><span class="qr-resp">Andrés Berlanga</span><span class="qr-sep"> · </span><span class="vd-cli-plz r">hace 9 días</span></div>
         </div>
         <div class="qr-right"><div><div class="qr-peso">$1.18M</div><div class="qr-peso-l">en juego</div></div><button class="qr-act r">Reclamar</button></div>
       </div>
 
-      <div class="vd-cli neu" onclick="openQ(this)" data-t="Renovación paralizada" data-s="POL-5540 · Grupo Ferrer">
+      <div class="vd-cli neu" onclick="openQ(this)" data-sit="Sin movimiento" data-sc="n" data-t="Renovación paralizada" data-s="POL-5540 · Grupo Ferrer">
         <div class="vd-cli-av">EV</div>
         <div class="vd-cli-body">
           <div class="vd-cli-n">Renovación paralizada</div>
           <div class="vd-cli-s">POL-5540 · Grupo Ferrer</div>
-          <div class="qr-meta"><span class="qr-resp">Ernesto Vidal</span><span class="vd-cli-plz n">hace 19 días</span><span class="chip pill"><svg class="qi n" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Sin movimiento</span></div>
+          <div class="qr-meta"><span class="qr-resp">Ernesto Vidal</span><span class="qr-sep"> · </span><span class="vd-cli-plz n">hace 19 días</span></div>
         </div>
         <div class="qr-right"><div><div class="qr-peso">$990K</div><div class="qr-peso-l">en juego</div></div><button class="qr-act">Pedir acción</button></div>
       </div>
 
-      <div class="vd-cli med" onclick="openQ(this)" data-t="Carátula sin entregar" data-s="POL-3320 · Grupo Textil del Norte">
+      <div class="vd-cli med" onclick="openQ(this)" data-sit="Por incumplirse" data-sc="a" data-t="Carátula sin entregar" data-s="POL-3320 · Grupo Textil del Norte">
         <div class="vd-cli-av">MR</div>
         <div class="vd-cli-body">
           <div class="vd-cli-n">Carátula sin entregar</div>
           <div class="vd-cli-s">POL-3320 · Grupo Textil del Norte</div>
-          <div class="qr-meta"><span class="qr-resp">Marcela Ríos</span><span class="vd-cli-plz a">vence en 2 días</span><span class="chip pill a"><svg class="qi a" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Por incumplirse</span></div>
+          <div class="qr-meta"><span class="qr-resp">Marcela Ríos</span><span class="qr-sep"> · </span><span class="vd-cli-plz a">vence en 2 días</span></div>
         </div>
         <div class="qr-right"><div><div class="qr-peso">$540K</div><div class="qr-peso-l">en juego</div></div><button class="qr-act a">Ver pedido</button></div>
       </div>
 
-      <div class="vd-cli med" onclick="openQ(this)" data-t="Reembolso en trámite" data-s="SIN-0942 · Grupo Sonora · MetLife">
+      <div class="vd-cli med" onclick="openQ(this)" data-sit="Por incumplirse" data-sc="a" data-t="Reembolso en trámite" data-s="SIN-0942 · Grupo Sonora · MetLife">
         <div class="vd-cli-av">AB</div>
         <div class="vd-cli-body">
           <div class="vd-cli-n">Reembolso en trámite</div>
           <div class="vd-cli-s">SIN-0942 · Grupo Sonora · MetLife</div>
-          <div class="qr-meta"><span class="qr-resp">Andrés Berlanga</span><span class="vd-cli-plz a">vence en 5 días</span><span class="chip pill a"><svg class="qi a" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Por incumplirse</span></div>
+          <div class="qr-meta"><span class="qr-resp">Andrés Berlanga</span><span class="qr-sep"> · </span><span class="vd-cli-plz a">vence en 5 días</span></div>
         </div>
         <div class="qr-right"><div><div class="qr-peso">$320K</div><div class="qr-peso-l">en juego</div></div><button class="qr-act a">Reclamar</button></div>
       </div>
@@ -378,10 +380,15 @@ function closeDrawer(){ drawer.classList.remove('open'); scrim.classList.remove(
 // ── la hoja que sube: hoja más grande con «qué se pedirá» y sus componentes ──
 var ovl=document.getElementById('ovl');
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function buildSheet(t, ctx, note, rows, ask, act){
+function buildSheet(t, ctx, note, rows, ask, act, opts){
   document.getElementById('sh-t').textContent = t;
   document.getElementById('sh-s').textContent = ctx;
   var h='';
+  if(opts && opts.sit){ h += '<div class="sh-chip"><span class="chip pill '+(opts.sc==='n'?'':(opts.sc||''))+'">'+esc(opts.sit)+'</span></div>'; }
+  if(opts && opts.arc){
+    var a=opts.arc, TK={84:'<line class="gz-tick" x1="50.4" y1="23.9" x2="59.2" y2="19.1"/>',65:'<line class="gz-tick" x1="41.5" y1="15.3" x2="46.1" y2="6.4"/>'};
+    h += '<div class="sh-arc '+a.sc+'"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="'+a.off+'"/>'+(a.tick?TK[a.tick]||'':'')+'</svg><div class="gz-num">'+esc(a.pct)+'</div></div><div class="sh-arc-cap">'+esc(a.cap)+'</div></div>';
+  }
   if(note) h += '<div class="sh-h">Qué pasa</div><div class="sh-note">'+esc(note)+'</div>';
   if(rows && rows.length){
     h += '<div class="sh-h">Componentes</div><div class="sh-rows">';
@@ -398,38 +405,43 @@ function confirmSheet(){ closeSheet(); }
 
 // datos de la hoja por línea de El Futuro (del escritorio)
 var SHEETS = {
-  colocacion:{t:'Pedir acción',ctx:'Colocación · en quiebre · 55% de la meta',
+  colocacion:{t:'Pedir acción',ctx:'Colocación · en quiebre',
+    arc:{off:45,sc:'r',pct:'55%',cap:'de la meta'},
     note:'Van 46 de 84 colocaciones; al ritmo actual no se alcanza. 30 aceptadas siguen sin expedir en Aseguradora del Norte.',
-    rows:[['Objeto','30 pólizas aceptadas'],['Aseguradora','Aseguradora del Norte'],['Responsable','Óscar Lévano'],['Plazo','al cierre · 21 días'],['En riesgo','$3.2M','r']],
+    rows:[['Ritmo','5/sem · faltan 12','r'],['En riesgo','$3.2M','r'],['Objeto','30 pólizas aceptadas'],['Aseguradora','Aseguradora del Norte'],['Responsable','Óscar Lévano'],['Plazo','al cierre · 21 días']],
     ask:'Expedir las 30 pólizas aceptadas antes del cierre.',act:'Pedir acción'},
-  cobranza:{t:'Revisar los 16',ctx:'Cobranza · sano · 96% en plazo',
+  cobranza:{t:'Revisar los 16',ctx:'Cobranza · sano',
+    arc:{off:4,sc:'g',pct:'96%',cap:'en plazo'},
     note:'El 3.8% vencido está estable, pero hay $180K vencido en 2 clientes que conviene revisar.',
-    rows:[['Objeto','16 recibos por revisar'],['Vencido','$180K'],['Clientes','2'],['Estado','estable','g']],
+    rows:[['Vencido','3.8% · estable','g'],['Monto','$180K'],['Objeto','16 recibos por revisar'],['Clientes','2']],
     ask:'Revisar los 16 recibos y gestionar el cobro de los 2 clientes con saldo vencido.',act:'Revisar los 16'},
-  renovacion:{t:'Pedir acción',ctx:'Renovación · bajo industria · 78% retención',
+  renovacion:{t:'Pedir acción',ctx:'Renovación · bajo industria',
+    arc:{off:22,sc:'a',pct:'78%',cap:'retención',tick:84},
     note:'3 meses a la baja y por debajo de la industria (84%). Al ritmo actual 26 pólizas se pierden.',
-    rows:[['En riesgo','26 pólizas'],['Prima','$4.1M','r'],['Retención','78% · ind. 84%'],['Tendencia','3 meses a la baja','a']],
+    rows:[['Tendencia','3 meses a la baja','a'],['En riesgo','$4.1M · 26 pólizas','r'],['Retención','78% · ind. 84%']],
     ask:'Lanzar la campaña de retención sobre las 26 pólizas en riesgo este mes.',act:'Pedir acción'},
-  siniestralidad:{t:'Pedir acción',ctx:'Siniestralidad · sobre umbral · 71%',
+  siniestralidad:{t:'Pedir acción',ctx:'Siniestralidad · sobre umbral',
+    arc:{off:29,sc:'a',pct:'71%',cap:'índice',tick:65},
     note:'El índice sube hace 3 meses y cruzó el umbral del 65%. 3 cuentas concentran el deterioro.',
-    rows:[['Umbral','65% · actual 71%','a'],['Cuentas','3'],['Expuesto','$6.8M'],['Tendencia','sube · 3 meses','a']],
+    rows:[['Tendencia','sube · 3 meses','a'],['Expuesto','$6.8M · 3 cuentas'],['Umbral','65% · actual 71%','a']],
     ask:'Revisar las 3 cuentas sobre umbral y proponer ajuste técnico o de cobertura.',act:'Pedir acción'},
-  atender:{t:'Atender el más grave',ctx:'Colocación · en quiebre · 55% — la línea más grave',
+  atender:{t:'Atender el más grave',ctx:'Colocación · en quiebre — la línea más grave',
+    arc:{off:45,sc:'r',pct:'55%',cap:'de la meta'},
     note:'De las cuatro líneas, Colocación es la única en quiebre: es donde más prima se pierde al cierre.',
-    rows:[['Objeto','30 pólizas aceptadas sin expedir'],['Aseguradora','Aseguradora del Norte'],['Responsable','Óscar Lévano'],['En riesgo','$3.2M','r']],
+    rows:[['Ritmo','5/sem · faltan 12','r'],['En riesgo','$3.2M','r'],['Objeto','30 pólizas aceptadas sin expedir'],['Aseguradora','Aseguradora del Norte'],['Responsable','Óscar Lévano']],
     ask:'Expedir las 30 pólizas aceptadas antes del cierre.',act:'Pedir acción'}
 };
-function openLine(key){ var d=SHEETS[key]; if(d) buildSheet(d.t,d.ctx,d.note,d.rows,d.ask,d.act); }
+function openLine(key){ var d=SHEETS[key]; if(d) buildSheet(d.t,d.ctx,d.note,d.rows,d.ask,d.act,{arc:d.arc}); }
 
 function openQ(row){
   var g=function(s){var e=row.querySelector(s);return e?e.textContent.trim():'';};
-  var sc = row.classList.contains('urg')?'r':row.classList.contains('med')?'a':'';
-  var sit=g('.chip'), act=g('.qr-act');
-  var rows=[['Objeto',row.dataset.s],['Responsable',g('.qr-resp')],['Situación',sit,sc],['Plazo',g('.vd-cli-plz'),sc],['En juego',g('.qr-peso')]];
+  var sit=row.dataset.sit||'', sc=row.dataset.sc||'';
+  var act=g('.qr-act');
+  var rows=[['Objeto',row.dataset.s],['Responsable',g('.qr-resp')],['Plazo',g('.vd-cli-plz'),sc==='n'?'':sc],['En juego',g('.qr-peso')]];
   var ask={'Reclamar':'Presentar la reclamación formal a la aseguradora por este caso.',
            'Ver pedido':'Dar seguimiento al pedido ya abierto y empujar su cierre.',
            'Pedir acción':'Pedir al responsable que resuelva este quiebre antes del plazo.'}[act]||'';
-  buildSheet(row.dataset.t, 'Quiebre · '+sit, '', rows, ask, act);
+  buildSheet(row.dataset.t, 'Quiebre', '', rows, ask, act, {sit:sit,sc:sc});
 }
 
 syncTemaLbl();
