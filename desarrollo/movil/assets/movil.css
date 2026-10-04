@@ -86,47 +86,59 @@
 .gz-pace{font-size:.66rem;font-weight:800;margin-top:3px;line-height:1.2}
 .gz-pace.r{color:var(--red-tx,var(--red))} .gz-pace.a{color:var(--amber)} .gz-pace.g{color:var(--green)} .gz-pace.n{color:var(--ink2)}
 
-/* el tile de línea estratégica (página 1 · rejilla 2×2).
-   La rejilla LLENA el alto disponible (flex:1, filas iguales) y el gauge se
-   centra en el tile: en pantallas altas el tile crece y respira, sin dejar un
-   vacío grande en medio de la página; en el SE se compacta. */
-.lgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;flex:1 1 auto;min-height:0}
-.ltile{background:var(--surf);border:1px solid var(--brd);border-radius:12px;padding:10px 10px;display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-width:0;min-height:0;overflow:hidden}
-.ltile .gz{flex:none;align-items:center}
-.ltile-foot{flex:none;font-size:.56rem;font-weight:700;color:var(--ink3);line-height:1.3;letter-spacing:-.01em}
-.ltile-foot b{color:var(--ink2);font-weight:800}
-/* título en su línea; el chip de estado DEBAJO (así caben "sobre umbral",
-   "bajo industria" sin salirse del tile estrecho) */
-.ltile-h{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
-.ltile-t{font-size:.82rem;font-weight:800;letter-spacing:-.01em;line-height:1}
-.ltile .memb-chip{font-size:.5rem;padding:2px 7px;white-space:nowrap}
-.ltile .gz{gap:8px}
-.ltile .gz-arc{width:54px;height:32px}
-.ltile .gz-arc svg{width:54px;height:32px}
-.ltile .gz-num{font-size:.8rem}
-.ltile .gz-cap{font-size:.46rem}
-.ltile .gz-pace{font-size:.6rem;margin-top:1px}
-/* la línea de evidencia (foot) sólo en pantallas altas: en el SE no cabe y su
-   razón es llenar el alto que sobra, que el SE no tiene */
-.ltile-foot{display:none}
-/* en pantallas altas: el gauge crece, aparece la evidencia, el tile respira */
-@media (min-height:740px){
-  .ltile{padding:12px 11px}
-  .ltile .gz-arc{width:74px;height:44px}
-  .ltile .gz-arc svg{width:74px;height:44px}
-  .ltile .gz-num{font-size:.96rem}
-  .ltile-foot{display:block}
+/* ── El tile de línea estratégica · celda KPI COMPUESTA EN GRILLA ──────────
+   No es una caja estirada: el contenido interno se rediseña y se alinea a
+   líneas clave. Zonas: cabecera (título + estado) · el gauge como héroe · una
+   rejilla de 2 cifras (tendencia y dinero, del escritorio) separadas por una
+   línea clave · el acto. Llena por composición, no estirando. */
+.lgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:7px;flex:1 1 auto;min-height:0}
+.ltile{background:var(--surf);border:1px solid var(--brd);border-radius:12px;display:grid;grid-template-rows:auto 1fr auto;min-width:0;min-height:0;overflow:hidden;cursor:pointer}
+/* título arriba, estado DEBAJO: así caben "bajo industria"/"sobre umbral" sin
+   recortarse en el tile estrecho */
+.lt-head{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px 6px}
+.lt-t{font-size:.8rem;font-weight:800;letter-spacing:-.02em;line-height:1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ltile .memb-chip{font-size:.45rem;padding:2px 6px;white-space:nowrap;flex:none}
+/* héroe: el gauge (arco + %) centrado, crece con el tile */
+.lt-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:3px 8px 7px;border-top:1px solid var(--line2,rgba(0,0,0,.07));min-height:0}
+.lt-hero .gz-arc{width:64px;height:38px;position:relative;flex:none}
+.lt-hero .gz-arc svg{width:64px;height:38px;display:block;overflow:visible}
+.lt-hero .gz-num{font-size:.9rem}
+.lt-hero.r .gz-val{stroke:var(--red)} .lt-hero.a .gz-val{stroke:var(--amber-fill,var(--amber))} .lt-hero.g .gz-val{stroke:var(--green)}
+.lt-cap{font-size:.5rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;text-align:center}
+/* cifras: 2 columnas, línea clave arriba y entre ellas */
+.lt-stats{display:none;grid-template-columns:1fr 1fr;border-top:1px solid var(--brd)}
+.lt-stat{padding:6px 10px;min-width:0}
+.lt-stat + .lt-stat{border-left:1px solid var(--brd)}
+.lt-k{font-size:.46rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lt-v{font-size:.86rem;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.05;margin-top:2px;color:var(--ink)}
+.lt-v.r{color:var(--red-tx,var(--red))} .lt-v.a{color:var(--amber)} .lt-v.g{color:var(--green)}
+.lt-s{font-size:.48rem;font-weight:700;color:var(--ink3);line-height:1.2;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ltile-act{border:none;border-top:1px solid var(--brd);background:none;padding:7px 10px;text-align:left;font-size:.66rem;font-weight:800;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:inherit;min-height:24px}
+.ltile-act .arr{color:var(--ink3)}
+/* la rejilla de cifras aparece cuando hay alto; en el SE con barras se oculta */
+@media (min-height:600px){
+  .ltile{grid-template-rows:auto 1fr auto auto}
+  .lt-stats{display:grid}
 }
-/* el acto de la línea: texto en tinta, abajo del tile (CM primario neutro).
-   El objetivo táctil de 44px lo cubre el tile entero, que también abre la hoja. */
-.ltile-act{border:none;background:none;padding:3px 0 0;text-align:left;font-size:.67rem;font-weight:800;color:var(--ink);cursor:pointer;letter-spacing:-.01em;min-height:24px;display:flex;align-items:center;font-family:inherit}
-.ltile-act .arr{margin-left:4px}
+/* en pantallas altas el gauge y las cifras crecen */
+@media (min-height:740px){
+  .lt-head{padding:11px 11px 9px}
+  .lt-hero .gz-arc{width:86px;height:50px}
+  .lt-hero .gz-arc svg{width:86px;height:50px}
+  .lt-hero .gz-num{font-size:1.18rem}
+  .lt-cap{font-size:.54rem}
+  .lt-stat{padding:9px 11px}
+  .lt-v{font-size:1rem}
+  .lt-k{font-size:.5rem}
+  .lt-s{font-size:.52rem}
+  .ltile-act{padding:9px 11px;font-size:.7rem}
+}
 
 /* ══ 5 · color = significado y ajustes sobre las formas heredadas ════════════ */
 /* la barra de decisión usa .camp; hereda el estado más grave (hoy rojo).
    Compacta dentro de la página para que todo quepa en el peor caso (SE con barras). */
 .camp.grave{border-color:var(--red)}
-.camp.grave .camp-act,.camp.grave .btn.primary{background:var(--red);border-color:var(--red)}
+.camp.grave .camp-act,.camp.grave .btn.primary{background:var(--red);border-color:var(--red);color:#fff}
 .page .camp{padding:10px 12px}
 .page .camp-t{font-size:.72rem;line-height:1.22}
 .page .camp-s{font-size:.6rem;margin-top:2px;line-height:1.25}
