@@ -91,7 +91,7 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
     <h1>El marco de aplicación</h1>
     <p class="lede">Paso 3, rehecho. Ya no son piezas sobre una página que se desplaza entera: es una app. El marco no se mueve, la entrada se pagina, y el contenido es el del escritorio, de la misma fuente.</p>
     <p>La cabecera y la barra inferior quedan fijas; sólo la superficie corre. El Futuro se recorre de lado, página completa, sin desplazamiento vertical. Las otras secciones son listas que corren dentro de su zona. Dos niveles de navegación: la hamburguesa para los módulos, la barra inferior para las superficies del CEO. La gramática §5·G no se tocó.</p>
-    <span class="verdict">✓ La auditoría de alturas pasa en el peor caso (iPhone SE · Safari con barras)</span>
+    <span class="verdict">✓ La entrada cabe SIN scroll en el peor caso (iPhone SE · Safari con barras · 375×553)</span>
   </div>
 
   <!-- §1 ARQUITECTURA -->
@@ -114,10 +114,10 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
           <div class="tags"><span class="tg casa">de la casa · CM, verbatim</span></div>
         </div></div>
         <div class="dec"><span class="b">3</span><div>
-          <h3>La cabecera fija y mínima</h3>
-          <p>Hamburguesa · <b>el ícono de Ontikos</b> (del kit, copiado no redibujado) · EN&nbsp;VIVO·CIERRE · campana · avatar. Respeta el área segura superior (isla / notch). Ya no es el wordmark.</p>
-          <div class="tags"><span class="tg casa">appbar de CM</span><span class="tg nueva">EN VIVO·CIERRE: pieza nueva</span></div>
-          <span class="cite">ícono: desarrollo/favicon.svg (Kit de Marca v1.1 §Símbolo)</span>
+          <h3>La cabecera fija y mínima · la marca es INICIO</h3>
+          <p>Hamburguesa · <b>el ícono de Ontikos como botón de inicio</b> (del kit, copiado no redibujado): toca → El Futuro, con el <b>gesto del escritorio</b> (el anillo gira una vuelta, los módulos entran escalonados) · EN&nbsp;VIVO·CIERRE · campana · avatar. Respeta el área segura superior (isla / notch). El gesto se re-dispara reinsertando el símbolo (línea de tiempo SMIL nueva), como el <code>key={gesto}</code> del escritorio; respeta <code>prefers-reduced-motion</code>.</p>
+          <div class="tags"><span class="tg casa">appbar de CM</span><span class="tg nueva">marca = inicio + gesto</span><span class="tg nueva">EN VIVO·CIERRE: pieza nueva</span></div>
+          <span class="cite">ícono + gesto: Marca.jsx (Kit de Marca v1.1 §Símbolo)</span>
         </div></div>
         <div class="dec"><span class="b">4</span><div>
           <h3>El marco no se desplaza</h3>
@@ -132,19 +132,21 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
   <!-- §2 ENTRADA PAGINADA -->
   <div class="sec">
     <div class="sec-n">§2</div>
-    <h2>La entrada se pagina · el tile, recompuesto</h2>
-    <p class="intro"><b>Antes:</b> el arco comprimido parecía un velocímetro de juguete, todo pesaba lo mismo (cifras a 900, filetes, cuatro cajas) y el acto se leía como enlace. <b>Después</b> (composición tomada de «Mi Semana» — EstructuraMovil, vendedor móvil — sin tomar su uso del color): <b>una sola idea por tile</b>, con aire y ritmo vertical constante. El arco sale del móvil: el avance va en una <b>barra delgada</b> en el color del estado, con <b>muesca de referencia</b> (industria 84%, umbral 65%); el arco completo se muestra en la hoja de detalle. La anatomía, igual en los cuatro: título (700) · estado · la cifra con su barra (única cifra a 900) · una línea de contexto · el acto como <b>botón real</b> (contorno rojo para el quiebre, tinta para los demás). Las dos celdas de métricas suben a la hoja. La separación la da el espacio, no las líneas.</p>
+    <h2>La entrada se pagina · el tile, recompuesto con semáforo</h2>
+    <p class="intro"><b>Composición de «Mi Semana»</b> (EstructuraMovil, vendedor móvil) <b>con su semáforo</b>: una idea por tile, aire y ritmo vertical constante, <b>y el color = estado de cumplimiento</b>, igual que el escritorio (<code>casa.css .card.alert/.good/.warn</code>). Cada tile lo lleva en tres canales a la vez —nunca sólo color—: el <b>filo lateral</b> de 3&nbsp;px, el <b>ícono</b> del frente (los mismos del escritorio: tendencia, maletín, renovar, triángulo) y el <b>botón relleno</b> en el estado (<b class="k-red">rojo</b> quiebre · ámbar advertencia · verde sano). La anatomía, igual en los cuatro: ícono + título (700) · estado en palabra (su propia línea, sin truncar) · la cifra con su barra y <b>muesca de referencia</b> (industria 84%, umbral 65%) · una línea de contexto · el acto como <b>botón real</b> ≥44&nbsp;px. El arco de escritorio no entra en el tile: vive en la hoja de detalle. <b>Se retiró la barra de decisión del pie:</b> cada tile ya remata en su propio acto, así que era redundante y su alto obligaba a desplazar y rompía la grilla; con ella fuera la 2×2 llena el alto y <b>cabe en el iPhone SE sin scroll</b>. La marca de la cabecera es ahora el <b>botón de inicio</b> (toca → El Futuro) con el <b>gesto del escritorio</b> (el anillo gira, los módulos entran).</p>
     <div class="pair" style="margin-bottom:8px">
-      <div class="unit"><div class="phone sm"><img src="img/mf-before.png" alt="Tile antes · arco y celdas"></div><div class="lbl">Antes · arco + celdas</div></div>
-      <div class="unit"><div class="phone sm"><img src="img/mf-f1.png" alt="Tile después · barra y una idea"></div><div class="lbl">Después · barra + una idea</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-before.png" alt="Tile antes · arco y celdas"></div><div class="lbl">Antes · arco (velocímetro)</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-f1.png" alt="Tile ahora · semáforo + ícono"></div><div class="lbl">Ahora · semáforo + ícono</div></div>
       <div class="unit"><div class="phone sm"><img src="img/mf-before-dk.png" alt="Antes oscuro"></div><div class="lbl">Antes · oscuro</div></div>
-      <div class="unit"><div class="phone sm"><img src="img/mf-f1-dk.png" alt="Después oscuro"></div><div class="lbl">Después · oscuro</div></div>
+      <div class="unit"><div class="phone sm"><img src="img/mf-f1-dk.png" alt="Ahora oscuro"></div><div class="lbl">Ahora · oscuro</div></div>
     </div>
     <div class="formlist">
       <span class="fm">composición <span class="src">Mi Semana · EstructuraMovil (vendedor móvil)</span></span>
+      <span class="fm">color = estado: filo + ícono + botón <span class="src">casa · .card.alert/.good/.warn</span></span>
+      <span class="fm">ícono por frente <span class="src">TableroCeo.jsx · ICON.coloc/cobr/reno/sini</span></span>
       <span class="fm">barra delgada + muesca <span class="src">casa · .vd-meta-bar</span></span>
       <span class="fm">el arco vive en la hoja <span class="src">§5·G: arco en escritorio, barra en móvil</span></span>
-      <span class="fm">la barra de decisión = 2.º nivel, <b class="k-red">rojo</b> (estado más grave)</span>
+      <span class="fm">marca = inicio, con gesto <span class="src">Marca.jsx · anillo + módulos</span></span>
       <span class="fm">paginador + puntos <span class="src">pieza nueva</span></span>
     </div>
     <div class="pair">
@@ -179,26 +181,26 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
   <div class="sec">
     <div class="sec-n">§4</div>
     <h2>La auditoría de alturas</h2>
-    <p class="intro">Medida con el viewport visible real (<code>visualViewport</code>), con la nueva anatomía airosa. Entrada = las dos filas de tiles + la barra de decisión; Quiebres = indicadores + filtros + primera fila completa. El margen es el aire que sobra al pie antes de la barra inferior.</p>
+    <p class="intro">Medida con el viewport visible real (<code>visualViewport</code>). Entrada = las dos filas de tiles (2×2) que <b>llenan</b> el alto, con los puntos del paginador y la barra inferior siempre visibles; Quiebres = indicadores + filtros + primera fila completa. Al retirar la barra de decisión, la grilla toma el alto que antes forzaba el scroll: <b>la entrada cabe sin desplazarse en toda la gama, incluido el peor caso</b> (SE con barras). «grilla→puntos» es el aire entre el fondo de la 2×2 y la banda de puntos.</p>
     <table class="audit">
       <thead><tr>
         <th>Dispositivo</th><th>Viewport</th><th>Área segura ↑/↓</th>
-        <th>El Futuro (entrada)</th><th>Quiebres · margen fila 1</th><th>Veredicto</th>
+        <th>El Futuro · scroll</th><th>grilla→puntos</th><th>Quiebres · margen fila 1</th><th>Veredicto</th>
       </tr></thead>
       <tbody>
-        <tr><td class="dev">iPhone 13 mini</td><td>375 × 812</td><td>44 / 34</td><td>margen +22 px</td><td>+294 px</td><td class="ok">Cabe con aire</td></tr>
-        <tr><td class="dev">iPhone 15 / 16</td><td>393 × 852</td><td>59 / 34</td><td>margen +22 px</td><td>+334 px</td><td class="ok">Cabe con aire</td></tr>
-        <tr><td class="dev">iPhone 16 Pro Max</td><td>440 × 956</td><td>62 / 34</td><td>margen +22 px</td><td>+459 px</td><td class="ok">Cabe con aire</td></tr>
-        <tr><td class="dev">Pixel 8 (Android)</td><td>412 × 915</td><td>24 / 24</td><td>margen +22 px</td><td>+397 px</td><td class="ok">Cabe con aire</td></tr>
-        <tr><td class="dev">Pixel · con barras*</td><td>412 × 780</td><td>— / —</td><td>margen +22 px</td><td>+262 px</td><td class="ok">Cabe con aire</td></tr>
-        <tr class="worst"><td class="dev">iPhone SE</td><td>375 × 667</td><td>20 / 0</td><td>se desplaza</td><td>+149 px</td><td class="tight">Entrada: ver nota</td></tr>
-        <tr class="worst"><td class="dev">iPhone SE · barras*</td><td>375 × 553</td><td>0 / 0</td><td>se desplaza</td><td>+35 px</td><td class="tight">Entrada: ver nota</td></tr>
-        <tr class="worst"><td class="dev">Galaxy S8 (Android)</td><td>360 × 740</td><td>24 / 24</td><td>se desplaza</td><td>+202 px</td><td class="tight">Entrada: ver nota</td></tr>
+        <tr><td class="dev">iPhone 13 mini</td><td>375 × 812</td><td>44 / 34</td><td class="ok">0 px</td><td>+6 px</td><td>+294 px</td><td class="ok">Cabe sin scroll</td></tr>
+        <tr><td class="dev">iPhone 15 / 16</td><td>393 × 852</td><td>59 / 34</td><td class="ok">0 px</td><td>+6 px</td><td>+334 px</td><td class="ok">Cabe sin scroll</td></tr>
+        <tr><td class="dev">iPhone 16 Pro Max</td><td>440 × 956</td><td>62 / 34</td><td class="ok">0 px</td><td>+6 px</td><td>+459 px</td><td class="ok">Cabe sin scroll</td></tr>
+        <tr><td class="dev">Pixel 8 (Android)</td><td>412 × 915</td><td>24 / 24</td><td class="ok">0 px</td><td>+6 px</td><td>+397 px</td><td class="ok">Cabe sin scroll</td></tr>
+        <tr><td class="dev">Pixel · con barras*</td><td>412 × 780</td><td>— / —</td><td class="ok">0 px</td><td>+6 px</td><td>+262 px</td><td class="ok">Cabe sin scroll</td></tr>
+        <tr><td class="dev">iPhone SE</td><td>375 × 667</td><td>20 / 0</td><td class="ok">0 px</td><td>+4 px</td><td>+149 px</td><td class="ok">Cabe sin scroll</td></tr>
+        <tr class="worst"><td class="dev">iPhone SE · barras*</td><td>375 × 553</td><td>0 / 0</td><td class="ok">0 px</td><td>+4 px</td><td>+35 px</td><td class="ok">Cabe sin scroll</td></tr>
+        <tr><td class="dev">Galaxy S8 (Android)</td><td>360 × 740</td><td>24 / 24</td><td class="ok">0 px</td><td>+4 px</td><td>+202 px</td><td class="ok">Cabe sin scroll</td></tr>
       </tbody>
     </table>
     <div class="note">
-      <p><b>El aire tiene un costo en los equipos cortos, y lo saco a la superficie antes de comprimir.</b> El tile airoso (una idea, botón de 44&nbsp;px) cabe con margen en todo viewport de ~760&nbsp;px o más —toda la gama moderna, incluido el Pixel del dueño, con +22&nbsp;px de aire al pie—. En los equipos cortos (iPhone SE 667 y con barras 553, Galaxy&nbsp;S8 740) la página 1 <b>no cabe sin sacrificar aire</b>. Como el aire es parte de la corrección, en esos equipos la entrada <b>se desplaza en vertical</b> (nada se recorta) en vez de comprimirse. <b>Pendiente de tu decisión:</b> ¿lo dejo así (scroll en equipos cortos, aire intacto) o hago una variante compacta para el SE?</p>
-      <p><b>Quiebres</b> sí cabe con margen en todos (el peor, SE con barras: +35&nbsp;px), porque la lista se desplaza dentro de su zona por diseño.</p>
+      <p><b>Resuelto sin comprimir el aire.</b> La barra de decisión del pie era la que no dejaba caber la entrada en los equipos cortos. Como cada tile ya remata en su propio acto, se retiró: la 2×2 ocupa el alto liberado y <b>la página 1 cabe sin scroll en todos los viewports medidos</b> —incluido el peor caso, iPhone SE con barras (375×553), con la banda de puntos y la barra inferior visibles—. En los equipos cortos el ritmo interno se afina (relleno, cifra, gap) sin bajar el acto de 44&nbsp;px ni truncar nada. No queda una decisión de scroll pendiente.</p>
+      <p><b>Quiebres</b> cabe con margen en todos (el peor, SE con barras: +35&nbsp;px), porque la lista se desplaza dentro de su zona por diseño.</p>
       <p><b>* El límite, declarado:</b> la emulación de WebKit headless no reproduce las barras dinámicas de Safari/Chrome; rinde a viewport completo. Las filas «con barras» se rindieron a una altura reducida (≈ el viewport con barras) como prueba. La confirmación final se hace en equipo real.</p>
     </div>
     <div class="pair" style="margin-top:20px">
@@ -213,13 +215,13 @@ footer p{font-size:.84rem;color:var(--ink3);max-width:74ch}
     <h2>Procedencia y reglas</h2>
     <p class="intro">Lo que existe, traído verbatim; lo nuevo, declarado.</p>
     <div class="formlist">
-      <span class="fm"><b>De la casa, verbatim:</b> el app-shell <code>.app/.sa/.appbar/.bnav</code>, la hoja <code>.ovl + .modal</code>, las formas <code>.kpi · .vd-cli · .chip · .memb-chip · .ord-filtro · .camp</code></span>
+      <span class="fm"><b>De la casa, verbatim:</b> el app-shell <code>.app/.sa/.appbar/.bnav</code>, la hoja <code>.ovl + .modal</code>, las formas <code>.kpi · .vd-cli · .chip · .memb-chip · .ord-filtro</code>; el semáforo del tile sigue <code>casa.css .card.alert/.good/.warn</code></span>
     </div>
     <div class="formlist">
-      <span class="fm"><b>Piezas nuevas (declaradas):</b> el panel de la hamburguesa, el paginador con puntos, EN VIVO·CIERRE (3 estados), el gauge móvil (heredado del escritorio)</span>
+      <span class="fm"><b>Piezas nuevas (declaradas):</b> el panel de la hamburguesa, el paginador con puntos, la marca como inicio con su gesto, EN VIVO·CIERRE (3 estados), el gauge móvil de la hoja (heredado del escritorio)</span>
     </div>
     <div class="note">
-      <p><b>Color = significado.</b> El dinero en tinta; el rojo sólo para el quiebre y la barra de decisión (estado más grave); el activo de la nav en tinta; en oscuro el rojo de texto usa su variante AA. El ícono de marca va en su rojo de kit verbatim (es marca, no texto).</p>
+      <p><b>Color = significado (semáforo de cumplimiento).</b> Cada tile revela su estado en tres canales a la vez —filo lateral, ícono y botón relleno—, no sólo en matiz: <b class="k-red">rojo</b> quiebre, ámbar advertencia, verde sano; el dinero y el activo de la nav en tinta; en oscuro el rojo de texto usa su variante AA. El ícono de marca va en su rojo de kit verbatim (es marca, no texto). Se retiró la barra de decisión del pie (redundante con el acto de cada tile, y rompía la grilla).</p>
       <p><b>El responsable.</b> En 375&nbsp;px no caben nombre + chip + plazo + acto + peso en la fila; el responsable lo lleva el avatar (iniciales) y la hoja de detalle muestra el nombre completo. Chip y plazo quedan siempre visibles.</p>
       <p><b>Carbon.</b> La grilla sigue siendo la de pantalla chica (4 columnas, relleno 16, breakpoint Small, verificada en el MCP). La hoja pegada al borde inferior sigue a Carbon · Modal · Mobile (verificada en el MCP) y además es la <code>.modal</code> de la casa.</p>
     </div>

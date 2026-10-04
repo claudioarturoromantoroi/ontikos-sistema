@@ -61,7 +61,7 @@
   <!-- ══ CABECERA fija · hamburguesa · ÍCONO Ontikos · EN VIVO·CIERRE · campana · avatar ══ -->
   <header class="appbar">
     <button class="hamb" aria-label="Abrir módulos" onclick="openDrawer()"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-    <span class="ont-ico" aria-label="Ontikos"><svg viewBox="27 29 144 144"><g fill="#D80404"><path d="M166 101A67 67 0 1 1 99 34L99 59A42 42 0 1 0 141 101Z"/><rect x="114" y="72" width="28" height="28"/><rect x="142" y="52" width="20" height="20"/><rect x="124" y="33" width="18" height="18"/></g></svg></span>
+    <button class="ont-home" id="ont-home" aria-label="Ir al inicio · El Futuro" title="Ontikos · inicio" onclick="goHome()"></button>
     <span class="clock"><span class="cdot"></span>EN VIVO · CIERRE 21D</span>
     <span class="sp"></span>
     <button class="rc-bell" aria-label="Alertas"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="rc-bell-badge">3</span></button>
@@ -75,62 +75,66 @@
     <section class="sc on" id="futuro">
       <div class="pager" id="pager">
 
-        <!-- Página 1 · las cuatro líneas 2×2 + la barra de decisión -->
+        <!-- Página 1 · las cuatro líneas 2×2 · color = estado de cumplimiento
+             (semáforo como «Mi Semana»: filo + ícono + botón en el estado) -->
         <div class="page">
           <div class="page-ey">Si nadie actúa, al cierre</div>
           <div class="lgrid">
-            <!-- Colocación · una idea: 55% de la meta -->
-            <div class="ltile" onclick="openLine('colocacion')">
-              <div class="lt-t">Colocación</div>
+            <!-- Colocación · en quiebre (rojo) -->
+            <div class="ltile alert" onclick="openLine('colocacion')">
+              <div class="lt-head">
+                <span class="lt-ico r"><svg viewBox="0 0 24 24"><path d="M23 18l-9.5-9.5-5 5L1 6"/><polyline points="17 18 23 18 23 12"/></svg></span>
+                <span class="lt-t">Colocación</span>
+              </div>
               <span class="memb-chip expired">en quiebre</span>
               <div class="lt-metric">
                 <div class="lt-figrow"><span class="lt-pct">55%</span><span class="lt-pct-cap">de la meta</span></div>
                 <div class="lt-bar"><div class="lt-bar-fill r" style="width:55%"></div></div>
               </div>
               <div class="lt-ctx r">5/sem · faltan 12</div>
-              <button class="ltile-act q">Pedir acción</button>
+              <button class="ltile-act r">Pedir acción</button>
             </div>
-            <!-- Cobranza · 96% en plazo -->
-            <div class="ltile" onclick="openLine('cobranza')">
-              <div class="lt-t">Cobranza</div>
+            <!-- Cobranza · sano (verde) -->
+            <div class="ltile good" onclick="openLine('cobranza')">
+              <div class="lt-head">
+                <span class="lt-ico g"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+                <span class="lt-t">Cobranza</span>
+              </div>
               <span class="memb-chip">sano</span>
               <div class="lt-metric">
                 <div class="lt-figrow"><span class="lt-pct">96%</span><span class="lt-pct-cap">en plazo</span></div>
                 <div class="lt-bar"><div class="lt-bar-fill g" style="width:96%"></div></div>
               </div>
               <div class="lt-ctx g">vencido 3.8%, estable</div>
-              <button class="ltile-act">Revisar los 16</button>
+              <button class="ltile-act g">Revisar los 16</button>
             </div>
-            <!-- Renovación · 78% retención (muesca ind. 84%) -->
-            <div class="ltile" onclick="openLine('renovacion')">
-              <div class="lt-t">Renovación</div>
+            <!-- Renovación · bajo industria (ámbar · muesca ind. 84%) -->
+            <div class="ltile warn" onclick="openLine('renovacion')">
+              <div class="lt-head">
+                <span class="lt-ico a"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span>
+                <span class="lt-t">Renovación</span>
+              </div>
               <span class="memb-chip grace">bajo industria</span>
               <div class="lt-metric">
                 <div class="lt-figrow"><span class="lt-pct">78%</span><span class="lt-pct-cap">retención</span></div>
                 <div class="lt-bar"><div class="lt-bar-fill a" style="width:78%"></div><span class="lt-bar-notch" style="left:84%" title="industria 84%"></span></div>
               </div>
               <div class="lt-ctx a">3 meses a la baja</div>
-              <button class="ltile-act">Pedir acción</button>
+              <button class="ltile-act a">Pedir acción</button>
             </div>
-            <!-- Siniestralidad · 71% (muesca umbral 65%) -->
-            <div class="ltile" onclick="openLine('siniestralidad')">
-              <div class="lt-t">Siniestralidad</div>
+            <!-- Siniestralidad · sobre umbral (ámbar · muesca umbral 65%) -->
+            <div class="ltile warn" onclick="openLine('siniestralidad')">
+              <div class="lt-head">
+                <span class="lt-ico a"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+                <span class="lt-t">Siniestralidad</span>
+              </div>
               <span class="memb-chip grace">sobre umbral</span>
               <div class="lt-metric">
                 <div class="lt-figrow"><span class="lt-pct">71%</span><span class="lt-pct-cap">índice</span></div>
                 <div class="lt-bar"><div class="lt-bar-fill a" style="width:71%"></div><span class="lt-bar-notch" style="left:65%" title="umbral 65%"></span></div>
               </div>
               <div class="lt-ctx a">sube · 3 meses</div>
-              <button class="ltile-act">Pedir acción</button>
-            </div>
-          </div>
-
-          <!-- barra de decisión · hereda el estado más grave (Colocación en quiebre → rojo) -->
-          <div class="camp grave">
-            <div class="camp-body">
-              <div class="camp-t"><b>$9.5M</b> de prima no entra y <b>$6.8M</b> renuevan encarecidas</div>
-              <div class="camp-s">Si nadie actúa al cierre · 38 colocaciones + 26 renovaciones.</div>
-              <button class="btn primary camp-act" onclick="openLine('atender')">Atender el más grave →</button>
+              <button class="ltile-act a">Pedir acción</button>
             </div>
           </div>
         </div>
@@ -351,6 +355,27 @@ function toggleTema(){
 
 var sa=document.getElementById('sa'), pager=document.getElementById('pager');
 
+// ── la marca como INICIO, con el gesto del escritorio (VERBATIM de Marca.jsx) ──
+// el anillo abierto gira 360° una vez; los 3 módulos entran escalonados (fade +
+// sube 11u). Reinsertar el <svg> le da una línea de tiempo SMIL nueva, que es
+// como el escritorio lo re-dispara (key={gesto}): sin @keyframes propios.
+var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+function brandSVG(play){
+  var ring = '<path d="M166 101A67 67 0 1 1 99 34L99 59A42 42 0 1 0 141 101Z">'
+    + (play && !RM ? '<animateTransform attributeName="transform" type="rotate" from="0 99 101" to="360 99 101" dur="0.9s" begin="0s" repeatCount="1" fill="freeze"/>' : '') + '</path>';
+  var mods = [[114,72,28,0.70],[142,52,20,0.92],[124,33,18,1.14]].map(function(m){
+    var inner = '';
+    if(play){ inner += '<animate attributeName="opacity" from="0" to="1" begin="'+m[3]+'s" dur="0.5s" fill="freeze"/>';
+      if(!RM) inner += '<animateTransform attributeName="transform" type="translate" from="0 11" to="0 0" begin="'+m[3]+'s" dur="0.5s" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.7 0.2 1" fill="freeze"/>'; }
+    return '<rect x="'+m[0]+'" y="'+m[1]+'" width="'+m[2]+'" height="'+m[2]+'"'+(play?' opacity="0"':'')+'>'+inner+'</rect>';
+  }).join('');
+  return '<svg class="ont-sym" viewBox="27 29 144 144" aria-hidden="true"><g fill="#D80404">'+ring+mods+'</g></svg>';
+}
+function playBrand(){ var h=document.getElementById('ont-home'); if(h) h.innerHTML = brandSVG(true); }
+
+// ── inicio: va a El Futuro (página 1) y re-dispara el gesto de marca ──
+function goHome(){ go('futuro'); goPage(0); playBrand(); }
+
 // ── navegación de secciones (bnav) ──
 function go(id){
   document.querySelectorAll('.sc').forEach(function(s){s.classList.toggle('on',s.id===id)});
@@ -445,6 +470,7 @@ function openQ(row){
 }
 
 syncTemaLbl();
+playBrand(); // el gesto de marca corre una vez al cargar (como el escritorio)
 document.addEventListener('keydown',function(e){ if(e.key==='Escape'){closeDrawer();closeSheet();} });
 </script>
 </body>

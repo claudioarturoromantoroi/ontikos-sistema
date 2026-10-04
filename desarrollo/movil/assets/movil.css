@@ -25,6 +25,13 @@
 .ont-ico svg{width:100%;height:100%;display:block}
 /* el ícono es la marca: va en su rojo #D80404 verbatim, igual que la casa deja
    su wordmark en rojo también en oscuro. No se recolorea (no es texto). */
+/* la marca es el botón de INICIO (como el escritorio): toca → El Futuro, y
+   re-dispara el gesto. Reset de botón + área táctil ≥44px, con el símbolo dentro. */
+.ont-home{width:26px;height:26px;flex:none;border:none;background:none;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;-webkit-tap-highlight-color:transparent}
+.ont-home .ont-sym{width:26px;height:26px;display:block}
+.ont-home::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:var(--tap,44px);height:var(--tap,44px)}
+.ont-home:active{transform:scale(.92)}
+.ont-home:focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:6px}
 .appbar .clock{font-size:.6rem}
 .clock.porcerrar{color:var(--amber)}
 .clock.porcerrar .cdot{background:var(--amber);animation:none}
@@ -95,23 +102,39 @@
 .gz-pace{font-size:.66rem;font-weight:800;margin-top:3px;line-height:1.2}
 .gz-pace.r{color:var(--red-tx,var(--red))} .gz-pace.a{color:var(--amber)} .gz-pace.g{color:var(--green)} .gz-pace.n{color:var(--ink2)}
 
-/* ── El tile de línea estratégica · UNA SOLA IDEA (recomposición) ───────────
+/* ── El tile de línea estratégica · COMPOSICIÓN de «Mi Semana» + SEMÁFORO ────
    Composición tomada de «Mi Semana» (EstructuraMovil · Ontikos vendedor móvil):
-   una idea por tarjeta, aire, ritmo vertical constante, peso contenido, acto
-   como botón. De ahí el relleno 16 y la barra delgada redondeada. NO se toma su
-   uso del color. La separación la da el ESPACIO, no líneas internas.
-   El arco de escritorio no entra: el avance va en BARRA con muesca de
+   una idea por tarjeta, aire, ritmo vertical constante, peso contenido, ÍCONO,
+   acto como botón. Y el COLOR = ESTADO de cumplimiento, como «Mi Semana» y como
+   el escritorio (casa.css .card.alert/.good/.warn): el filo lateral, el ícono y
+   el botón van EN el estado (rojo quiebre · ámbar advertencia · verde sano).
+   El arco de escritorio no entra en el tile: el avance va en BARRA con muesca de
    referencia; el arco se muestra en la hoja (instrumento a escala de escritorio).
-   Procedencia: ERP-CRM/producto/app/src/vistas/movil/estructura-movil.css */
+   Procedencia: estructura-movil.css + marco/casa.css (.card.alert/.good/.warn). */
 .lgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;flex:1 1 auto;min-height:0}
-.ltile{background:var(--surf);border:1px solid var(--brd);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0;min-height:0;overflow:hidden;cursor:pointer;text-align:left}
-/* 1 · título (peso 700) · 2 · estado (chip con punto) */
-.lt-t{font-size:.92rem;font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink)}
-.ltile .memb-chip{font-size:.46rem;padding:2px 7px;white-space:nowrap;align-self:flex-start}
+.ltile{position:relative;background:var(--surf);border:1px solid var(--brd);border-radius:14px;padding:14px 14px 14px 15px;display:flex;flex-direction:column;gap:9px;min-width:0;min-height:0;overflow:hidden;cursor:pointer;text-align:left}
+/* semáforo de cumplimiento (como el escritorio): borde en el estado + filo
+   lateral de 3px. color=significado, y nunca sólo color: lo acompaña el ícono. */
+.ltile.alert{border-color:var(--red-brd,var(--red))}
+.ltile.good{border-color:var(--green-brd,var(--green))}
+.ltile.warn{border-color:var(--amber-brd,var(--amber))}
+.ltile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:14px 0 0 14px}
+.ltile.alert::before{background:var(--red)}
+.ltile.good::before{background:var(--green)}
+.ltile.warn::before{background:var(--amber-fill,var(--amber))}
+/* 1 · cabecera: ÍCONO (en el estado) + título (700) + estado (chip) */
+.lt-head{display:flex;align-items:center;gap:8px;min-width:0}
+.lt-ico{width:20px;height:20px;flex:none;display:flex;align-items:center;justify-content:center}
+.lt-ico svg{width:100%;height:100%;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke:var(--ink3)}
+.lt-ico.r svg{stroke:var(--red)} .lt-ico.a svg{stroke:var(--amber)} .lt-ico.g svg{stroke:var(--green)}
+.lt-t{font-size:.92rem;font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* el estado en PALABRA, en su propia línea (no se trunca ni empuja el título);
+   el color ya lo cargan el filo, el ícono y el botón. */
+.ltile .memb-chip{font-size:.52rem;padding:2px 8px;white-space:nowrap;align-self:flex-start;margin:-2px 0 0}
 /* 3 · la cifra con su barra (única cifra a 900 del tile, moderada) */
 .lt-metric{display:flex;flex-direction:column;gap:7px}
 .lt-figrow{display:flex;align-items:baseline;gap:7px}
-.lt-pct{font-size:1.35rem;font-weight:900;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.lt-pct{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
 .lt-pct-cap{font-size:.66rem;font-weight:600;color:var(--ink3)}
 .lt-bar{position:relative;height:8px;background:var(--surf3);border-radius:99px}
 .lt-bar-fill{position:absolute;left:0;top:0;height:100%;border-radius:99px}
@@ -120,38 +143,47 @@
 /* 4 · una sola línea de contexto (regular; color del estado sólo si lo carga) */
 .lt-ctx{font-size:.76rem;font-weight:500;color:var(--ink2);line-height:1.3}
 .lt-ctx.r{color:var(--red-tx,var(--red));font-weight:600} .lt-ctx.a{color:var(--amber);font-weight:600} .lt-ctx.g{color:var(--green);font-weight:600}
-/* 5 · el acto como BOTÓN real: ancho completo, contorno, ≥44px, SIN relleno */
-.ltile-act{margin-top:auto;display:block;width:100%;border:1.5px solid var(--ink);background:none;border-radius:11px;padding:11px 10px;min-height:44px;font-size:.78rem;font-weight:700;color:var(--ink);cursor:pointer;text-align:center;font-family:inherit;letter-spacing:-.01em}
-.ltile-act.q{border-color:var(--red);color:var(--red-tx,var(--red))}
-/* en pantallas altas: más aire y cifra un poco mayor */
+/* 5 · el acto como BOTÓN real: ancho completo, ≥44px, RELLENO en el semáforo
+   (como «Mi Semana»: el botón refleja el estado de cumplimiento) */
+.ltile-act{margin-top:auto;display:block;width:100%;border:1.5px solid var(--ink);background:none;border-radius:11px;padding:11px 10px;min-height:44px;font-size:.78rem;font-weight:800;color:var(--ink);cursor:pointer;text-align:center;font-family:inherit;letter-spacing:-.01em}
+.ltile-act.r{background:var(--red);border-color:var(--red);color:#fff}
+.ltile-act.a{background:var(--amber-fill,var(--amber));border-color:var(--amber-fill,var(--amber));color:#fff}
+.ltile-act.g{background:var(--green);border-color:var(--green);color:#fff}
+.ltile-act:active{transform:translateY(1px)}
+/* en pantallas altas: más aire, ícono y cifra mayores (uso del espacio liberado
+   al quitar la barra de decisión; lo gráfico crece sin romper la grilla) */
 @media (min-height:760px){
   .lgrid{gap:14px}
-  .ltile{padding:16px;gap:13px}
+  .ltile{padding:16px 16px 16px 17px;gap:12px}
+  .lt-head{gap:9px}
+  .lt-ico{width:23px;height:23px}
   .lt-t{font-size:1rem}
-  .lt-pct{font-size:1.6rem}
+  .lt-pct{font-size:1.85rem}
   .lt-pct-cap{font-size:.74rem}
-  .lt-bar{height:9px}
+  .lt-bar{height:10px}
   .lt-ctx{font-size:.82rem}
   .ltile-act{font-size:.82rem;padding:12px}
 }
-/* En viewports muy cortos (iPhone SE con barras de Safari) el tile airoso no
-   cabe sin sacrificar aire. Antes que comprimir —el aire es parte de la
-   corrección— la entrada se desplaza en vertical y la grilla toma su alto
-   natural, para que nada se recorte. (Pendiente de decisión del dueño.) */
+/* En viewports cortos (iPhone SE con las barras de Safari) la grilla 2×2 LLENA
+   el alto disponible sin desplazarse: al retirar la barra de decisión sobra el
+   alto que antes obligaba a comprimir o a hacer scroll. Se afina sólo el ritmo
+   (relleno, cifra, gap) para que el tile airoso quepa sin recortar nada. */
 @media (max-height:759px){
-  .pager-host .sc.on .page{overflow-y:auto;overflow-x:hidden}
-  .pager-host .lgrid{flex:0 0 auto;grid-template-rows:none;grid-auto-rows:auto}
+  .page{padding-top:6px;padding-bottom:4px;gap:5px}
+  .lgrid{gap:10px}
+  .ltile{padding:12px 12px 12px 13px;gap:7px}
+  .lt-ico{width:18px;height:18px}
+  .lt-t{font-size:.86rem}
+  .lt-pct{font-size:1.35rem}
+  .lt-pct-cap{font-size:.62rem}
+  .lt-ctx{font-size:.72rem}
+  .ltile-act{padding:10px 8px;font-size:.74rem}
 }
 
 /* ══ 5 · color = significado y ajustes sobre las formas heredadas ════════════ */
-/* la barra de decisión usa .camp; hereda el estado más grave (hoy rojo).
-   Compacta dentro de la página para que todo quepa en el peor caso (SE con barras). */
-.camp.grave{border-color:var(--red)}
-.camp.grave .camp-act,.camp.grave .btn.primary{background:var(--red);border-color:var(--red);color:#fff}
-.page .camp{padding:10px 12px}
-.page .camp-t{font-size:.72rem;line-height:1.22}
-.page .camp-s{font-size:.6rem;margin-top:2px;line-height:1.25}
-.page .camp-act{margin-top:7px;padding:10px 13px;font-size:.76rem;min-height:44px}
+/* (La barra de decisión de la página 1 se retiró: cada tile ya remata en su
+   propio acto, y su redundancia obligaba a desplazar y rompía la grilla. El
+   peso de la decisión lo cargan el semáforo de los cuatro tiles y la página 2.) */
 
 /* Quiebres · la fila .vd-cli con su acto visible; chip en la línea de responsable.
    Se ajusta el relleno y los gaps de la fila para dar ancho al cuerpo en móvil
