@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ontikos · Dirección General (desarrollo)</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <!-- ENTRADA ÚNICA del tablero en desarrollo (/desarrollo/): una sola vía que
+         distingue el dispositivo y enruta. El TELÉFONO recibe la app móvil, que
+         debe ser el documento de nivel superior para que dvh y
+         env(safe-area-inset-*) funcionen; el ESCRITORIO, el tablero. Mismo
+         criterio que ceo.html. Se preservan ?query y #hash (p. ej. ?dk). Corre
+         antes de pintar nada; <noscript>/meta-refresh caen al escritorio. -->
+    <script>
+      (function () {
+        try {
+          var ua = navigator.userAgent || '';
+          var phoneUA = /iPhone|iPod|Android.*Mobile|Windows Phone|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+          var mm = window.matchMedia;
+          var narrow = mm && mm('(max-width: 768px)').matches;
+          var coarse = mm && mm('(pointer: coarse)').matches;
+          var dest = (phoneUA || (narrow && coarse)) ? './movil/index.html' : './ceo.html';
+          window.location.replace(dest + window.location.search + window.location.hash);
+        } catch (e) {
+          window.location.replace('./ceo.html');
+        }
+      })();
+    </script>
+    <meta http-equiv="refresh" content="0; url=./ceo.html" />
+  </head>
+  <body>
+    <noscript><a href="./ceo.html">Entrar al tablero</a></noscript>
+  </body>
+</html>
