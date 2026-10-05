@@ -350,6 +350,16 @@ body.vh-short .lt-act{min-height:26px;padding:4px 12px;font-size:.74rem}
 .sh-k{font-size:.74rem;color:var(--ink3);font-weight:600;flex:none}
 .sh-v{font-size:.82rem;color:var(--ink);font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
 .sh-v.r{color:var(--red-tx,var(--red))} .sh-v.a{color:var(--amber)} .sh-v.g{color:var(--green)}
+/* ── GRILLA interna de componentes (lógica del escritorio) · 2 columnas con
+   junta hairline, rótulo en versalitas y valor en su color de estado. Es la
+   plantilla de TODAS las hojas (El Futuro, Quiebres, Compromisos, Lo clave). */
+.sh-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--brd);border:1px solid var(--brd);border-radius:12px;overflow:hidden;margin-top:8px}
+.sh-cell{background:var(--surf);padding:11px 13px;min-width:0}
+.sh-cell-k{font-size:.56rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-cell-v{font-size:.9rem;font-weight:800;color:var(--ink);line-height:1.25;font-variant-numeric:tabular-nums}
+.sh-cell-v.r{color:var(--red-tx,var(--red))} .sh-cell-v.a{color:var(--amber)} .sh-cell-v.g{color:var(--green)}
+/* conteo impar: la última celda abarca el ancho, sin hueco vacío */
+.sh-grid .sh-cell:last-child:nth-child(odd){grid-column:1 / -1}
 /* ── stepper COMPLETO con nombres (hoja de Lo clave) · vertical, con línea
    conectora; hecho = nodo verde, actual = anillo del estado + etiqueta «aquí»,
    pendiente = hueco. Aquí sí hay alto (la hoja sube), así que cabe entero. */
