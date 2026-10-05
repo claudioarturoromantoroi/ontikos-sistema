@@ -10,12 +10,12 @@
      VERSIONADO DE ASSETS (?v=…): cada cambio sube el número y el navegador trae
      el archivo nuevo al instante, sin que nadie tenga que limpiar la caché —el
      HTML se sirve fresco y pide la versión nueva del CSS. Subir en cada deploy. -->
-<link rel="stylesheet" href="assets/app.css?v=20261005f">
-<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261005f">
-<link rel="stylesheet" href="assets/cliente-extra.css?v=20261005f">
-<link rel="stylesheet" href="assets/proceso.css?v=20261005f">
-<link rel="stylesheet" href="assets/network-design-system.css?v=20261005f">
-<link rel="stylesheet" href="assets/movil.css?v=20261005f">
+<link rel="stylesheet" href="assets/app.css?v=20261005g">
+<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261005g">
+<link rel="stylesheet" href="assets/cliente-extra.css?v=20261005g">
+<link rel="stylesheet" href="assets/proceso.css?v=20261005g">
+<link rel="stylesheet" href="assets/network-design-system.css?v=20261005g">
+<link rel="stylesheet" href="assets/movil.css?v=20261005g">
 <style>html,body{font-family:'DM Sans',system-ui,sans-serif}
 .qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
@@ -38,7 +38,7 @@
 .tac-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px}
 .tac-foot-l{font-size:.7rem;font-weight:700;color:var(--ink2)}
 /* el acto · botón-píldora en tinta (navegación), a juego con los de página 1 */
-.tac-act{border:none;background:var(--ink);border-radius:999px;padding:12px 18px;min-height:46px;font-family:inherit;font-size:.82rem;font-weight:700;color:var(--surf);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.tac-act{border:none;background:var(--red);border-radius:999px;padding:12px 18px;min-height:46px;font-family:inherit;font-size:.82rem;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
 .tac-act:active{transform:scale(.97)}
 .fn{display:flex;flex-direction:column;gap:15px}
 .fn-step{display:flex;flex-direction:column;gap:7px}
@@ -704,7 +704,11 @@ function buildSheet(t, ctx, note, rows, ask, act, opts){
   }
   if(ask) h += '<div class="sh-ask"><div class="sh-ask-k">Qué se pedirá</div><div class="sh-ask-v">'+esc(ask)+'</div></div>';
   document.getElementById('sh-body').innerHTML = h;
-  document.getElementById('sh-act').textContent = act || 'Pedir acción';
+  var ab=document.getElementById('sh-act');
+  ab.textContent = act || 'Pedir acción';
+  // el botón de acto toma el color del estado (rojo/ámbar/verde); nunca negro
+  var bsc = (opts && (opts.sc || (opts.arc && opts.arc.sc))) || '';
+  ab.className = 'primary' + (/^[rag]$/.test(bsc) ? ' prim-'+bsc : '');
   ovl.classList.add('on');
 }
 function closeSheet(){ ovl.classList.remove('on'); }

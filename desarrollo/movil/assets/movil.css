@@ -163,7 +163,7 @@ body.vh-short .ef-sub{font-size:.78rem;margin-top:2px}
 .lt-bar-notch{position:absolute;top:-3px;width:2px;height:12px;background:var(--ink);opacity:.55;border-radius:1px;margin-left:-1px}
 /* el acto · BOTÓN-PÍLDORA a lo ancho, relleno en el estado, ≥46px (instrumento,
    no juguete): radio 999, centrado, con la flecha de «hazlo» */
-.lt-act{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;border:none;border-radius:999px;padding:10px 14px;min-height:40px;font-size:.88rem;font-weight:700;letter-spacing:-.01em;color:#fff;background:var(--ink);cursor:pointer;font-family:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lt-act{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;border:none;border-radius:999px;padding:10px 14px;min-height:40px;font-size:.88rem;font-weight:700;letter-spacing:-.01em;color:#fff;background:var(--red);cursor:pointer;font-family:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lt-act.r{background:var(--red)} .lt-act.a{background:var(--amber-fill,var(--amber))} .lt-act.g{background:var(--green)}
 .lt-act:active{transform:scale(.97)}
 /* ── alerta DELGADA al pie de la página 1 (una línea, sin scroll) ────────────
@@ -315,9 +315,12 @@ body.vh-short .lt-act{min-height:26px;padding:4px 12px;font-size:.74rem}
 .qr-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:5px;flex:none;min-width:0}
 .qr-peso{font-size:.88rem;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink)!important}
 .qr-peso-l{font-size:.48rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.03em;margin-top:-2px}
-.qr-act{border:1.5px solid var(--ink);background:none;border-radius:7px;padding:4px 7px;font-size:.58rem;font-weight:800;color:var(--ink);cursor:pointer;white-space:nowrap;font-family:inherit;line-height:1.1}
+/* el acto NO va en negro (no dice nada): por defecto en el acento de marca (rojo),
+   y en su color de estado cuando lo tiene (ámbar/verde). */
+.qr-act{border:1.5px solid var(--red);background:none;border-radius:7px;padding:4px 7px;font-size:.58rem;font-weight:800;color:var(--red-tx,var(--red));cursor:pointer;white-space:nowrap;font-family:inherit;line-height:1.1}
 .qr-act.r{border-color:var(--red);color:var(--red-tx,var(--red))}
 .qr-act.a{border-color:var(--amber);color:var(--amber)}
+.qr-act.g{border-color:var(--green);color:var(--green)}
 
 /* indicadores en rejilla 2×2 compacto; dinero en tinta salvo estado */
 .kpis.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -392,7 +395,14 @@ body.vh-short .lt-act{min-height:26px;padding:4px 12px;font-size:.74rem}
 .sh-ask-k{font-size:.56rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
 .sh-ask-v{font-size:.92rem;font-weight:700;color:var(--ink);line-height:1.45}
 .modal-btns button{min-height:48px}
-.modal-btns button.primary{font-size:.84rem}
+/* el botón de acto de la hoja toma el COLOR DEL ESTADO (no negro): rojo de marca
+   por defecto, ámbar/verde cuando la pieza lo es. El «Cancelar» queda neutro. */
+.modal-btns button.primary{font-size:.84rem;background:var(--red);border-color:var(--red);color:#fff}
+.modal-btns button.primary.prim-a{background:var(--amber-fill,var(--amber));border-color:var(--amber-fill,var(--amber))}
+.modal-btns button.primary.prim-g{background:var(--green);border-color:var(--green)}
+.modal-btns button.primary:hover{background:var(--red-h,var(--red));border-color:var(--red-h,var(--red))}
+.modal-btns button.primary.prim-a:hover{filter:brightness(.95)}
+.modal-btns button.primary.prim-g:hover{filter:brightness(.95)}
 /* interruptor de tema en el panel de la hamburguesa */
 .mod-tgl{margin-left:auto;width:38px;height:22px;border-radius:12px;background:var(--surf3);position:relative;flex:none;transition:background .2s}
 .mod-tgl::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s}
