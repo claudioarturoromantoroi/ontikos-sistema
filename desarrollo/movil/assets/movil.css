@@ -220,6 +220,30 @@ body.vh-short .alert-slim .as-txt{font-size:.74rem}
 .kpi-dot.r{background:var(--red)} .kpi-dot.a{background:var(--amber-fill,var(--amber))}
 .kpi-dot.m{background:var(--ink4)} .kpi-dot.k{background:var(--ink)}
 
+/* ── Compromisos y Lo clave · grupos, filo verde, pipeline y chip de estado ───
+   Reutilizan la fila .vd-cli (avatar · cuerpo · acto a la derecha) de Quiebres,
+   para que las cuatro superficies lean como un solo sistema. */
+.cmp-gh{display:flex;align-items:baseline;gap:8px;margin:17px 0 9px}
+.cmp-gh-t{font-size:.95rem;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.cmp-gh-c{flex:none;font-size:.7rem;font-weight:800;color:var(--ink3);background:var(--surf3);border-radius:999px;padding:1px 9px;line-height:1.6}
+.cmp-gh-c.a{color:var(--amber);background:var(--amber-bg)}
+.cmp-gh-s{font-size:.66rem;font-weight:600;color:var(--ink3);margin-left:auto;text-align:right}
+/* cuarto filo de estado (sano · verde), a juego con urg/med/neu */
+.vd-cli.ok{box-shadow:inset 3px 0 0 var(--green)}
+.vd-cli-plz.g{color:var(--green)}
+/* chip de estado a la derecha en «En ejecución» */
+.cmp-st{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap;padding:3px 9px;border-radius:999px;align-self:center}
+.cmp-st.r{color:var(--red-tx,var(--red));background:var(--red-bg)}
+.cmp-st.a{color:var(--amber);background:var(--amber-bg)}
+.cmp-st.g{color:var(--green);background:var(--green-bg)}
+.cmp-st.n{color:var(--ink3);background:var(--surf3)}
+/* pipeline compacto (Lo clave): segmentos hecho/actual/pendiente/inválido */
+.pipe{display:flex;gap:3px;margin:7px 0 3px}
+.pipe i{flex:1 1 0;height:5px;border-radius:3px;background:var(--surf3)}
+.pipe i.d{background:var(--green)}
+.pipe i.c{background:var(--amber-fill,var(--amber))}
+.pipe i.x{background:var(--red)}
+
 /* pantalla ancha (≥420): un punto más de cuerpo, sin cambiar el alto compacto */
 @media (min-width:420px){
   .lt-ico{width:42px;height:42px}
