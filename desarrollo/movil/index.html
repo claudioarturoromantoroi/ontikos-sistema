@@ -10,12 +10,12 @@
      VERSIONADO DE ASSETS (?v=…): cada cambio sube el número y el navegador trae
      el archivo nuevo al instante, sin que nadie tenga que limpiar la caché —el
      HTML se sirve fresco y pide la versión nueva del CSS. Subir en cada deploy. -->
-<link rel="stylesheet" href="assets/app.css?v=20261005d">
-<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261005d">
-<link rel="stylesheet" href="assets/cliente-extra.css?v=20261005d">
-<link rel="stylesheet" href="assets/proceso.css?v=20261005d">
-<link rel="stylesheet" href="assets/network-design-system.css?v=20261005d">
-<link rel="stylesheet" href="assets/movil.css?v=20261005d">
+<link rel="stylesheet" href="assets/app.css?v=20261005e">
+<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261005e">
+<link rel="stylesheet" href="assets/cliente-extra.css?v=20261005e">
+<link rel="stylesheet" href="assets/proceso.css?v=20261005e">
+<link rel="stylesheet" href="assets/network-design-system.css?v=20261005e">
+<link rel="stylesheet" href="assets/movil.css?v=20261005e">
 <style>html,body{font-family:'DM Sans',system-ui,sans-serif}
 .qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
@@ -687,6 +687,13 @@ function buildSheet(t, ctx, note, rows, ask, act, opts){
     var a=opts.arc, TK={84:'<line class="gz-tick" x1="50.4" y1="23.9" x2="59.2" y2="19.1"/>',65:'<line class="gz-tick" x1="41.5" y1="15.3" x2="46.1" y2="6.4"/>'};
     h += '<div class="sh-arc '+a.sc+'"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="'+a.off+'"/>'+(a.tick?TK[a.tick]||'':'')+'</svg><div class="gz-num">'+esc(a.pct)+'</div></div><div class="sh-arc-cap">'+esc(a.cap)+'</div></div>';
   }
+  if(opts && opts.steps && opts.steps.length){
+    h += '<div class="sh-h">Etapas del pipeline</div><div class="sh-steps">';
+    opts.steps.forEach(function(st){
+      h += '<div class="sh-step '+st.s+(st.sc?' '+st.sc:'')+'"><span class="sh-node"></span><span class="sh-step-n">'+esc(st.n)+'</span>'+(st.s==='cur'?'<span class="sh-step-tag">aquí</span>':'')+'</div>';
+    });
+    h += '</div>';
+  }
   if(note) h += '<div class="sh-h">Qué pasa</div><div class="sh-note">'+esc(note)+'</div>';
   if(rows && rows.length){
     h += '<div class="sh-h">Componentes</div><div class="sh-rows">';
@@ -753,10 +760,22 @@ function openPed(row){
   buildSheet(d.t, 'Compromiso · '+d.kind, '', rows, ASK[d.kind]||'', d.act||'Ver', {sit:d.kind, sc:(d.sc||'')});
 }
 // ── hoja de una pieza clave (póliza o siniestro) ──
+// pipelines canónicos (del CEO de escritorio) para el stepper completo de la hoja.
+// Se eligen por el total n de «k de n»: 6=póliza · 7=siniestro directo · 8=reembolso.
+var PIPES={
+  6:['Modelar','Cotizar','Asesorar','Vincular','Emisión','Entregar'],
+  7:['Aviso','Integración','Ajuste','Resolución','Autorización','Pago','Cierre'],
+  8:['Aviso','Integración','Ajuste','Resolución','Comprobación','Procedencia','Reembolso','Cierre']
+};
 function openClave(row){
   var d=row.dataset;
-  var rows=[['Paso actual', d.step+' · '+d.prog],['Estado', d.st, d.sc],['Vence', d.plz],['Responsable', d.resp]];
-  buildSheet(d.c, 'Lo clave · '+d.kind, '', rows, 'Empujar la pieza al siguiente paso con el responsable.', 'Ver detalle', {sit:d.st, sc:(d.sc||'')});
+  // stepper COMPLETO con nombres: done antes del actual, el actual resaltado, el resto pendiente
+  var steps=null, m=/(\d+)\s*de\s*(\d+)/.exec(d.prog||'');
+  if(m){ var ci=(+m[1])-1, list=PIPES[+m[2]];
+    if(list) steps=list.map(function(nm,i){ return {n:nm, s:(i<ci?'done':(i===ci?'cur':'pend')), sc:(i===ci?(d.sc||''):'')}; });
+  }
+  var rows=[['Estado', d.st, d.sc],['Vence', d.plz],['Responsable', d.resp]];
+  buildSheet(d.c, 'Lo clave · '+d.kind, '', rows, 'Empujar la pieza al siguiente paso con el responsable.', 'Ver detalle', {sit:d.st, sc:(d.sc||''), steps:steps});
 }
 
 syncTemaLbl();
