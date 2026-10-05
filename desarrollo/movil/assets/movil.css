@@ -413,3 +413,33 @@ body.dk .mod-tgl::after{left:18px}
 .grid-ovl{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:none;display:flex;z-index:80}
 .grid-ovl i{flex:1;background:rgba(208,2,27,.05);border-right:1px dashed rgba(208,2,27,.4)}
 .grid-ovl i:first-child{border-left:1px dashed rgba(208,2,27,.4)}
+
+/* ══ INTERACCIÓN · toque y hover ═══════════════════════════════════════════════
+   En táctil NO hay hover (no hay puntero que se pose): el feedback es la PRESIÓN
+   (:active) — es el «hover» del móvil. El hover REAL se reserva a dispositivos con
+   mouse (@media hover) para que no quede «pegado» tras tocar. Transición suave en
+   todo lo tappable. */
+.ltile,.vd-cli,.qr-act,.ord-filtro,.ni,.dot{transition:transform .12s var(--ease,ease),background .14s,border-color .14s,box-shadow .16s,color .14s,opacity .14s}
+/* — presión (toque): el elemento responde al dedo — */
+.ltile:active{transform:scale(.985)}
+.vd-cli:active{transform:scale(.99);background:var(--surf2)}
+.qr-act:active{transform:scale(.93)}
+.ord-filtro:active{transform:scale(.95)}
+.ni:active{transform:scale(.9)}
+.dot:active{transform:scale(1.25)}
+.card.tapc:active{transform:scale(.99)}
+.modal-btns button:active{transform:scale(.98)}
+.kpi-dot,.pipe{pointer-events:none}
+/* — hover REAL, sólo con mouse/puntero fino (no se pega en pantallas táctiles) — */
+@media (hover:hover) and (pointer:fine){
+  .ltile:hover{transform:translateY(-2px);box-shadow:0 7px 22px rgba(9,9,15,.10)}
+  .vd-cli:hover{border-color:var(--ink4);background:var(--surf2)}
+  .card.tapc:hover{box-shadow:0 7px 22px rgba(9,9,15,.10)}
+  .qr-act:hover{background:var(--surf2)}
+  .lt-act:hover{filter:brightness(1.07)}
+  .alert-slim:hover{filter:brightness(.985)}
+  .tac-act:hover{filter:brightness(1.07)}
+  .ord-filtro:hover{border-color:var(--ink4);color:var(--ink2)}
+  .ni:hover svg{stroke:var(--ink2)} .ni:hover .ni-lbl{color:var(--ink2)}
+  .dot:hover{opacity:.85}
+}
