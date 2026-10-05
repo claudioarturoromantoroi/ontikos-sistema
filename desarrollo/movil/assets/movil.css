@@ -241,11 +241,23 @@ body.vh-short .alert-slim .as-txt{font-size:.74rem}
 .cmp-st.g{color:var(--green);background:var(--green-bg)}
 .cmp-st.n{color:var(--ink3);background:var(--surf3)}
 /* pipeline compacto (Lo clave): segmentos hecho/actual/pendiente/inválido */
-.pipe{display:flex;gap:3px;margin:7px 0 3px}
-.pipe i{flex:1 1 0;height:5px;border-radius:3px;background:var(--surf3)}
-.pipe i.d{background:var(--green)}
-.pipe i.c{background:var(--amber-fill,var(--amber))}
-.pipe i.x{background:var(--red)}
+/* pipeline como STEPPER DE NODOS (se ve la etapa, no sólo el avance): puntos
+   unidos por una línea, el nodo ACTUAL en anillo (gesto de un stepper), hecho
+   relleno, pendiente hueco, inválido en rojo. Compacto: no engrosa la fila. */
+.pipe{display:flex;align-items:center;margin:4px 0 2px;padding:0 1px}
+.pipe i{flex:1 1 0;position:relative;height:11px;display:flex;align-items:center;justify-content:center}
+.pipe i::before{content:"";position:absolute;right:50%;left:-50%;top:50%;height:2px;background:var(--surf3);transform:translateY(-50%)}
+.pipe i:first-child::before{display:none}
+.pipe i::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--surf3);position:relative;z-index:1}
+/* hecho: línea y nodo rellenos (verde) */
+.pipe i.d::before{background:var(--green)}
+.pipe i.d::after{background:var(--green)}
+/* actual: la línea de entrada ya está hecha; el nodo es un ANILLO resaltado */
+.pipe i.c::before{background:var(--green)}
+.pipe i.c::after{width:11px;height:11px;background:var(--surf);border:3px solid var(--amber-fill,var(--amber))}
+/* inválido/bloqueado: se llegó (línea verde) y el nodo queda en rojo */
+.pipe i.x::before{background:var(--green)}
+.pipe i.x::after{width:11px;height:11px;background:var(--surf);border:3px solid var(--red)}
 
 /* pantalla ancha (≥420): un punto más de cuerpo, sin cambiar el alto compacto */
 @media (min-width:420px){
