@@ -443,3 +443,32 @@ body.dk .mod-tgl::after{left:18px}
   .ni:hover svg{stroke:var(--ink2)} .ni:hover .ni-lbl{color:var(--ink2)}
   .dot:hover{opacity:.85}
 }
+
+/* ── El Futuro · hoja «Pedir acción» con cortes y pedido editable (paridad escritorio) ── */
+.ef-enun{font-size:.92rem;font-weight:800;color:var(--ink);line-height:1.35;margin:10px 0 3px}
+.ef-cifra{font-size:1.5rem;font-weight:900;color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
+.ef-pie{font-size:.74rem;color:var(--ink3);line-height:1.45;margin-top:3px}
+.ef-med{display:flex;gap:2px;height:9px;border-radius:5px;overflow:hidden;margin:11px 0 8px}
+.ef-med i{display:block;height:100%}
+.ef-med i.r{background:var(--red)} .ef-med i.a{background:var(--amber-fill,var(--amber))} .ef-med i.g{background:var(--green)} .ef-med i.n{background:var(--surf3,var(--brd))}
+.ef-leg{display:flex;flex-wrap:wrap;gap:5px 15px;font-size:.73rem;color:var(--ink2)}
+.ef-leg span{display:inline-flex;align-items:center;gap:6px}
+.ef-leg i{width:9px;height:9px;border-radius:2px;flex:none}
+.ef-leg i.r{background:var(--red)} .ef-leg i.a{background:var(--amber-fill,var(--amber))} .ef-leg i.g{background:var(--green)} .ef-leg i.n{background:var(--surf3,var(--brd))}
+.ef-leg b{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.ef-cuentas{margin-top:10px;display:flex;flex-direction:column;gap:1px;background:var(--brd);border:1px solid var(--brd);border-radius:11px;overflow:hidden}
+.ef-cta{display:flex;justify-content:space-between;gap:10px;background:var(--surf);padding:10px 13px;font-size:.82rem;color:var(--ink)}
+.ef-cta b{font-weight:800;font-variant-numeric:tabular-nums}
+.ef-sep{height:1px;background:var(--brd);margin:17px 0 0}
+.ef-ped{font-size:.9rem;font-weight:700;color:var(--ink);line-height:1.45;margin-top:2px}
+.ef-umbral{display:flex;align-items:flex-start;gap:8px;margin-top:10px;padding:10px 12px;border-radius:11px;background:var(--surf2);border:1px solid var(--brd);color:var(--amber);font-size:.76rem;font-weight:700;line-height:1.4}
+.ef-umbral svg{width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-width:2;margin-top:1px}
+.ef-field{margin-top:13px}
+.ef-field label{display:block;font-size:.56rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:6px}
+.ef-field select,.ef-field input,.ef-field textarea{width:100%;box-sizing:border-box;min-height:46px;padding:12px 13px;border:1px solid var(--brd);border-radius:11px;background:var(--surf);color:var(--ink);font:inherit;font-size:.86rem;font-weight:600;-webkit-appearance:none;appearance:none}
+.ef-field textarea{min-height:62px;resize:vertical;line-height:1.45}
+.ef-field select:focus,.ef-field input:focus,.ef-field textarea:focus{outline:2px solid var(--red);outline-offset:1px;border-color:var(--red)}
+.ef-field select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:38px}
+/* la pista de cortes reusa .ord-filtros/.ord-filtro; el activo en tinta */
+#ef-tabs{margin:9px 0 4px}
+#ef-tabs .ord-filtro[aria-selected="true"],#ef-tabs .ord-filtro.on{background:var(--ink);border-color:var(--ink);color:var(--surf)}

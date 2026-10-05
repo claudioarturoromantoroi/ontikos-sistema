@@ -14,12 +14,12 @@
      VERSIONADO DE ASSETS (?v=…): cada cambio sube el número y el navegador trae
      el archivo nuevo al instante, sin que nadie tenga que limpiar la caché —el
      HTML se sirve fresco y pide la versión nueva del CSS. Subir en cada deploy. -->
-<link rel="stylesheet" href="assets/app.css?v=20261005h">
-<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261005h">
-<link rel="stylesheet" href="assets/cliente-extra.css?v=20261005h">
-<link rel="stylesheet" href="assets/proceso.css?v=20261005h">
-<link rel="stylesheet" href="assets/network-design-system.css?v=20261005h">
-<link rel="stylesheet" href="assets/movil.css?v=20261005h">
+<link rel="stylesheet" href="assets/app.css?v=20261005i">
+<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261005i">
+<link rel="stylesheet" href="assets/cliente-extra.css?v=20261005i">
+<link rel="stylesheet" href="assets/proceso.css?v=20261005i">
+<link rel="stylesheet" href="assets/network-design-system.css?v=20261005i">
+<link rel="stylesheet" href="assets/movil.css?v=20261005i">
 <style>html,body{font-family:'DM Sans',system-ui,sans-serif}
 .qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
@@ -718,35 +718,72 @@ function buildSheet(t, ctx, note, rows, ask, act, opts){
 function closeSheet(){ ovl.classList.remove('on'); }
 function confirmSheet(){ closeSheet(); }
 
-// datos de la hoja por línea de El Futuro (del escritorio)
-var SHEETS = {
-  colocacion:{t:'Pedir acción',ctx:'Colocación · en quiebre',
-    arc:{off:45,sc:'r',pct:'55%',cap:'de la meta'},
-    note:'Van 46 de 84 colocaciones; al ritmo actual no se alcanza. 30 aceptadas siguen sin expedir en Aseguradora del Norte.',
-    rows:[['Ritmo','5/sem · faltan 12','r'],['En riesgo','$3.2M','r'],['Objeto','30 pólizas aceptadas'],['Aseguradora','Aseguradora del Norte'],['Responsable','Óscar Lévano'],['Plazo','al cierre · 21 días']],
-    ask:'Expedir las 30 pólizas aceptadas antes del cierre.',act:'Pedir acción'},
-  cobranza:{t:'Revisar los 16',ctx:'Cobranza · sano',
-    arc:{off:4,sc:'g',pct:'96%',cap:'en plazo'},
-    note:'El 3.8% vencido está estable, pero hay $180K vencido en 2 clientes que conviene revisar.',
-    rows:[['Vencido','3.8% · estable','g'],['Monto','$180K'],['Objeto','16 recibos por revisar'],['Clientes','2']],
-    ask:'Revisar los 16 recibos y gestionar el cobro de los 2 clientes con saldo vencido.',act:'Revisar los 16'},
-  renovacion:{t:'Pedir acción',ctx:'Renovación · bajo industria',
-    arc:{off:22,sc:'a',pct:'78%',cap:'retención',tick:84},
-    note:'3 meses a la baja y por debajo de la industria (84%). Al ritmo actual 26 pólizas se pierden.',
-    rows:[['Tendencia','3 meses a la baja','a'],['En riesgo','$4.1M · 26 pólizas','r'],['Retención','78% · ind. 84%']],
-    ask:'Lanzar la campaña de retención sobre las 26 pólizas en riesgo este mes.',act:'Pedir acción'},
-  siniestralidad:{t:'Pedir acción',ctx:'Siniestralidad · sobre umbral',
-    arc:{off:29,sc:'a',pct:'71%',cap:'índice',tick:65},
-    note:'El índice sube hace 3 meses y cruzó el umbral del 65%. 3 cuentas concentran el deterioro.',
-    rows:[['Tendencia','sube · 3 meses','a'],['Expuesto','$6.8M · 3 cuentas'],['Umbral','65% · actual 71%','a']],
-    ask:'Revisar las 3 cuentas sobre umbral y proponer ajuste técnico o de cobertura.',act:'Pedir acción'},
-  atender:{t:'Atender el más grave',ctx:'Colocación · en quiebre — la línea más grave',
-    arc:{off:45,sc:'r',pct:'55%',cap:'de la meta'},
-    note:'De las cuatro líneas, Colocación es la única en quiebre: es donde más prima se pierde al cierre.',
-    rows:[['Ritmo','5/sem · faltan 12','r'],['En riesgo','$3.2M','r'],['Objeto','30 pólizas aceptadas sin expedir'],['Aseguradora','Aseguradora del Norte'],['Responsable','Óscar Lévano']],
-    ask:'Expedir las 30 pólizas aceptadas antes del cierre.',act:'Pedir acción'}
+// Personas (del escritorio) para el menú de Responsable
+var PERSONAS=['Laura Méndez · Gerente de Colocación','Rosa Ibarra · Coordinadora de Cobranza','Diego Fuentes · Director Comercial','Marcela Ríos · Coordinadora de Emisión','Óscar Lévano · Enlace con aseguradoras','Andrés Berlanga · Servicio al cliente · Siniestros','Jorge Salinas · Gerente Técnico de Daños','Ernesto Vidal · Ejecutivo de cuenta','Paola Cantú · Ejecutiva de cuenta','Mario Ortiz · Vendedor','Tomás Aguirre · Ejecutivo de colocación'];
+// Cada línea de El Futuro · VERBATIM del escritorio (FRENTES): el patrón servido
+// con sus CORTES por eje (pestañas) y el PEDIDO pre-poblado y EDITABLE.
+var EF={
+  colocacion:{t:'Colocación',ctx:'En quiebre · 55% de la meta',arc:{off:45,sc:'r',pct:'55%',cap:'de la meta'},
+    rotulo:'La concentración más grave',ejes:['Aseguradora','Etapa','Vendedor'],cortes:{
+      'Aseguradora':{enunciado:'El 60% del atasco está en una sola aseguradora.',cifra:'30',pie:'de 50 esperan emisión · Aseguradora del Norte · $3.2M',medidor:[['Aseguradora del Norte',30,'r'],['Resto de aseguradoras',20,'n']]},
+      'Etapa':{enunciado:'El 64% del atasco espera emisión.',cifra:'32',pie:'de 50 esperan emisión · 11 cotizando · 7 en firma',medidor:[['Esperan emisión',32,'r'],['Otras etapas',18,'n']]},
+      'Vendedor':{enunciado:'Ningún vendedor concentra el atasco.',cifra:'14',pie:'de 50 con el que más carga · Mario Ortiz',medidor:[['Mario Ortiz',14,'a'],['Resto de vendedores',36,'n']]}},
+    ped:{frase:'Destrabar las 30 emisiones atascadas con Aseguradora del Norte.',resp:'Laura Méndez · Gerente de Colocación',plazo:'3 días · vence 27-sep',cond:'Las 30 emitidas o con fecha firme',umbral:'El plazo excede el máximo de LISF 99'},act:'Pedir acción'},
+  cobranza:{t:'Cobranza',ctx:'Sano · 96% en plazo',arc:{off:4,sc:'g',pct:'96%',cap:'en plazo'},
+    rotulo:'Lo único que mirar',ejes:['Cliente','Aseguradora','Antigüedad'],cortes:{
+      'Cliente':{enunciado:'2 clientes son el 58% del vencido.',cifra:'$180K',pie:'de $310K vencidos · 6 recibos · Logística Sierra y Hotelera Costa',medidor:[['2 clientes',180,'a'],['Resto del vencido',130,'n']]},
+      'Aseguradora':{enunciado:'El vencido se reparte entre aseguradoras.',cifra:'$120K',pie:'de $310K con la que más · GNP',medidor:[['GNP',120,'a'],['Resto de aseguradoras',190,'n']]},
+      'Antigüedad':{enunciado:'El 71% del vencido tiene menos de 30 días.',cifra:'$90K',pie:'de $310K pasa de 30 días · 3 recibos pasan de 60',medidor:[['Más de 30 días',90,'a'],['Menos de 30 días',220,'n']]}},
+    ped:{frase:'Cobrar el vencido de los 2 clientes.',resp:'Rosa Ibarra · Coordinadora de Cobranza',plazo:'5 días',cond:'Los 6 recibos cobrados o con fecha comprometida',umbral:null},act:'Revisar los 16'},
+  renovacion:{t:'Renovación',ctx:'Bajo industria · 78% retención',arc:{off:22,sc:'a',pct:'78%',cap:'retención',tick:84},
+    rotulo:'La concentración más grave',ejes:['Antigüedad','Responsable','Aseguradora'],cortes:{
+      'Antigüedad':{enunciado:'La primera renovación retiene sólo 71%.',cifra:'14',pie:'de las 26 que se pierden son de primer año · $2.3M',medidor:[['Primer año',14,'a'],['Cartera madura',12,'n']]},
+      'Responsable':{enunciado:'Una cartera pierde el doble que el resto.',cifra:'11',pie:'de las 26 son de la cartera de Ernesto Vidal',medidor:[['Ernesto Vidal',11,'a'],['Resto de carteras',15,'n']]},
+      'Aseguradora':{enunciado:'Una aseguradora subió tarifa 12%.',cifra:'9',pie:'de las 26 renuevan con Seguros Atlas',medidor:[['Seguros Atlas',9,'a'],['Resto de aseguradoras',17,'n']]}},
+    ped:{frase:'Presentar propuesta a las 14 de primer año.',resp:'Paola Cantú · Ejecutiva de cuenta',plazo:'7 días',cond:'Las 14 con propuesta presentada, o declaradas perdidas con su razón',umbral:null},act:'Pedir acción'},
+  siniestralidad:{t:'Siniestralidad',ctx:'Sobre umbral · 71%',arc:{off:29,sc:'a',pct:'71%',cap:'índice',tick:65},
+    rotulo:'La concentración más grave',ejes:['Cuenta','Ramo','Aseguradora'],cortes:{
+      'Cuenta':{enunciado:'3 cuentas explican el 70% del desvío.',cifra:'$6.8M',pie:'de prima renuevan en 45 a 90 días',medidor:[['3 cuentas',70,'r'],['Resto de la cartera',30,'n']],cuentas:[['Transportes Elizondo','94% · $3.1M'],['Grupo Sonora','88% · $2.2M'],['Constructora Pinar','79% · $1.5M']]},
+      'Ramo':{enunciado:'Flotillas explica la mitad del desvío.',cifra:'52%',pie:'del desvío en flotillas · el ramo va a 84%',medidor:[['Flotillas',52,'r'],['Resto de ramos',48,'n']]},
+      'Aseguradora':{enunciado:'El desvío pesa más con una aseguradora.',cifra:'$4.2M',pie:'de los $6.8M renuevan con Aseguradora del Norte',medidor:[['Aseguradora del Norte',42,'r'],['Resto',26,'n']]}},
+    ped:{frase:'Re-modelar las 3 cuentas antes de renovar.',resp:'Ernesto Vidal · Ejecutivo de cuenta',plazo:'30 días',cond:'Las 3 cuentas re-modeladas antes de renovar',umbral:null},act:'Pedir acción'}
 };
-function openLine(key){ var d=SHEETS[key]; if(d) buildSheet(d.t,d.ctx,d.note,d.rows,d.ask,d.act,{arc:d.arc}); }
+var EF_TK={84:'<line class="gz-tick" x1="50.4" y1="23.9" x2="59.2" y2="19.1"/>',65:'<line class="gz-tick" x1="41.5" y1="15.3" x2="46.1" y2="6.4"/>'};
+var efCur=null;
+// el corte activo: enunciado + cifra + pie + medidor + leyenda (+ cuentas)
+function efCorte(ej){
+  var c=efCur.cortes[ej];
+  var med=c.medidor.map(function(m){return '<i class="'+m[2]+'" style="flex:'+m[1]+'"></i>';}).join('');
+  var leg=c.medidor.map(function(m){return '<span><i class="'+m[2]+'"></i>'+esc(m[0])+' <b>'+m[1]+'</b></span>';}).join('');
+  var cuentas=c.cuentas?'<div class="ef-cuentas">'+c.cuentas.map(function(q){return '<div class="ef-cta"><span>'+esc(q[0])+'</span><b>'+esc(q[1])+'</b></div>';}).join('')+'</div>':'';
+  document.getElementById('ef-corte').innerHTML='<div class="ef-enun">'+esc(c.enunciado)+'</div><div class="ef-cifra">'+esc(c.cifra)+'</div><div class="ef-pie">'+esc(c.pie)+'</div><div class="ef-med">'+med+'</div><div class="ef-leg">'+leg+'</div>'+cuentas;
+  document.querySelectorAll('#ef-tabs .ord-filtro').forEach(function(b){b.classList.toggle('on', b.getAttribute('data-eje')===ej); b.setAttribute('aria-selected', b.getAttribute('data-eje')===ej?'true':'false');});
+}
+function efEje(ej){ efCorte(ej); }
+// la hoja de El Futuro, como el escritorio: cortes por eje + pedido editable
+function openLine(key){
+  var d=EF[key==='atender'?'colocacion':key]; if(!d) return; efCur=d;
+  document.getElementById('sh-t').textContent = key==='atender'?'Atender el más grave':d.t;
+  document.getElementById('sh-s').textContent = d.ctx;
+  var a=d.arc;
+  var arc='<div class="sh-arc '+a.sc+'"><div class="gz-arc"><svg viewBox="0 0 64 40"><path class="gz-track" d="M6 34 A26 26 0 0 1 58 34" pathLength="100"/><path class="gz-val" d="M6 34 A26 26 0 0 1 58 34" pathLength="100" stroke-dasharray="100" stroke-dashoffset="'+a.off+'"/>'+(a.tick?(EF_TK[a.tick]||''):'')+'</svg><div class="gz-num">'+esc(a.pct)+'</div></div><div class="sh-arc-cap">'+esc(a.cap)+'</div></div>';
+  var tabs=d.ejes.map(function(e){return '<button class="ord-filtro" role="tab" data-eje="'+esc(e)+'" onclick="efEje(this.getAttribute(\'data-eje\'))">'+esc(e)+'</button>';}).join('');
+  var inList=PERSONAS.indexOf(d.ped.resp)>-1;
+  var opts=(inList?'':'<option selected>'+esc(d.ped.resp)+'</option>')+PERSONAS.map(function(p){return '<option'+(p===d.ped.resp?' selected':'')+'>'+esc(p)+'</option>';}).join('');
+  var umbral=d.ped.umbral?'<div class="ef-umbral"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'+esc(d.ped.umbral)+'</div>':'';
+  document.getElementById('sh-body').innerHTML=arc
+    +'<div class="sh-h">'+esc(d.rotulo)+'</div>'
+    +'<div class="ord-filtros" id="ef-tabs" role="tablist" aria-label="Cortar por">'+tabs+'</div>'
+    +'<div id="ef-corte"></div>'
+    +'<div class="ef-sep"></div>'
+    +'<div class="sh-h">El pedido</div><div class="ef-ped">'+esc(d.ped.frase)+'</div>'+umbral
+    +'<div class="ef-field"><label for="ef-resp">Responsable</label><select id="ef-resp">'+opts+'</select></div>'
+    +'<div class="ef-field"><label for="ef-plazo">Plazo</label><input id="ef-plazo" value="'+esc(d.ped.plazo)+'"></div>'
+    +'<div class="ef-field"><label for="ef-cond">Condición de satisfacción</label><textarea id="ef-cond" rows="2">'+esc(d.ped.cond)+'</textarea></div>';
+  efCorte(d.ejes[0]);
+  var ab=document.getElementById('sh-act'); ab.textContent=d.act; ab.className='primary'+(/^[rag]$/.test(a.sc)?' prim-'+a.sc:'');
+  ovl.classList.add('on');
+}
 
 function openQ(row){
   var g=function(s){var e=row.querySelector(s);return e?e.textContent.trim():'';};
