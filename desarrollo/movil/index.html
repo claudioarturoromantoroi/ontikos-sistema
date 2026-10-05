@@ -10,12 +10,12 @@
      VERSIONADO DE ASSETS (?v=…): cada cambio sube el número y el navegador trae
      el archivo nuevo al instante, sin que nadie tenga que limpiar la caché —el
      HTML se sirve fresco y pide la versión nueva del CSS. Subir en cada deploy. -->
-<link rel="stylesheet" href="assets/app.css?v=20261005e">
-<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261005e">
-<link rel="stylesheet" href="assets/cliente-extra.css?v=20261005e">
-<link rel="stylesheet" href="assets/proceso.css?v=20261005e">
-<link rel="stylesheet" href="assets/network-design-system.css?v=20261005e">
-<link rel="stylesheet" href="assets/movil.css?v=20261005e">
+<link rel="stylesheet" href="assets/app.css?v=20261005f">
+<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261005f">
+<link rel="stylesheet" href="assets/cliente-extra.css?v=20261005f">
+<link rel="stylesheet" href="assets/proceso.css?v=20261005f">
+<link rel="stylesheet" href="assets/network-design-system.css?v=20261005f">
+<link rel="stylesheet" href="assets/movil.css?v=20261005f">
 <style>html,body{font-family:'DM Sans',system-ui,sans-serif}
 .qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
@@ -696,8 +696,10 @@ function buildSheet(t, ctx, note, rows, ask, act, opts){
   }
   if(note) h += '<div class="sh-h">Qué pasa</div><div class="sh-note">'+esc(note)+'</div>';
   if(rows && rows.length){
-    h += '<div class="sh-h">Componentes</div><div class="sh-rows">';
-    rows.forEach(function(r){ if(r[1]) h += '<div class="sh-row"><span class="sh-k">'+esc(r[0])+'</span><span class="sh-v'+(r[2]?' '+r[2]:'')+'">'+esc(r[1])+'</span></div>'; });
+    // GRILLA interna 2 columnas (lógica del escritorio: celdas con junta hairline,
+    // rótulo en versalitas y valor en su color de estado). El acto queda abajo.
+    h += '<div class="sh-h">Componentes</div><div class="sh-grid">';
+    rows.forEach(function(r){ if(r[1]) h += '<div class="sh-cell"><div class="sh-cell-k">'+esc(r[0])+'</div><div class="sh-cell-v'+(r[2]?' '+r[2]:'')+'">'+esc(r[1])+'</div></div>'; });
     h += '</div>';
   }
   if(ask) h += '<div class="sh-ask"><div class="sh-ask-k">Qué se pedirá</div><div class="sh-ask-v">'+esc(ask)+'</div></div>';
