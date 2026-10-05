@@ -10,12 +10,12 @@
      VERSIONADO DE ASSETS (?v=…): cada cambio sube el número y el navegador trae
      el archivo nuevo al instante, sin que nadie tenga que limpiar la caché —el
      HTML se sirve fresco y pide la versión nueva del CSS. Subir en cada deploy. -->
-<link rel="stylesheet" href="assets/app.css?v=20261005a">
-<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261005a">
-<link rel="stylesheet" href="assets/cliente-extra.css?v=20261005a">
-<link rel="stylesheet" href="assets/proceso.css?v=20261005a">
-<link rel="stylesheet" href="assets/network-design-system.css?v=20261005a">
-<link rel="stylesheet" href="assets/movil.css?v=20261005a">
+<link rel="stylesheet" href="assets/app.css?v=20261005b">
+<link rel="stylesheet" href="assets/vendedor-extra.css?v=20261005b">
+<link rel="stylesheet" href="assets/cliente-extra.css?v=20261005b">
+<link rel="stylesheet" href="assets/proceso.css?v=20261005b">
+<link rel="stylesheet" href="assets/network-design-system.css?v=20261005b">
+<link rel="stylesheet" href="assets/movil.css?v=20261005b">
 <style>html,body{font-family:'DM Sans',system-ui,sans-serif}
 .qi{width:11px;height:11px;flex:none;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .qi.r{stroke:var(--red)} .qi.a{stroke:var(--amber)} .qi.n{stroke:var(--ink4)}
@@ -315,9 +315,216 @@
       <div style="height:6px"></div>
     </section>
 
-    <!-- Compromisos y Lo clave existen en el marco; su contenido llega en el paso 4 -->
-    <section class="sc" id="compromisos"><div class="surf-h"><div class="surf-t">Mis compromisos</div><div class="surf-sub">paso 4</div></div><div class="ord-empty" style="padding:40px 10px;text-align:center;color:var(--ink3)">Se compone con contenido real en el paso 4.</div></section>
-    <section class="sc" id="clave"><div class="surf-h"><div class="surf-t">Lo clave</div><div class="surf-sub">paso 4</div></div><div class="ord-empty" style="padding:40px 10px;text-align:center;color:var(--ink3)">Se compone con contenido real en el paso 4.</div></section>
+    <!-- ───────── MIS COMPROMISOS · pedidos (espeja el CEO de escritorio) ───────── -->
+    <section class="sc" id="compromisos">
+      <div class="surf-h"><div class="surf-t">Mis compromisos</div><div class="surf-sub">15 pedidos · al cierre</div></div>
+
+      <!-- Por responder · esperan MI decisión (lo primero para la dirección) -->
+      <div class="cmp-gh"><span class="cmp-gh-t">Por responder</span><span class="cmp-gh-c a">5</span><span class="cmp-gh-s">esperan mi respuesta</span></div>
+
+      <div class="vd-cli med" onclick="openPed(this)" data-t="Extender 30 días el pago de Logística Sierra" data-kind="Por responder" data-relk="De" data-who="Rosa Ibarra" data-when="26-sep" data-sc="a" data-act="Responder">
+        <div class="vd-cli-av">RI</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Extender 30 días el pago de Logística Sierra</div>
+          <div class="qr-meta"><span class="qr-resp">De Rosa Ibarra</span><span class="qr-sep"> · </span><span class="vd-cli-plz a">26-sep</span></div></div>
+        <div class="qr-right"><button class="qr-act a">Responder</button></div>
+      </div>
+      <div class="vd-cli med" onclick="openPed(this)" data-t="Una persona de apoyo en Colocación por dos semanas" data-kind="Por responder" data-relk="De" data-who="Laura Méndez" data-when="26-sep" data-sc="a" data-act="Responder">
+        <div class="vd-cli-av">LM</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Una persona de apoyo en Colocación por dos semanas</div>
+          <div class="qr-meta"><span class="qr-resp">De Laura Méndez</span><span class="qr-sep"> · </span><span class="vd-cli-plz a">26-sep</span></div></div>
+        <div class="qr-right"><button class="qr-act a">Responder</button></div>
+      </div>
+      <div class="vd-cli neu" onclick="openPed(this)" data-t="Autorizar $85K fuera de norma para Grupo Sonora" data-kind="Por responder" data-relk="De" data-who="Andrés Berlanga" data-when="30-sep" data-sc="n" data-act="Responder">
+        <div class="vd-cli-av">AB</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Autorizar $85K fuera de norma para Grupo Sonora</div>
+          <div class="qr-meta"><span class="qr-resp">De Andrés Berlanga</span><span class="qr-sep"> · </span><span class="vd-cli-plz n">30-sep</span></div></div>
+        <div class="qr-right"><button class="qr-act">Responder</button></div>
+      </div>
+      <div class="vd-cli neu" onclick="openPed(this)" data-t="Pasar 12 cuentas de Ernesto Vidal a Paola Cantú" data-kind="Por responder" data-relk="De" data-who="Diego Fuentes" data-when="1-oct" data-sc="n" data-act="Responder">
+        <div class="vd-cli-av">DF</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Pasar 12 cuentas de Ernesto Vidal a Paola Cantú</div>
+          <div class="qr-meta"><span class="qr-resp">De Diego Fuentes</span><span class="qr-sep"> · </span><span class="vd-cli-plz n">1-oct</span></div></div>
+        <div class="qr-right"><button class="qr-act">Responder</button></div>
+      </div>
+      <div class="vd-cli neu" onclick="openPed(this)" data-t="$40K para la campaña de renovación de primer año" data-kind="Por responder" data-relk="De" data-who="Paola Cantú" data-when="2-oct" data-sc="n" data-act="Responder">
+        <div class="vd-cli-av">PC</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">$40K para la campaña de renovación de primer año</div>
+          <div class="qr-meta"><span class="qr-resp">De Paola Cantú</span><span class="qr-sep"> · </span><span class="vd-cli-plz n">2-oct</span></div></div>
+        <div class="qr-right"><button class="qr-act">Responder</button></div>
+      </div>
+
+      <!-- Por ejecutar · pedidos que YO hice; sigo el avance -->
+      <div class="cmp-gh"><span class="cmp-gh-t">Por ejecutar</span><span class="cmp-gh-c">4</span><span class="cmp-gh-s">pedí · sigo el avance</span></div>
+
+      <div class="vd-cli neu" onclick="openPed(this)" data-t="Reclamar a MetLife el reembolso del SIN-0942" data-kind="Por ejecutar" data-relk="A" data-who="Andrés Berlanga" data-when="27-sep" data-sc="n" data-act="Ver pedido">
+        <div class="vd-cli-av">AB</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Reclamar a MetLife el reembolso del SIN-0942</div>
+          <div class="qr-meta"><span class="qr-resp">A Andrés Berlanga</span><span class="qr-sep"> · </span><span class="vd-cli-plz n">27-sep</span></div></div>
+        <div class="qr-right"><button class="qr-act">Ver</button></div>
+      </div>
+      <div class="vd-cli neu" onclick="openPed(this)" data-t="Destrabar la renovación de POL-5540 · Grupo Ferrer" data-kind="Por ejecutar" data-relk="A" data-who="Ernesto Vidal" data-when="27-sep" data-sc="n" data-act="Ver pedido">
+        <div class="vd-cli-av">EV</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Destrabar la renovación de POL-5540 · Grupo Ferrer</div>
+          <div class="qr-meta"><span class="qr-resp">A Ernesto Vidal</span><span class="qr-sep"> · </span><span class="vd-cli-plz n">27-sep</span></div></div>
+        <div class="qr-right"><button class="qr-act">Ver</button></div>
+      </div>
+      <div class="vd-cli neu" onclick="openPed(this)" data-t="Cobrar los 6 recibos vencidos de Logística Sierra y Hotelera Costa" data-kind="Por ejecutar" data-relk="A" data-who="Rosa Ibarra" data-when="29-sep" data-sc="n" data-act="Ver pedido">
+        <div class="vd-cli-av">RI</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Cobrar los 6 recibos vencidos de Logística Sierra y Hotelera Costa</div>
+          <div class="qr-meta"><span class="qr-resp">A Rosa Ibarra</span><span class="qr-sep"> · </span><span class="vd-cli-plz n">29-sep</span></div></div>
+        <div class="qr-right"><button class="qr-act">Ver</button></div>
+      </div>
+      <div class="vd-cli neu" onclick="openPed(this)" data-t="Conseguir la documentación de los 5 siniestros clave" data-kind="Por ejecutar" data-relk="A" data-who="Andrés Berlanga" data-when="29-sep" data-sc="n" data-act="Ver pedido">
+        <div class="vd-cli-av">AB</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Conseguir la documentación de los 5 siniestros clave</div>
+          <div class="qr-meta"><span class="qr-resp">A Andrés Berlanga</span><span class="qr-sep"> · </span><span class="vd-cli-plz n">29-sep</span></div></div>
+        <div class="qr-right"><button class="qr-act">Ver</button></div>
+      </div>
+
+      <!-- En ejecución · en curso · acto a la derecha = estado -->
+      <div class="cmp-gh"><span class="cmp-gh-t">En ejecución</span><span class="cmp-gh-c">6</span><span class="cmp-gh-s">en curso</span></div>
+
+      <div class="vd-cli urg" onclick="openPed(this)" data-t="Una persona de apoyo para el cierre de mes en Cobranza" data-kind="En ejecución" data-relk="Cumple" data-who="Yo (pidió Rosa Ibarra)" data-when="23-sep" data-st="Atrasado" data-sc="r" data-act="Ver">
+        <div class="vd-cli-av">YO</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Una persona de apoyo para el cierre de mes en Cobranza</div>
+          <div class="qr-meta"><span class="qr-resp">Yo cumplo</span><span class="qr-sep"> · </span><span class="vd-cli-plz r">23-sep</span></div></div>
+        <div class="qr-right"><span class="cmp-st r">Atrasado</span></div>
+      </div>
+      <div class="vd-cli urg" onclick="openPed(this)" data-t="Dictamen del SIN-1188 · Transportes Elizondo" data-kind="En ejecución" data-relk="Cumple" data-who="GNP (pidió Yo)" data-when="23-sep" data-st="Atrasado" data-sc="r" data-act="Ver">
+        <div class="vd-cli-av">GN</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Dictamen del SIN-1188 · Transportes Elizondo</div>
+          <div class="qr-meta"><span class="qr-resp">GNP cumple</span><span class="qr-sep"> · </span><span class="vd-cli-plz r">23-sep</span></div></div>
+        <div class="qr-right"><span class="cmp-st r">Atrasado</span></div>
+      </div>
+      <div class="vd-cli med" onclick="openPed(this)" data-t="Entregar la carátula de POL-3320 a Textil del Norte" data-kind="En ejecución" data-relk="Cumple" data-who="Marcela Ríos (pidió Yo)" data-when="25-sep" data-st="En riesgo" data-sc="a" data-act="Ver">
+        <div class="vd-cli-av">MR</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Entregar la carátula de POL-3320 a Textil del Norte</div>
+          <div class="qr-meta"><span class="qr-resp">Marcela Ríos cumple</span><span class="qr-sep"> · </span><span class="vd-cli-plz a">25-sep</span></div></div>
+        <div class="qr-right"><span class="cmp-st a">En riesgo</span></div>
+      </div>
+      <div class="vd-cli ok" onclick="openPed(this)" data-t="Renovar Metalúrgica León" data-kind="En ejecución" data-relk="Cumple" data-who="Paola Cantú (pidió Yo)" data-when="26-sep" data-st="Al día" data-sc="g" data-act="Ver">
+        <div class="vd-cli-av">PC</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Renovar Metalúrgica León</div>
+          <div class="qr-meta"><span class="qr-resp">Paola Cantú cumple</span><span class="qr-sep"> · </span><span class="vd-cli-plz g">26-sep</span></div></div>
+        <div class="qr-right"><span class="cmp-st g">Al día</span></div>
+      </div>
+      <div class="vd-cli neu" onclick="openPed(this)" data-t="Destrabar las 30 emisiones de Aseguradora del Norte" data-kind="En ejecución" data-relk="Cumple" data-who="Laura Méndez (pidió Yo)" data-when="27-sep" data-st="En curso" data-sc="n" data-act="Ver">
+        <div class="vd-cli-av">LM</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Destrabar las 30 emisiones de Aseguradora del Norte</div>
+          <div class="qr-meta"><span class="qr-resp">Laura Méndez cumple</span><span class="qr-sep"> · </span><span class="vd-cli-plz n">27-sep</span></div></div>
+        <div class="qr-right"><span class="cmp-st n">En curso</span></div>
+      </div>
+      <div class="vd-cli neu" onclick="openPed(this)" data-t="$30K para el peritaje independiente del SIN-1188" data-kind="En ejecución" data-relk="Cumple" data-who="Yo (pidió Andrés Berlanga)" data-when="29-sep" data-st="En curso" data-sc="n" data-act="Ver">
+        <div class="vd-cli-av">YO</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">$30K para el peritaje independiente del SIN-1188</div>
+          <div class="qr-meta"><span class="qr-resp">Yo cumplo</span><span class="qr-sep"> · </span><span class="vd-cli-plz n">29-sep</span></div></div>
+        <div class="qr-right"><span class="cmp-st n">En curso</span></div>
+      </div>
+      <div style="height:8px"></div>
+    </section>
+
+    <!-- ───────── LO CLAVE · pólizas y siniestros con pipeline (espeja escritorio) ───────── -->
+    <section class="sc" id="clave">
+      <div class="surf-h"><div class="surf-t">Lo clave</div><div class="surf-sub">8 pólizas · 5 siniestros</div></div>
+
+      <div class="cmp-gh"><span class="cmp-gh-t">Pólizas clave</span><span class="cmp-gh-c">8</span><span class="cmp-gh-s">pipeline de colocación</span></div>
+
+      <div class="vd-cli urg" onclick="openClave(this)" data-c="Grupo Textil del Norte · POL-3320" data-kind="Póliza clave" data-step="Entregar" data-prog="6 de 6" data-st="Atrasada" data-sc="r" data-plz="1-oct" data-resp="Paola Cantú">
+        <div class="vd-cli-av">PC</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Grupo Textil del Norte · POL-3320</div>
+          <div class="pipe"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="c"></i></div>
+          <div class="qr-meta"><span class="qr-resp">Entregar · 6/6</span><span class="qr-sep"> · </span><span class="vd-cli-plz r">Atrasada · 1-oct</span></div></div>
+        <div class="qr-right"><button class="qr-act r">Ver</button></div>
+      </div>
+      <div class="vd-cli urg" onclick="openClave(this)" data-c="Hotelera Costa · POL-4410" data-kind="Póliza clave" data-step="Cotizar" data-prog="2 de 6" data-st="Atrasada" data-sc="r" data-plz="8-oct" data-resp="Paola Cantú">
+        <div class="vd-cli-av">PC</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Hotelera Costa · POL-4410</div>
+          <div class="pipe"><i class="d"></i><i class="c"></i><i></i><i></i><i></i><i></i></div>
+          <div class="qr-meta"><span class="qr-resp">Cotizar · 2/6</span><span class="qr-sep"> · </span><span class="vd-cli-plz r">Atrasada · 8-oct</span></div></div>
+        <div class="qr-right"><button class="qr-act r">Ver</button></div>
+      </div>
+      <div class="vd-cli urg" onclick="openClave(this)" data-c="Constructora del Bajío · POL-9031" data-kind="Póliza clave" data-step="Emisión" data-prog="5 de 6 · bloqueada" data-st="Paralizada" data-sc="r" data-plz="12-oct" data-resp="Diego Fuentes">
+        <div class="vd-cli-av">DF</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Constructora del Bajío · POL-9031</div>
+          <div class="pipe"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="x"></i><i></i></div>
+          <div class="qr-meta"><span class="qr-resp">Emisión · 5/6</span><span class="qr-sep"> · </span><span class="vd-cli-plz r">Paralizada · 12-oct</span></div></div>
+        <div class="qr-right"><button class="qr-act r">Ver</button></div>
+      </div>
+      <div class="vd-cli urg" onclick="openClave(this)" data-c="Grupo Ferrer · POL-5540" data-kind="Póliza clave" data-step="Vincular" data-prog="4 de 6 · bloqueada" data-st="Paralizada" data-sc="r" data-plz="20-oct" data-resp="Ernesto Vidal">
+        <div class="vd-cli-av">EV</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Grupo Ferrer · POL-5540</div>
+          <div class="pipe"><i class="d"></i><i class="d"></i><i class="d"></i><i class="x"></i><i></i><i></i></div>
+          <div class="qr-meta"><span class="qr-resp">Vincular · 4/6</span><span class="qr-sep"> · </span><span class="vd-cli-plz r">Paralizada · 20-oct</span></div></div>
+        <div class="qr-right"><button class="qr-act r">Ver</button></div>
+      </div>
+      <div class="vd-cli ok" onclick="openClave(this)" data-c="Metalúrgica León · POL-7781" data-kind="Póliza clave" data-step="Entregar" data-prog="6 de 6" data-st="A tiempo" data-sc="g" data-plz="26-oct" data-resp="Paola Cantú">
+        <div class="vd-cli-av">PC</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Metalúrgica León · POL-7781</div>
+          <div class="pipe"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="c"></i></div>
+          <div class="qr-meta"><span class="qr-resp">Entregar · 6/6</span><span class="qr-sep"> · </span><span class="vd-cli-plz g">A tiempo · 26-oct</span></div></div>
+        <div class="qr-right"><button class="qr-act">Ver</button></div>
+      </div>
+      <div class="vd-cli ok" onclick="openClave(this)" data-c="Transportes Elizondo · POL-6120" data-kind="Póliza clave" data-step="Cotizar" data-prog="2 de 6" data-st="A tiempo" data-sc="g" data-plz="15-nov" data-resp="Paola Cantú">
+        <div class="vd-cli-av">PC</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Transportes Elizondo · POL-6120</div>
+          <div class="pipe"><i class="d"></i><i class="c"></i><i></i><i></i><i></i><i></i></div>
+          <div class="qr-meta"><span class="qr-resp">Cotizar · 2/6</span><span class="qr-sep"> · </span><span class="vd-cli-plz g">A tiempo · 15-nov</span></div></div>
+        <div class="qr-right"><button class="qr-act">Ver</button></div>
+      </div>
+      <div class="vd-cli ok" onclick="openClave(this)" data-c="Logística Sierra · POL-8802" data-kind="Póliza clave" data-step="Modelar" data-prog="1 de 6" data-st="A tiempo" data-sc="g" data-plz="1-dic" data-resp="Ernesto Vidal">
+        <div class="vd-cli-av">EV</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Logística Sierra · POL-8802</div>
+          <div class="pipe"><i class="c"></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="qr-meta"><span class="qr-resp">Modelar · 1/6</span><span class="qr-sep"> · </span><span class="vd-cli-plz g">A tiempo · 1-dic</span></div></div>
+        <div class="qr-right"><button class="qr-act">Ver</button></div>
+      </div>
+      <div class="vd-cli ok" onclick="openClave(this)" data-c="Grupo Sonora · POL-2290" data-kind="Póliza clave" data-step="Modelar" data-prog="1 de 6" data-st="A tiempo" data-sc="g" data-plz="10-ene" data-resp="Ernesto Vidal">
+        <div class="vd-cli-av">EV</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Grupo Sonora · POL-2290</div>
+          <div class="pipe"><i class="c"></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="qr-meta"><span class="qr-resp">Modelar · 1/6</span><span class="qr-sep"> · </span><span class="vd-cli-plz g">A tiempo · 10-ene</span></div></div>
+        <div class="qr-right"><button class="qr-act">Ver</button></div>
+      </div>
+
+      <div class="cmp-gh"><span class="cmp-gh-t">Siniestros clave</span><span class="cmp-gh-c">5</span><span class="cmp-gh-s">pipeline de siniestro</span></div>
+
+      <div class="vd-cli urg" onclick="openClave(this)" data-c="Metalúrgica León · SIN-1230" data-kind="Siniestro clave" data-step="Resolución" data-prog="4 de 7" data-st="Mora" data-sc="r" data-plz="excede 5 días" data-resp="Andrés Berlanga">
+        <div class="vd-cli-av">AB</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Metalúrgica León · SIN-1230</div>
+          <div class="pipe"><i class="d"></i><i class="d"></i><i class="d"></i><i class="c"></i><i></i><i></i><i></i></div>
+          <div class="qr-meta"><span class="qr-resp">Resolución · 4/7</span><span class="qr-sep"> · </span><span class="vd-cli-plz r">Mora · excede 5 días</span></div></div>
+        <div class="qr-right"><button class="qr-act r">Ver</button></div>
+      </div>
+      <div class="vd-cli med" onclick="openClave(this)" data-c="Grupo Sonora · SIN-1215" data-kind="Siniestro clave" data-step="Integración" data-prog="2 de 7 · bloqueado" data-st="Requiere documentación" data-sc="a" data-plz="22 días" data-resp="Andrés Berlanga">
+        <div class="vd-cli-av">AB</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Grupo Sonora · SIN-1215</div>
+          <div class="pipe"><i class="d"></i><i class="x"></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="qr-meta"><span class="qr-resp">Integración · 2/7</span><span class="qr-sep"> · </span><span class="vd-cli-plz a">Requiere doc · 22 días</span></div></div>
+        <div class="qr-right"><button class="qr-act a">Ver</button></div>
+      </div>
+      <div class="vd-cli med" onclick="openClave(this)" data-c="Transportes Elizondo · SIN-1203" data-kind="Siniestro clave" data-step="Integración" data-prog="2 de 8 · bloqueado" data-st="Requiere documentación" data-sc="a" data-plz="18 días" data-resp="Andrés Berlanga">
+        <div class="vd-cli-av">AB</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Transportes Elizondo · SIN-1203</div>
+          <div class="pipe"><i class="d"></i><i class="x"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="qr-meta"><span class="qr-resp">Integración · 2/8</span><span class="qr-sep"> · </span><span class="vd-cli-plz a">Requiere doc · 18 días</span></div></div>
+        <div class="qr-right"><button class="qr-act a">Ver</button></div>
+      </div>
+      <div class="vd-cli med" onclick="openClave(this)" data-c="Grupo Sonora · SIN-0942" data-kind="Siniestro clave" data-step="Procedencia" data-prog="6 de 8" data-st="Por vencer" data-sc="a" data-plz="27-sep" data-resp="Andrés Berlanga">
+        <div class="vd-cli-av">AB</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Grupo Sonora · SIN-0942</div>
+          <div class="pipe"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="c"></i><i></i><i></i></div>
+          <div class="qr-meta"><span class="qr-resp">Procedencia · 6/8</span><span class="qr-sep"> · </span><span class="vd-cli-plz a">Por vencer · 27-sep</span></div></div>
+        <div class="qr-right"><button class="qr-act a">Ver</button></div>
+      </div>
+      <div class="vd-cli ok" onclick="openClave(this)" data-c="Transportes Elizondo · SIN-1188" data-kind="Siniestro clave" data-step="Ajuste" data-prog="3 de 7" data-st="En plazo" data-sc="g" data-plz="10-oct" data-resp="Andrés Berlanga">
+        <div class="vd-cli-av">AB</div>
+        <div class="vd-cli-body"><div class="vd-cli-n">Transportes Elizondo · SIN-1188</div>
+          <div class="pipe"><i class="d"></i><i class="d"></i><i class="c"></i><i></i><i></i><i></i><i></i></div>
+          <div class="qr-meta"><span class="qr-resp">Ajuste · 3/7</span><span class="qr-sep"> · </span><span class="vd-cli-plz g">En plazo · 10-oct</span></div></div>
+        <div class="qr-right"><button class="qr-act">Ver</button></div>
+      </div>
+      <div style="height:8px"></div>
+    </section>
 
   </div>
 
@@ -533,6 +740,23 @@ function openQ(row){
            'Ver pedido':'Dar seguimiento al pedido ya abierto y empujar su cierre.',
            'Pedir acción':'Pedir al responsable que resuelva este quiebre antes del plazo.'}[act]||'';
   buildSheet(row.dataset.t, 'Quiebre', '', rows, ask, act, {sit:sit,sc:sc});
+}
+
+// ── hoja de un compromiso (pedido) ──
+function openPed(row){
+  var d=row.dataset;
+  var ASK={'Por responder':'Responder el pedido: aprobar, ajustar o declinar antes del plazo.',
+           'Por ejecutar':'Dar seguimiento al pedido abierto y empujar su cierre.',
+           'En ejecución':'Ver el avance del pedido en curso.'};
+  var rows=[[d.relk||'Con', d.who],['Para cuándo', d.when]];
+  if(d.st) rows.push(['Estado', d.st, d.sc]);
+  buildSheet(d.t, 'Compromiso · '+d.kind, '', rows, ASK[d.kind]||'', d.act||'Ver', {sit:d.kind, sc:(d.sc||'')});
+}
+// ── hoja de una pieza clave (póliza o siniestro) ──
+function openClave(row){
+  var d=row.dataset;
+  var rows=[['Paso actual', d.step+' · '+d.prog],['Estado', d.st, d.sc],['Vence', d.plz],['Responsable', d.resp]];
+  buildSheet(d.c, 'Lo clave · '+d.kind, '', rows, 'Empujar la pieza al siguiente paso con el responsable.', 'Ver detalle', {sit:d.st, sc:(d.sc||'')});
 }
 
 syncTemaLbl();
