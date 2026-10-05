@@ -224,10 +224,13 @@ body.vh-short .alert-slim .as-txt{font-size:.74rem}
    Reutilizan la fila .vd-cli (avatar · cuerpo · acto a la derecha) de Quiebres,
    para que las cuatro superficies lean como un solo sistema. */
 .cmp-gh{display:flex;align-items:baseline;gap:8px;margin:17px 0 9px}
-.cmp-gh-t{font-size:.95rem;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.cmp-gh-t{font-size:.95rem;font-weight:800;letter-spacing:-.02em;color:var(--ink);white-space:nowrap}
 .cmp-gh-c{flex:none;font-size:.7rem;font-weight:800;color:var(--ink3);background:var(--surf3);border-radius:999px;padding:1px 9px;line-height:1.6}
 .cmp-gh-c.a{color:var(--amber);background:var(--amber-bg)}
-.cmp-gh-s{font-size:.66rem;font-weight:600;color:var(--ink3);margin-left:auto;text-align:right}
+.cmp-gh-s{font-size:.66rem;font-weight:600;color:var(--ink3);margin-left:auto;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* en pantallas muy estrechas (iPhone SE) el descriptor del grupo se oculta para
+   que el título + conteo queden en UNA línea limpia, sin envolver. */
+@media (max-width:360px){ .cmp-gh-s{display:none} }
 /* cuarto filo de estado (sano · verde), a juego con urg/med/neu */
 .vd-cli.ok{box-shadow:inset 3px 0 0 var(--green)}
 .vd-cli-plz.g{color:var(--green)}
