@@ -350,6 +350,26 @@ body.vh-short .lt-act{min-height:26px;padding:4px 12px;font-size:.74rem}
 .sh-k{font-size:.74rem;color:var(--ink3);font-weight:600;flex:none}
 .sh-v{font-size:.82rem;color:var(--ink);font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
 .sh-v.r{color:var(--red-tx,var(--red))} .sh-v.a{color:var(--amber)} .sh-v.g{color:var(--green)}
+/* ── stepper COMPLETO con nombres (hoja de Lo clave) · vertical, con línea
+   conectora; hecho = nodo verde, actual = anillo del estado + etiqueta «aquí»,
+   pendiente = hueco. Aquí sí hay alto (la hoja sube), así que cabe entero. */
+.sh-steps{margin-top:8px;display:flex;flex-direction:column}
+.sh-step{position:relative;display:flex;align-items:center;gap:12px;padding:5px 0 5px 3px}
+.sh-step::before{content:"";position:absolute;left:9px;top:0;bottom:0;width:2px;background:var(--brd);z-index:0}
+.sh-step:first-child::before{top:50%}
+.sh-step:last-child::before{bottom:50%}
+.sh-step.done::before,.sh-step.cur::before{background:var(--green)}
+.sh-node{width:13px;height:13px;border-radius:50%;background:var(--surf3);position:relative;z-index:1;flex:none;box-shadow:0 0 0 3px var(--surf)}
+.sh-step.done .sh-node{background:var(--green)}
+.sh-step.cur .sh-node{width:15px;height:15px;background:var(--surf);border:3px solid var(--amber-fill,var(--amber))}
+.sh-step.cur.r .sh-node{border-color:var(--red)} .sh-step.cur.g .sh-node{border-color:var(--green)}
+.sh-step-n{font-size:.82rem;font-weight:600;color:var(--ink2)}
+.sh-step.done .sh-step-n{color:var(--ink3)}
+.sh-step.cur .sh-step-n{font-weight:800;color:var(--ink)}
+.sh-step.pend .sh-step-n{color:var(--ink4)}
+.sh-step-tag{margin-left:auto;font-size:.56rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--amber);background:var(--amber-bg);border-radius:999px;padding:2px 8px}
+.sh-step.cur.r .sh-step-tag{color:var(--red-tx,var(--red));background:var(--red-bg)}
+.sh-step.cur.g .sh-step-tag{color:var(--green);background:var(--green-bg)}
 .sh-chip{margin:2px 0 4px}
 /* el arco completo vive en la hoja (instrumento a escala de escritorio) */
 .sh-arc{display:flex;flex-direction:column;align-items:center;gap:3px;margin:12px 0 6px}
