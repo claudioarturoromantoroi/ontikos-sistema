@@ -1123,6 +1123,8 @@ function goAn(id){ document.querySelectorAll('.sc').forEach(function(s){s.classL
 function setModOn(w){ var t=document.getElementById('mod-tablero'),a=document.getElementById('mod-analitico'); if(t)t.classList.toggle('on',w==='tablero'); if(a)a.classList.toggle('on',w==='analitico'); }
 function openAnalitico(){ closeDrawer(); setModOn('analitico'); propioLect='propio'; AN_ORDER.forEach(renderAn); goAn('an-cliente'); }
 function goTablero(){ closeDrawer(); setModOn('tablero'); document.querySelector('.bnav').innerHTML=BNAV_TABLERO; go('futuro'); }
+// ── RUTA ÚNICA · si se llega con ?m=analitico (desde analitico.html en teléfono), entra directo al Analítico ──
+(function(){ try{ if(new URLSearchParams(location.search).get('m')==='analitico') openAnalitico(); }catch(e){} })();
 
 </script>
 </body>
