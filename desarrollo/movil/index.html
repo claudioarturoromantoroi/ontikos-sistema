@@ -135,9 +135,15 @@
 .an-cal-row{display:grid;grid-template-columns:4.8rem 1fr;gap:6px;align-items:center}
 .an-cal-etq{font-size:.58rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .an-cal-cells{display:grid;grid-template-columns:repeat(var(--anc,4),1fr);gap:3px}
-.an-cal-cell{height:23px;border-radius:4px;border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:800;color:var(--ink2)}
-.an-cal-leg{display:flex;align-items:center;gap:7px;margin-top:9px;font-size:.56rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em}
+.an-cal-cell{height:34px;border-radius:4px;border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:var(--ink2)}
+.an-cal-leg{display:flex;align-items:center;gap:7px;margin-top:11px;font-size:.56rem;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em}
 .an-cal-scale{display:flex;gap:2px} .an-cal-sw{width:15px;height:10px;border-radius:2px;border:1px solid var(--brd)}
+/* el cuerpo de «En qué» se centra en la página (que el paginador estira al
+   alto de la más alta): la matriz no queda pegada arriba con un hueco debajo. */
+.an-enque-body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
+/* la lectura del patrón: una línea que dice qué reincidencia manda. */
+.an-cal-read{margin-top:14px;font-size:.74rem;line-height:1.4;color:var(--ink2);font-weight:600}
+.an-cal-read b{color:var(--ink);font-weight:800}
 /* tiempo · distribución */
 .an-dist{display:flex;flex-direction:column;gap:10px}
 .an-dist-row{display:grid;grid-template-columns:4.8rem 1fr;gap:9px;align-items:center}
@@ -1051,7 +1057,14 @@ function anReinc(d){ var r=d.reinc, h='<div class="an-cal" style="--anc:'+r.mese
   r.tipos.forEach(function(t,i){ var cells=r.cells[i].map(function(n){var k=n/r.max;return '<span class="an-cal-cell" style="background:'+anMezcla(k)+(k>0.55?';color:#fff':'')+'">'+(n||'')+'</span>';}).join('');
     h+='<div class="an-cal-row"><span class="an-cal-etq">'+esc(t)+'</span><div class="an-cal-cells">'+cells+'</div></div>'; });
   var sc=[0,.25,.5,.75,1].map(function(k){return '<span class="an-cal-sw" style="background:'+anMezcla(k)+'"></span>';}).join('');
-  return h+'<div class="an-cal-leg"><span>Menos</span><div class="an-cal-scale">'+sc+'</div><span>Más · incumplimientos en el mes</span></div></div>';
+  h+='<div class="an-cal-leg"><span>Menos</span><div class="an-cal-scale">'+sc+'</div><span>Más · incumplimientos en el mes</span></div>';
+  /* La lectura del patrón: el tipo que más reincide (por total de incumplimientos)
+     y en cuántos meses. Se saca del mismo dato de la matriz, no a mano. */
+  var tot=r.tipos.map(function(t,i){ return { t:t, sum:r.cells[i].reduce(function(a,b){return a+b;},0), hits:r.cells[i].filter(function(n){return n>0;}).length }; }).sort(function(a,b){return b.sum-a.sum;});
+  var top=tot[0], nMes=r.meses.length;
+  if(top && top.sum>0){ var cuando=top.hits>=nMes?('los '+nMes+' meses'):('en '+top.hits+' de '+nMes+' meses');
+    h+='<div class="an-cal-read"><b>'+esc(top.t)+'</b> reincide '+cuando+': es la reincidencia que manda.</div>'; }
+  return h+'</div>';
 }
 function anPorTipo(d){ return '<div class="an-dist">'+d.porTipo.map(function(g){ return '<div class="an-ex"><span class="an-ex-t">'+esc(g.tipo)+'</span>'+anDot(g.dot)+anBar(g.pctN)+'<span class="an-ex-d">'+g.pct+'</span><span class="an-ex-d" style="color:var(--ink2)">'+g.din+'</span></div>'; }).join('')+'</div>'; }
 function anTiempo(d){ var topo=d.tiempoTopo, P=function(v){return (v/topo*100)+'%';};
@@ -1059,7 +1072,7 @@ function anTiempo(d){ var topo=d.tiempoTopo, P=function(v){return (v/topo*100)+'
 function anEnQueBody(d,s){ var v=anVista[s]; return v==='tipo'?anPorTipo(d):v==='tiempo'?anTiempo(d):anReinc(d); }
 function anEnQuePage(d, secId){ var v=anVista[secId];
   var seg='<div class="seg an-seg-vista" role="tablist">'+['reinc','tipo','tiempo'].map(function(k,i){var lbl=['Reincidencia','Por tipo','Tiempo'][i];return '<button role="tab" aria-selected="'+(v===k)+'" class="'+(v===k?'on':'')+'" onclick="setAnVista(\''+secId+'\',\''+k+'\')">'+lbl+'</button>';}).join('')+'</div>';
-  return '<div class="an-page">'+seg+'<div id="'+secId+'-enque">'+anEnQueBody(d,secId)+'</div></div>';
+  return '<div class="an-page">'+seg+'<div class="an-enque-body" id="'+secId+'-enque">'+anEnQueBody(d,secId)+'</div></div>';
 }
 function setAnVista(secId,k){ anVista[secId]=k; var d=anSecData(secId), b=document.getElementById(secId+'-enque'); if(b) b.innerHTML=anEnQueBody(d,secId);
   var ks=['reinc','tipo','tiempo']; document.querySelectorAll('#'+secId+' .an-seg-vista button').forEach(function(btn,i){btn.classList.toggle('on',ks[i]===k); btn.setAttribute('aria-selected',ks[i]===k);}); }
